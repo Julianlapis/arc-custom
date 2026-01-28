@@ -12,7 +12,7 @@ website:
   desc: Visual design direction
   summary: Establish the visual identity for your UI—colors, typography, spacing, tone. Comes with opinionated references to avoid generic AI aesthetics.
   what: |
-    Design walks you through visual decisions: What's the tone? What makes this memorable? From there it produces a design direction document—color palette, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can screenshot via Chrome to verify implementation matches intent.
+    Design walks you through visual decisions: What's the tone? What makes this memorable? It can research real-world examples from Siteinspire (websites) and Mobbin (UI patterns) to inform your direction. From there it produces a design direction document—color palette, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can screenshot via Chrome to verify implementation matches intent.
   why: |
     AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
   decisions:
@@ -114,7 +114,82 @@ Ask these questions **one at a time**:
 
 ---
 
-## Phase 3: Make Concrete Visual Decisions
+## Phase 3: Research Inspiration (Optional)
+
+**Use WebFetch to explore curated design examples based on the chosen direction.**
+
+This phase is optional but recommended when:
+- Starting from scratch with no existing references
+- The user wants to see examples matching their chosen tone
+- You need concrete visual patterns to inform decisions
+
+### Siteinspire (Website/Homepage Design)
+
+Siteinspire curates high-quality website designs. Use WebFetch to explore based on the chosen tone:
+
+```
+WebFetch URL patterns by tone:
+- Minimal:    https://www.siteinspire.com/websites?style=minimal
+- Bold:       https://www.siteinspire.com/websites?style=bold
+- Playful:    https://www.siteinspire.com/websites?style=playful
+- Editorial:  https://www.siteinspire.com/websites?style=editorial
+- Luxury:     https://www.siteinspire.com/websites?style=luxury
+- Brutalist:  https://www.siteinspire.com/websites?style=brutalist
+- Retro:      https://www.siteinspire.com/websites?style=retro
+- Organic:    https://www.siteinspire.com/websites?style=organic
+
+By page type:
+- Homepage:   https://www.siteinspire.com/websites?page=homepage
+- Portfolio:  https://www.siteinspire.com/websites?page=portfolio
+- E-commerce: https://www.siteinspire.com/websites?page=e-commerce
+- Blog:       https://www.siteinspire.com/websites?page=blog
+```
+
+**WebFetch prompt:** "List the website names, their URLs, and a brief description of their visual style. Focus on typography choices, color palettes, and layout patterns."
+
+### Mobbin (UI/Mobile Design Patterns)
+
+Mobbin collects UI patterns from real apps. Use for component and interaction inspiration:
+
+```
+WebFetch URL patterns:
+- iOS apps:     https://mobbin.com/browse/ios/apps
+- Android:      https://mobbin.com/browse/android/apps
+- Web apps:     https://mobbin.com/browse/web/apps
+
+By screen type:
+- Onboarding:   https://mobbin.com/browse/ios/screens?screen=onboarding
+- Dashboard:    https://mobbin.com/browse/ios/screens?screen=dashboard
+- Settings:     https://mobbin.com/browse/ios/screens?screen=settings
+- Profile:      https://mobbin.com/browse/ios/screens?screen=profile
+- Search:       https://mobbin.com/browse/ios/screens?screen=search
+```
+
+**WebFetch prompt:** "List the apps shown and describe their UI patterns—navigation style, card layouts, typography hierarchy, and interaction patterns."
+
+### Research Workflow
+
+1. **Based on user's chosen tone**, fetch 1-2 relevant Siteinspire pages
+2. **Based on what you're designing** (homepage, dashboard, form), fetch relevant Mobbin screens
+3. **Summarize findings** to user: "I found these patterns that match your direction: [observations]"
+4. **Ask:** "Any of these resonate? Should I explore a specific site further with Chrome MCP?"
+
+### Deep Dive with Chrome MCP
+
+If a specific example catches interest, use Chrome MCP for detailed inspection:
+
+```
+1. mcp__claude-in-chrome__navigate to the specific site URL
+2. mcp__claude-in-chrome__computer action=screenshot
+3. Analyze: typography, colors, spacing, layout patterns
+4. Report specific values observed (font names, hex colors, spacing)
+```
+
+**Note:** WebFetch provides quick overview; Chrome MCP provides detailed visual inspection. Use both strategically.
+
+---
+
+## Phase 4: Make Concrete Visual Decisions
 
 **Capture SPECIFIC visual decisions, not conceptual themes.**
 
@@ -152,7 +227,7 @@ Define the scale being used:
 
 ---
 
-## Phase 4: ASCII Wireframe
+## Phase 5: ASCII Wireframe
 
 **Create ASCII wireframes before any code.** Use patterns from `ascii-ui-patterns.md`.
 
@@ -176,7 +251,7 @@ Define the scale being used:
 
 ---
 
-## Phase 5: Produce Design Document
+## Phase 6: Produce Design Document
 
 **Create the design direction document at `docs/plans/design-[component-name].md`:**
 
@@ -231,7 +306,7 @@ Define the scale being used:
 
 ---
 
-## Phase 6: Verify Against Checklist
+## Phase 7: Verify Against Checklist
 
 **Run the Design Review Checklist from frontend-design.md:**
 
@@ -251,7 +326,7 @@ Define the scale being used:
 
 ---
 
-## Phase 7: Hand Off
+## Phase 8: Hand Off
 
 **Use AskUserQuestion tool:**
 ```
@@ -353,4 +428,5 @@ Design is complete when:
 - Produces design doc consumed by **/arc:build** and **/arc:implement**
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual capture throughout
+- Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin
 - References feed into implementation to maintain design fidelity
