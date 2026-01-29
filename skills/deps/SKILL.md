@@ -116,4 +116,46 @@ Critical/high CVEs: N
 Outdated packages: N (N major, N minor, N patch)
 ```
 
+## Phase 2: Alternative Discovery
+
+**If `--cve-only` flag is set, skip this phase entirely.**
+
+**Load curated alternatives:**
+
+**Use Read tool:** `${CLAUDE_PLUGIN_ROOT}/references/dependency-alternatives.md`
+
+This file contains a maintained table of known package replacements (lodash → es-toolkit, moment → date-fns, etc.) with migration effort ratings.
+
+**For each dependency in the project:**
+
+1. Check if the package name appears in the curated alternatives table
+2. If found → record the alternative, reason, and migration effort
+3. If NOT found → check whether this package is flagged (any of: 2+ major versions outdated, critical/high CVE, deprecated)
+
+**For flagged packages NOT in the curated table:**
+
+Use WebSearch to discover alternatives:
+
+```
+WebSearch: "alternative to [package-name] npm 2026"
+```
+
+For each search result:
+- If a clear, well-maintained alternative exists → record it with reason and estimated migration effort
+- If no clear alternative → record "no clear alternative found" and move on
+
+**Skip web search for packages that are:**
+- Current and healthy (not outdated, no CVEs, not deprecated)
+- In the "do not flag" list from the reference file (react, next, typescript, etc.)
+- devDependencies that are only minor/patch behind
+
+**Compile alternatives list:**
+
+For each alternative found (curated or discovered):
+
+| Package | Current Version | Alternative | Reason | Migration Effort | Source |
+|---------|----------------|-------------|--------|-----------------|--------|
+| lodash | 4.17.21 | es-toolkit | 97% smaller, modern ESM | Medium | Curated |
+| legacy-pkg | 1.2.0 | modern-pkg | Actively maintained replacement | Medium | Web search |
+
 </process>
