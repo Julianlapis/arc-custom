@@ -11,7 +11,7 @@ section "Argument Handling Tests"
 SKILLS_WITH_ARGS=(
     "audit:<path-or-focus>"
     "figma:<figma-url"
-    "commit:<optional-message>"
+    "commit:[push]"
     "progress:<note-to-add>"
 )
 
