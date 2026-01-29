@@ -156,13 +156,24 @@ Checklist:
 - [ ] Twitter/X analytics connected
 
 ### C. SEO & Meta (Always for public sites)
+
+> Reference: `${CLAUDE_PLUGIN_ROOT}/rules/seo.md` for full SEO rules.
+
+- [ ] `<html lang="...">` attribute set
+- [ ] `<meta name="viewport">` present
 - [ ] Page titles set (unique, <60 chars per page)
-- [ ] Meta descriptions written (<160 chars per page)
+- [ ] Meta descriptions written (unique, <160 chars per page)
+- [ ] Single `<h1>` per page, logical heading hierarchy
 - [ ] Canonical URLs set (avoid duplicate content)
-- [ ] robots.txt configured
+- [ ] Images have meaningful `alt` text
+- [ ] No `noindex` on production marketing pages (check for Vercel preview leftover)
+- [ ] Clean URL structure (no UUIDs, no query params for content)
+- [ ] robots.txt configured and not blocking marketing pages
 - [ ] sitemap.xml generated and submitted
 - [ ] Structured data / JSON-LD (if applicable)
 - [ ] Rich Results Test passing
+
+*For a comprehensive SEO audit, run `/arc:seo`.*
 
 ### D. Social Sharing / Open Graph
 - [ ] og:title, og:description, og:image set
