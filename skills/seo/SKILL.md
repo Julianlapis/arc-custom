@@ -120,6 +120,7 @@ API routes are automatically excluded from SEO checks.
 | Structured data | JSON-LD in layouts or pages |
 | OG images | `app/opengraph-image.*`, static OG images in public/ |
 | Favicons | `app/icon.*`, `app/favicon.ico`, `public/favicon.ico` |
+| Google Search Console | `<meta name="google-site-verification">` in root layout, `public/google*.html` verification file |
 
 Report what exists:
 ```markdown
@@ -129,6 +130,7 @@ Report what exists:
 - ✗ sitemap.xml missing
 - ✗ No structured data found
 - ✗ OG images not configured
+- ✗ Google Search Console not verified
 ```
 
 #### Step 5: Ask for Live URL
@@ -147,6 +149,7 @@ Run checks against the codebase, organized by category. Marketing pages get full
 - **Meta robots** — Any marketing pages with `noindex`? Common pitfall: Vercel preview noindex leaking to production.
 - **Sitemap** — Present? Lists all marketing pages? Doesn't list app pages? Dynamically generated or static?
 - **Redirect chains** — Any 301 → 301 → page chains? (Check middleware, vercel.json, next.config redirects)
+- **Google Search Console** — Site verification detected? (meta tag `google-site-verification` or `public/google*.html` file). If not verified, flag as **High** — without Search Console, Google won't notify you of indexing issues, manual actions, or crawl errors.
 
 #### Category 2: Indexability
 
@@ -289,6 +292,18 @@ npx unlighthouse --site [URL] --reporter jsonExpanded
 
 [Specific audit failures from Lighthouse]
 
+## Google Search Console
+
+**Status:** [Verified / Not verified]
+
+If not verified, submit your site now:
+→ **Add your site:** [https://search.google.com/search-console/welcome](https://search.google.com/search-console/welcome)
+
+After verification, submit your sitemap:
+→ **Submit sitemap:** `https://search.google.com/search-console/sitemaps?resource_id=https://[DOMAIN]/`
+
+Without Search Console, Google won't alert you to indexing problems, crawl errors, or manual actions. This is not optional for any site that needs organic traffic.
+
 ## Manual Validation Tools
 
 Check these tools for additional validation:
@@ -379,6 +394,7 @@ SEO audit is complete when:
 - [ ] Fix approach offered (direct fix, plan, or done)
 - [ ] Framework-specific recommendations included
 - [ ] Manual validation tool links included (with pre-filled URLs if live URL provided)
+- [ ] Google Search Console verification checked; if missing, user given direct link to submit
 - [ ] Progress journal updated
 </success_criteria>
 
