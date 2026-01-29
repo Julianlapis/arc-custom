@@ -58,30 +58,48 @@ Check for recent changes that should be included in audit scope.
 
 **Use Glob tool:** `.ruler/*.md`
 
-**If `.ruler/` exists, detect stack and read relevant rules:**
+**Determine rules source:**
+- **If `.ruler/` exists:** Read rules from `.ruler/`
+- **If `.ruler/` doesn't exist:** Read rules from `${CLAUDE_PLUGIN_ROOT}/rules/`
 
-| Check | Read from `.ruler/` |
-|-------|---------------------|
-| Always | code-style.md |
+**Detect stack and read relevant rules from the rules source:**
+
+| Check | Read |
+|-------|------|
+| Always | code-style.md, stack.md |
 | `next.config.*` exists | nextjs.md |
 | `react` in package.json | react.md |
 | `tailwindcss` in package.json | tailwind.md |
 | `.ts` or `.tsx` files | typescript.md |
 | `vitest` or `jest` in package.json | testing.md |
+| `drizzle` or `prisma` in package.json | api.md |
+| `.env*` files exist | env.md |
 
 Pass relevant rules to each reviewer agent.
 
-**If `.ruler/` doesn't exist:** Continue without rules — they're optional.
+**For each reviewer, pass domain-specific core rules:**
+
+| Reviewer | Core Rules to Pass |
+|----------|-------------------|
+| security-engineer | api.md, env.md, integrations.md |
+| architecture-engineer | stack.md, turborepo.md |
+| lee-nextjs-engineer | nextjs.md, api.md |
+| senior-engineer | code-style.md, typescript.md, react.md |
+| data-engineer | testing.md, api.md |
+| organization-engineer | turborepo.md, code-style.md |
+| llm-engineer | stack.md, code-style.md |
+| daniel-product-engineer | react.md, typescript.md |
+| performance-engineer | (no core rules — uses own heuristics) |
 
 **For UI/frontend audits, also load interface rules:**
 
-| Reviewer | Rules to Pass |
-|----------|---------------|
+| Reviewer | Interface Rules to Pass |
+|----------|------------------------|
 | designer | design.md, colors.md, typography.md, marketing.md |
 | daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md |
 | lee-nextjs-engineer | layout.md, performance.md |
 
-Rules location: `${CLAUDE_PLUGIN_ROOT}/rules/interface/`
+Interface rules location: `${CLAUDE_PLUGIN_ROOT}/rules/interface/`
 
 Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
 </rules_context>

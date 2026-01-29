@@ -22,6 +22,11 @@ website:
     - Safety verification. Ensures worktree directories are gitignored before creating.
 ---
 
+<required_reading>
+**Read this reference file NOW:**
+1. ${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md
+</required_reading>
+
 # Worktree Workflow
 
 Create isolated git worktrees for feature development.
