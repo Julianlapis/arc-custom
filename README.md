@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 20 skills covering the complete development lifecycle:
+Arc provides 24 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -34,8 +34,12 @@ CROSS-CUTTING
         /arc:audit      - Comprehensive codebase audit (includes deslop)
         /arc:progress   - Session journal for knowledge persistence
         /arc:document   - Feature documentation
-        /arc:suggest    - Opinionated next-step recommendations
+        /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
+        /arc:naming     - Generate and validate project names
+        /arc:dedup      - Detect semantic code duplication
+        /arc:deps       - Dependency management and updates
         /arc:tidy       - Clean up completed plans
+        /arc:cleanup    - Kill orphaned subagent processes
 
 TOOLS   /arc:worktree   - Create isolated git worktree for feature work
         /arc:commit     - Smart commit + push with auto-splitting
@@ -54,8 +58,7 @@ TOOLS   /arc:worktree   - Create isolated git worktree for feature work
 ## Installation
 
 ```
-/plugin marketplace add howells/arc
-/plugin install arc@howells-arc
+claude plugins install arc@howells-arc
 ```
 
 ## Dependencies
@@ -185,20 +188,24 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:progress` | View/manage session journal | `docs/progress.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
-| `/arc:suggest` | What to work on next | Recommendations |
+| `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
+| `/arc:naming` | Generate project names | Name candidates |
 | `/arc:worktree` | Create isolated worktree | Feature branch + workspace |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:rules` | Apply coding standards | `.ruler/` directory |
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
+| `/arc:dedup` | Detect semantic code duplication | Duplicate report |
+| `/arc:deps` | Dependency management | Updated dependencies |
+| `/arc:cleanup` | Kill orphaned subagent processes | Clean process state |
 
 ## Agents
 
-Arc includes 16 specialized agents:
+Arc includes 21 specialized agents:
 
 | Category | Agents |
 |----------|--------|
-| **Research** | docs-researcher, git-history-analyzer, duplicate-detector |
-| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer |
+| **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
+| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
 | **Design** | figma-implement |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner |
 
@@ -219,7 +226,7 @@ Implementation methodologies in `disciplines/`:
 
 Commands work together:
 
-- `/arc:suggest` reads TaskList, codebase, and `/arc:vision` (priority cascade)
+- `/arc:suggest` reads TaskList, codebase, `/arc:vision`, and external market trends (priority cascade with opt-in discovery mode)
 - `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
 - `/arc:build` suggests `/arc:ideate` if scope is too large
 - `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
