@@ -37,6 +37,16 @@ Strong preference. Use unless there's a specific reason not to.
 - **tRPC 11** — When a project needs a typesafe client data layer, tRPC is the answer
 - MUST: Use `queryOptions`/`mutationOptions` integration with React Query (not legacy hooks)
 - MUST: Use `@trpc/tanstack-react-query` (not `@trpc/react-query`)
+- **OpenAPI 3.1** — Specification for all HTTP APIs. Generate from code, never hand-write
+- SHOULD: `zod-openapi` for Zod-first HTTP APIs, `trpc-openapi` for tRPC REST exposure
+- See [api.md](api.md) for design conventions
+
+### CLI
+
+- **Commander** — Argument parsing for scripted mode
+- **Ink** — React-based interactive TUI (MUST for React projects)
+- Every project with an API ships a companion CLI (scripted + interactive dual-mode)
+- See [cli.md](cli.md) for conventions
 
 ### UI
 
@@ -88,10 +98,6 @@ Proven options for specific needs. Install when the project requires them.
 - **OpenRouter** — Multi-model API access (Claude, Gemini, etc.)
 - **fal.ai** — Image generation (GPT-Image, Flux, etc.)
 - **Voyage AI** — Embeddings for semantic search and RAG
-
-### CLI
-
-- **Ink** — React-based CLI interfaces
 
 ### Native
 

@@ -52,7 +52,7 @@ Tell the user:
 Rules copied to .ruler/
 
 Files added:
-- stack.md, code-style.md, env.md, git.md, integrations.md
+- stack.md, api.md, cli.md, code-style.md, env.md, git.md, integrations.md
 - nextjs.md, react.md, tailwind.md, testing.md
 - turborepo.md, typescript.md, versions.md
 - interface/ (animation, design, forms, interactions, layout, performance, typography)

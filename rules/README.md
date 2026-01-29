@@ -38,6 +38,8 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [env.md](env.md) | Environment variable handling |
 | [turborepo.md](turborepo.md) | Monorepo package patterns |
 | [integrations.md](integrations.md) | External service adapters |
+| [api.md](api.md) | API design, OpenAPI, error formats |
+| [cli.md](cli.md) | CLI patterns, dual-mode, agent friendliness |
 
 ### Interface Guidelines
 | File | Purpose |
