@@ -172,7 +172,7 @@ Look for:
 | `/arc:audit` | Audit completed, issue counts by severity |
 | `/arc:design` | UI designed, aesthetic direction |
 | `/arc:letsgo` | Deployment status, checklist progress |
-| `/arc:deslop` | Files cleaned, patterns removed |
+| `/arc:audit --deslop` | Files cleaned, patterns removed |
 | `/arc:document` | Solution documented, category |
 | `/arc:commit` | What was committed, branch |
 
