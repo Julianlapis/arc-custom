@@ -433,3 +433,40 @@ Report: docs/audits/YYYY-MM-DD-deps-audit.md
 ```
 
 </process>
+
+<progress_append>
+After completing the dependency audit, append to progress journal:
+
+```markdown
+## YYYY-MM-DD HH:MM — /arc:deps
+**Task:** Dependency audit
+**Outcome:** Complete
+**Files:** docs/audits/YYYY-MM-DD-deps-audit.md
+**Decisions:**
+- Critical CVEs: [N]
+- Alternatives found: [N]
+- Batches applied: [N/N]
+- Failures rolled back: [N]
+- Replacements flagged: [N]
+**Next:** [Apply batches / Migration work / Done]
+
+---
+```
+</progress_append>
+
+<success_criteria>
+Dependency audit is complete when:
+- [ ] Package manager detected
+- [ ] Vulnerability audit run (critical/high only)
+- [ ] Outdated check run
+- [ ] Curated alternatives matched
+- [ ] Web search run for flagged unlisted deps
+- [ ] Report generated in docs/audits/
+- [ ] Report committed
+- [ ] Summary presented to user
+- [ ] Next steps offered
+- [ ] Batches applied (if user chose to apply)
+- [ ] Test verification after each batch
+- [ ] Rollback on failure
+- [ ] Progress journal updated
+</success_criteria>
