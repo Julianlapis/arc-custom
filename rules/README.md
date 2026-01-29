@@ -22,6 +22,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 ### Core Rules
 | File | Purpose |
 |------|---------|
+| [stack.md](stack.md) | **Preferred technologies and rejected alternatives** |
 | [versions.md](versions.md) | **Mandatory version requirements** |
 | [code-style.md](code-style.md) | Formatting, syntax, naming |
 | [typescript.md](typescript.md) | Type definitions and safety |
