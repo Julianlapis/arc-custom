@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 21 skills for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 24 skills for the complete development lifecycle.
 
 ## Structure
 

@@ -40,6 +40,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [integrations.md](integrations.md) | External service adapters |
 | [api.md](api.md) | API design, OpenAPI, error formats |
 | [cli.md](cli.md) | CLI patterns, dual-mode, agent friendliness |
+| [plan-mode.md](plan-mode.md) | Constraints for Claude's plan mode |
 
 ### Interface Guidelines
 | File | Purpose |
@@ -55,6 +56,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [interface/animation.md](interface/animation.md) | Motion and transitions |
 | [interface/performance.md](interface/performance.md) | Rendering, loading, CLS |
 | [interface/content-accessibility.md](interface/content-accessibility.md) | ARIA, content, a11y |
+| [interface/marketing.md](interface/marketing.md) | Marketing pages, distinctive design |
 
 ## Customization
 
