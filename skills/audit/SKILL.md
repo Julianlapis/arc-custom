@@ -9,7 +9,7 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility]
+argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--seo]
 metadata:
   author: howells
 website:
@@ -90,6 +90,7 @@ Pass relevant rules to each reviewer agent.
 | llm-engineer | stack.md, code-style.md |
 | daniel-product-engineer | react.md, typescript.md |
 | performance-engineer | (no core rules — uses own heuristics) |
+| seo-engineer | seo.md |
 
 **For UI/frontend audits, also load interface rules:**
 
@@ -245,6 +246,7 @@ Execution mode: [batched (default) / parallel]
 - If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
 - If recent AI-assisted work or branch audit → add `llm-engineer` (deslop)
+- If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
 
 **Focus flag overrides:**
 - `--security` → only `security-engineer`
@@ -254,6 +256,7 @@ Execution mode: [batched (default) / parallel]
 - `--design` → only `designer`
 - `--accessibility` → only `accessibility-engineer`
 - `--deslop` → only `llm-engineer`
+- `--seo` → only `seo-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -301,6 +304,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | data-engineer | sonnet | Data safety reasoning |
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
 | llm-engineer | sonnet | Pattern recognition for AI artifacts |
+| seo-engineer | sonnet | Pattern recognition for SEO elements |
 
 **Include project stage in every reviewer prompt.**
 
