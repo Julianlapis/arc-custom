@@ -37,6 +37,29 @@ website:
 3. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
 </required_reading>
 
+<rules_context>
+**Check for project coding rules:**
+
+**Use Glob tool:** `.ruler/*.md`
+
+**Determine rules source:**
+- **If `.ruler/` exists:** Read rules from `.ruler/`
+- **If `.ruler/` doesn't exist:** Read rules from `${CLAUDE_PLUGIN_ROOT}/rules/`
+
+**Pass relevant core rules to each reviewer:**
+
+| Reviewer | Rules to Pass |
+|----------|--------------|
+| daniel-product-engineer | react.md, typescript.md, code-style.md |
+| lee-nextjs-engineer | nextjs.md, api.md |
+| senior-engineer | code-style.md, typescript.md, react.md |
+| architecture-engineer | stack.md, turborepo.md |
+| simplicity-engineer | code-style.md |
+| security-engineer | api.md, env.md |
+| data-engineer | testing.md, api.md |
+| accessibility-engineer | (interface rules only — already in agent prompt) |
+</rules_context>
+
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 
