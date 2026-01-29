@@ -67,7 +67,7 @@ CROSS-CUTTING (available anytime):
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
               /arc:progress   → Session journal
-              /arc:suggest    → What to work on next
+              /arc:suggest    → What to work on next (+ discovery mode)
               /arc:document   → Capture solved problems
               /arc:tidy       → Clean up completed plans
               /arc:rules      → Apply coding standards
