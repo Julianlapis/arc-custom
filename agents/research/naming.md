@@ -1,6 +1,7 @@
 ---
 name: naming
 model: sonnet
+color: magenta
 description: Generate and validate project name candidates. Reads codebase context, produces candidates using tech naming strategies, and checks domain + GitHub availability.
 tools:
   - Read

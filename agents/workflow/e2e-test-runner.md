@@ -1,6 +1,7 @@
 ---
 name: e2e-test-runner
 model: sonnet
+color: green
 description: |
   Use this agent to run e2e tests (Playwright, Cypress) and fix failures. Spawns as separate agent to avoid filling main context with verbose test output, traces, and screenshots.
 

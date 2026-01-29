@@ -1,6 +1,7 @@
 ---
 name: llm-engineer
 model: sonnet
+color: magenta
 description: Use this agent to detect AI-generated artifacts ("slop") in code. Reviews for unnecessary comments, defensive checks in trusted codepaths, type escapes, and style inconsistencies that indicate LLM-generated code not properly reviewed. Use when running /arc:audit --deslop, after AI-assisted coding sessions, or before merging branches with substantial AI-generated code.
 website:
   desc: AI artifact detector

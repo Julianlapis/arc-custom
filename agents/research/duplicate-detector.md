@@ -1,6 +1,7 @@
 ---
 name: duplicate-detector
 model: sonnet
+color: cyan
 description: |
   Use this agent to detect semantic code duplication - functions that do the same thing but have different names or implementations. Especially useful for codebases where new functions are often created rather than reusing existing ones.
 
