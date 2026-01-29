@@ -55,7 +55,7 @@ Scope: Marketing pages of any web project. App pages (authenticated/gated) get b
 
 **Verify:** File exists at `rules/seo.md`, follows the MUST/SHOULD/NEVER convention used by other rules files (see `rules/env.md`, `rules/code-style.md`).
 
-**Commit:** `docs: add SEO rules file`
+**Commit:** `feat(rules): add seo.md rules file`
 
 ---
 
@@ -77,7 +77,7 @@ Follow the agent pattern from `agents/review/accessibility-engineer.md` and `age
 ---
 name: seo-engineer
 model: sonnet
-color: cyan
+color: green
 description: |
   Use this agent to review web projects for SEO compliance. Checks all vitals from rules/seo.md — meta tags, heading hierarchy, Open Graph, robots.txt, sitemap, structured data, and page classification (marketing vs app). Flags missing or broken SEO elements that would hurt indexing or social sharing.
 
@@ -213,6 +213,25 @@ Severity levels:
 - **High**: Core SEO element missing on marketing pages — missing descriptions, no OG image, no canonical, no h1, missing alt text
 - **Medium**: Suboptimal but not broken — generic titles, duplicated descriptions, missing structured data on some pages
 
+## Scope Boundaries
+
+When running alongside other reviewers in `/arc:audit`, avoid overlapping with:
+
+**Defer to accessibility-engineer:**
+- Color contrast issues
+- Keyboard navigation
+- ARIA labels and roles on interactive elements
+- Screen reader compatibility
+- Focus management
+
+**SEO-engineer owns (even though they overlap with accessibility):**
+- Image alt text — from an indexing/image search perspective
+- Heading hierarchy — from a crawler/content structure perspective
+- Semantic HTML — from a crawlability perspective
+- Page language attribute — from an indexing perspective
+
+When both agents flag the same element (e.g., missing alt text), frame the SEO finding in terms of search impact, not accessibility impact. Let the accessibility-engineer handle the assistive technology angle.
+
 ## What NOT to Flag
 
 - App/dashboard pages missing SEO elements beyond title (that's expected)
@@ -224,7 +243,7 @@ Severity levels:
 
 **Verify:** File follows the agent pattern (frontmatter with name/model/color/description/website, advisory block, role, protocol sections, output format, severity levels, "What NOT to flag"). Compare structure against `agents/review/accessibility-engineer.md`.
 
-**Commit:** `feat: add seo-engineer review agent`
+**Commit:** `feat(agents): add seo-engineer review agent`
 
 ---
 
@@ -654,7 +673,7 @@ After completing the SEO audit, append to progress journal:
 
 **Verify:** File follows skill pattern (frontmatter, context blocks, process, success criteria, interop, progress append). Compare structure against `skills/test/SKILL.md` and `skills/letsgo/SKILL.md`.
 
-**Commit:** `feat: add /arc:seo deep SEO audit skill`
+**Commit:** `feat(skills): add /arc:seo deep SEO audit skill`
 
 ---
 
@@ -702,7 +721,7 @@ In the frontmatter `argument-hint` (line 12), add `--seo` to the list of focus f
 
 **Verify:** Run a mental walkthrough of audit with `--seo` flag: it should select only `seo-engineer`, pass `seo.md` rules, run at sonnet, and produce findings in the standard audit format.
 
-**Commit:** `feat: wire seo-engineer into audit reviewer selection`
+**Commit:** `feat(audit): wire seo-engineer into reviewer selection`
 
 ---
 
@@ -712,9 +731,11 @@ In the frontmatter `argument-hint` (line 12), add `--seo` to the list of focus f
 
 **Modify:** `skills/letsgo/SKILL.md`
 
-### Change 1: Add missing vitals to Section C
+### Change 1: Expand Section C checklist
 
-Replace the current Section C (lines 158-165):
+Expand the current Section C checklist items (lines 158-165 only). **Preserve all content below line 165** — the OG image guidance, favicon guidance, and everything in Section D onward must remain untouched.
+
+Replace these 7 checklist items:
 
 ```markdown
 ### C. SEO & Meta (Always for public sites)
@@ -727,7 +748,7 @@ Replace the current Section C (lines 158-165):
 - [ ] Rich Results Test passing
 ```
 
-With:
+With these 13 items:
 
 ```markdown
 ### C. SEO & Meta (Always for public sites)
@@ -753,7 +774,7 @@ With:
 
 **Verify:** Section C now covers all vitals from `rules/seo.md` as a checklist. The section stays as one block. The `/arc:seo` pointer is at the bottom.
 
-**Commit:** `feat: complete letsgo SEO & Meta checklist with missing vitals`
+**Commit:** `feat(letsgo): expand SEO checklist with all vitals from seo.md`
 
 ---
 
