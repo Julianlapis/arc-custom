@@ -158,4 +158,124 @@ For each alternative found (curated or discovered):
 | lodash | 4.17.21 | es-toolkit | 97% smaller, modern ESM | Medium | Curated |
 | legacy-pkg | 1.2.0 | modern-pkg | Actively maintained replacement | Medium | Web search |
 
+## Phase 3: Report Generation
+
+**Create report directory:**
+
+```bash
+mkdir -p docs/audits
+```
+
+**Generate report file:** `docs/audits/YYYY-MM-DD-deps-audit.md`
+
+Use today's date. The report follows this structure:
+
+```markdown
+# Dependency Audit Report
+
+**Date:** YYYY-MM-DD
+**Package Manager:** [detected]
+**Total dependencies:** N (N prod, N dev)
+**Node version:** [detected]
+
+## Summary
+
+- Critical CVEs: N
+- Deprecated packages: N
+- Modern alternatives available: N
+- Major version outdated: N
+- Minor/patch outdated: N
+
+## Must Fix — CVEs
+
+> Known vulnerabilities with critical or high severity
+
+### [package-name] ([current] → [fixed version])
+**CVE:** [CVE ID]
+**Severity:** [Critical/High]
+**Description:** [Brief description of the vulnerability]
+**Fix:** `[package-manager] update [package-name]`
+**Alternative:** [If a modern alternative exists, mention it here]
+
+[Repeat for each CVE]
+
+## Should Consider — Alternatives
+
+> Modern replacements for heavy, deprecated, or outdated packages
+
+### [package-name] ([current version])
+**Status:** [Deprecated / Outdated / Heavy]
+**Alternative:** [replacement package or built-in]
+**Reason:** [Why the alternative is better]
+**Migration effort:** [Low / Medium / High]
+**Bundle impact:** [Estimated size reduction if known]
+**Source:** [Curated / Web search]
+
+[Repeat for each alternative]
+
+## Should Consider — Major Outdated
+
+> Packages 2+ major versions behind
+
+### [package-name] ([current] → [latest])
+**Behind:** [N major versions]
+**Risk:** [Low / Medium / High — based on changelog breaking changes]
+**Key changes:** [1-2 most important breaking changes from changelog]
+
+[Repeat for each]
+
+## Worth Noting — Minor Outdated
+
+| Package | Current | Latest | Behind | Type |
+|---------|---------|--------|--------|------|
+| [name] | [ver] | [ver] | [minor/patch] | [prod/dev] |
+
+[Table of all minor/patch outdated packages]
+
+## Upgrade Batches
+
+Pre-computed batches for the interactive apply phase.
+
+### Batch 1: Safe Patches (low risk)
+Apply together, test once.
+
+| Package | Current | Target | Type |
+|---------|---------|--------|------|
+| [name] | [ver] | [ver] | [minor/patch] |
+
+**Command:** `[package-manager] update [list of packages]`
+
+### Batch 2: CVE Fixes (high priority)
+Apply together, test once.
+
+| Package | Current | Target | CVE |
+|---------|---------|--------|-----|
+| [name] | [ver] | [ver] | [CVE ID] |
+
+**Command:** `[package-manager] update [list of packages]`
+
+### Batch 3: Major Upgrades (test carefully)
+Apply individually, test after each.
+
+| Package | Current | Target | Breaking Changes |
+|---------|---------|--------|-----------------|
+| [name] | [ver] | [ver] | [key changes] |
+
+### Batch 4: Replacements (separate work)
+These require code changes — flagged for manual migration.
+
+| Current Package | Alternative | Migration Effort |
+|----------------|-------------|-----------------|
+| [name] | [replacement] | [Low/Medium/High] |
+
+**Note:** Replacements are not auto-applied. Install the alternative, migrate imports, then remove the old package.
+```
+
+**Commit the report:**
+
+```bash
+git add docs/audits/
+git commit -m "docs: add dependency audit report"
+```
+
 </process>
