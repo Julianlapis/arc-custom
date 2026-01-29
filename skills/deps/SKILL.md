@@ -278,4 +278,158 @@ git add docs/audits/
 git commit -m "docs: add dependency audit report"
 ```
 
+## Phase 4: Present Summary & Interactive Walkthrough
+
+**Present summary to user:**
+
+```
+Dependency audit complete.
+Report: docs/audits/YYYY-MM-DD-deps-audit.md
+
+Summary:
+- Critical CVEs: N
+- Deprecated: N
+- Modern alternatives: N
+- Major outdated: N
+- Minor/patch outdated: N
+
+Suggested batches:
+1. Safe patches (N packages) — low risk
+2. CVE fixes (N packages) — high priority
+3. Major upgrades (N packages) — test carefully
+4. Replacements (N packages) — needs code changes
+```
+
+**If `--apply` flag was set:** Skip the menu and go straight to walking through all batches.
+
+**If `--cve-only` flag was set:** Skip the menu and apply only Batch 2 (CVE fixes).
+
+**Otherwise, offer next steps via AskUserQuestion:**
+
+```
+Question: "How would you like to proceed?"
+Header: "Next step"
+Options:
+  1. "Apply safe patches" (Recommended) — Batch 1: minor/patch updates, low risk
+  2. "Walk through all batches" — Review each batch, approve or skip
+  3. "Apply CVE fixes only" — Just the security-critical updates
+  4. "Done for now" — Report is committed, come back later
+```
+
+### Batch Apply Cycle
+
+For each approved batch, execute this cycle:
+
+**Step 1: Git checkpoint**
+
+```bash
+git add -A && git commit -m "checkpoint: before [batch description] upgrade" --allow-empty
+```
+
+**Step 2: Run upgrade commands**
+
+Use the detected package manager from Phase 1:
+
+```bash
+# For Batch 1 (safe patches) and Batch 2 (CVE fixes):
+[package-manager] update [list of packages]
+
+# For Batch 3 (major upgrades) — one at a time:
+[package-manager] install [package]@latest
+
+# For Batch 4 (replacements):
+[package-manager] install [alternative-package]
+# Do NOT remove old package — user must migrate imports first
+```
+
+**Step 3: Type check (if TypeScript project)**
+
+```bash
+# Check if tsconfig.json exists first
+tsc --noEmit
+```
+
+If type check fails → this may be expected for major upgrades. Note the errors but don't auto-rollback on type errors alone. Report them to the user.
+
+**Step 4: Run tests**
+
+Use the detected test runner from Phase 1:
+
+```bash
+# vitest
+pnpm vitest run
+
+# jest
+pnpm jest
+
+# playwright
+pnpm exec playwright test
+
+# npm script fallback
+pnpm test
+```
+
+**Step 5: Evaluate result**
+
+**If tests pass:**
+```bash
+git add -A && git commit -m "deps: [batch description]"
+```
+
+Report: "[batch description] applied successfully. Tests passing."
+
+**If tests fail:**
+```bash
+# Rollback to checkpoint
+git reset --hard HEAD~1
+```
+
+Report which package(s) likely caused the failure:
+```
+Batch [N] failed — tests broke after upgrading [packages].
+Rolled back to checkpoint. You may want to upgrade these individually
+to isolate the breaking package.
+```
+
+Continue to next batch — one failure shouldn't block the rest.
+
+### Replacement Handling (Batch 4)
+
+Replacements are NOT auto-migrated. For each approved replacement:
+
+1. Install the new package:
+   ```bash
+   [package-manager] install [alternative-package]
+   ```
+
+2. Report to user:
+   ```
+   Installed [alternative]. [old-package] is still in package.json.
+
+   To complete the migration:
+   1. Replace [old-package] imports with [alternative] equivalents
+   2. Run tests to verify
+   3. Remove [old-package]: [package-manager] remove [old-package]
+
+   Consider running /arc:build to handle the import migration.
+   ```
+
+3. Do NOT remove the old package or modify imports automatically.
+
+### Final Summary
+
+After all batches are processed:
+
+```
+## Dependency Update Summary
+
+Packages upgraded: N
+Batches applied: N/N
+Batches skipped: N
+Failures rolled back: N
+Replacements flagged: N (need manual migration)
+
+Report: docs/audits/YYYY-MM-DD-deps-audit.md
+```
+
 </process>
