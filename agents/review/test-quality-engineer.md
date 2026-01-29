@@ -1,6 +1,7 @@
 ---
 name: test-quality-engineer
 model: sonnet
+color: yellow
 description: |
   Use this agent to review test quality — assertion meaningfulness, test isolation, flaky patterns, coverage gaps, and mock hygiene. Complements test-runner agents by evaluating whether tests are actually catching bugs, not just passing.
 

@@ -1,6 +1,7 @@
 ---
 name: organization-engineer
 model: sonnet
+color: blue
 description: Use this agent when you need to analyze how code is organized at the file and folder level, evaluate naming conventions, assess colocation practices, or recommend structural improvements. This includes reviewing whether features are properly grouped, files are appropriately sized, and the project follows consistent organization patterns. <example>Context: The user wants to understand how their codebase should be structured.\nuser: "My project has grown messy and I'm not sure where to put new files"\nassistant: "I'll use the organization-engineer agent to analyze your codebase structure and recommend improvements"\n<commentary>Since the user is struggling with file organization, use the organization-engineer to map the current structure and propose a cleaner organization.</commentary></example><example>Context: The user is starting a new project and wants guidance on structure.\nuser: "I want to set up my folder structure correctly from the start"\nassistant: "Let me use the organization-engineer agent to recommend an optimal structure for your project type"\n<commentary>New projects benefit from organization guidance to avoid structural debt later.</commentary></example>
 website:
   desc: File structure guardian

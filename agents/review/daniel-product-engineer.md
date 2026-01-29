@@ -1,6 +1,7 @@
 ---
 name: daniel-product-engineer
 model: sonnet
+color: cyan
 description: |
   Use this agent for frontend/UI code reviews. Strict on: type safety (no `any`, no casts), UI completeness (loading/error/empty states), React patterns (React Query not useEffect for data fetching). Confidence-scored findings — only reports issues with ≥80% confidence. Prefer over senior-engineer when reviewing React components, forms, or UI flows.
 

@@ -1,6 +1,7 @@
 ---
 name: simplicity-engineer
 model: sonnet
+color: blue
 description: Use this agent when you need a final review pass to ensure code changes are as simple and minimal as possible. This agent should be invoked after implementation is complete but before finalizing changes, to identify opportunities for simplification, remove unnecessary complexity, and ensure adherence to YAGNI principles. Examples: <example>Context: The user has just implemented a new feature and wants to ensure it's as simple as possible. user: "I've finished implementing the user authentication system" assistant: "Great! Let me review the implementation for simplicity and minimalism using the simplicity-engineer agent" <commentary>Since implementation is complete, use the simplicity-engineer agent to identify simplification opportunities.</commentary></example> <example>Context: The user has written complex business logic and wants to simplify it. user: "I think this order processing logic might be overly complex" assistant: "I'll use the simplicity-engineer agent to analyze the complexity and suggest simplifications" <commentary>The user is explicitly concerned about complexity, making this a perfect use case for the simplicity-engineer.</commentary></example>
 website:
   desc: YAGNI enforcer

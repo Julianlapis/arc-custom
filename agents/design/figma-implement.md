@@ -15,6 +15,7 @@ description: |
     assistant: "Let me implement that pricing section from the Figma design."
     </example>
 model: opus
+color: magenta
 website:
   desc: Figma → production code
   summary: Implements UI components from Figma designs with pixel-perfect fidelity via Figma MCP.

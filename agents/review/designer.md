@@ -1,6 +1,7 @@
 ---
 name: designer
 model: opus
+color: magenta
 description: |
   Use this agent to review UI implementations for visual design quality and aesthetic distinctiveness. Catches "AI slop" patterns — generic, forgettable designs that could be mistaken for any AI-generated site. Complements daniel-product-engineer (which focuses on code quality) by focusing on visual/aesthetic quality.
 

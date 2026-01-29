@@ -1,6 +1,7 @@
 ---
 name: accessibility-engineer
 model: sonnet
+color: green
 description: |
   Use this agent to review UI implementations for accessibility compliance. Checks WCAG 2.1 AA conformance, keyboard navigation, screen reader compatibility, color contrast, motion preferences, form accessibility, and semantic HTML usage.
 
