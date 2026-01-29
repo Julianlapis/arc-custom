@@ -1,0 +1,182 @@
+#!/bin/bash
+# Test that all agents are properly structured and skill references are valid
+#
+# Verifies:
+# - All expected agent files exist with required frontmatter
+# - Skills that reference agents point to files that exist
+# - Skills that reference rules point to files that exist
+
+section "Agent Structure Tests"
+
+# Expected agents by category
+REVIEW_AGENTS=(
+    "accessibility-engineer"
+    "architecture-engineer"
+    "daniel-product-engineer"
+    "data-engineer"
+    "designer"
+    "lee-nextjs-engineer"
+    "llm-engineer"
+    "organization-engineer"
+    "performance-engineer"
+    "security-engineer"
+    "senior-engineer"
+    "seo-engineer"
+    "simplicity-engineer"
+    "test-quality-engineer"
+)
+
+RESEARCH_AGENTS=(
+    "docs-researcher"
+    "duplicate-detector"
+    "feature-scout"
+    "git-history-analyzer"
+    "naming"
+)
+
+DESIGN_AGENTS=(
+    "figma-implement"
+)
+
+WORKFLOW_AGENTS=(
+    "e2e-test-runner"
+    "spec-flow-analyzer"
+)
+
+echo "Checking review agents..."
+echo ""
+for agent in "${REVIEW_AGENTS[@]}"; do
+    agent_file="$PLUGIN_ROOT/agents/review/$agent.md"
+    if [ -f "$agent_file" ]; then
+        pass "agents/review/$agent exists"
+    else
+        fail "agents/review/$agent.md not found"
+    fi
+done
+
+echo ""
+echo "Checking research agents..."
+echo ""
+for agent in "${RESEARCH_AGENTS[@]}"; do
+    agent_file="$PLUGIN_ROOT/agents/research/$agent.md"
+    if [ -f "$agent_file" ]; then
+        pass "agents/research/$agent exists"
+    else
+        fail "agents/research/$agent.md not found"
+    fi
+done
+
+echo ""
+echo "Checking design agents..."
+echo ""
+for agent in "${DESIGN_AGENTS[@]}"; do
+    agent_file="$PLUGIN_ROOT/agents/design/$agent.md"
+    if [ -f "$agent_file" ]; then
+        pass "agents/design/$agent exists"
+    else
+        fail "agents/design/$agent.md not found"
+    fi
+done
+
+echo ""
+echo "Checking workflow agents..."
+echo ""
+for agent in "${WORKFLOW_AGENTS[@]}"; do
+    agent_file="$PLUGIN_ROOT/agents/workflow/$agent.md"
+    if [ -f "$agent_file" ]; then
+        pass "agents/workflow/$agent exists"
+    else
+        fail "agents/workflow/$agent.md not found"
+    fi
+done
+
+# Verify agent frontmatter has required fields
+section "Agent Frontmatter Tests"
+
+echo "Verifying all agents have name, model, and description..."
+echo ""
+
+for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
+    agent_name=$(basename "$agent_file" .md)
+    category=$(basename "$(dirname "$agent_file")")
+
+    frontmatter=$(get_frontmatter "$agent_file")
+
+    if echo "$frontmatter" | grep -q "^name:"; then
+        if echo "$frontmatter" | grep -q "^model:"; then
+            if echo "$frontmatter" | grep -q "^description:"; then
+                pass "$category/$agent_name has name, model, description"
+            else
+                fail "$category/$agent_name missing description"
+            fi
+        else
+            fail "$category/$agent_name missing model"
+        fi
+    else
+        fail "$category/$agent_name missing name"
+    fi
+done
+
+# Verify skills reference existing files
+section "Skill Reference Tests"
+
+echo "Checking CLAUDE_PLUGIN_ROOT references in skills..."
+echo ""
+
+ref_errors=0
+ref_checked=0
+
+for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
+    skill_name=$(basename "$(dirname "$skill_file")")
+
+    # Extract all ${CLAUDE_PLUGIN_ROOT}/path references
+    refs=$(grep -oE '\$\{CLAUDE_PLUGIN_ROOT\}/[a-zA-Z0-9/_.-]+' "$skill_file" 2>/dev/null)
+
+    if [ -n "$refs" ]; then
+        while IFS= read -r ref; do
+            # Convert ${CLAUDE_PLUGIN_ROOT}/path to actual path
+            rel_path="${ref#\$\{CLAUDE_PLUGIN_ROOT\}/}"
+            full_path="$PLUGIN_ROOT/$rel_path"
+
+            ((ref_checked++))
+
+            # Check if path exists (file or directory)
+            if [ -e "$full_path" ] || [ -e "${full_path}.md" ]; then
+                : # exists, no output needed to keep it concise
+            else
+                fail "skill/$skill_name references missing: $rel_path"
+                ((ref_errors++))
+            fi
+        done <<< "$refs"
+    fi
+done
+
+if [ $ref_errors -eq 0 ] && [ $ref_checked -gt 0 ]; then
+    pass "All $ref_checked CLAUDE_PLUGIN_ROOT references are valid"
+elif [ $ref_checked -eq 0 ]; then
+    skip "No CLAUDE_PLUGIN_ROOT references found"
+fi
+
+# Verify no unexpected agents
+echo ""
+echo "Checking for unexpected agent files..."
+ALL_EXPECTED_AGENTS=(
+    "${REVIEW_AGENTS[@]}"
+    "${RESEARCH_AGENTS[@]}"
+    "${DESIGN_AGENTS[@]}"
+    "${WORKFLOW_AGENTS[@]}"
+)
+
+for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
+    agent_name=$(basename "$agent_file" .md)
+    found=false
+    for expected in "${ALL_EXPECTED_AGENTS[@]}"; do
+        if [ "$agent_name" = "$expected" ]; then
+            found=true
+            break
+        fi
+    done
+    if [ "$found" = false ]; then
+        echo -e "${YELLOW}⚠${NC} Unexpected agent: $agent_name (not in expected list)"
+    fi
+done

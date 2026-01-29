@@ -13,12 +13,14 @@ section "Invocation Control Tests"
 
 # Skills that MUST have disable-model-invocation: true
 PROTECTED_SKILLS=(
+    "cleanup"
     "commit"
+    "dedup"
     "letsgo"
     "legal"
-    "worktree"
-    "tidy"
     "rules"
+    "tidy"
+    "worktree"
 )
 
 echo "Verifying destructive skills are protected..."
