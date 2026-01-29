@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 24 skills covering the complete development lifecycle:
+Arc provides 25 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -38,6 +38,7 @@ CROSS-CUTTING
         /arc:naming     - Generate and validate project names
         /arc:dedup      - Detect semantic code duplication
         /arc:deps       - Dependency management and updates
+        /arc:seo        - Deep SEO audit for web projects
         /arc:tidy       - Clean up completed plans
         /arc:cleanup    - Kill orphaned subagent processes
 
@@ -196,16 +197,17 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
 | `/arc:dedup` | Detect semantic code duplication | Duplicate report |
 | `/arc:deps` | Dependency management | Updated dependencies |
+| `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |
 | `/arc:cleanup` | Kill orphaned subagent processes | Clean process state |
 
 ## Agents
 
-Arc includes 21 specialized agents:
+Arc includes 22 specialized agents:
 
 | Category | Agents |
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
-| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
+| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
 | **Design** | figma-implement |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner |
 
