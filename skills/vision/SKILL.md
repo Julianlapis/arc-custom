@@ -94,21 +94,12 @@ git add docs/vision.md
 git commit -m "docs: add project vision"
 ```
 
-<progress_append>
-After creating or updating the vision, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:vision
-**Task:** [Create / Update] vision document
-**Outcome:** Complete
-**Files:** docs/vision.md
-**Decisions:**
-- Purpose: [one-liner]
-**Next:** /arc:ideate or continue
-
----
-```
-</progress_append>
+Entry: `/arc:vision — [Created / Updated] vision document`
+</arc_log>
 
 ## Interop
 

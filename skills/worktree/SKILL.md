@@ -116,19 +116,9 @@ Use AskUserQuestion to present options:
 | Trivial single-file fix | Skip worktree |
 | User declines worktree | Proceed on current branch |
 
-<progress_append>
-After creating a worktree, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:worktree
-**Task:** Create worktree for [feature]
-**Outcome:** Complete
-**Files:** [worktree path]
-**Decisions:**
-- Branch: [branch name]
-- Location: [.worktrees or global]
-**Next:** [ideate/detail/build/implement]
-
----
-```
-</progress_append>
+Entry: `/arc:worktree — Created [branch] at [path]`
+</arc_log>
