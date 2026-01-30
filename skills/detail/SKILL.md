@@ -327,22 +327,12 @@ Look for related ideate sessions or prior work on this feature.
 If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
 </tasklist_context>
 
-<progress_append>
-After creating the implementation plan, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:detail
-**Task:** Implementation plan for [feature]
-**Outcome:** Complete
-**Files:** docs/plans/YYYY-MM-DD-[topic]-implementation.md
-**Decisions:**
-- Tasks: [N] TDD cycles
-- Stack: [framework + test runner]
-**Next:** /arc:review or /arc:implement
-
----
-```
-</progress_append>
+Entry: `/arc:detail — [Feature name] implementation plan ([N] tasks)`
+</arc_log>
 
 <success_criteria>
 Implementation plan is complete when:

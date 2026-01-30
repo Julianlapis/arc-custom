@@ -734,25 +734,12 @@ This is especially important after `--parallel` runs or when auditing large code
 
 </process>
 
-<progress_append>
-After completing the audit, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:audit
-**Task:** Audit [scope]
-**Outcome:** Complete
-**Files:** docs/audits/YYYY-MM-DD-[scope]-audit.md
-**Decisions:**
-- Project stage: [stage]
-- Critical: [N] issues
-- High: [N] issues
-- Reviewers: [list]
-- Execution mode: [batched / parallel]
-**Next:** [Create tasks / Focus on critical / Done]
-
----
-```
-</progress_append>
+Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
+</arc_log>
 
 <success_criteria>
 Audit is complete when:

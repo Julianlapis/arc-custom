@@ -241,18 +241,9 @@ If accepted, spawn the test-quality-engineer agent:
 Present findings and offer to fix any issues found.
 </test_quality_check>
 
-<progress_append>
-After running tests or creating strategy, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:test
-**Task:** [Run tests / Create strategy / Fix failing]
-**Outcome:** [Complete / X tests passing / Y failing]
-**Files:** [Test files if created/modified]
-**Decisions:**
-- [Coverage gaps identified]
-**Next:** [Fix failures / Continue]
-
----
-```
-</progress_append>
+Entry: `/arc:test — [X passing, Y failing]`
+</arc_log>

@@ -227,21 +227,12 @@ Options:
 Check for related prior work.
 </progress_context>
 
-<progress_append>
-After completing the build, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:build
-**Task:** [What was built]
-**Outcome:** Complete
-**Files:** [Key files created/modified]
-**Decisions:**
-- [Key decision if any]
-**Next:** Continue working
-
----
-```
-</progress_append>
+Entry: `/arc:build — [What was built]`
+</arc_log>
 
 <success_criteria>
 Build is complete when:

@@ -68,16 +68,9 @@ Ask the user which duplicates they want to consolidate, then offer to create a p
 
 ---
 
-<progress_append>
-After running duplicate detection, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:dedup
-**Task:** Duplicate detection
-**Outcome:** Found X duplicate groups (Y high confidence, Z medium)
-**Scope:** [path or "full codebase"]
-**Next:** Consolidate [N] duplicate groups
-
----
-```
-</progress_append>
+Entry: `/arc:dedup — Found [N] duplicate groups`
+</arc_log>

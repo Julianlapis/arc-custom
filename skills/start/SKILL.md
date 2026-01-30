@@ -47,9 +47,9 @@ ls docs/vision.md docs/plans/*.md 2>/dev/null | head -10
 **Check for existing tasks:**
 Use **TaskList tool** to see if there are pending tasks.
 
-**Read progress journal for recent work:**
+**Read activity log for recent work:**
 ```bash
-head -50 docs/progress.md 2>/dev/null
+head -50 .arc/log.md 2>/dev/null
 ```
 
 ### Step 2: Present Context
@@ -57,7 +57,7 @@ head -50 docs/progress.md 2>/dev/null
 Briefly share what you found:
 - Project type and key patterns
 - Any existing plans or tasks
-- Recent work from progress journal (if found)
+- Recent work from activity log (if found)
 
 ### Step 3: Ask What They Want to Do
 
@@ -108,5 +108,5 @@ Skill arc:[chosen]: "[user's description]"
 ## Interop
 
 - Routes to all other /arc:* commands
-- Reads TaskList, /arc:vision, /arc:progress for context
+- Reads TaskList, /arc:vision, .arc/log.md for context
 - Uses /arc:suggest when user is unsure

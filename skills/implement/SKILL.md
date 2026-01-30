@@ -511,21 +511,12 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 3. **If blocked** → Use **TaskCreate** for the blocker
 </tasklist_update>
 
-<progress_append>
-After completing implementation (or pausing), append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:implement
-**Task:** [Feature name]
-**Outcome:** [Complete / In Progress (X/Y tasks) / Blocked]
-**Files:** [Key files created/modified]
-**Decisions:**
-- [Key implementation decision]
-**Next:** [PR created / Continue tomorrow / Blocked on X]
-
----
-```
-</progress_append>
+Entry: `/arc:implement — [Feature name] ([X/Y] tasks complete)`
+</arc_log>
 
 <success_criteria>
 Execution is complete when:
