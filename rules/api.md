@@ -62,9 +62,47 @@ When using tRPC as the typesafe client data layer:
 
 - MUST: Use `@trpc/tanstack-react-query` with `queryOptions`/`mutationOptions`.
 - MUST: Zod for all input validation.
+- MUST: Use `queryKey()` for cache invalidation — never manual string arrays.
 - SHOULD: Organize routers by domain (`user`, `posts`, `billing`).
 - SHOULD: Use `superjson` as transformer for Date/Map/Set serialization.
+- SHOULD: Prefer optimistic updates for mutations that modify displayed data.
 - See [integrations.md](integrations.md) for adapter error handling rules.
+
+### Query Keys
+
+```ts
+// Partial key — matches all queries for procedure (good for invalidate/cancel)
+qc.invalidateQueries({ queryKey: trpc.posts.list.queryKey() });
+
+// Exact key — includes input (required for setQueryData/getQueryData)
+const queryOptions = trpc.posts.list.queryOptions({ limit: 10 });
+qc.setQueryData(queryOptions.queryKey, newData);
+
+// Wrong — manual strings won't match tRPC's nested key format
+qc.invalidateQueries({ queryKey: ["posts", "list"] });
+```
+
+### Optimistic Updates
+
+For mutations affecting displayed data, use the optimistic pattern:
+
+```ts
+// Get exact query key from queryOptions (includes input)
+const queryOptions = trpc.posts.list.queryOptions({ limit: 10 });
+const queryKey = queryOptions.queryKey;
+
+const mutation = useMutation({
+  mutationFn: trpc.posts.delete.mutationOptions().mutationFn,
+  onMutate: async (vars) => {
+    await qc.cancelQueries({ queryKey });
+    const previous = qc.getQueryData(queryKey);
+    qc.setQueryData(queryKey, (old) => old?.filter((p) => p.id !== vars.id));
+    return { previous };
+  },
+  onError: (_, __, ctx) => ctx?.previous && qc.setQueryData(queryKey, ctx.previous),
+  onSettled: () => qc.invalidateQueries({ queryKey }),
+});
+```
 
 ## OpenAPI Generation
 
