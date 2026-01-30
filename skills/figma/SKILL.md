@@ -116,22 +116,12 @@ mcp__figma__get_screenshot: fileKey, nodeId
 Check for related prior UI/design work.
 </progress_context>
 
-<progress_append>
-After completing the Figma implementation, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:figma
-**Task:** [Component/screen implemented from Figma]
-**Outcome:** [Complete / In Progress / Blocked]
-**Files:** [Key files created/modified]
-**Decisions:**
-- [Design system tokens used]
-- [Any deviations from design and why]
-**Next:** [Follow-up work if any]
-
----
-```
-</progress_append>
+Entry: `/arc:figma — [Component/screen] implemented from Figma`
+</arc_log>
 
 <success_criteria>
 Figma implementation is complete when:

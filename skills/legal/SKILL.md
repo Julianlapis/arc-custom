@@ -453,32 +453,12 @@ Present to user after generation:
 
 ---
 
-<progress_append>
-After generating legal pages, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:legal
-**Task:** Generate legal pages for [project]
-**Outcome:** Created Privacy Policy, Terms of Service, Cookie Policy
-**Files:**
-- app/(legal)/privacy/page.tsx
-- app/(legal)/terms/page.tsx
-- app/(legal)/cookies/page.tsx
-**Detection summary:**
-- Auth: [what was detected]
-- Analytics: [what was detected]
-- Payments: [what was detected]
-- Third parties: [list]
-**User provided:**
-- Company: [name]
-- Jurisdiction: [location]
-- Service type: [type]
-**Compliance targets:** GDPR, CCPA, [others]
-**Next:** Legal review, cookie consent banner, footer links
-
----
-```
-</progress_append>
+Entry: `/arc:legal — Generated Privacy Policy, Terms, Cookie Policy`
+</arc_log>
 
 ---
 

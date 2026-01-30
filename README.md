@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 26 skills covering the complete development lifecycle:
+Arc provides 25 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -32,7 +32,6 @@ DO      /arc:implement  - Execute the plan with TDD
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
         /arc:audit      - Comprehensive codebase audit (includes deslop)
-        /arc:progress   - Session journal for knowledge persistence
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
         /arc:naming     - Generate and validate project names
@@ -82,7 +81,7 @@ Arc uses these plugins for enhanced functionality:
 
 Arc works without these, but relevant features will be limited.
 
-**Note:** Arc maintains its own progress journal (`docs/progress.md`) for knowledge persistence across sessions, replacing the need for external memory plugins.
+**Note:** Arc maintains an activity log (`.arc/log.md`, gitignored) for knowledge persistence across sessions. Every skill auto-appends a brief entry on completion.
 
 ### Optional: Vercel Labs Plugins
 
@@ -187,7 +186,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
-| `/arc:progress` | View/manage session journal | `docs/progress.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
 | `/arc:naming` | Generate project names | Name candidates |

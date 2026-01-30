@@ -434,25 +434,12 @@ Report: docs/audits/YYYY-MM-DD-deps-audit.md
 
 </process>
 
-<progress_append>
-After completing the dependency audit, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:deps
-**Task:** Dependency audit
-**Outcome:** Complete
-**Files:** docs/audits/YYYY-MM-DD-deps-audit.md
-**Decisions:**
-- Critical CVEs: [N]
-- Alternatives found: [N]
-- Batches applied: [N/N]
-- Failures rolled back: [N]
-- Replacements flagged: [N]
-**Next:** [Apply batches / Migration work / Done]
-
----
-```
-</progress_append>
+Entry: `/arc:deps — Dependency audit ([N] CVEs, [N] outdated)`
+</arc_log>
 
 <success_criteria>
 Dependency audit is complete when:
