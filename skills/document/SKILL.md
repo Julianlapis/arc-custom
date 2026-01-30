@@ -186,22 +186,12 @@ If follow-up work is identified, use **TaskCreate**:
 - **activeForm:** Present continuous form
 </tasklist_update>
 
-<progress_append>
-After documenting a solution, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:document
-**Task:** Documented solution for [problem summary]
-**Outcome:** Complete
-**Files:** docs/solutions/[category]/[filename].md
-**Decisions:**
-- Problem type: [category]
-- Severity: [level]
-**Next:** Continue working
-
----
-```
-</progress_append>
+Entry: `/arc:document — [Problem summary] solution`
+</arc_log>
 
 <success_criteria>
 - [ ] YAML frontmatter complete (date, type, severity, tags)

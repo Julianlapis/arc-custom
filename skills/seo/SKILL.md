@@ -405,20 +405,9 @@ SEO audit is complete when:
 - Can be invoked after **/arc:letsgo** for deeper analysis
 - SEO agent (**seo-engineer**) handles the lighter audit in `/arc:audit`
 
-<progress_append>
-After completing the SEO audit, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:seo
-**Task:** SEO audit for [project/scope]
-**Outcome:** [Complete / Issues found]
-**Files:** docs/audits/YYYY-MM-DD-seo-audit.md
-**Decisions:**
-- Marketing pages: [N]
-- Critical: [N], High: [N], Medium: [N]
-- Live checks: [run / not run]
-**Next:** [Fix issues / Create plan / Done]
-
----
-```
-</progress_append>
+Entry: `/arc:seo — [scope] audit ([N] issues)`
+</arc_log>
