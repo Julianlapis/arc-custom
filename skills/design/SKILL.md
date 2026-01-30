@@ -390,24 +390,12 @@ From `frontend-design.md`:
 
 ---
 
-<progress_append>
-After completing design work, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:design
-**Task:** [UI/component designed]
-**Outcome:** Complete
-**Files:** docs/plans/design-[name].md
-**Decisions:**
-- Tone: [aesthetic direction]
-- Memorable: [key element]
-- Typography: [fonts chosen]
-- Colors: [palette summary]
-**Next:** /arc:build or /arc:implement
-
----
-```
-</progress_append>
+Entry: `/arc:design — [Component/page] design ([aesthetic direction])`
+</arc_log>
 
 <success_criteria>
 Design is complete when:
