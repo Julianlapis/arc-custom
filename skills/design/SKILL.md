@@ -121,6 +121,16 @@ Ask these questions **one at a time**:
 "Any reference designs or inspiration?"
 - If provided, **screenshot them immediately using Chrome MCP** for visual reference
 
+### Question 5: UI Chrome
+"Should this have standard website chrome (header, footer, navigation), or feel more like an app?"
+
+Consider:
+- **Standard website chrome** — Fixed header with logo/nav, footer with links. Good for content sites, marketing pages, multi-page experiences where users need to navigate.
+- **App-like experience** — Minimal or no persistent chrome. Content takes full focus. Good for tools, dashboards, immersive experiences, single-purpose flows.
+- **Hybrid** — Minimal header (maybe just a logo), no footer. Common for SaaS apps.
+
+**The default shouldn't always be "header + footer".** If the experience is focused (a tool, a game, a single flow), standard chrome can feel clunky and distract from the core experience. Let the purpose guide the frame.
+
 ---
 
 ## Phase 3: Research Inspiration (Optional)
