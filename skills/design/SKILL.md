@@ -27,6 +27,15 @@ Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cut
 
 **Announce at start:** "I'm using the design skill to create distinctive, non-generic UI."
 
+<important>
+**This skill is user-interactive. Do NOT spawn agents to do design work.**
+
+- This skill walks through design decisions WITH the user — it's collaborative, not delegated
+- There is no `arc:design:designer` agent — design creation happens through this skill
+- `arc:review:designer` exists but is for REVIEWING implementations AFTER they're built, not for creating designs
+- If asked to "design X", follow this skill's phases; don't try to spawn an agent
+</important>
+
 ---
 
 ## Phase 0: Load References (MANDATORY)
