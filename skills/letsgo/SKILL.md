@@ -573,21 +573,12 @@ If follow-up work is identified, use **TaskCreate**:
 - **activeForm:** Present continuous form
 </tasklist_update>
 
-<progress_append>
-After completing deployment or checklist, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:letsgo
-**Task:** Production readiness for [project/feature]
-**Outcome:** [Deployed / Checklist complete / Blocked]
-**Files:** [Config files modified]
-**Decisions:**
-- [Key production decisions]
-**Next:** [Live at URL / Fix blockers]
-
----
-```
-</progress_append>
+Entry: `/arc:letsgo — [Deployed to URL / Checklist complete]`
+</arc_log>
 
 <success_criteria>
 Letsgo is complete when:

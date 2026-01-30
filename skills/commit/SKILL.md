@@ -168,21 +168,12 @@ Tell the user:
 - Summary of each commit (hash, message)
 - Push status (if pushed), or remind them to push when ready
 
-<progress_append>
-After committing changes, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:commit
-**Task:** Commit changes
-**Outcome:** Complete
-**Files:** [N] commits created
-**Decisions:**
-- [commit message summaries]
-**Next:** Continue working
-
----
-```
-</progress_append>
+Entry: `/arc:commit — [N] commits ([summary])`
+</arc_log>
 
 ## Failure Scenarios
 
