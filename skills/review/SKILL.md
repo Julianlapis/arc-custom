@@ -272,22 +272,12 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
 
 </process>
 
-<progress_append>
-After completing the review, append to progress journal:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:review
-**Task:** Review [plan name]
-**Outcome:** Complete
-**Files:** [Plan file if updated]
-**Decisions:**
-- [Key change 1]
-- [Key change 2]
-**Next:** /arc:implement or done
-
----
-```
-</progress_append>
+Entry: `/arc:review — [Plan name] reviewed`
+</arc_log>
 
 <success_criteria>
 Review is complete when:

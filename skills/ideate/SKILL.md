@@ -338,21 +338,12 @@ Options:
 </next_step_routing>
 </process>
 
-<progress_append>
-After completing the design, append to `docs/progress.md`:
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:ideate
-**Task:** [Feature name]
-**Outcome:** Complete
-**Files:** docs/plans/YYYY-MM-DD-[topic]-design.md
-**Decisions:**
-- [Key decisions made]
-**Next:** /arc:detail or /arc:implement
-
----
-```
-</progress_append>
+Entry: `/arc:ideate — [Feature name] design complete`
+</arc_log>
 
 <spec_flow_analysis>
 After the design document is written and committed, offer optional user flow analysis:
