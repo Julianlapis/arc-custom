@@ -22,11 +22,11 @@ website:
     - Discovery mode researches externally — market trends, competitors, emerging tech — and proposes new features.
 ---
 
-<progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+<arc_log_context>
+**Use Read tool:** `.arc/log.md` (first 50 lines)
 
 Check what was recently worked on to avoid re-suggesting completed work.
-</progress_context>
+</arc_log_context>
 
 # Suggest Workflow
 
