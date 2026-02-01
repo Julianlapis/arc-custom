@@ -164,3 +164,123 @@ AskUserQuestion:
     - label: "Skip auth routes"
       description: "Only audit public pages for now"
 ```
+
+---
+
+## Phase 2: Page-by-page Audit & Fix
+
+Work through each confirmed route. The loop is tight: **screenshot → analyze → fix → verify → check desktop → next page.**
+
+### For Each Page:
+
+#### Step 1: Mobile Screenshot (375x812)
+
+```
+mcp__claude-in-chrome__navigate to [dev-server-url]/[route]
+mcp__claude-in-chrome__resize_window width=375 height=812
+mcp__claude-in-chrome__computer action=wait duration=2
+mcp__claude-in-chrome__computer action=screenshot
+```
+
+Wait briefly for any animations or lazy-loaded content to settle before screenshotting.
+
+#### Step 2: Analyze the Screenshot
+
+Look at the screenshot and evaluate against these categories:
+
+**Layout:**
+- Horizontal overflow (content wider than viewport, horizontal scrollbar)
+- Elements overlapping or clipping
+- Grids/flexbox not stacking properly
+- Fixed-width elements that don't fit
+
+**Spacing:**
+- Content touching container edges (needs padding)
+- Inconsistent gaps between elements
+- Sections too cramped or too sparse for mobile
+
+**Typography:**
+- Body text smaller than 16px (hard to read on mobile)
+- Headings that are too large and cause overflow
+- Typography hierarchy lost (everything looks the same size)
+
+**Usability:**
+- Touch targets smaller than 44x44px (buttons, links, icons)
+- Input fields without `text-base` (causes iOS auto-zoom)
+- Missing viewport meta tag
+- Hover-dependent functionality with no touch alternative
+
+**Design intent (if design doc was loaded):**
+- Does the page still feel like the same design at mobile width?
+- Is the memorable element preserved (even if scaled)?
+- Are the documented spacing values being used (not arbitrary new values)?
+- Is the typography hierarchy intact (scaled down proportionally, not collapsed)?
+
+#### Step 3: Fix Issues
+
+Apply fixes in code. Follow these principles:
+
+**Container queries for component-level fixes:**
+Use `@container` when fixing a reusable component (card, sidebar, content block, form layout). This makes the component adapt to its container rather than the viewport, so it works in any layout context.
+
+**Viewport queries for page-level layout:**
+Use viewport media queries (`@media`) when fixing page structure — grid column counts, section stacking order, navigation collapse, page-level padding.
+
+**Use existing spacing values:**
+Reference `rules/interface/spacing.md`. Use the Tailwind spacing scale (4, 8, 12, 16, 24, 32, 48, 64). Never invent new spacing values like 13px or 27px.
+
+**Use `h-dvh` not `h-screen`:**
+Reference `rules/interface/layout.md`. Dynamic viewport height respects mobile browser chrome.
+
+**Gate hover styles:**
+Reference `rules/interface/interactions.md`. Use `@media(hover:hover)` so hover effects don't fire on touch devices.
+
+**Shared components:**
+If you recognize the same component causing issues across multiple pages, fix the component source file rather than adding page-specific overrides. This is the natural, correct approach — not a special detection system.
+
+#### Step 4: Verify Mobile Fix
+
+After applying fixes:
+
+```
+mcp__claude-in-chrome__computer action=screenshot
+```
+
+Compare visually to the pre-fix screenshot. Are the issues resolved? If not, iterate.
+
+#### Step 5: Desktop Regression Check (1440x900)
+
+```
+mcp__claude-in-chrome__resize_window width=1440 height=900
+mcp__claude-in-chrome__computer action=screenshot
+```
+
+**Verify desktop is intact.** The fix should not have broken the desktop layout. Check:
+- Grid layouts still multi-column
+- Spacing still generous (not collapsed)
+- Typography still at desktop scale
+- No visual artifacts from responsive changes
+
+**If desktop broke:** Fix the regression, then re-verify at both 375px and 1440px before moving on.
+
+#### Step 6: Scroll Check
+
+For pages longer than the viewport:
+
+```
+mcp__claude-in-chrome__resize_window width=375 height=812
+mcp__claude-in-chrome__computer action=scroll scroll_direction=down scroll_amount=5
+mcp__claude-in-chrome__computer action=screenshot
+```
+
+Repeat scrolling and screenshotting until you've covered the full page. Look for below-the-fold issues:
+- Footer overflow
+- Long content sections with broken layout
+- Images or embeds that don't fit
+- Sticky/fixed elements obscuring content
+
+#### Step 7: Next Page
+
+Move to the next route in the list and repeat from Step 1.
+
+**Progress update:** After each page, briefly note what was fixed: "Homepage: fixed hero grid and nav. Moving to /about."
