@@ -353,3 +353,36 @@ mcp__claude-in-chrome__resize_window width=1440 height=900
 ```
 
 Navigate to each page and take a quick screenshot. If anything looks off, fix and re-commit.
+
+---
+
+<success_criteria>
+Responsive audit is complete when:
+- [ ] Chrome MCP connected and dev server verified
+- [ ] Design doc read (if exists) for aesthetic context
+- [ ] Interface rules loaded (layout, interactions, spacing)
+- [ ] Routes discovered and confirmed with user
+- [ ] Each page screenshotted at 375px (mobile)
+- [ ] Issues identified and fixed per page
+- [ ] Each fix verified with re-screenshot at mobile
+- [ ] Desktop (1440px) checked after mobile fixes — no regressions
+- [ ] Final desktop pass across all pages
+- [ ] Changes committed
+- [ ] Activity log updated
+</success_criteria>
+
+## Interop
+
+- Invoked after `/arc:build` or `/arc:implement` — the natural post-build polish step
+- Reads design docs from `/arc:design` for aesthetic context
+- References `rules/interface/layout.md`, `interactions.md`, `spacing.md` for implementation patterns
+- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for all browser interaction
+- Follows `/arc:commit` discipline for commits
+- Can invoke `web-design-guidelines` skill for compliance review (if available)
+
+<arc_log>
+**After completing this skill, append to the activity log.**
+See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+
+Entry: `/arc:responsive — [N] pages audited, [N] issues fixed`
+</arc_log>
