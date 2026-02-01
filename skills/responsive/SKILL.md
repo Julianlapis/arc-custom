@@ -284,3 +284,72 @@ Repeat scrolling and screenshotting until you've covered the full page. Look for
 Move to the next route in the list and repeat from Step 1.
 
 **Progress update:** After each page, briefly note what was fixed: "Homepage: fixed hero grid and nav. Moving to /about."
+
+---
+
+## Phase 3: Summary & Commit
+
+### Step 1: Present Change Summary
+
+After all pages are audited and fixed, present a summary grouped by page and shared component:
+
+```
+## Responsive Fixes Applied
+
+### / (homepage)
+- Fixed hero grid: 3-column → single-column on mobile (container query on HeroCard)
+- Fixed nav: added mobile sheet menu via viewport query
+- Fixed section padding: p-4 on mobile, p-16 on desktop
+
+### /about
+- Fixed image overflow: added max-w-full to team photos
+- Fixed touch targets on CTA buttons: expanded hit area to 44px
+
+### /blog/first-post
+- Fixed prose width: constrained to viewport on mobile
+- Fixed code blocks: added overflow-x-auto
+
+### Shared: components/Card.tsx
+- Added @container query for horizontal → vertical layout below 400px
+
+### Shared: components/Navigation.tsx
+- Added mobile sheet menu pattern with viewport query
+```
+
+### Step 2: Commit
+
+Batch commit all responsive fixes:
+
+```bash
+git add .
+git commit -m "fix: responsive fixes across [N] pages
+
+- [Brief list of key changes]
+- Container queries for [components]
+- Viewport queries for [page layouts]"
+```
+
+### Step 3: Optional Audit Document
+
+```
+AskUserQuestion:
+  question: "Want me to save a responsive audit doc with all issues found and fixes applied?"
+  header: "Audit doc"
+  options:
+    - label: "Yes, save audit doc"
+      description: "Write to docs/plans/responsive-audit.md for future reference"
+    - label: "No, the commit is enough"
+      description: "Skip the audit doc"
+```
+
+If yes, write `docs/plans/responsive-audit.md` with the full change summary, and commit it.
+
+### Step 4: Final Desktop Verification
+
+Do one final pass: resize to 1440x900 and quickly navigate through all audited pages to confirm everything looks correct at desktop width. This catches any cumulative issues from the page-by-page fixes.
+
+```
+mcp__claude-in-chrome__resize_window width=1440 height=900
+```
+
+Navigate to each page and take a quick screenshot. If anything looks off, fix and re-commit.
