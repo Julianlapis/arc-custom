@@ -29,6 +29,10 @@ website:
 # Tool Restrictions
 
 **Do NOT use the `EnterPlanMode` tool.** This skill has its own conversational design process that writes plans to disk (`docs/plans/`). Claude's built-in plan mode would bypass this process. Follow the conversation flow defined below instead.
+
+**Do NOT use the `ExitPlanMode` tool.** This skill is never in plan mode. It manages its own design output.
+
+**ALWAYS use the `AskUserQuestion` tool for questions.** Never ask questions as plain text in your response. Every question to the user — whether clarifying scope, choosing approaches, or validating design sections — MUST use the `AskUserQuestion` tool. This enforces one question at a time and prevents walls of text with multiple questions. If you need to provide context before asking, keep it to 2-3 sentences max, then use the tool.
 </tool_restrictions>
 
 <key_principles>
@@ -36,8 +40,8 @@ website:
 
 These govern every interaction. Return to them constantly.
 
-- **One question at a time** — Don't overwhelm with multiple questions. If a topic needs more exploration, break it into multiple questions across multiple messages.
-- **Multiple choice preferred** — Easier to answer than open-ended when possible. Offer 2-4 options.
+- **One question at a time via AskUserQuestion tool** — Every question MUST use the `AskUserQuestion` tool. Never write questions as plain text. Never ask more than one question per message. If a topic needs more exploration, use separate tool calls across separate messages.
+- **Multiple choice preferred** — Use `AskUserQuestion` with 2-4 concrete options. Only fall back to open-ended (where the user types freely) when the question genuinely can't be reduced to choices.
 - **YAGNI ruthlessly** — Remove unnecessary features from all designs. "Do we need this in v1?"
 - **Explore alternatives** — Always propose 2-3 approaches before settling. Lead with your recommendation.
 - **Review at every stage** — Don't batch feedback at the end. Each phase includes validation before moving forward.
@@ -81,33 +85,38 @@ This is collaborative dialogue, not a form to fill out. The conversation IS the 
 
 This context-gathering should be **fast and invisible**. Don't dump findings on the user. Use them to ask better questions.
 
-**Then start the conversation:**
+**Then start the conversation.** If the user already described their idea in the initial prompt, skip straight to your first clarifying question. Otherwise, ask them to describe it — this is the ONE exception where a plain text prompt ("Tell me what you're thinking.") is acceptable since you're just opening the floor.
 
-"Tell me what you're thinking."
+**Wait for their response. Then ask ONE clarifying question using `AskUserQuestion`.**
 
-**Wait for their response. Then ask ONE question to clarify.**
-
-The first question should show you understand the codebase:
+The first question should show you understand the codebase. Examples:
 - "I see you have [existing feature]. Is this related, or completely separate?"
 - "The current architecture uses [pattern]. Should this follow that, or is there a reason to diverge?"
 - "There's already [similar thing]. Should we extend it or build fresh?"
 
 ## Understanding the Idea
 
-Ask questions **one at a time** to refine understanding:
+Ask questions **one at a time using the AskUserQuestion tool**. Pick the most important unknown and ask about it. Then wait. Then ask the next one.
+
+Example topics to explore (one per message):
 - Purpose: "What problem does this solve?"
 - Users: "Who uses this?"
 - Scope: "What's the simplest version that's useful?"
 - Constraints: "What's explicitly out of scope?"
 - Success: "How will you know it's working?"
 
-**Prefer multiple choice when possible:**
+**Always use AskUserQuestion with concrete options when possible:**
 ```
-"Which of these matters most for v1?
-A) Speed of implementation
-B) Flexibility for future changes
-C) Perfect UX
-D) Something else?"
+AskUserQuestion:
+  question: "Which of these matters most for v1?"
+  header: "Priority"
+  options:
+    - label: "Speed of implementation"
+      description: "Get it shipped fast, iterate later"
+    - label: "Flexibility for future changes"
+      description: "More upfront design for extensibility"
+    - label: "Perfect UX"
+      description: "Polish the experience before shipping"
 ```
 
 **Keep going until you can explain the idea in one sentence.** Don't rush to propose solutions. Understanding first.
@@ -132,11 +141,22 @@ D) Something else?"
 </conversation_flow>
 
 <scope_check>
-**Before proposing solutions, check scope:**
+**Before proposing solutions, check scope using `AskUserQuestion`:**
 
-"Before we dive into solutions—is there anything here that's nice-to-have vs must-have?"
+```
+AskUserQuestion:
+  question: "Before we dive into solutions — is there anything here that's nice-to-have vs must-have?"
+  header: "Scope"
+  options:
+    - label: "Everything's must-have"
+      description: "All of this is core to v1"
+    - label: "Some is nice-to-have"
+      description: "I'll tell you what we could defer"
+    - label: "Not sure yet"
+      description: "Help me figure out what's essential"
+```
 
-If user is unsure, help them clarify:
+If user picks "Not sure", follow up with one of:
 - "What's the smallest version that would be useful?"
 - "If we had to ship in a day, what would we cut?"
 - "Which part solves the core problem?"
@@ -182,9 +202,18 @@ For each option:
 **Ask which direction appeals to them.** Listen to their reasoning — they have context you don't.
 
 <early_review>
-**Once they've chosen an approach, offer a quick sanity check:**
+**Once they've chosen an approach, offer a quick sanity check via `AskUserQuestion`:**
 
-"Before we detail this out—want me to have a couple reviewers sanity-check the approach? Quick check, not a full audit."
+```
+AskUserQuestion:
+  question: "Before we detail this out — want a couple of reviewers to sanity-check the approach?"
+  header: "Review"
+  options:
+    - label: "Quick review (Recommended)"
+      description: "2-3 reviewers check if the approach is sound"
+    - label: "Skip review"
+      description: "Move straight to detailed design"
+```
 
 **Why now, not later:** Catching architectural issues before investing in detailed design saves significant rework. A 2-minute review now can prevent a 20-minute redesign later.
 
@@ -224,10 +253,10 @@ If they approve → move to the next section.
 <ui_design>
 **For UI work, establish aesthetic direction FIRST:**
 
-Ask (one at a time):
-1. "What tone fits this UI?" — minimal, bold, playful, editorial, luxury, brutalist, retro, organic?
-2. "What should be memorable about this?" — animation, typography, layout, a specific interaction?
-3. "Any existing brand/style to match, or fresh start?"
+Ask (one at a time, each using `AskUserQuestion`):
+1. "What tone fits this UI?" — options: minimal, bold, playful, editorial (+ Other)
+2. "What should be memorable about this?" — options: animation, typography, layout, a specific interaction
+3. "Any existing brand/style to match, or fresh start?" — options: match existing brand, fresh start
 
 **Then create ASCII wireframes:**
 
