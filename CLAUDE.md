@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 25 skills for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 26 skills for the complete development lifecycle.
 
 ## Structure
 
@@ -29,6 +29,7 @@ arc/
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
 │   ├── document/SKILL.md   # Cross-cutting: capture solutions
 │   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
+│   ├── responsive/SKILL.md  # Cross-cutting: mobile responsive audit
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   └── deps/SKILL.md       # Cross-cutting: dependency audit
 ├── agents/                  # Specialized reviewers
@@ -65,6 +66,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 CROSS-CUTTING (available anytime):
               /arc:naming     → Generate and validate project names
               /arc:worktree   → Create isolated git worktree
+              /arc:responsive  → Mobile responsive audit & fix
               /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
