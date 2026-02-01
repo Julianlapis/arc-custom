@@ -91,6 +91,7 @@ Based on their answer:
 | "Continue [existing plan]" | /arc:implement or /arc:detail |
 | "Not sure what to work on" | /arc:suggest |
 | "Review/improve existing code" | /arc:audit --deslop or /arc:review |
+| "Make it responsive/fix mobile" | /arc:responsive |
 | "Ship to production" | /arc:letsgo |
 | "Run tests" | /arc:test |
 

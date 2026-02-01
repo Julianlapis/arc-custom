@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 25 skills covering the complete development lifecycle:
+Arc provides 26 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -37,6 +37,7 @@ CROSS-CUTTING
         /arc:naming     - Generate and validate project names
         /arc:dedup      - Detect semantic code duplication
         /arc:deps       - Dependency management and updates
+        /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
         /arc:tidy       - Clean up completed plans
         /arc:cleanup    - Kill orphaned subagent processes
@@ -195,6 +196,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
 | `/arc:dedup` | Detect semantic code duplication | Duplicate report |
 | `/arc:deps` | Dependency management | Updated dependencies |
+| `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
 | `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |
 | `/arc:cleanup` | Kill orphaned subagent processes | Clean process state |
 
