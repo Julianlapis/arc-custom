@@ -517,6 +517,7 @@ Then grep the codebase for variations and fix any inconsistencies.
 - [ ] HTTP → HTTPS redirects (automatic on Vercel)
 
 ### R. Pre-Launch Testing
+- [ ] Responsive audit completed (`/arc:responsive` if not done already)
 - [ ] Test on real mobile device (not just DevTools)
 - [ ] Test in incognito/private browsing
 - [ ] Test critical user flows end-to-end
