@@ -168,6 +168,28 @@ When uncertain, err toward not reporting. False positives waste everyone's time.
 - **Primitives** = abstract, reusable (`Card`, `List`, `Modal`)
 - **Implementations** = use primitives, add domain logic (`ProductCard` fetches product, standardizes props)
 
+### God Component Signals
+
+A god component isn't just "big" — it's a component with multiple unrelated responsibilities. Flag when you see:
+
+- **3+ unrelated `useState` calls** — multiple state domains = multiple responsibilities
+- **4+ `useEffect` hooks** — too many side effects = too many concerns
+- **5+ props that control layout/mode variants** — a god component hiding behind a prop API
+- **Conditional rendering of completely different UIs** — `if (mode === 'edit')` rendering a totally different tree means this should be two components
+- **200+ lines** — not a hard rule, but when combined with the above, it confirms the diagnosis
+
+### Codebase-Wide Duplication
+
+LLMs generate new code instead of searching the codebase for something to reuse. When reviewing, actively check for:
+
+| See This | Say This |
+|----------|----------|
+| Two components rendering the same visual pattern | "These share a shape. Extract a shared component." |
+| Utility function that reimplements existing logic | "This already exists. Reuse it — don't reinvent." |
+| New hook duplicating existing hook behavior | "Check existing hooks — this logic is already covered." |
+| Same fetch/transform/render pattern across files | "Extract this pattern into a shared hook or component." |
+| Similar components diverging only in data source | "One component, different props. Don't fork the UI." |
+
 ### Design System
 
 | See This | Say This |

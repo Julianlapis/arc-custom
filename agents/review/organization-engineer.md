@@ -217,6 +217,32 @@ apps/
 - Export through a root `index.ts`
 - Not import from sibling packages at the same level (use dependency injection)
 
+### 11. Duplicate & Similar Code Detection
+
+**Duplicated code is an organization failure.** When developers (or LLMs) can't find existing code, they create new code that does the same thing.
+
+**Component duplication:**
+- Two or more components with similar markup/layout → extract shared component
+- Copy-pasted components with minor prop differences → parameterize the original
+- Same UI pattern (card, list item, modal content) reimplemented per feature → shared primitive
+
+**Utility duplication:**
+- Multiple formatting functions (dates, currency, strings) doing the same thing
+- Validation logic reimplemented across forms
+- API call patterns duplicated instead of using a shared fetcher
+
+**Style duplication:**
+- Same Tailwind class combinations repeated across 3+ components → extract component or `@apply`
+- Magic numbers (spacing, colors) used instead of design tokens
+
+**How to detect:**
+1. Search for function signatures with similar names (`format*`, `validate*`, `use*`)
+2. Look for files with similar structure in different feature directories
+3. Check for components that render near-identical markup
+4. Flag any file that looks like a copy of another with search-and-replace changes
+
+**Quantity as a signal:** When a project has many small files doing similar things, that's duplication — not good organization. 10 card components across 10 features likely means 9 should share a base.
+
 ## Analysis Process
 
 When reviewing codebase organization:
