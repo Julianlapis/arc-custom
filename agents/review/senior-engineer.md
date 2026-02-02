@@ -106,10 +106,11 @@ Consider extracting to a new file/module when you see multiple of these:
 
 ## 7. CORE PHILOSOPHY
 
-**Duplication > Complexity**
-- Simple, duplicated code that's easy to understand is BETTER than complex DRY abstractions
-- "I'd rather have four simple components than one clever component with many modes"
-- Adding more files is rarely bad. Making files complex is always bad.
+**Consistency > Duplication**
+- Shared, well-named components are BETTER than duplicated code scattered across features
+- "I'd rather have one clear component used in four places than four copies that drift apart"
+- Duplication looks harmless today but becomes inconsistency tomorrow — extract shared patterns early
+- Exception: Don't create a premature abstraction for code that only *looks* similar but serves genuinely different purposes
 
 **Fail Fast**
 - Errors should surface immediately, not hide behind fallbacks
