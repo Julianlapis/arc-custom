@@ -70,6 +70,9 @@ Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and a
 Reference: `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` for React component patterns.
 Reference: `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` for motion design.
 Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/nextjs-app-router.md` for Next.js App Router patterns (if using Next.js).
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/tanstack-query-trpc.md` for TanStack Query + tRPC patterns (if using data fetching).
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/tanstack-table.md` for TanStack Table v8 patterns (if building data tables).
 </rules_context>
 
 <process>
@@ -369,6 +372,27 @@ If yes, spawn in parallel (all use sonnet for balanced cost/quality):
 - security-engineer if auth/data involved (model: sonnet)
 
 Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
+
+## Post-Completion: Doc Staleness Check
+
+Before offering next steps, check if documentation may need updating:
+
+1. **Get modified files** — List files modified during this session (from git status or tracking)
+2. **Check for existing docs** — Glob for `docs/**/*.md`, `docs/**/*.mdx`, `content/**/*.md`, `content/**/*.mdx`
+3. **If no docs exist** — Skip this check entirely
+4. **If docs exist** — Search doc files for references to modified file paths, exported function names, or component names
+5. **If matches found** — Use AskUserQuestion:
+   ```
+   Question: "These docs reference code you just changed. Update them?"
+   Header: "Stale docs"
+   Options:
+     - label: "Yes, update now"
+       description: "I'll update the affected sections to match your changes"
+     - label: "Skip for now"
+       description: "Continue to next steps"
+   ```
+6. **If user says yes** — Read each stale doc file and the changed source files. Rewrite only the affected sections to reflect the current code. Do not rewrite unaffected sections.
+7. **If user says no or no matches** — Continue to next steps
 
 ## Phase 7: Finish the Branch
 
