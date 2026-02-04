@@ -28,6 +28,7 @@ website:
     - data-engineer
     - senior-engineer
     - simplicity-engineer
+    - designer
 ---
 
 <required_reading>
@@ -58,6 +59,7 @@ website:
 | security-engineer | api.md, env.md |
 | data-engineer | testing.md, api.md |
 | accessibility-engineer | (interface rules only — already in agent prompt) |
+| designer | design.md, colors.md, spacing.md, typography.md |
 </rules_context>
 
 <progress_context>
@@ -83,6 +85,7 @@ Check for context on what led to the plan being reviewed.
 - `performance-engineer` — Bottlenecks, scalability
 - `security-engineer` — Vulnerabilities, OWASP
 - `data-engineer` — Migrations, transactions
+- `designer` — Visual design quality, UX fundamentals, AI slop detection
 
 ## Phase 1: Find the Plan
 
@@ -167,6 +170,7 @@ Check for context on what led to the plan being reviewed.
 
 **Conditional addition (all UI project types):**
 - If plan involves UI components, forms, or user-facing features → add `${CLAUDE_PLUGIN_ROOT}/agents/review/accessibility-engineer.md`
+- If plan involves UI components, pages, or visual design → add `${CLAUDE_PLUGIN_ROOT}/agents/review/designer.md`
 
 ## Phase 3: Run Expert Review
 
