@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -48,9 +52,11 @@ jobs:
           git commit -m "chore: bump version to $new_version [skip ci]"
           git push
 
-          # Create and push tag
-          git tag "v$new_version"
-          git push --tags
+          # Create and push tag (skip if already exists from a previous run)
+          if ! git rev-parse "v$new_version" >/dev/null 2>&1; then
+            git tag "v$new_version"
+            git push --tags
+          fi
 
           # Get commit message for release notes
           COMMIT_MSG=$(git log -1 --skip=1 --pretty=format:"%s" HEAD)
