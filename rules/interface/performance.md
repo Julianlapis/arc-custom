@@ -60,6 +60,29 @@ element.style.width = width * 2 + "px" // Then write
 
 - MUST: Disable transitions during theme change (see `animation.md`)
 
+## Hydration & Refresh
+
+- MUST: No flash of wrong content on page refresh for interactive components (tabs, toggles, accordions, theme)
+- MUST: Persist client state in `localStorage`/`sessionStorage` and read before first render
+- MUST: Set initial state server-side or use CSS to prevent flash:
+
+```jsx
+// Read persisted state before render to avoid flash
+const [activeTab, setActiveTab] = useState(() => {
+  if (typeof window === 'undefined') return 'default';
+  return localStorage.getItem('activeTab') ?? 'default';
+});
+```
+
+```css
+/* CSS-only: hide content until JS hydrates to prevent flash */
+[data-hydrated="false"] .interactive-content {
+  visibility: hidden;
+}
+```
+
+- SHOULD: Use proper SSR hydration — match server/client initial state
+
 ## Video & Media
 
 - MUST: Pause/unmount off-screen videos (especially iOS)

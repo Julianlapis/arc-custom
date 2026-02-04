@@ -45,3 +45,4 @@ UI/UX guidelines for building polished, accessible interfaces.
 - 3:1 contrast for large text
 - Never rely on color alone
 - Honor `prefers-reduced-motion`
+

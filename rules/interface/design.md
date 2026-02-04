@@ -3,7 +3,18 @@
 ## Shadows
 
 - SHOULD: Layer shadows (ambient + direct): `shadow-[0_2px_4px_rgba(0,0,0,0.05),0_12px_24px_rgba(0,0,0,0.1)]`
-- SHOULD: Crisp edges via `border border-black/5 dark:border-white/10`
+- SHOULD: Prefer `box-shadow` over `border` for subtle edges — shadows blend with backgrounds and avoid subpixel rendering issues:
+
+```css
+/* Preferred: shadow blends with any background */
+box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+/* Also works: inset variant */
+box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+/* Fallback: explicit border when shadow isn't practical */
+border: 1px solid rgb(0 0 0 / 0.05);
+```
 
 ## Borders
 
