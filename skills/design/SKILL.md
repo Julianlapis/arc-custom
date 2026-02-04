@@ -352,22 +352,20 @@ Define the scale being used:
 Question: "Design documented. What's next?"
 Header: "Next step"
 Options:
-  1. "Build now" (Recommended) — Continue to implementation
-  2. "Create detailed plan" — Run /arc:detail for task breakdown
-  3. "Save and stop" — Return to this later
+  1. "Create detailed plan" (Recommended) — Run /arc:detail for task breakdown
+  2. "Save and stop" — Return to this later
 ```
 
 **IMPORTANT: Do NOT automatically invoke other skills.**
 
-- **If option 1:** Tell user: "Design saved. Run `/arc:build` to start building."
-- **If option 2:** Tell user: "Design saved. Run `/arc:detail` to create implementation tasks."
-- **If option 3:** Tell user: "Design saved to `docs/plans/design-[name].md`. Return anytime."
+- **If option 1:** Tell user: "Design saved. Run `/arc:detail` to create implementation tasks."
+- **If option 2:** Tell user: "Design saved to `docs/plans/design-[name].md`. Return anytime."
 
 ---
 
-## During Implementation (Reference for /arc:build)
+## During Implementation (Reference for /arc:implement)
 
-When implementing this design (in /arc:build or /arc:implement), use Chrome MCP continuously:
+When implementing this design (via /arc:implement), use Chrome MCP continuously:
 
 ### After Every Significant Change
 ```
@@ -432,7 +430,7 @@ Design is complete when:
 
 ## Interop
 
-- Produces design doc consumed by **/arc:build** and **/arc:implement**
+- Produces design doc consumed by **/arc:implement**
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual capture throughout
 - Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin

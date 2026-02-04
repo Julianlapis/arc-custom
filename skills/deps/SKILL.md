@@ -411,7 +411,7 @@ Replacements are NOT auto-migrated. For each approved replacement:
    2. Run tests to verify
    3. Remove [old-package]: [package-manager] remove [old-package]
 
-   Consider running /arc:build to handle the import migration.
+   Consider running /arc:implement to handle the import migration.
    ```
 
 3. Do NOT remove the old package or modify imports automatically.

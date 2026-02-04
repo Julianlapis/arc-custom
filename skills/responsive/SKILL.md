@@ -373,7 +373,7 @@ Responsive audit is complete when:
 
 ## Interop
 
-- Invoked after `/arc:build` or `/arc:implement` — the natural post-build polish step
+- Invoked after `/arc:implement` — the natural post-build polish step
 - Reads design docs from `/arc:design` for aesthetic context
 - References `rules/interface/layout.md`, `interactions.md`, `spacing.md` for implementation patterns
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for all browser interaction

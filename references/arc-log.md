@@ -67,7 +67,6 @@ Look for:
 | `/arc:ideate` | Feature designed, approach chosen |
 | `/arc:detail` | Plan created, task count |
 | `/arc:implement` | Tasks completed, remaining |
-| `/arc:build` | What was built |
 | `/arc:test` | Test results, coverage |
 | `/arc:review` | Plan reviewed, changes |
 | `/arc:audit` | Issue counts by severity |

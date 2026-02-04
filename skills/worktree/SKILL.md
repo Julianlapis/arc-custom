@@ -93,14 +93,14 @@ Use AskUserQuestion to present options:
 |--------|------|
 | Design the feature (/arc:ideate) | New feature needing design |
 | Create implementation plan (/arc:detail) | Have design, need tasks |
-| Start building (/arc:build) | Small/clear scope |
+| Start implementing (/arc:implement) | Have a plan ready |
 | Done for now | Just wanted the worktree |
 
 ## Integration
 
 **Called by:**
 - `/arc:ideate` (Phase 5) — After design approved
-- `/arc:build` (Step 1b) — When on main
+- `/arc:implement` (Step 1b) — When on main
 - `/arc:detail` (Step 7) — When plan ready but on main
 - Any workflow starting non-trivial work
 

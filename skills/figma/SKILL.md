@@ -136,5 +136,4 @@ Figma implementation is complete when:
 ## Interop
 
 - Use **/arc:design** if you need to create a design from scratch (no Figma reference)
-- Use **/arc:build** for quick implementations without Figma
 - Use **/arc:implement** for planned multi-step implementations

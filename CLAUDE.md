@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 26 skills for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 25 skills for the complete development lifecycle.
 
 ## Structure
 
@@ -15,7 +15,6 @@ arc/
 │   ├── detail/SKILL.md     # 4. Plan: design → implementation plan
 │   ├── review/SKILL.md     # 5. Review: validate before execution
 │   ├── implement/SKILL.md  # 6. Execute: TDD implementation
-│   ├── build/SKILL.md      # 6. Execute: quick builds
 │   ├── design/SKILL.md     # 6. Execute: distinctive UI
 │   ├── figma/SKILL.md      # 6. Execute: from Figma designs
 │   ├── test/SKILL.md       # 7. Test: strategy & execution
@@ -56,7 +55,6 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 4. PLAN       /arc:detail     → Create step-by-step implementation plan
 5. REVIEW     /arc:review     → Expert validation before execution
 6. EXECUTE    /arc:implement  → TDD implementation of plan
-              /arc:build      → Quick builds without formal planning
               /arc:design     → Create distinctive UI
               /arc:figma      → Implement from Figma designs
 7. TEST       /arc:test       → Test strategy and execution
@@ -103,7 +101,6 @@ Arc focuses on the development lifecycle. For specialized domains, consider thes
 | Arc Command | Complementary Skill | Use Case |
 |-------------|-------------------|----------|
 | `/arc:design` | `web-design-guidelines` | UI compliance review |
-| `/arc:build` | `vercel-react-best-practices` | React/Next.js performance |
 | `/arc:implement` | Both | Quality checkpoints |
 | `/arc:letsgo` | `vercel-react-best-practices`, `vercel:deploy` | Production readiness |
 

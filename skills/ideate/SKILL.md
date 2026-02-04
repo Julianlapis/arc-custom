@@ -322,27 +322,23 @@ The design doc stays on main — it's the canonical "what we're building."
 
 **Present the options clearly:**
 
-"Design committed. There are two paths forward:
+"Design committed. Ready to move to implementation planning?
 
-**Option A: Create implementation plan first** (Recommended for complex features)
+**Option A: Create implementation plan** (Recommended)
 - I'll set up a worktree for isolated development
 - Then create a detailed plan with exact file paths and TDD tasks
 - You'll review the plan before any code is written
 
-**Option B: Start building directly** (For simpler features)
-- I'll set up a worktree and start implementing
-- Good when the design is straightforward and you want to move fast
-
-Which fits this feature better?"
+**Option B: Done for now**
+- Design is saved — return later with `/arc:detail` to plan, then `/arc:implement` to execute"
 
 **Use AskUserQuestion tool:**
 ```
 Question: "How would you like to proceed?"
 Header: "Next step"
 Options:
-  1. "Create implementation plan first" (Recommended) — Worktree + detailed TDD plan before coding
-  2. "Start building directly" — Worktree + implement without formal plan
-  3. "Done for now" — Keep just the design, continue later
+  1. "Create implementation plan" (Recommended) — Worktree + detailed TDD plan before coding
+  2. "Done for now" — Keep just the design, continue later
 ```
 
 <next_step_routing>
@@ -355,15 +351,9 @@ Options:
 4. **STOP.** Tell the user: "Worktree ready. Run `/arc:detail` to create the implementation plan."
 5. Do NOT invoke `/arc:detail` yourself — wait for the user to do so.
 
-**If Option 2 (start building):**
-1. Create worktree: follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
-2. Branch name: `feature/<topic-slug>`
-3. **STOP.** Tell the user: "Worktree ready. Run `/arc:build` to start implementing."
-4. Do NOT invoke `/arc:build` yourself — wait for the user to do so.
-
-**If Option 3 (done for now):**
+**If Option 2 (done for now):**
 - Design is complete and committed
-- **STOP.** Tell the user they can return later with `/arc:detail` or `/arc:build`
+- **STOP.** Tell the user they can return later with `/arc:detail` then `/arc:implement`
 </next_step_routing>
 </process>
 

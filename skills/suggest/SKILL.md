@@ -79,7 +79,7 @@ Present top 3-5 suggestions:
 
 ### 1. [Top recommendation]
 **Why:** [Brief rationale]
-**Command:** /arc:ideate [topic] or /arc:build [thing]
+**Command:** /arc:ideate [topic]
 
 ### 2. [Second recommendation]
 **Why:** [Brief rationale]

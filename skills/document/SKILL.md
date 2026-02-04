@@ -225,7 +225,7 @@ Check `package.json` dependencies and project files:
 **If no framework detected:**
 - Will generate plain markdown
 - After sample validation, recommend a framework based on stack:
-  - Next.js project → "Fumadocs would give you search, navigation, and a polished UI. Set it up with `/arc:build`?"
+  - Next.js project → "Fumadocs would give you search, navigation, and a polished UI. Set it up with `/arc:implement`?"
   - Astro project → "Starlight is built for Astro and gives you great docs out of the box."
   - General → "Plain markdown works everywhere. If you want a docs site later, Fumadocs or VitePress are good options."
 - Use AskUserQuestion:
@@ -236,7 +236,7 @@ Check `package.json` dependencies and project files:
     - label: "Plain markdown"
       description: "Simple .md files with a README index. Works everywhere."
     - label: "Set up a framework first"
-      description: "I'll recommend one for your stack. Use /arc:build to scaffold it, then come back."
+      description: "I'll recommend one for your stack. Use /arc:implement to scaffold it, then come back."
   ```
 
 ## Phase 4: Sample & Validation
@@ -377,7 +377,7 @@ Options:
   - label: "Add more sections"
     description: "Document additional features or modules"
   - label: "Set up a docs framework"
-    description: "Scaffold a docs site with /arc:build to host these"
+    description: "Scaffold a docs site with /arc:implement to host these"
   - label: "Done"
     description: "Documentation is complete"
 ```
@@ -386,13 +386,13 @@ Options:
 <integration>
 ## Integration with Other Skills
 
-**Doc staleness detection:** `/arc:build` and `/arc:implement` check for stale docs after completing work. If changed files have associated documentation, they prompt the user to update inline.
+**Doc staleness detection:** `/arc:implement` checks for stale docs after completing work. If changed files have associated documentation, they prompt the user to update inline.
 
 **Production readiness:** `/arc:letsgo` includes documentation coverage as a checklist item.
 
 **Design context:** `/arc:ideate` reads existing docs to understand the current feature set.
 
-**Framework scaffolding:** If the user wants a docs site (Fumadocs, etc.), route them to `/arc:build` for the infrastructure. `/arc:document` generates content, not apps.
+**Framework scaffolding:** If the user wants a docs site (Fumadocs, etc.), route them to `/arc:implement` for the infrastructure. `/arc:document` generates content, not apps.
 </integration>
 
 <arc_log>

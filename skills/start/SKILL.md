@@ -12,7 +12,7 @@ website:
   desc: Start here
   summary: Start here—whether it's an empty folder or an existing codebase. Arc understands your context and guides you to what's next.
   what: |
-    Arc works in an empty folder or a mature codebase. It gathers context (or notes the absence of it), then kicks off an interactive process to figure out what you're building and how to get there. You'll end up in the right workflow—vision for new projects, ideate for new features, build for quick work.
+    Arc works in an empty folder or a mature codebase. It gathers context (or notes the absence of it), then kicks off an interactive process to figure out what you're building and how to get there. You'll end up in the right workflow—vision for new projects, ideate for new features, implement for existing plans.
   why: |
     Starting is the hardest part. Arc removes the "where do I begin?" paralysis by meeting you where you are—blank slate or legacy monolith—and guiding you forward through conversation.
   decisions:
@@ -87,7 +87,7 @@ Based on their answer:
 | Intent | Route to |
 |--------|----------|
 | "I want to build [feature]" | /arc:ideate |
-| "Quick fix/small change" | /arc:build |
+| "Quick fix/small change" | /arc:ideate |
 | "Continue [existing plan]" | /arc:implement or /arc:detail |
 | "Not sure what to work on" | /arc:suggest |
 | "Review/improve existing code" | /arc:audit --deslop or /arc:review |

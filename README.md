@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 26 skills covering the complete development lifecycle:
+Arc provides 25 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -24,7 +24,6 @@ HOW     /arc:detail     - Detailed implementation plan
           ↓
 DO      /arc:implement  - Execute the plan with TDD
         /arc:design     - UI/UX design with wireframes
-        /arc:build      - Quick build (no formal plan)
         /arc:test       - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
         /arc:legal      - Generate privacy policy and terms
@@ -90,7 +89,7 @@ These plugins provide additional review capabilities:
 
 | Plugin | Skill | Used by |
 |--------|-------|---------|
-| **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:build`, `/arc:letsgo` |
+| **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:letsgo` |
 | **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement` |
 
 ```
@@ -141,9 +140,6 @@ You can also jump in at any point if you already have docs.
 # Design a new feature (full flow)
 /arc:ideate add a notification system
 
-# Quick build without formal planning
-/arc:build add a logout button to the header
-
 # Get suggestions for what to work on
 /arc:suggest
 
@@ -181,7 +177,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:implement` | Execute a plan | Code changes |
 | `/arc:design` | UI/UX work | Wireframes + code |
 | `/arc:figma` | Implement from Figma | Code matching design |
-| `/arc:build` | Quick implementation | Code changes |
 | `/arc:test` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
 | `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
@@ -230,7 +225,7 @@ Commands work together:
 
 - `/arc:suggest` reads TaskList, codebase, `/arc:vision`, and external market trends (priority cascade with opt-in discovery mode)
 - `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
-- `/arc:build` suggests `/arc:ideate` if scope is too large
+- `/arc:ideate` naturally handles small scope quickly, larger scope with more depth
 - `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
 - Any command can create tasks with TaskCreate
 
