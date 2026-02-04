@@ -524,6 +524,22 @@ Then grep the codebase for variations and fix any inconsistencies.
 - [ ] Test with slow network (DevTools throttling)
 - [ ] Check print styles (if applicable)
 
+### S. UI Polish (Always)
+- [ ] No layout shift on dynamic content (hardcoded dimensions, `tabular-nums`, no font-weight changes on hover)
+- [ ] Animations have `prefers-reduced-motion` support
+- [ ] Touch targets are 44px minimum
+- [ ] Hover effects gated behind `@media (hover: hover)`
+- [ ] Keyboard navigation works (tab order, focus trap in modals, arrow keys in lists)
+- [ ] Icon-only buttons have `aria-label`
+- [ ] Forms submit with Enter; textareas with ⌘/Ctrl+Enter
+- [ ] Inputs are `text-base` (16px+) to prevent iOS zoom
+- [ ] No `transition: all` — specify exact properties
+- [ ] z-index uses fixed scale or `isolation: isolate`
+- [ ] No flash on refresh for interactive state (tabs, theme, toggles)
+- [ ] Destructive actions require confirmation (`AlertDialog`, not `confirm()`)
+
+> Reference: `${CLAUDE_PLUGIN_ROOT}/rules/interface/` for detailed rules on each item.
+
 ---
 
 ### Step 4: Address Gaps
