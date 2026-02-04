@@ -69,6 +69,10 @@ at commit time.
 
 ### .claude/settings.json
 
+Use `biome check --fix --unsafe` (not `biome format --write` + `biome lint` separately).
+`check --fix` combines format + lint fix in a single pass, so rules like `useSortedClasses`
+(Tailwind class sorting) are applied automatically.
+
 ```json
 {
   "hooks": {
@@ -78,7 +82,7 @@ at commit time.
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path' | { read file_path; case \"$file_path\" in *.js|*.ts|*.jsx|*.tsx|*.json|*.jsonc|*.css) pnpm biome format --write \"$file_path\" 2>/dev/null || true ;; esac; }"
+            "command": "jq -r '.tool_input.file_path' | { read file_path; case \"$file_path\" in *.js|*.ts|*.jsx|*.tsx|*.json|*.jsonc|*.css|*.graphql) pnpm biome check --fix --unsafe \"$file_path\" 2>/dev/null || true ;; esac; }"
           }
         ]
       }
