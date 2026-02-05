@@ -62,6 +62,7 @@ Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cut
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — If designing forms
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/app-ui.md` — If designing app UI (dashboards, settings, data views)
 </mandatory_references>
 
 <progress_context>
@@ -99,6 +100,27 @@ Check for related prior design work and aesthetic decisions.
 - Confirm dev server is running (or will be)
 - Ask if there's any existing brand/style guide to reference
 - Check if there are reference designs or inspiration URLs to screenshot
+
+---
+
+## Phase 1.5: Design Mode
+
+**Before gathering direction, establish what kind of UI you're designing.**
+
+**Use AskUserQuestion:**
+```
+Question: "What are you designing?"
+Header: "Design mode"
+Options:
+  1. "Marketing page" — Landing page, homepage, pricing, about, blog. Goal: persuade and convert.
+  2. "App UI" — Dashboard, settings, forms, data views. Goal: enable and orient.
+```
+
+**After selection:**
+- **Marketing** → Load `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` as mandatory reference
+- **App UI** → Load `${CLAUDE_PLUGIN_ROOT}/rules/interface/app-ui.md` as mandatory reference
+
+This mode context informs all subsequent phases — questions, research sources, wireframe patterns, and checklist items adapt accordingly.
 
 ---
 
@@ -142,9 +164,28 @@ Ask the remaining questions **one at a time**:
 "What tone fits this UI?"
 - Minimal, bold, playful, editorial, luxury, brutalist, retro, organic, industrial, art deco, soft/pastel
 
+### Question 1.5: Mode-Specific Question
+
+**If Marketing mode:**
+"How does the page tell its story?"
+- Hero → problem → solution → proof → CTA (classic)
+- Immersive scroll narrative (one idea per viewport)
+- Feature showcase (dense, scannable)
+- Minimal single-screen (everything above the fold)
+- Editorial long-form (article-like)
+
+**If App UI mode:**
+"How information-dense should this be?"
+- Sparse — generous whitespace, one focus per screen (e.g., onboarding)
+- Balanced — comfortable density, clear hierarchy (e.g., settings)
+- Dense — lots of data visible at once (e.g., dashboard, table views)
+
 ### Question 2: Memorable Element
 "What should be memorable about this?"
-- The animation? Typography? Layout? A specific interaction? Color? Photography style?
+
+**If Marketing:** The animation? Typography drama? Layout surprise? Photography style? Scroll behavior?
+
+**If App UI:** The navigation paradigm? Micro-interactions? Information density approach? Empty state creativity? Data visualization style?
 
 ### Question 3: Existing Constraints
 "Any existing brand/style to match, or fresh start?"
@@ -311,6 +352,8 @@ Beyond basic layout, make deliberate choices about:
 3. Mobile version if responsive
 4. States: empty, loading, error (where relevant)
 
+**If App UI mode:** You MUST include at least one state variant beyond the populated state (empty, loading, or error). App UI without state design is incomplete.
+
 **Ask:** "Does this layout feel right before I continue?"
 
 ---
@@ -385,6 +428,19 @@ Beyond basic layout, make deliberate choices about:
 - [ ] Typography is deliberate
 - [ ] At least one memorable element
 - [ ] Layout has unexpected decisions
+
+### If Marketing Mode, also check:
+- [ ] **Red Flag:** Cookie-cutter hero → features → testimonials → CTA layout
+- [ ] **Red Flag:** No clear narrative structure
+- [ ] **Green Flag:** Section rhythm creates breathing room
+- [ ] **Green Flag:** Would pass the "screenshot test" — distinctive in a grid of competitors
+
+### If App UI Mode, also check:
+- [ ] **Red Flag:** No empty state designed
+- [ ] **Red Flag:** Generic admin template feel
+- [ ] **Red Flag:** Fails the swap test — choices are defaults, not decisions (see app-ui.md)
+- [ ] **Green Flag:** Could use this for 8 hours without visual fatigue
+- [ ] **Green Flag:** All critical states designed (empty, loaded, error)
 
 **If any Red Flags are present, revise before proceeding.**
 
@@ -461,7 +517,8 @@ Entry: `/arc:design — [Component/page] design ([aesthetic direction])`
 
 <success_criteria>
 Design is complete when:
-- [ ] All mandatory references were loaded and applied
+- [ ] Design mode identified (marketing or app UI)
+- [ ] All mandatory references were loaded and applied (including mode-specific reference)
 - [ ] Current UI was screenshotted (if redesigning)
 - [ ] Aesthetic direction established with SPECIFIC values
 - [ ] Typography selected from recommended fonts

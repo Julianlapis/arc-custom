@@ -2,6 +2,51 @@
 
 **Quality bar:** Build marketing sites worthy of [siteinspire.com](https://siteinspire.com). Distinctive, refined, memorable — not generic template work.
 
+## Hero Section
+
+The hero is the first impression. It sets the tone for everything below.
+
+- MUST: Headline communicates the core value proposition in one sentence
+- SHOULD: Typography creates drama — large size contrast between headline and subtext
+- SHOULD: One primary CTA, visually dominant. Secondary CTA (if present) clearly subordinate.
+- NEVER: Generic stock imagery that could belong to any product
+- NEVER: More than 2 CTAs in the hero
+- NEVER: Auto-playing video without user consent
+
+**Hero patterns (pick one, don't combine):**
+
+| Pattern | When to use |
+|---------|-------------|
+| Text-centered | Strong copy, no product to show yet |
+| Split (text + visual) | Product screenshot, illustration, or demo |
+| Full-bleed media | Photography-driven, lifestyle brands |
+| Interactive/demo | Product speaks for itself |
+
+## Section Composition
+
+Marketing pages are narratives. Each section advances the story.
+
+- MUST: Consistent vertical rhythm between sections (pick a value: 96px, 128px, or 160px and commit)
+- SHOULD: Alternate visual weight — dense section followed by spacious, text followed by visual
+- SHOULD: Each section has one clear purpose (don't combine testimonials with feature lists)
+- SHOULD: Visual transitions between sections — background color shifts, not just whitespace
+- NEVER: Cookie-cutter repeating layout (3-column cards, 3-column cards, 3-column cards)
+- NEVER: More than 7-8 sections total (if you need more, you're not editing)
+
+**Section rhythm matters more than individual section design.** A page with 5 well-paced sections beats a page with 10 beautifully designed sections that feel relentless.
+
+## Social Proof
+
+Social proof converts. But generic social proof repels.
+
+- SHOULD: Real names, real photos, real companies — not "John D., CEO"
+- SHOULD: Specific outcomes over vague praise ("Cut deploy time from 45min to 2min" > "Great product!")
+- SHOULD: Logo bars with recognizable brands, monochrome, consistent sizing
+- SHOULD: Testimonials placed after the claim they support (feature section → proof of that feature)
+- NEVER: Fake or obviously AI-generated testimonials
+- NEVER: Star ratings without context (everyone has 5 stars)
+- NEVER: Carousel of testimonials that auto-advances (let users read at their pace)
+
 ## Animation
 
 - SHOULD: Marketing animations can be longer than product UI

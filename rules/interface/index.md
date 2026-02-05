@@ -16,6 +16,7 @@ UI/UX guidelines for building polished, accessible interfaces.
 | [animation.md](animation.md) | Motion and transitions |
 | [performance.md](performance.md) | UI performance optimization |
 | [marketing.md](marketing.md) | Marketing page guidelines |
+| [app-ui.md](app-ui.md) | App UI guidelines (dashboards, SaaS, data tools) |
 | [content-accessibility.md](content-accessibility.md) | Accessible content |
 
 ## Related References
