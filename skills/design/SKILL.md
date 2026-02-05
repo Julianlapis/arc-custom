@@ -104,7 +104,39 @@ Check for related prior design work and aesthetic decisions.
 
 ## Phase 2: Gather Direction
 
-Ask these questions **one at a time**:
+### Question 0: Exploration Mode (Conditional)
+
+**Offer this option when circumstances allow:**
+- New project with no established design system
+- Homepage, landing page, or marketing site design
+- User seems uncertain about direction
+- Greenfield UI with creative freedom
+
+**Do NOT offer when:**
+- Strict brand guidelines exist
+- Designing a small component or iteration
+- User has already specified a clear direction
+- Adding to an existing design system
+
+**If circumstances allow, use AskUserQuestion:**
+```
+Question: "Would you like me to create 5 vastly different design directions, each at its own route? This lets you compare radically different approaches before committing."
+Header: "Exploration"
+Options:
+  1. "Yes, explore 5 directions" — Create /design-1 through /design-5 with completely different aesthetics
+  2. "No, single direction" (Recommended) — Focus on one well-crafted design
+```
+
+**If exploration mode is chosen:**
+- Each route (/design-1, /design-2, etc.) gets a completely different aesthetic
+- Vary: color palette, typography, layout structure, tone, spatial composition
+- Don't just tweak—make them *unrecognizable* from each other
+- After building all 5, ask user which direction resonates
+- Then proceed with full design doc for the chosen direction
+
+---
+
+Ask the remaining questions **one at a time**:
 
 ### Question 1: Tone
 "What tone fits this UI?"
@@ -212,6 +244,10 @@ If a specific example catches interest, use Chrome MCP for detailed inspection:
 
 **Capture SPECIFIC visual decisions, not conceptual themes.**
 
+<principle>
+**Complexity Matching:** Design complexity should align with aesthetic vision. Maximalist designs warrant elaborate code and rich details. Minimalist designs require restraint and precision—every element must earn its place. Don't add flourishes to a minimal design; don't under-build a maximalist one.
+</principle>
+
 Apply knowledge from the loaded references to make these decisions:
 
 ### Typography Selection
@@ -238,6 +274,15 @@ Define the scale being used:
 - **Common values:** 4, 8, 12, 16, 24, 32, 48, 64
 - **Component padding:** [e.g., 16px default, 24px for cards]
 - **Section spacing:** [e.g., 64px between major sections]
+
+### Spatial Composition
+Beyond basic layout, make deliberate choices about:
+- **Asymmetry:** Not everything needs to be centered or perfectly balanced
+- **Overlap:** Elements can break grid boundaries, bleed off edges, layer on top of each other
+- **Unexpected layouts:** Break the "header → hero → 3-column features → footer" pattern
+- **Negative space:** Generous whitespace creates breathing room and draws focus to what matters
+
+**Ask:** "Where can the layout do something unexpected?"
 
 ### Motion Philosophy
 - **Where animation is used:** [specific locations]
