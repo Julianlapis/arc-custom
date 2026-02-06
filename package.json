@@ -4,7 +4,6 @@
   "private": true,
   "description": "Arc workflows for Claude Code and Codex",
   "scripts": {
-    "agents:generate": "node scripts/generate-agents-md.js",
     "push": "./scripts/push.sh",
     "release": "node scripts/release.js",
     "release:patch": "node scripts/release.js patch",

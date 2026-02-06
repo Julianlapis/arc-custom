@@ -10,7 +10,7 @@
 The full arc from idea to shipped code.
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands in Claude.
-- Codex: this repo includes `AGENTS.md` so the same `skills/*/SKILL.md` workflows can run directly in Codex (no Claude plugin install required).
+- Codex: this repo includes `.agents/skills` so the same `skills/*/SKILL.md` workflows can run directly in Codex (no Claude plugin install required).
 
 ## What It Does
 
@@ -68,25 +68,26 @@ claude plugins install arc@howells-arc
 
 ### Codex
 
-Codex reads `AGENTS.md` from your workspace and uses it to route requests to the right skill.
+Codex reads skills from `.agents/skills` (scanned from your current working directory up to the repo root).
 
 ## Using In Codex
 
 1. Clone this repo.
 2. Open it in Codex as your workspace.
-3. Use Claude-style commands in chat, for example:
+3. Invoke skills explicitly (recommended):
+   - In CLI/IDE: run `/skills` or type `$` to pick a skill
+   - In the Codex app: type `$<skill-name>` in chat
 
 ```
-/arc:start
-/arc:ideate add user authentication with magic links
+$start
+$ideate add user authentication with magic links
 ```
 
-Codex will route these to the corresponding `skills/<name>/SKILL.md` based on `AGENTS.md`.
+Codex loads the selected skill’s `SKILL.md` and follows its workflow.
 
 ### Codex Notes
 
-- `AGENTS.md` is generated from `skills/*/SKILL.md` frontmatter. If you add/remove skills, regenerate with:
-  - `npm run agents:generate` (or `pnpm agents:generate`)
+- These skills are stored in `skills/<name>/SKILL.md` for Claude Code; `.agents/skills/<name>` is a symlink to the same folder so Codex can discover them.
 - Some skills reference Claude-specific tooling (e.g. `TaskList`, `mcp__claude-in-chrome__*`). In Codex, use the closest equivalent:
   - terminal exploration instead of `Task` blocks
   - Playwright (or user-provided screenshots) instead of Claude-in-Chrome MCP
@@ -169,8 +170,8 @@ You can also jump in at any point if you already have docs.
 ### Codex
 
 1. Open your project in Codex.
-2. Ensure this repo's `AGENTS.md` is present in the workspace root (see ["Using In Codex"](#using-in-codex)).
-3. Run commands in chat, e.g. `/arc:start` or `/arc:ideate ...`.
+2. Ensure `.agents/skills` is present (see ["Using In Codex"](#using-in-codex)).
+3. Run skills in chat, e.g. `$start` or `$ideate ...`.
 
 ### Quick Examples
 
