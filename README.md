@@ -7,9 +7,10 @@
 
 <br>
 
-The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin.
+The full arc from idea to shipped code.
 
-Arc also ships with an `AGENTS.md` so the same workflows can be used directly in **Codex** (no Claude plugin install required).
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands in Claude.
+- Codex: this repo includes `AGENTS.md` so the same `skills/*/SKILL.md` workflows can run directly in Codex (no Claude plugin install required).
 
 ## What It Does
 
@@ -57,16 +58,22 @@ TOOLS   /arc:worktree   - Create isolated git worktree for feature work
 - **TDD mandatory** — Tests first, implementation second
 - **Frontend-design integrated** — Bold aesthetic direction, not generic AI slop
 
-## Installation
+## Install
+
+### Claude Code
 
 ```
 claude plugins install arc@howells-arc
 ```
 
+### Codex
+
+Codex reads `AGENTS.md` from your workspace and uses it to route requests to the right skill.
+
 ## Using In Codex
 
-1. Clone this repo (or add it as a git submodule).
-2. Open the repo in Codex as your workspace.
+1. Clone this repo.
+2. Open it in Codex as your workspace.
 3. Use Claude-style commands in chat, for example:
 
 ```
@@ -76,7 +83,15 @@ claude plugins install arc@howells-arc
 
 Codex will route these to the corresponding `skills/<name>/SKILL.md` based on `AGENTS.md`.
 
-## Dependencies
+### Codex Notes
+
+- `AGENTS.md` is generated from `skills/*/SKILL.md` frontmatter. If you add/remove skills, regenerate with:
+  - `npm run agents:generate` (or `pnpm agents:generate`)
+- Some skills reference Claude-specific tooling (e.g. `TaskList`, `mcp__claude-in-chrome__*`). In Codex, use the closest equivalent:
+  - terminal exploration instead of `Task` blocks
+  - Playwright (or user-provided screenshots) instead of Claude-in-Chrome MCP
+
+## Claude Code Dependencies (Optional)
 
 Arc uses these plugins for enhanced functionality:
 
@@ -122,7 +137,7 @@ When installed, Arc commands will automatically use these skills for React/Next.
 
 ## Getting Started
 
-If you're new to Claude Code, here's how Arc works:
+### Claude Code
 
 ### 1. Open your project
 
@@ -150,6 +165,12 @@ Arc commands chain together. After `/arc:ideate` creates a design:
 - Then to `/arc:implement` (write the code with TDD)
 
 You can also jump in at any point if you already have docs.
+
+### Codex
+
+1. Open your project in Codex.
+2. Ensure this repo's `AGENTS.md` is present in the workspace root (see ["Using In Codex"](#using-in-codex)).
+3. Run commands in chat, e.g. `/arc:start` or `/arc:ideate ...`.
 
 ### Quick Examples
 
@@ -240,11 +261,11 @@ Implementation methodologies in `disciplines/`:
 
 Commands work together:
 
-- `/arc:suggest` reads TaskList, codebase, `/arc:vision`, and external market trends (priority cascade with opt-in discovery mode)
+- `/arc:suggest` reads existing tasks (TaskList in Claude Code), codebase, `/arc:vision`, and external market trends (priority cascade with opt-in discovery mode)
 - `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
 - `/arc:ideate` naturally handles small scope quickly, larger scope with more depth
 - `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
-- Any command can create tasks with TaskCreate
+- Claude Code can create tasks via TaskCreate; in Codex, track tasks in issues/docs instead.
 
 ## Acknowledgments
 
