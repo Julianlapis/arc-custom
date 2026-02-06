@@ -342,6 +342,12 @@ Invoke skill: vercel-react-best-practices
 "Review performance patterns. Check: component rendering, data fetching, bundle optimization"
 ```
 
+**If React Native/Expo and `vercel-react-native-skills` skill available:**
+```
+Invoke skill: vercel-react-native-skills
+"Review React Native production readiness. Check: list performance, animation optimization, memory leaks, native module usage, Expo config"
+```
+
 ### G. Security (Always)
 - [ ] No secrets in client-side code (check bundle)
 - [ ] HTTPS enforced (automatic on Vercel)
@@ -615,4 +621,5 @@ Letsgo is complete when:
 - References **/arc:vision** to verify alignment
 - Invokes **/arc:legal** to generate missing legal documents
 - Can invoke **vercel-react-best-practices** skill for performance review (if available)
+- Can invoke **vercel-react-native-skills** skill for React Native performance review (if available)
 - Can invoke **vercel:deploy** skill for deployment (if available)

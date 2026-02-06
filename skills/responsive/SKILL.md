@@ -379,6 +379,7 @@ Responsive audit is complete when:
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for all browser interaction
 - Follows `/arc:commit` discipline for commits
 - Can invoke `web-design-guidelines` skill for compliance review (if available)
+- Can invoke `vercel-react-native-skills` skill for React Native mobile optimization (if available)
 
 <arc_log>
 **After completing this skill, append to the activity log.**

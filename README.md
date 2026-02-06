@@ -90,7 +90,9 @@ These plugins provide additional review capabilities:
 | Plugin | Skill | Used by |
 |--------|-------|---------|
 | **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:letsgo` |
-| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement` |
+| | `vercel-composition-patterns` | `/arc:implement`, `/arc:design` |
+| | `vercel-react-native-skills` | `/arc:implement`, `/arc:letsgo`, `/arc:responsive` |
+| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement`, `/arc:responsive` |
 
 ```
 # Vercel Labs plugins (optional)

@@ -94,15 +94,16 @@ To test changes locally:
 
 Arc focuses on the development lifecycle. For specialized domains, consider these Vercel Labs plugins:
 
-- **[agent-skills](https://github.com/vercel-labs/agent-skills)** — `vercel-react-best-practices` skill for React/Next.js performance patterns
+- **[agent-skills](https://github.com/vercel-labs/agent-skills)** — `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-native-skills`
 - **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** — `web-design-guidelines` skill for UI compliance review
 
 **When installed, Arc commands will suggest these skills:**
 | Arc Command | Complementary Skill | Use Case |
 |-------------|-------------------|----------|
-| `/arc:design` | `web-design-guidelines` | UI compliance review |
-| `/arc:implement` | Both | Quality checkpoints |
-| `/arc:letsgo` | `vercel-react-best-practices`, `vercel:deploy` | Production readiness |
+| `/arc:design` | `web-design-guidelines`, `vercel-composition-patterns` | UI compliance, component architecture |
+| `/arc:implement` | All agent-skills + `web-design-guidelines` | Quality checkpoints |
+| `/arc:letsgo` | `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel:deploy` | Production readiness |
+| `/arc:responsive` | `web-design-guidelines`, `vercel-react-native-skills` | Mobile audit |
 
 ## Publishing
 

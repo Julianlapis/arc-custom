@@ -534,6 +534,7 @@ Design is complete when:
 
 - Produces design doc consumed by **/arc:implement**
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
+- Can invoke **vercel-composition-patterns** skill for component architecture review (if available)
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual capture throughout
 - Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin
 - References feed into implementation to maintain design fidelity
