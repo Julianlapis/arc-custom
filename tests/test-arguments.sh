@@ -10,9 +10,10 @@ section "Argument Handling Tests"
 # Skills that MUST have argument-hint at root level
 SKILLS_WITH_ARGS=(
     "audit:<path-or-focus>"
-    "figma:<figma-url"
+    "figma:figma-url-or-description"
     "commit:[push]"
-    "progress:<note-to-add>"
+    "deps:--apply"
+    "document:path-or-description"
 )
 
 echo "Verifying argument-hint is at root level..."
@@ -29,7 +30,7 @@ for entry in "${SKILLS_WITH_ARGS[@]}"; do
         # Check argument-hint is at root level (not indented)
         if echo "$frontmatter" | grep -q "^argument-hint:"; then
             # Check it contains expected pattern
-            if echo "$frontmatter" | grep "^argument-hint:" | grep -q "$expected_pattern"; then
+            if echo "$frontmatter" | grep "^argument-hint:" | grep -F -q -- "$expected_pattern"; then
                 pass "skill/$skill has argument-hint at root level"
             else
                 fail "skill/$skill argument-hint doesn't contain expected pattern" \

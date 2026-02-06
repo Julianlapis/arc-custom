@@ -39,6 +39,7 @@ DESIGN_AGENTS=(
 )
 
 WORKFLOW_AGENTS=(
+    "docs-writer"
     "e2e-test-runner"
     "spec-flow-analyzer"
 )

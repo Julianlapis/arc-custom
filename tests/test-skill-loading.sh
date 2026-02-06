@@ -11,7 +11,6 @@ section "Skill Loading Tests"
 # Expected skills
 EXPECTED_SKILLS=(
     "audit"
-    "build"
     "cleanup"
     "commit"
     "dedup"
@@ -25,7 +24,7 @@ EXPECTED_SKILLS=(
     "legal"
     "letsgo"
     "naming"
-    "progress"
+    "responsive"
     "review"
     "rules"
     "seo"
