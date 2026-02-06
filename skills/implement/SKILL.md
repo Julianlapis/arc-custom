@@ -28,6 +28,7 @@ website:
 3. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
 4. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
 5. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
+6. ${CLAUDE_PLUGIN_ROOT}/disciplines/subagent-driven-development.md
 </required_reading>
 
 <rules_context>
@@ -224,15 +225,81 @@ If debugger can't resolve after one attempt → stop and ask user
 ### Step 3: Mark completed
 Update task with TaskUpdate.
 
-### Step 4: Checkpoint after batch
+### Step 4: Batch Review Gate
 
-After every 3 tasks:
+After every 3 tasks, run a two-stage review before continuing.
+
+**Stage 1 — Spec Compliance (mandatory):**
+
+Re-read the relevant tasks from the implementation plan, then spawn a spec compliance reviewer:
 
 ```
-Completed:
-- Task 1: [description] ✓
-- Task 2: [description] ✓
-- Task 3: [description] ✓
+Task general-purpose model: sonnet: "Compare the git diff of the last batch of commits against the plan text below.
+
+PLAN TASKS:
+[paste the 3 task descriptions from the plan]
+
+GIT DIFF:
+[output of: git diff HEAD~3..HEAD]
+
+Check:
+1. Anything MISSING that the plan specifies?
+2. Anything EXTRA that the plan doesn't call for?
+3. Is test coverage adequate for each task?
+
+Report: list of issues or ✅ compliant."
+```
+
+**If issues found → fix → re-review (max 2 cycles).** If still failing after 2 cycles, stop and ask user.
+
+**Stage 2 — Domain Quality Review:**
+
+Detect what the batch touched:
+```bash
+git diff --name-only HEAD~3..HEAD
+```
+
+Select 1-2 reviewers from `agents/review/` based on file patterns:
+
+| Files touched | Reviewer(s) |
+|---------------|-------------|
+| DB migrations, ORM models, schema files | data-engineer |
+| API routes, endpoints, handlers | security-engineer |
+| Auth, middleware, session logic | security-engineer |
+| UI components, pages, layouts | senior-engineer |
+| Complex business logic, domain services | architecture-engineer |
+| Test infrastructure only | test-quality-engineer |
+| Mixed/unclear | senior-engineer (default) |
+
+If the batch spans multiple domains, run the top 2 reviewers **in parallel**.
+
+Each reviewer gets the git diff and instructions to categorize findings as:
+- **Blockers** — Must fix before continuing
+- **Should-fix** — Fix now if quick, otherwise note for later
+- **Suggestions** — Log for final review, don't block progress
+
+```
+Task [reviewer-type] model: sonnet: "Review this batch of changes.
+
+GIT DIFF:
+[output of: git diff HEAD~3..HEAD]
+
+Categorize each finding as: blocker / should-fix / suggestion.
+Focus on your domain. Be specific — cite file and line."
+```
+
+**If blockers found → fix → re-review (max 2 cycles).** Should-fix items: fix if under 5 minutes, otherwise note. Suggestions: log for final review.
+
+**Then present batch summary and wait for user:**
+
+```
+Batch [N] complete:
+- Task X: [description] ✓
+- Task Y: [description] ✓
+- Task Z: [description] ✓
+
+Spec compliance: ✅ (or: fixed [N] issues)
+Quality review ([reviewer names]): ✅ (or: [N] blockers fixed, [N] suggestions noted)
 
 Tests passing: [X/X]
 
@@ -242,10 +309,6 @@ Ready for feedback before continuing?
 Wait for user confirmation or adjustments.
 
 ## Phase 4: Quality Checkpoints
-
-**After completing data/types tasks:**
-- Spawn data-engineer for quick review
-- Present findings as questions
 
 **Before starting UI tasks — INVOKE ARC:DESIGN FOR BUILD:**
 
@@ -315,6 +378,12 @@ If `web-design-guidelines` skill is available:
 Skill web-design-guidelines: "Review [components] for Web Interface Guidelines compliance"
 ```
 
+**Optional: Composition Patterns Review**
+For React projects with component architecture work (new compound components, context providers, or components accumulating boolean props), if `vercel-composition-patterns` skill is available:
+```
+Skill vercel-composition-patterns: "Review [components] for composition patterns — check for boolean prop proliferation, compound component opportunities, and context usage"
+```
+
 **When implementing unfamiliar library APIs:**
 ```
 mcp__context7__resolve-library-id: "[library name]"
@@ -344,6 +413,12 @@ For React/Next.js projects, if `vercel-react-best-practices` skill is available:
 Skill vercel-react-best-practices: "Review implementation for React/Next.js performance patterns"
 ```
 
+**Optional: React Native Performance Review**
+For React Native/Expo projects, if `vercel-react-native-skills` skill is available:
+```
+Skill vercel-react-native-skills: "Review implementation for React Native performance — check list rendering, animations, native module usage, and platform-specific optimizations"
+```
+
 ## Phase 5b: E2E Tests (If Created)
 
 If e2e tests were created as part of this implementation:
@@ -360,18 +435,43 @@ Task Bash run_in_background: true: "Run e2e tests for the feature we just implem
 
 Wait for agent to complete. Review its summary of fixes applied.
 
-## Phase 6: Expert Review (Optional)
+## Phase 6: Implementation Review (Mandatory)
 
-For significant features, offer parallel review:
+Run a final review of the entire implementation. This is **not optional** — skip only if the user explicitly says so.
 
-"Feature complete. Run expert review before PR?"
+**Always spawn 2 reviewers in parallel:**
 
-If yes, spawn in parallel (all use sonnet for balanced cost/quality):
-- simplicity-engineer (model: sonnet)
-- architecture-engineer or domain-specific reviewer (model: sonnet)
-- security-engineer if auth/data involved (model: sonnet)
+```
+Task arc:review:simplicity-engineer model: sonnet: "Review the entire implementation diff for YAGNI violations, over-engineering, unnecessary abstractions, and complexity that isn't justified by current requirements.
 
-Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
+GIT DIFF (full feature):
+[output of: git diff main..HEAD]
+
+Be specific — cite file and line. Categorize as: blocker / should-fix / suggestion."
+
+Task arc:review:architecture-engineer model: sonnet: "Review the entire implementation diff for boundary violations, import hygiene, layer leaks, and structural concerns.
+
+GIT DIFF (full feature):
+[output of: git diff main..HEAD]
+
+Be specific — cite file and line. Categorize as: blocker / should-fix / suggestion."
+```
+
+**Add a conditional third reviewer based on what was built:**
+
+| If the implementation includes... | Also spawn |
+|----------------------------------|------------|
+| Auth, sessions, API keys, user data | security-engineer |
+| Significant UI (components, pages) | senior-engineer |
+| Database migrations, data models | data-engineer |
+
+**Process findings:**
+1. Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`)
+2. **Blockers → fix → re-verify (max 2 cycles)**
+3. Should-fix → fix if quick, otherwise note as follow-up
+4. Suggestions → present to user, don't block
+
+**If user wants to skip:** They must explicitly say "skip review" or "no review". Don't skip silently.
 
 ## Post-Completion: Doc Staleness Check
 
@@ -547,6 +647,9 @@ Execution is complete when:
 - [ ] All tasks marked completed with TaskUpdate
 - [ ] All tests passing
 - [ ] Linting passes
+- [ ] Batch spec compliance reviews passed (all batches)
+- [ ] Batch quality reviews passed (all batches)
+- [ ] Final implementation review passed (mandatory)
 - [ ] PR created
 - [ ] User informed of completion
 - [ ] Progress journal updated
