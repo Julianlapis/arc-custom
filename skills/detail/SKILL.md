@@ -269,7 +269,7 @@ git branch --show-current
      ↓
 /arc:detail     → Implementation plan ✓ YOU ARE HERE
      ↓
-/arc:review     → Review implementation plan (optional)
+/arc:review     → Review implementation plan (recommended)
      ↓
 /arc:implement  → Execute task-by-task
 ```

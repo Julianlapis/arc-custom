@@ -322,38 +322,45 @@ The design doc stays on main — it's the canonical "what we're building."
 
 **Present the options clearly:**
 
-"Design committed. Ready to move to implementation planning?
+"Design committed. What would you like to do next?
 
-**Option A: Create implementation plan** (Recommended)
+**Option A: Review the design** (Recommended)
+- Expert reviewers validate your design before you invest in planning
+- Catches architectural issues early when they're cheapest to fix
+
+**Option B: Create implementation plan**
 - I'll set up a worktree for isolated development
 - Then create a detailed plan with exact file paths and TDD tasks
-- You'll review the plan before any code is written
 
-**Option B: Done for now**
-- Design is saved — return later with `/arc:detail` to plan, then `/arc:implement` to execute"
+**Option C: Done for now**
+- Design is saved — return later with `/arc:review` to review, `/arc:detail` to plan, then `/arc:implement` to execute"
 
 **Use AskUserQuestion tool:**
 ```
 Question: "How would you like to proceed?"
 Header: "Next step"
 Options:
-  1. "Create implementation plan" (Recommended) — Worktree + detailed TDD plan before coding
-  2. "Done for now" — Keep just the design, continue later
+  1. "Review the design" (Recommended) — Expert reviewers validate before planning
+  2. "Create implementation plan" — Worktree + detailed TDD plan before coding
+  3. "Done for now" — Keep just the design, continue later
 ```
 
 <next_step_routing>
 **IMPORTANT: Do NOT automatically invoke skills. Wait for the user to choose, then perform the setup steps only.**
 
-**If Option 1 (implementation plan):**
+**If Option 1 (review the design):**
+- **STOP.** Tell the user: "Run `/arc:review` to have expert reviewers validate the design before planning."
+
+**If Option 2 (implementation plan):**
 1. Create worktree: follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
 2. Branch name: `feature/<topic-slug>`
 3. Copy design doc to worktree: `docs/plans/`
 4. **STOP.** Tell the user: "Worktree ready. Run `/arc:detail` to create the implementation plan."
 5. Do NOT invoke `/arc:detail` yourself — wait for the user to do so.
 
-**If Option 2 (done for now):**
+**If Option 3 (done for now):**
 - Design is complete and committed
-- **STOP.** Tell the user they can return later with `/arc:detail` then `/arc:implement`
+- **STOP.** Tell the user they can return later with `/arc:review` to review, `/arc:detail` to plan, then `/arc:implement` to execute
 </next_step_routing>
 </process>
 
