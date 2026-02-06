@@ -32,5 +32,10 @@
 - MUST: Use `indexOf`/`lastIndexOf` for simple value lookups (not `findIndex`/`findLastIndex`).
 - MUST: Use `.flatMap()` over `map().flat()`.
 
+## Bug Ownership
+- NEVER: Dismiss errors as "pre-existing bugs" and move on. If you encounter a failing test, type error, or broken behavior during your session, you caused it or your changes exposed it. Fix it.
+- NEVER: Work around a bug instead of fixing it. No `// @ts-ignore`, no `as any` casts, no skipped tests to silence errors you introduced.
+- MUST: If a test, build, or lint check fails, treat it as your responsibility. Investigate, identify the root cause, and fix it before continuing.
+
 ## Cleanup
 - SHOULD: Use `knip` to find and remove unused code when making large changes.
