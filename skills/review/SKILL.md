@@ -172,9 +172,38 @@ Check for context on what led to the plan being reviewed.
 - If plan involves UI components, forms, or user-facing features → add `${CLAUDE_PLUGIN_ROOT}/agents/review/accessibility-engineer.md`
 - If plan involves UI components, pages, or visual design → add `${CLAUDE_PLUGIN_ROOT}/agents/review/designer.md`
 
+## Phase 2.5: Team Mode Check
+
+<team_mode_check>
+**Skip if specific reviewer was provided in Phase 0** (single reviewer, no team needed).
+
+**Check if agent teams are available** by attempting to detect team support in the current environment.
+
+**If teams are available**, offer the user a choice:
+
+```
+Execution mode:
+1. Team mode — Reviewers challenge each other's findings before you see them (higher quality, 3-5x token cost)
+2. Standard mode — Independent reviewers, findings consolidated by skill (faster, lower cost)
+```
+
+Use AskUserQuestion with:
+- **"Team mode"** — Reviewers cross-review and debate findings. Questions that survive peer scrutiny are stronger. Best when reviewing complex or high-stakes plans.
+- **"Standard mode (Recommended)"** — Independent reviewers run in parallel. Faster and cheaper. Good default for most reviews.
+
+**If teams are NOT available**, proceed silently with standard mode. Do not mention teams to the user.
+
+**If team mode selected**, read the team reference:
+```
+${CLAUDE_PLUGIN_ROOT}/references/agent-teams.md
+```
+</team_mode_check>
+
 ## Phase 3: Run Expert Review
 
 **If specific reviewer from Phase 0:** Spawn single reviewer agent.
+
+**If team mode selected:** Run team review (see Team Execution below).
 
 **Otherwise:** Spawn 3 reviewer agents in parallel:
 
@@ -190,7 +219,52 @@ Task [reviewer-2] model: sonnet: "Review this plan for [specialty concerns]..."
 Task [reviewer-3] model: sonnet: "Review this plan for [specialty concerns]..."
 ```
 
+### Team Execution (Agent Teams mode)
+
+Only if user opted into team mode in Phase 2.5.
+
+Create team `arc-review-[plan-slug]` with the 3 selected reviewers as teammates.
+
+**Round 1 — Initial Review:**
+
+Each reviewer performs their standard analysis independently (same prompts as standard mode).
+
+```
+Create team: arc-review-[plan-slug]
+Teammates: [reviewer-1], [reviewer-2], [reviewer-3]
+
+Each teammate reviews the plan through their domain lens.
+Same prompts and focus areas as standard mode.
+```
+
+**Round 2 — Cross-Review:**
+
+Each reviewer reads the others' findings and responds:
+- **"My analysis supports this"** — Confirms another reviewer's concern with additional evidence
+- **"My analysis addresses that"** — Points out that their recommendation already handles the concern
+- **"I disagree because"** — Challenges a finding with code-level evidence or domain reasoning
+
+**Resolution rules (from agent-teams reference):**
+- Code-level evidence wins over principle-based reasoning
+- Domain authority wins within domain
+- Every challenge must include explicit rationale
+
+**Round 2 output:** Pre-debated findings where each concern has either been confirmed by peers, refined through challenge, or dropped with stated rationale.
+
+**Wait for team to complete.**
+
+**If team creation fails**, fall back silently to standard parallel dispatch above.
+
 ## Phase 4: Consolidate and Present
+
+<team_consolidation>
+**If team mode was used**, consolidation is simpler:
+
+- Findings already survived peer scrutiny — false positives were caught and removed during debate
+- Conflicting recommendations already resolved with rationale from both sides
+- Socratic questions derived from team-debated findings carry more weight: "Two reviewers independently flagged this — what if we..."
+- Focus on transforming debated findings into questions (skip deduplication and conflict resolution)
+</team_consolidation>
 
 **Transform findings into Socratic questions:**
 

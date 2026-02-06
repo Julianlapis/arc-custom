@@ -233,7 +233,7 @@ Has database: [yes/no]
 Has tests: [yes/no]
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
-Execution mode: [batched (default) / parallel]
+Execution mode: [batched (default) / parallel / team]
 ```
 
 ## Phase 2: Select Reviewers
@@ -279,6 +279,31 @@ Execution mode: [batched (default) / parallel]
 - Medium projects: 3-4 reviewers
 - Large projects: 4-6 reviewers
 
+## Phase 2.5: Team Mode Check
+
+<team_mode_check>
+**Check if agent teams are available** by attempting to detect team support in the current environment.
+
+**If teams are available**, offer the user a choice:
+
+```
+Execution mode:
+1. Team mode — Reviewers debate findings before consolidation (higher quality, 3-5x token cost)
+2. Standard mode — Independent reviewers, batched or parallel (faster, lower cost)
+```
+
+Use AskUserQuestion with:
+- **"Team mode (Recommended for pre-launch/production)"** — Reviewers cross-review and challenge each other's findings. Conflicts resolved with evidence-based rationale. Best for high-stakes audits.
+- **"Standard mode"** — Independent reviewers run in batches (default) or parallel (--parallel). Faster and cheaper. Findings consolidated by the skill.
+
+**If teams are NOT available**, proceed silently with standard mode. Do not mention teams to the user.
+
+**If team mode selected**, read the team reference:
+```
+${CLAUDE_PLUGIN_ROOT}/references/agent-teams.md
+```
+</team_mode_check>
+
 ## Phase 3: Run Audit
 
 **Read agent prompts:**
@@ -289,7 +314,7 @@ ${CLAUDE_PLUGIN_ROOT}/agents/review/[reviewer-name].md
 
 **Execution strategy:**
 
-By default, reviewers run in **batches of 2** to avoid resource exhaustion on large codebases. If `--parallel` flag is set, all reviewers run simultaneously.
+By default, reviewers run in **batches of 2** to avoid resource exhaustion on large codebases. If `--parallel` flag is set, all reviewers run simultaneously. If user opted into **team mode**, reviewers collaborate as teammates.
 
 ### Batched Execution (Default)
 
@@ -452,9 +477,60 @@ Task [architecture-engineer] model: sonnet: "..."
 
 **Wait for all agents to complete.**
 
+### Team Execution (Agent Teams mode)
+
+Only if user opted into team mode in Phase 2.5.
+
+**Round 1 — Initial Analysis:**
+
+Create team `arc-audit-[scope-slug]` with all selected reviewers as teammates. Each reviewer performs their standard analysis using the same prompts as subagent mode (including stage calibration, coding rules, and domain-specific focus areas).
+
+```
+Create team: arc-audit-[scope-slug]
+Teammates: [all selected reviewers]
+
+Each teammate runs their initial analysis independently.
+Same prompts, same model selection as batched/parallel mode.
+```
+
+**Round 2 — Cross-Review:**
+
+Each reviewer reads the others' findings and responds:
+- **Confirms** findings with supporting evidence from their domain
+- **Challenges** findings they believe are incorrect or overstated, citing code-level evidence
+- **Reconciles** conflicting findings by synthesizing both perspectives into a resolution
+
+```
+Each teammate reviews others' Round 1 findings.
+Responses: confirm (with evidence), challenge (with code citations), or reconcile (with synthesis).
+```
+
+**Resolution rules:**
+- Code-level evidence wins over principle-based reasoning
+- Domain authority wins within domain (security-engineer's security judgment > architecture-engineer's security opinion)
+- Project stage context breaks ties
+- Every challenge must include explicit rationale
+
+**Round 2 output:** Each finding is now annotated with peer review status — confirmed, modified after challenge, or dropped with rationale.
+
+**Wait for team to complete.**
+
 ## Phase 4: Consolidate Findings
 
 **Collect all agent outputs.**
+
+<team_consolidation>
+**If team mode was used**, consolidation is simplified — reviewers already did the hard work:
+
+- **Deduplication: already done.** Reviewers identified overlapping findings during cross-review.
+- **Conflict resolution: already done.** Contradictory findings were debated with evidence-based rationale. Each resolution includes the reasoning from both sides.
+- **Severity validation: still needed.** Apply the stage-based severity calibration table below as a final sanity check.
+- **Task clustering: still needed.** Group debated findings into work clusters.
+
+Skip the deduplication and conflict resolution steps below and proceed directly to "Validate severity against project stage."
+</team_consolidation>
+
+**If standard mode was used**, proceed with full consolidation:
 
 **Deduplicate:**
 - Same file:line mentioned by multiple reviewers → merge into single finding
@@ -761,7 +837,7 @@ Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 Audit is complete when:
 - [ ] Scope detected (path, full codebase, or focus flag)
 - [ ] Project type detected
-- [ ] Execution mode determined (batched default, or --parallel)
+- [ ] Execution mode determined (batched default, --parallel, or team)
 - [ ] 4-6 reviewers selected based on context
 - [ ] Reviewers run in batches of 2 (or all at once if --parallel)
 - [ ] All reviewers completed
