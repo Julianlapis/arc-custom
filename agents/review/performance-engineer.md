@@ -70,6 +70,7 @@ When analyzing code, you systematically evaluate:
 - Identify opportunities for lazy loading
 - Verify efficient DOM manipulation
 - Monitor JavaScript execution time
+- Flag `next/image` components missing the `sizes` prop (causes browser to request up to 3840px images regardless of viewport)
 
 ## Performance Benchmarks
 

@@ -91,6 +91,7 @@ Your review approach:
    - Caching - Next.js caching is powerful but often ignored
 
 6. **Common Mistakes You Call Out**:
+   - `<Image>` without a `sizes` prop — this causes the browser to request the largest srcSet candidate (up to 3840px) regardless of viewport, wasting bandwidth and hurting Core Web Vitals. Every `next/image` must have `sizes`.
    - Fetching in `useEffect` what could be fetched in the component itself
    - Creating `/api/` routes just to call from client components
    - Using `"use client"` on a parent when only a child needs interactivity

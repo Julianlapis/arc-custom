@@ -8,6 +8,7 @@
 ## Assets & Loading
 - MUST: Use `next/font` for fonts and `next/script` for third-party scripts.
 - MUST: Use `next/image` for all images.
+- MUST: Every `<Image>` must have a `sizes` prop. Without it, the browser requests the largest srcSet candidate (up to 3840px) regardless of viewport. Example: `sizes="(max-width: 768px) 100vw, 50vw"`.
 - SHOULD: Above-the-fold images use `loading="eager"` or `fetchPriority="high"`. Use `priority` sparingly.
 
 ## Proxy (replaces Middleware in Next.js 16+)
