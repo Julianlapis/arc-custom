@@ -9,9 +9,11 @@
 
 The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin.
 
+Arc also ships with an `AGENTS.md` so the same workflows can be used directly in **Codex** (no Claude plugin install required).
+
 ## What It Does
 
-Arc provides 25 skills covering the complete development lifecycle:
+Arc provides 24 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -60,6 +62,19 @@ TOOLS   /arc:worktree   - Create isolated git worktree for feature work
 ```
 claude plugins install arc@howells-arc
 ```
+
+## Using In Codex
+
+1. Clone this repo (or add it as a git submodule).
+2. Open the repo in Codex as your workspace.
+3. Use Claude-style commands in chat, for example:
+
+```
+/arc:start
+/arc:ideate add user authentication with magic links
+```
+
+Codex will route these to the corresponding `skills/<name>/SKILL.md` based on `AGENTS.md`.
 
 ## Dependencies
 
