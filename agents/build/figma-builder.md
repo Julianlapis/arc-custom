@@ -1,5 +1,5 @@
 ---
-name: figma-implement
+name: figma-builder
 description: |
   Implements UI components from Figma designs. Use when the user provides a Figma URL or asks to build something from a design. The agent extracts design specifications via Figma MCP and generates production-ready code that respects the codebase's existing design system.
 

@@ -13,10 +13,37 @@ metadata:
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
 2. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
-3. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-4. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
-5. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
+3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
+4. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+5. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
 </required_reading>
+
+<build_agents>
+**Available build agents in `${CLAUDE_PLUGIN_ROOT}/agents/build/`:**
+
+| Agent | Model | Use For |
+|-------|-------|---------|
+| `implementer` | sonnet | General task execution — utilities, services, APIs, business logic |
+| `fixer` | haiku | TypeScript errors, lint issues — fast mechanical fixes |
+| `debugger` | sonnet | Failing tests — systematic root cause analysis |
+| `test-writer` | sonnet | TDD test creation — behavior over implementation |
+| `ui-builder` | opus | UI components from design spec — anti-slop, memorable |
+| `design-specifier` | opus | Design decisions when no spec exists — empty states, visual direction |
+| `figma-builder` | opus | Build UI directly from Figma URL |
+| `e2e-runner` | sonnet | Playwright tests — iterate until green or report blockers |
+| `spec-reviewer` | haiku | Quick spec compliance check — nothing missing, nothing extra |
+| `code-reviewer` | haiku | Quick code quality gate — no `any`, proper error handling, tests exist |
+
+**Before spawning a build agent:**
+1. Read the agent file: `${CLAUDE_PLUGIN_ROOT}/agents/build/[agent-name].md`
+2. Use the model specified in the agent's frontmatter
+3. Include relevant context from the task
+
+**Spawn syntax:**
+```
+Task [agent-name] model: [model]: "[task description with context]"
+```
+</build_agents>
 
 <rules_context>
 **Check for project coding rules:**
@@ -53,11 +80,6 @@ Rules are optional — proceed without them if the user prefers.
 | Form work | forms.md, interactions.md |
 | Interactive elements | interactions.md |
 | Marketing pages | marketing.md |
-
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and anti-patterns.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` for React component patterns.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` for motion design.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
 </rules_context>
 
 <process>
@@ -109,19 +131,57 @@ One todo per task in the plan. Mark first as `in_progress`.
 
 **Default batch size: 3 tasks**
 
+**Per-task loop:**
+```
+┌─────────────────────────────────────────────────────────┐
+│  1. BUILD     → implementer / ui-builder / specialized  │
+│  2. TEST      → TDD cycle (test → fail → impl → pass)   │
+│  3. FIX       → fixer (TS/lint cleanup)                 │
+│  4. SPEC      → spec-reviewer (matches spec?)           │
+│       ↳ issues? → fix → re-review                       │
+│  5. QUALITY   → code-reviewer (well-built?)             │
+│       ↳ issues? → fix → re-review                       │
+│  6. COMMIT    → atomic commit, mark complete            │
+└─────────────────────────────────────────────────────────┘
+```
+
 For each task:
 
 ### Step 1: Mark in_progress
 Update TodoWrite.
 
-### Step 2: Follow TDD cycle exactly
+### Step 2: Classify Task Type
+
+Determine which build agent(s) may be needed:
+
+| Task Type | Primary Agent | When to Use |
+|-----------|---------------|-------------|
+| General implementation | implementer | Utilities, services, APIs, business logic |
+| Write tests | test-writer | TDD test creation |
+| Build UI from spec | ui-builder | UI components with existing design direction |
+| Build UI from Figma | figma-builder | Figma URL provided |
+| Design decisions needed | design-specifier | No spec exists (empty states, visual direction) |
+| Fix TS/lint errors | fixer | Mechanical cleanup |
+| Debug failing tests | debugger | Test failures |
+| Run E2E tests | e2e-runner | Playwright test suites |
+| Verify spec compliance | spec-reviewer | After implementation, before code quality |
+
+**Agent selection flow:**
+1. Is this general code (no UI)? → implementer
+2. Is this UI with Figma? → figma-implement
+3. Is this UI with design spec? → ui-builder
+4. Is this UI with no spec? → design-specifier first, then ui-builder
+5. Did something break? → debugger or fixer
+6. Task complete? → spec-reviewer to verify
+
+### Step 3: Follow TDD cycle exactly
 
 ```
-1. Write the test (copy from plan)
+1. Write the test (copy from plan, or spawn test-writer)
 2. Run test → verify FAIL
 3. Write implementation (copy from plan, adapt as needed)
 4. Run test → verify PASS
-5. Fix TypeScript + lint (see below)
+5. Fix TypeScript + lint (spawn fixer if issues)
 6. Commit with message from plan
 ```
 
@@ -131,22 +191,22 @@ Update TodoWrite.
 **TypeScript check:**
 ```bash
 pnpm tsc --noEmit
-# or: pnpm typecheck (if script exists)
 ```
 
 **Biome lint + format:**
 ```bash
 pnpm biome check --write .
-# or: pnpm lint:fix (if script exists)
 ```
 
-**If issues found:**
-- Fix immediately
-- Don't accumulate debt
-- If stuck on a type issue → spawn a quick agent:
-  ```
-  Task general-purpose model: haiku: "Fix TypeScript error in [file]: [error message]"
-  ```
+**If issues found — spawn fixer:**
+```
+Task [fixer] model: haiku: "Fix TypeScript and lint errors.
+
+Files with issues: [list files]
+Errors: [paste error output]
+
+Project rules: .ruler/typescript.md, .ruler/code-style.md"
+```
 
 **Why continuous:**
 - Catching TS errors early is easier than fixing 20 at once
@@ -159,23 +219,59 @@ pnpm biome check --write .
 - Implementation might already exist
 - Stop and ask user
 
-**If test doesn't pass after implementation:**
-Spawn debugger agent immediately:
+**If test doesn't pass after implementation — spawn debugger:**
 ```
-Task general-purpose model: sonnet: "Test failing unexpectedly.
+Task [debugger] model: sonnet: "Test failing unexpectedly.
+
 Test file: [path]
 Test name: [name]
-Error: [error message]
-Implementation: [path]
-Debug and fix."
+Error: [paste full error]
+Implementation file: [path]
+
+Investigate root cause and fix. See ${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md"
 ```
 
-If debugger can't resolve after one attempt → stop and ask user
+If debugger can't resolve after one attempt → stop and ask user.
 
-### Step 3: Mark completed
-Update TodoWrite.
+### Step 4: Spec Compliance Check
 
-### Step 4: Checkpoint after batch
+After implementation, spawn spec-reviewer:
+```
+Task [spec-reviewer] model: haiku: "Verify implementation matches spec.
+
+Task spec: [paste task specification]
+Files created/modified: [list]
+
+Check: nothing missing, nothing extra."
+```
+
+If spec-reviewer finds issues → fix with implementer/fixer → re-run spec-reviewer.
+If compliant → proceed to code quality.
+
+### Step 5: Code Quality Gate
+
+After spec compliance passes, spawn code-reviewer:
+```
+Task [code-reviewer] model: haiku: "Quick code quality check.
+
+Files: [list of files created/modified]
+
+Check: no any types, error handling, tests exist, style consistent."
+```
+
+If code-reviewer finds issues → fix with fixer → re-run code-reviewer.
+If approved → commit and mark complete.
+
+### Step 6: Commit and Mark Complete
+
+```bash
+git add [files]
+git commit -m "feat(scope): [description from plan]"
+```
+
+Update TodoWrite to mark task completed.
+
+### Step 7: Checkpoint after batch
 
 After every 3 tasks:
 
@@ -195,13 +291,38 @@ Wait for user confirmation or adjustments.
 ## Phase 4: Quality Checkpoints
 
 **After completing data/types tasks:**
-- Spawn data-engineer for quick review
+- Spawn data-engineer (from review agents) for quick review
 - Present findings as questions
 
-**Before starting UI tasks — INVOKE ARC:DESIGN FOR BUILD:**
+**Before starting UI tasks:**
 
+**If design spec exists** — spawn ui-builder:
 ```
-Skill arc:design: "Build UI components for [feature].
+Read: ${CLAUDE_PLUGIN_ROOT}/agents/build/ui-builder.md
+```
+
+**If no design spec** (empty states, undefined visuals) — spawn design-specifier first:
+```
+Task [design-specifier] model: opus: "Create design spec for [component].
+
+Context: [what this is for, user's emotional state]
+Existing patterns: [what it should feel like]
+Project aesthetic: [tone from design doc]
+
+Output actionable spec for ui-builder to implement."
+```
+
+Then spawn ui-builder with the design-specifier's output.
+
+**If Figma URL provided** — spawn figma-builder:
+```
+Read: ${CLAUDE_PLUGIN_ROOT}/agents/build/figma-builder.md
+Task [figma-builder] model: opus: "Implement from Figma: [URL]"
+```
+
+**For ui-builder, spawn:
+```
+Task [ui-builder] model: opus: "Build UI components for [feature].
 
 Aesthetic Direction (from design doc):
 - Tone: [tone]
@@ -213,29 +334,21 @@ Aesthetic Direction (from design doc):
 Figma: [URL if available]
 Files to create: [list from implementation plan]
 
+Interface rules: ${CLAUDE_PLUGIN_ROOT}/rules/interface/
+Project rules: .ruler/react.md, .ruler/tailwind.md
+
 Apply the aesthetic direction to every decision. Make it memorable, not generic."
 ```
 
-**Why invoke the skill, not just follow principles:**
-- The skill has creative energy and specific guidance
-- It makes bold decisions, not safe ones
-- It catches generic patterns as they're written, not after
-
-**Fetch Figma context:**
+**Fetch Figma context (if available):**
 ```
 mcp__figma__get_design_context: fileKey, nodeId
 mcp__figma__get_screenshot: fileKey, nodeId
 ```
 
-**After each UI task, quick self-check:**
-- [ ] Would a designer call this "generic AI slop"?
-- [ ] Is the memorable element actually memorable?
-- [ ] Did I avoid Roboto/Arial/system-ui and purple gradients?
-
-**After completing ALL UI tasks — INVOKE ARC:DESIGN FOR REVIEW:**
-
+**After completing ALL UI tasks — spawn designer review:**
 ```
-Task general-purpose model: opus: "Review the completed UI implementation.
+Task [designer] model: opus: "Review the completed UI implementation.
 
 Aesthetic Direction (from design doc):
 - Tone: [tone]
@@ -255,16 +368,7 @@ Check for:
 - Missing states (loading, error, empty)"
 ```
 
-- Run playwright visual test if available
-- Take screenshots of key states
-- Compare against Figma screenshot
-- Address any review findings before proceeding
-
-**Optional: Web Interface Guidelines Review**
-If `web-design-guidelines` skill is available:
-```
-Skill web-design-guidelines: "Review [components] for Web Interface Guidelines compliance"
-```
+Address any review findings before proceeding.
 
 **When implementing unfamiliar library APIs:**
 ```
@@ -279,29 +383,36 @@ Use current documentation to ensure correct API usage.
 
 ## Phase 5: Final Quality Sweep
 
-**Always run (in parallel agents for speed):**
+**Spawn parallel build agents for speed:**
 
 ```
-Task general-purpose model: haiku: "Run TypeScript check (tsc --noEmit) and fix any errors"
-Task general-purpose model: haiku: "Run Biome check (biome check --write .) and fix any issues"
-Task general-purpose model: haiku: "Run test suite and report results"
+Task [fixer] model: haiku: "Run TypeScript check (tsc --noEmit) and fix any errors. Report results."
+
+Task [fixer] model: haiku: "Run Biome check (biome check --write .) and fix any issues. Report results."
 ```
 
-Wait for all agents to complete. If issues found, fix before proceeding.
+Wait for agents to complete. If issues found, fix before proceeding.
 
-**Optional: React/Next.js Performance Review**
-For React/Next.js projects, if `vercel-react-best-practices` skill is available:
+**Run test suite:**
+```bash
+pnpm test
 ```
-Skill vercel-react-best-practices: "Review implementation for React/Next.js performance patterns"
-```
+
+If tests fail, spawn debugger to investigate.
 
 ## Phase 5b: E2E Tests (If Created)
 
 If e2e tests were created as part of this implementation:
 
-**Spawn dedicated agent to run and fix e2e tests:**
+**Spawn e2e-runner agent:**
 ```
-Task Bash run_in_background: true: "Run e2e tests for the feature we just implemented. Fix any failures and iterate until all pass."
+Task [e2e-runner] model: sonnet: "Run E2E tests for the feature we just implemented.
+
+Test files: [list e2e test files]
+Feature: [brief description]
+
+Run tests, fix any failures, and iterate until all pass or report blockers.
+See ${CLAUDE_PLUGIN_ROOT}/agents/build/e2e-runner.md for protocol."
 ```
 
 **Why a separate agent?**
@@ -317,10 +428,24 @@ For significant features, offer parallel review:
 
 "Feature complete. Run expert review before PR?"
 
-If yes, spawn in parallel (all use sonnet for balanced cost/quality):
-- simplicity-engineer (model: sonnet)
-- architecture-engineer or domain-specific reviewer (model: sonnet)
-- security-engineer if auth/data involved (model: sonnet)
+If yes, spawn review agents in parallel (all use sonnet):
+
+```
+Task [simplicity-engineer] model: sonnet: "Review implementation for unnecessary complexity.
+Files: [list of new/modified files]
+See ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md"
+
+Task [architecture-engineer] model: sonnet: "Review implementation for architectural concerns.
+Files: [list of new/modified files]
+See ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md"
+```
+
+If auth/data involved, also spawn:
+```
+Task [security-engineer] model: sonnet: "Review implementation for security concerns.
+Files: [list of new/modified files]
+See ${CLAUDE_PLUGIN_ROOT}/agents/review/security-engineer.md"
+```
 
 Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
 
@@ -368,11 +493,24 @@ EOF
 cd ..
 git worktree remove .worktrees/<feature-name>
 ```
+
+## Phase 8: Cleanup
+
+**Kill orphaned subagent processes:**
+
+After spawning multiple build agents, some may not exit cleanly. Run cleanup:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+```
+
+This is especially important after parallel agent runs.
+
 </process>
 
 <when_to_stop>
 **STOP and ask user when:**
-- Test fails unexpectedly
+- Test fails unexpectedly and debugger can't resolve
 - Implementation doesn't match plan
 - Stuck after 2 debug attempts
 - Plan has ambiguity
@@ -396,6 +534,7 @@ After completing implementation (or pausing), append to progress journal:
 **Task:** [Feature name]
 **Outcome:** [Complete / In Progress (X/Y tasks) / Blocked]
 **Files:** [Key files created/modified]
+**Agents spawned:** [list of agents used]
 **Decisions:**
 - [Key implementation decision]
 **Next:** [PR created / Continue tomorrow / Blocked on X]
@@ -412,4 +551,5 @@ Execution is complete when:
 - [ ] PR created
 - [ ] User informed of completion
 - [ ] Progress journal updated
+- [ ] Orphaned agents cleaned up
 </success_criteria>
