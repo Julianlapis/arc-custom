@@ -25,7 +25,7 @@ export default function ArcPage() {
       <div className="mx-auto max-w-3xl">
         <nav className="flex items-center justify-end gap-2">
           {version && (
-            <span className="font-mono text-neutral-300 text-xs">
+            <span className="font-mono text-neutral-400 text-xs">
               v{version}
             </span>
           )}
