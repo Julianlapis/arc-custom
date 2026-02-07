@@ -25,7 +25,7 @@ HOW     /arc:detail     - Detailed implementation plan
 DO      /arc:implement  - Execute the plan with TDD
         /arc:design     - UI/UX design with wireframes
         /arc:build      - Quick build (no formal plan)
-        /arc:test       - Test strategy and execution
+        /arc:testing       - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
         /arc:legal      - Generate privacy policy and terms
 
@@ -178,7 +178,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:design` | UI/UX work | Wireframes + code |
 | `/arc:figma` | Implement from Figma | Code matching design |
 | `/arc:build` | Quick implementation | Code changes |
-| `/arc:test` | Test strategy | Test files |
+| `/arc:testing` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
 | `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
@@ -222,7 +222,7 @@ Commands work together:
 - `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
 - `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
 - `/arc:build` suggests `/arc:ideate` if scope is too large
-- `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
+- `/arc:letsgo` runs `/arc:testing` and `/arc:audit --deslop` as part of quality checks
 - Any command can add to `/arc:tasklist`
 
 ## Acknowledgments

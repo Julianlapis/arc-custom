@@ -93,7 +93,7 @@ Start with 3 core skills only. Expand later if valuable.
 |-------|------------------------|
 | `/arc:implement` | Detected stack rules + code-style.md |
 | `/arc:build` | Detected stack rules + code-style.md |
-| `/arc:test` | testing.md |
+| `/arc:testing` | testing.md |
 
 **Reading pattern:**
 
@@ -131,6 +131,6 @@ If Phase 1 proves valuable, expand to:
 1. Copy rules from `~/Obsi/Areas/Build/rules/` into `arc/rules/`
 2. Create `skills/rules/SKILL.md`
 3. Update plugin.json to register the new skill
-4. Add rules reading to `/arc:implement`, `/arc:build`, `/arc:test`
+4. Add rules reading to `/arc:implement`, `/arc:build`, `/arc:testing`
 5. Test on fresh project
 6. Test on project with existing `.ruler/`

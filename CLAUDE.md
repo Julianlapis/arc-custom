@@ -17,7 +17,7 @@ arc/
 │   ├── design/SKILL.md     # /arc:design
 │   ├── figma/SKILL.md      # /arc:figma
 │   ├── build/SKILL.md      # /arc:build
-│   ├── test/SKILL.md       # /arc:test
+│   ├── testing/SKILL.md       # /arc:testing
 │   ├── letsgo/SKILL.md     # /arc:letsgo
 │   ├── legal/SKILL.md      # /arc:legal
 │   ├── review/SKILL.md     # /arc:review
@@ -51,7 +51,7 @@ ENTRY   /arc:arc        - Main entry point, routes to right workflow
 WHY     /arc:vision     - High-level goals
 WHAT    /arc:ideate     - From idea to working implementation
 HOW     /arc:detail     - Detailed implementation plan
-DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:test, /arc:letsgo, /arc:legal
+DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:testing, /arc:letsgo, /arc:legal
 CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
 TOOLS   /arc:commit, /arc:rules
 ```
