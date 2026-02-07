@@ -1,6 +1,6 @@
 "use client";
 
-import type { Skill } from "./page";
+import type { Skill } from "@/lib/types";
 
 interface SkillListProps {
   skills: Skill[];

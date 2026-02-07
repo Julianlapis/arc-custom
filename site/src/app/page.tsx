@@ -5,8 +5,6 @@ import { AnimatedHero } from "./animated-hero";
 import { ContentBrowser } from "./content-browser";
 import { CopyButton } from "./copy-button";
 
-export type { Agent, Rule, Skill } from "@/lib/content";
-export type { RuleCategory } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Arc – The full arc from idea to shipped code",

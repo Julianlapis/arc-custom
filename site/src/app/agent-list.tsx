@@ -1,7 +1,7 @@
 "use client";
 
-import { AGENT_CATEGORY_LABELS } from "@/lib/content";
-import type { Agent } from "./page";
+import type { Agent } from "@/lib/types";
+import { AGENT_CATEGORY_LABELS } from "@/lib/types";
 
 interface AgentListProps {
   agents: Agent[];

@@ -3,7 +3,7 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { AgentList } from "./agent-list";
-import type { Agent, Rule, Skill } from "./page";
+import type { Agent, Rule, Skill } from "@/lib/types";
 import { RuleList } from "./rule-list";
 import { SkillList } from "./skill-list";
 import { UnifiedDrawer } from "./unified-drawer";

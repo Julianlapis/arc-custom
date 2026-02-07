@@ -2,14 +2,15 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
+import { AGENT_CATEGORIES } from "./types";
+import type { Agent, AgentCategory, Rule, RuleCategory, Skill } from "./types";
+
+export type { Agent, AgentCategory, Rule, RuleCategory, Skill };
+export { AGENT_CATEGORY_LABELS, AGENT_CATEGORIES, RULE_CATEGORIES } from "./types";
 
 // Resolve repo root: site/ → arc/
 // process.cwd() is the Next.js project root (site/), go up one level to arc/
 const ROOT = resolve(process.cwd(), "..");
-
-// Agent categories correspond to subdirectories under agents/
-const AGENT_CATEGORIES = ["review", "research", "build", "workflow"] as const;
-type AgentCategory = (typeof AGENT_CATEGORIES)[number];
 
 // Regex patterns for custom YAML extraction (avoids issues with complex description fields)
 const FRONTMATTER_REGEX = /^---\n([\s\S]*?)\n---/;
@@ -66,46 +67,6 @@ function getInvokableSkills(): Set<string> {
   );
 }
 
-export interface Skill {
-  name: string;
-  order: number;
-  invokable: boolean;
-  desc: string;
-  summary: string;
-  what: string;
-  why: string;
-  decisions: string[];
-  agents?: string[];
-  content: string;
-}
-
-export interface Agent {
-  name: string;
-  category: AgentCategory;
-  desc: string;
-  summary: string;
-  what: string;
-  why: string;
-  usedBy?: string[];
-  content: string;
-}
-
-const RULE_CATEGORIES = ["core", "workflow", "interface"] as const;
-export type RuleCategory = (typeof RULE_CATEGORIES)[number];
-
-export interface Rule {
-  slug: string;
-  title: string;
-  category: RuleCategory;
-  content: string;
-}
-
-export const AGENT_CATEGORY_LABELS: Record<AgentCategory, string> = {
-  review: "Review Agent",
-  research: "Research Agent",
-  build: "Build Agent",
-  workflow: "Workflow Agent",
-};
 
 const CORE_RULES = new Set([
   "stack",

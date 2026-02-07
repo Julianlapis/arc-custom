@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import type { Rule, RuleCategory } from "@/lib/content";
+import type { Rule, RuleCategory } from "@/lib/types";
 
 interface RuleListProps {
   rules: Rule[];

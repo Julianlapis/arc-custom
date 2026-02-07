@@ -8,8 +8,8 @@ import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
 
 const remarkPlugins = [remarkGfm];
-import { AGENT_CATEGORY_LABELS } from "@/lib/content";
-import type { Agent, Rule, Skill } from "./page";
+import type { Agent, Rule, Skill } from "@/lib/types";
+import { AGENT_CATEGORY_LABELS } from "@/lib/types";
 
 type DrawerContent =
   | { type: "skill"; data: Skill }
