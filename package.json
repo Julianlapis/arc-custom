@@ -4,11 +4,7 @@
   "private": true,
   "description": "Arc workflows for Claude Code and Codex",
   "scripts": {
-    "push": "./scripts/push.sh",
-    "release": "node scripts/release.js",
-    "release:patch": "node scripts/release.js patch",
-    "release:minor": "node scripts/release.js minor",
-    "release:major": "node scripts/release.js major",
+    "test": "bash tests/run-skill-tests.sh",
     "prepare": "husky"
   },
   "devDependencies": {
