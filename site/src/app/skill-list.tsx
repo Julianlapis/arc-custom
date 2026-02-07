@@ -1,0 +1,37 @@
+"use client";
+
+import type { Skill } from "./page";
+
+interface SkillListProps {
+  skills: Skill[];
+  onSkillClick: (skill: Skill) => void;
+}
+
+export function SkillList({ skills, onSkillClick }: SkillListProps) {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {skills.map((skill) => (
+        <button
+          className="group rounded-lg border border-neutral-200 p-4 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
+          key={skill.name}
+          onClick={() => onSkillClick(skill)}
+          type="button"
+        >
+          <span className="flex items-center gap-2">
+            <span className="block font-mono text-neutral-800 text-sm transition-colors group-hover:text-[var(--color-accent)]">
+              {skill.invokable ? `/arc:${skill.name}` : skill.name}
+            </span>
+            {!skill.invokable && (
+              <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-neutral-500 text-[10px] leading-none">
+                internal
+              </span>
+            )}
+          </span>
+          <span className="mt-1 block text-neutral-500 text-sm leading-snug">
+            {skill.desc}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}

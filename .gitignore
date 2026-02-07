@@ -3,3 +3,12 @@
 .arc/
 node_modules/
 .worktrees/
+
+# Site
+site/.next/
+site/.vercel/
+site/src/fonts/
+site/.env
+site/.env.local
+site/.env.*.local
+site/*.tsbuildinfo

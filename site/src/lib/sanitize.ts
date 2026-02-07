@@ -1,0 +1,50 @@
+/**
+ * Sanitize markdown content for public display.
+ * Strips XML-like instruction tags that are meant for Claude, not humans.
+ *
+ * Pure string manipulation — safe for both client and server.
+ */
+export function sanitizeContent(content: string): string {
+  let result = content;
+
+  // 1. Strip operational blocks entirely (tag + content) — these are Claude instructions
+  const stripBlocks = [
+    "progress_context",
+    "tasklist_context",
+    "rules_context",
+    "required_reading",
+    "tool_restrictions",
+    "progress_append",
+    "arc_log",
+    "success_criteria",
+  ];
+  for (const tag of stripBlocks) {
+    const re = new RegExp(`<${tag}>[\\s\\S]*?</${tag}>\\s*`, "g");
+    result = result.replace(re, "");
+  }
+
+  // 2. Unwrap content tags — keep inner text, remove markers
+  const unwrapTags = [
+    "advisory",
+    "important",
+    "principle",
+    "key_principles",
+    "output_format",
+    "process",
+    "agents",
+    "example",
+    "commentary",
+  ];
+  for (const tag of unwrapTags) {
+    result = result.replace(new RegExp(`<${tag}>\\s*`, "g"), "");
+    result = result.replace(new RegExp(`\\s*</${tag}>`, "g"), "");
+  }
+
+  // 3. Remove any remaining self-closing instruction tags
+  result = result.replace(/<[a-z_]+\s*\/>\s*/g, "");
+
+  // 4. Collapse 3+ consecutive newlines into 2
+  result = result.replace(/\n{3,}/g, "\n\n");
+
+  return result.trim();
+}

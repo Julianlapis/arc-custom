@@ -1,0 +1,8 @@
+.next/
+node_modules/
+.vercel/
+src/fonts/
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
