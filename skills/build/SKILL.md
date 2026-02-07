@@ -29,6 +29,7 @@ metadata:
 | `e2e-test-writer` | sonnet | E2E tests (Playwright) |
 | `fixer` | haiku | TS/lint cleanup |
 | `debugger` | sonnet | Failing tests |
+| `test-runner` | haiku | Run vitest, analyze results |
 | `spec-reviewer` | haiku | Verify matches spec |
 | `code-reviewer` | haiku | Code quality gate |
 </agents>

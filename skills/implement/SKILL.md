@@ -32,6 +32,7 @@ metadata:
 | `ui-builder` | opus | UI components from design spec — anti-slop, memorable |
 | `design-specifier` | opus | Design decisions when no spec exists — empty states, visual direction |
 | `figma-builder` | opus | Build UI directly from Figma URL |
+| `test-runner` | haiku | Run vitest, analyze failures |
 | `e2e-runner` | sonnet | Playwright tests — iterate until green or report blockers |
 | `spec-reviewer` | haiku | Quick spec compliance check — nothing missing, nothing extra |
 | `code-reviewer` | haiku | Quick code quality gate — no `any`, proper error handling, tests exist |

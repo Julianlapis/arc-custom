@@ -22,14 +22,15 @@ Create comprehensive test strategies covering the full test pyramid. Execute wit
 
 ## Agents
 
-**This skill uses 3 specialist agents + 1 runner:**
+**This skill uses 3 writers + 2 runners:**
 
 | Agent | Model | Purpose | Framework |
 |-------|-------|---------|-----------|
-| `unit-test-writer` | sonnet | Pure functions, components, hooks | vitest |
-| `integration-test-writer` | sonnet | API mocking, component interactions, auth | vitest + MSW |
-| `e2e-test-writer` | sonnet | Full user journeys, real browser | Playwright |
-| `e2e-runner` | sonnet | Run and fix E2E tests | Playwright |
+| `unit-test-writer` | sonnet | Write unit tests | vitest |
+| `integration-test-writer` | sonnet | Write integration tests (API, auth) | vitest + MSW |
+| `e2e-test-writer` | sonnet | Write E2E tests | Playwright |
+| `test-runner` | haiku | Run vitest, analyze failures | vitest |
+| `e2e-runner` | sonnet | Run Playwright, fix issues, iterate | Playwright |
 
 **Test Pyramid:**
 ```
