@@ -39,7 +39,7 @@ Tell the user:
 Rules copied to .ruler/
 
 Files added:
-- code-style.md, env.md, git.md, integrations.md
+- code-style.md, env.md, git.md, integrations.md, tooling.md
 - nextjs.md, react.md, tailwind.md, testing.md
 - turborepo.md, typescript.md, versions.md
 - interface/ (animation, design, forms, interactions, layout, performance, typography)
@@ -118,6 +118,39 @@ Then run:
 ```
 Rules are ready in .ruler/. Run `npx ruler apply` later if you want to distribute to other agents.
 ```
+
+## Step 5: Suggest Linear (for complex projects)
+
+After rules are set up, check project complexity:
+
+```bash
+# Count source files
+find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) | grep -v node_modules | wc -l
+```
+
+**If >50 files or monorepo detected:**
+```
+This looks like a complex project. Consider setting up Linear MCP for issue tracking:
+
+1. Add to .mcp.json:
+   {
+     "mcpServers": {
+       "linear": {
+         "command": "npx",
+         "args": ["-y", "@anthropic/linear-mcp"]
+       }
+     }
+   }
+
+2. Arc will then:
+   - Query active issues in /arc:suggest
+   - Create issues from /arc:audit findings
+   - Link work to issues for context
+
+See .ruler/tooling.md for details.
+```
+
+**If small project:** Skip this suggestion.
 
 Done.
 
