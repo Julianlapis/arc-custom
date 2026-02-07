@@ -107,7 +107,7 @@ If user picks one, invoke the relevant command.
 
 ## What Suggest is NOT
 
-- Not a code review (use /arc:deslop or /arc:review)
+- Not a code review (use /arc:audit or /arc:review)
 - Not a test runner (use /arc:testing)
 - Not a planner (use /arc:ideate)
 

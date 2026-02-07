@@ -78,7 +78,7 @@ Based on their answer:
 | "Quick fix/small change" | /arc:build |
 | "Continue [existing plan]" | /arc:implement or /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
-| "Review/improve existing code" | /arc:deslop or /arc:review |
+| "Review/improve existing code" | /arc:audit or /arc:review |
 | "Ship to production" | /arc:letsgo |
 | "Run tests" | /arc:testing |
 
