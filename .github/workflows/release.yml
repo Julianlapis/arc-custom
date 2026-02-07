@@ -24,47 +24,54 @@ jobs:
       - name: Validate plugin
         run: .husky/validate-plugin.sh
 
-      - name: Bump version and release
+      - name: Check for version bump
+        id: version
         run: |
-          # Configure git
+          PLUGIN_JSON=".claude-plugin/plugin.json"
+          current_version=$(jq -r '.version' "$PLUGIN_JSON")
+
+          # Check if tag already exists — if so, no release needed
+          if git rev-parse "v$current_version" >/dev/null 2>&1; then
+            echo "Tag v$current_version already exists, skipping release"
+            echo "release=false" >> $GITHUB_OUTPUT
+          else
+            echo "New version detected: $current_version"
+            echo "release=true" >> $GITHUB_OUTPUT
+            echo "version=$current_version" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Verify version sync
+        if: steps.version.outputs.release == 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PLUGIN_V=$(jq -r '.version' .claude-plugin/plugin.json)
+          MARKET_V=$(jq -r '.metadata.version' .claude-plugin/marketplace.json)
+          PACKAGE_V=$(jq -r '.version' package.json)
+
+          if [ "$PLUGIN_V" != "$VERSION" ] || [ "$MARKET_V" != "$VERSION" ] || [ "$PACKAGE_V" != "$VERSION" ]; then
+            echo "::error::Version mismatch: plugin.json=$PLUGIN_V marketplace.json=$MARKET_V package.json=$PACKAGE_V"
+            exit 1
+          fi
+
+      - name: Create tag and release
+        if: steps.version.outputs.release == 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Get current version from plugin.json (source of truth)
-          PLUGIN_JSON=".claude-plugin/plugin.json"
-          MARKETPLACE_JSON=".claude-plugin/marketplace.json"
-          PACKAGE_JSON="package.json"
+          git tag "v$VERSION"
+          git push --tags
 
-          current_version=$(jq -r '.version' "$PLUGIN_JSON")
-
-          # Parse and bump patch version
-          IFS='.' read -r major minor patch <<< "$current_version"
-          new_patch=$((patch + 1))
-          new_version="$major.$minor.$new_patch"
-
-          # Update version files using jq (doesn't depend on current value)
-          jq --arg v "$new_version" '.version = $v' "$PLUGIN_JSON" > tmp.json && mv tmp.json "$PLUGIN_JSON"
-          jq --arg v "$new_version" '.metadata.version = $v | .plugins[0].version = $v' "$MARKETPLACE_JSON" > tmp.json && mv tmp.json "$MARKETPLACE_JSON"
-          jq --arg v "$new_version" '.version = $v' "$PACKAGE_JSON" > tmp.json && mv tmp.json "$PACKAGE_JSON"
-
-          # Commit version bump
-          git add "$PLUGIN_JSON" "$MARKETPLACE_JSON" "$PACKAGE_JSON"
-          git commit -m "chore: bump version to $new_version [skip ci]"
-          git push
-
-          # Create and push tag (skip if already exists from a previous run)
-          if ! git rev-parse "v$new_version" >/dev/null 2>&1; then
-            git tag "v$new_version"
-            git push --tags
-          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
           # Get commit message for release notes
-          COMMIT_MSG=$(git log -1 --skip=1 --pretty=format:"%s" HEAD)
-
-          echo "VERSION=$new_version" >> $GITHUB_ENV
+          COMMIT_MSG=$(git log -1 --pretty=format:"%s" HEAD)
           echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
 
       - name: Create GitHub Release
+        if: steps.version.outputs.release == 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.VERSION }}
