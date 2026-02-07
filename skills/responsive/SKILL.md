@@ -42,6 +42,8 @@ Systematically audit and fix every page for mobile responsiveness, with visual v
 
 ---
 
+<process>
+
 ## Phase 1: Setup & Discovery
 
 ### Step 1: Check Chrome MCP
@@ -108,6 +110,9 @@ Read before auditing:
 | `"@remix-run"` in `package.json` | Remix | `app/routes/**/*.{tsx,jsx}` |
 | `"astro"` in `package.json` | Astro | `src/pages/**/*.{astro,mdx}` |
 | `"@sveltejs/kit"` in `package.json` | SvelteKit | `src/routes/**/+page.svelte` |
+| `"react-router"` or `"@tanstack/react-router"` in `package.json` | Vite + Router | Ask user for route list — no file convention |
+
+**If no framework detected** or routes use a router config (React Router, TanStack Router), ask the user to provide the list of URLs to audit.
 
 **Scan for page files** using the appropriate glob pattern. Exclude API routes (`app/api/**`).
 
@@ -242,9 +247,10 @@ If you recognize the same component causing issues across multiple pages, fix th
 
 #### Step 4: Verify Mobile Fix
 
-After applying fixes:
+After applying fixes, wait for HMR to recompile before screenshotting:
 
 ```
+mcp__claude-in-chrome__computer action=wait duration=3
 mcp__claude-in-chrome__computer action=screenshot
 ```
 
@@ -323,7 +329,9 @@ After all pages are audited and fixed, present a summary grouped by page and sha
 Batch commit all responsive fixes:
 
 ```bash
-git add .
+# Stage only the files you modified — check git status first
+git status
+git add [list of modified files]
 git commit -m "fix: responsive fixes across [N] pages
 
 - [Brief list of key changes]
@@ -339,12 +347,12 @@ AskUserQuestion:
   header: "Audit doc"
   options:
     - label: "Yes, save audit doc"
-      description: "Write to docs/plans/responsive-audit.md for future reference"
+      description: "Write to docs/audits/ for future reference"
     - label: "No, the commit is enough"
       description: "Skip the audit doc"
 ```
 
-If yes, write `docs/plans/responsive-audit.md` with the full change summary, and commit it.
+If yes, write `docs/audits/YYYY-MM-DD-responsive.md` with the full change summary, and commit it.
 
 ### Step 4: Final Desktop Verification
 
@@ -356,7 +364,7 @@ mcp__claude-in-chrome__resize_window width=1440 height=900
 
 Navigate to each page and take a quick screenshot. If anything looks off, fix and re-commit.
 
----
+</process>
 
 <success_criteria>
 Responsive audit is complete when:
@@ -381,7 +389,6 @@ Responsive audit is complete when:
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for all browser interaction
 - Follows `/arc:commit` discipline for commits
 - Can invoke `web-design-guidelines` skill for compliance review (if available)
-- Can invoke `vercel-react-native-skills` skill for React Native mobile optimization (if available)
 
 <arc_log>
 **After completing this skill, append to the activity log.**
