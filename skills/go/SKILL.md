@@ -1,5 +1,5 @@
 ---
-name: arc
+name: go
 description: |
   The main entry point. Understands your codebase and routes to the right workflow.
   Use when starting a session, saying "let's work on something", or unsure which
@@ -9,7 +9,7 @@ metadata:
   author: howells
 ---
 
-# /arc
+# /arc:go
 
 The front door to Arc. Understands context, asks what you want to do, routes to the right workflow.
 
@@ -76,7 +76,7 @@ Based on their answer:
 |--------|----------|
 | "I want to build [feature]" | /arc:ideate |
 | "Quick fix/small change" | /arc:build |
-| "Continue [existing plan]" | /arc:implement or /arc:implement |
+| "Continue [existing plan]" | /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
 | "Review/improve existing code" | /arc:audit or /arc:review |
 | "Ship to production" | /arc:letsgo |
@@ -87,7 +87,7 @@ Based on their answer:
 Skill arc:[chosen]: "[user's description]"
 ```
 
-## What /arc is NOT
+## What /arc:go is NOT
 
 - Not a replacement for specific commands — it routes TO them
 - Not for when you already know what command to use

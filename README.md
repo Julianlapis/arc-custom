@@ -14,7 +14,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 Arc provides 20 commands covering the complete development lifecycle:
 
 ```
-ENTRY   /arc:arc      - Main entry point, routes to right workflow
+ENTRY   /arc:go       - Main entry point, routes to right workflow
           ↓
 WHY     /arc:vision     - High-level goals (500-700 words)
           ↓
@@ -166,7 +166,7 @@ Each step asks if you want to continue. You can also enter at any point:
 
 | Command | When to use | Output |
 |---------|-------------|--------|
-| `/arc:arc` | Main entry point, routes to workflow | Context-aware guidance |
+| `/arc:go` | Main entry point, routes to workflow | Context-aware guidance |
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
 | `/arc:ideate` | From idea to design doc | `docs/plans/YYYY-MM-DD-<feature>-design.md` |
 | `/arc:implement` | Plan + execute with TDD | Code changes |
