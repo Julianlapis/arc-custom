@@ -1,18 +1,12 @@
 "use client";
 
+import { AGENT_CATEGORY_LABELS } from "@/lib/content";
 import type { Agent } from "./page";
 
 interface AgentListProps {
   agents: Agent[];
   onAgentClick: (agent: Agent) => void;
 }
-
-const categoryLabels: Record<Agent["category"], string> = {
-  review: "Review",
-  research: "Research",
-  build: "Build",
-  workflow: "Workflow",
-};
 
 const categoryOrder: Agent["category"][] = [
   "review",
@@ -41,7 +35,7 @@ export function AgentList({ agents, onAgentClick }: AgentListProps) {
         return (
           <div key={category}>
             <h3 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-400 text-xs uppercase tracking-wider">
-              {categoryLabels[category]}
+              {AGENT_CATEGORY_LABELS[category]}
             </h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {categoryAgents.map((agent) => (

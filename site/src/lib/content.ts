@@ -100,6 +100,13 @@ export interface Rule {
   content: string;
 }
 
+export const AGENT_CATEGORY_LABELS: Record<AgentCategory, string> = {
+  review: "Review Agent",
+  research: "Research Agent",
+  build: "Build Agent",
+  workflow: "Workflow Agent",
+};
+
 const CORE_RULES = new Set([
   "stack",
   "versions",

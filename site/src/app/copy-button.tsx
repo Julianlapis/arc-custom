@@ -21,46 +21,51 @@ export function CopyButton({ text, light }: CopyButtonProps) {
     : "text-neutral-400 hover:text-neutral-600";
 
   return (
-    <button
-      aria-label="Copy to clipboard"
-      className={`transition-colors ${
-        copied ? "text-[var(--color-accent)]" : baseClasses
-      }`}
-      onClick={handleCopy}
-      type="button"
-    >
-      {copied ? (
-        <svg
-          aria-hidden="true"
-          fill="none"
-          height="16"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      ) : (
-        <svg
-          aria-hidden="true"
-          fill="none"
-          height="16"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect height="14" rx="2" ry="2" width="14" x="8" y="8" />
-          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-        </svg>
-      )}
-    </button>
+    <>
+      <button
+        aria-label={copied ? "Copied" : "Copy to clipboard"}
+        className={`transition-colors ${
+          copied ? "text-[var(--color-accent)]" : baseClasses
+        }`}
+        onClick={handleCopy}
+        type="button"
+      >
+        {copied ? (
+          <svg
+            aria-hidden="true"
+            fill="none"
+            height="16"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : (
+          <svg
+            aria-hidden="true"
+            fill="none"
+            height="16"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect height="14" rx="2" ry="2" width="14" x="8" y="8" />
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+          </svg>
+        )}
+      </button>
+      <span aria-live="polite" className="sr-only" role="status">
+        {copied ? "Copied to clipboard" : ""}
+      </span>
+    </>
   );
 }

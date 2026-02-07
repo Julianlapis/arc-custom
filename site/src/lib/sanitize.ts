@@ -19,7 +19,7 @@ export function sanitizeContent(content: string): string {
     "success_criteria",
   ];
   for (const tag of stripBlocks) {
-    const re = new RegExp(`<${tag}>[\\s\\S]*?</${tag}>\\s*`, "g");
+    const re = new RegExp(`<${tag}>[\\s\\S]*?</${tag}>\\s*`, "gi");
     result = result.replace(re, "");
   }
 
@@ -36,12 +36,12 @@ export function sanitizeContent(content: string): string {
     "commentary",
   ];
   for (const tag of unwrapTags) {
-    result = result.replace(new RegExp(`<${tag}>\\s*`, "g"), "");
-    result = result.replace(new RegExp(`\\s*</${tag}>`, "g"), "");
+    result = result.replace(new RegExp(`<${tag}>\\s*`, "gi"), "");
+    result = result.replace(new RegExp(`\\s*</${tag}>`, "gi"), "");
   }
 
   // 3. Remove any remaining self-closing instruction tags
-  result = result.replace(/<[a-z_]+\s*\/>\s*/g, "");
+  result = result.replace(/<[a-z_]+\s*\/>\s*/gi, "");
 
   // 4. Collapse 3+ consecutive newlines into 2
   result = result.replace(/\n{3,}/g, "\n\n");
