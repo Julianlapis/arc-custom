@@ -120,12 +120,16 @@ The detail skill will:
 4. Break down into TDD tasks
 5. Save implementation plan
 
-After plan is created, offer review:
+After plan is created, strongly recommend review:
 
 ```
-"Implementation plan ready. Would you like to:
-1. Review the plan first (/arc:review) — expert review before building
-2. Start implementing — skip review, begin execution"
+"Implementation plan ready.
+
+I strongly recommend reviewing the plan before building — it's much cheaper to
+catch issues now than after writing code.
+
+1. Review first (/arc:review) — recommended
+2. Skip review and start implementing"
 ```
 
 If review requested → invoke `/arc:review`, then return here.
