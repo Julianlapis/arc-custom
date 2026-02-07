@@ -63,6 +63,23 @@ async function CachedComponent() {
 }
 ```
 
+## Bundle Optimization
+
+- MUST: Never import from barrel files for large icon/component libraries. `import { Check } from 'lucide-react'` loads 1,500+ modules. Import directly: `import { Check } from 'lucide-react/dist/esm/icons/check'`. Or use `optimizePackageImports` in next.config:
+  ```js
+  experimental: { optimizePackageImports: ['lucide-react', '@mui/material'] }
+  ```
+- MUST: Use `next/dynamic` with `{ ssr: false }` for heavy client-only components (editors, charts, maps). Keeps them out of the initial bundle.
+- SHOULD: Defer non-critical third-party scripts (analytics, tracking) by dynamically importing them with `{ ssr: false }`.
+- SHOULD: Preload heavy modules on hover/focus when a user interaction will trigger them (e.g., preload editor on "Open Editor" button hover).
+
+## Server Performance
+
+- MUST: Authenticate inside Server Actions — they are public endpoints. Always call `verifySession()` or equivalent before any mutation.
+- MUST: When using `React.cache()`, pass primitives not objects. `cache(async (params: { id: string }) => ...)` always misses — use `cache(async (id: string) => ...)`.
+- SHOULD: Only pass fields the client component actually uses across the RSC boundary, not entire objects. `<Profile name={user.name} />` not `<Profile user={user} />`.
+- SHOULD: Use `after()` from `next/server` to schedule non-blocking work (logging, analytics) that runs after the response is sent.
+
 ## Feature Structure
 - SHOULD: Add new features under `apps/<app>/features/<feature>/`.
 - SHOULD: Within a feature, organize by kind: `components/`, `hooks/`, `utils/`, `lib/`, `types/`.

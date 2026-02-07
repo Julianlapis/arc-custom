@@ -126,3 +126,33 @@ components/
 | Prop explosion (`leftIcon`, `rightIcon`, `iconSize`...) | Use children: `<Button><Icon /> Text</Button>` |
 | Boolean variants (`primary`, `large`, `rounded`) | Explicit variants: `variant="primary" size="lg"` |
 | Premature abstraction | Wait until you've copy-pasted 2-3 times |
+
+## Explicit Variants (over Boolean Props)
+
+When a component grows boolean props (`isThread`, `isEditing`, `isCompact`), each boolean doubles the state space. Create explicit variant components instead:
+
+```tsx
+// ❌ Boolean explosion — 2³ = 8 possible states
+<Composer isThread isDMThread isEditing />
+
+// ✅ Explicit variants — each is a focused component
+<ThreadComposer channelId="abc" />
+<EditMessageComposer messageId="xyz" />
+<ForwardMessageComposer messageId="123" />
+```
+
+Each variant can share logic via a common hook or provider, but the component surface is clear.
+
+## Context Interface Pattern
+
+For complex compound components, define a standard context shape with three parts:
+
+```tsx
+interface ComposerContextValue {
+  state: ComposerState;     // What data exists (value, attachments, mentions)
+  actions: ComposerActions; // How to modify it (setValue, addAttachment, submit)
+  meta: ComposerMeta;       // Refs, config, readonly info (inputRef, maxLength)
+}
+```
+
+This enables dependency injection — different providers can implement the same interface with completely different state management (local state, Zustand, URL params). Consumers don't care how state is managed, only what's available.

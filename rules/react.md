@@ -93,7 +93,16 @@ function Input({ ref, ...props }: Props & { ref?: React.Ref<HTMLInputElement> })
 - MUST: Add `data-testid` to testable elements for Playwright (see testing.md).
 - SHOULD: Prefix child test IDs with component name: `user-profile-edit`, `product-card-add-to-cart`.
 
+## Gotchas
+- NEVER: Use `&&` for conditional rendering with numbers. `{count && <Badge />}` renders `0` when count is 0. Use ternary: `{count > 0 ? <Badge /> : null}`.
+- MUST: Use lazy initializer for expensive `useState`: `useState(() => buildIndex(items))`, not `useState(buildIndex(items))` — the non-lazy form runs on every render.
+- SHOULD: Use `startTransition` to wrap non-urgent state updates (search results, filtered lists) so they don't block user input.
+
 ## Utilities, Hooks, Functions
 - MUST: Keep utilities, hooks, and general functions single-purpose.
 - SHOULD: Organize by responsibility in individual folders where appropriate (e.g., `hooks/use-thing/`, `utils/format-price/`).
 - SHOULD: Co-locate utilities that are truly component-specific next to the component, otherwise place shared items under a common folder (e.g., `lib/`, `hooks/`, `utils/`).
+
+## Further Reading
+
+For 57 detailed React/Next.js performance rules with code examples, agents can reference the `vercel-react-best-practices` skill. For advanced composition patterns (compound components, dependency injection via providers), reference the `vercel-composition-patterns` skill.

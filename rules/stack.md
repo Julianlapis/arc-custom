@@ -102,6 +102,7 @@ Proven options for specific needs. Install when the project requires them.
 
 - **React Native** — Cross-platform native apps
 - **Expo** — Managed workflow, OTA updates, build service
+- For React Native patterns, install the `vercel-react-native-skills` skill
 
 ## Rejected Alternatives (NEVER)
 

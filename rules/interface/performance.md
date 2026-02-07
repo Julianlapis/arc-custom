@@ -113,3 +113,24 @@ Motion uses WAAPI (S-Tier) for most animations. However, "independent transforms
 ```
 
 For performance-critical transforms, prefer string syntax to ensure WAAPI.
+
+### Long Lists Without Virtualization
+
+When full virtualization (`@tanstack/react-virtual`) isn't feasible, use CSS `content-visibility`:
+
+```css
+.list-item {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 80px; /* estimated height */
+}
+```
+
+This lets the browser skip rendering off-screen items. Simpler than JS virtualization, works for moderate lists (100-500 items).
+
+### Hydration Mismatches
+
+For content that legitimately differs between server and client (timestamps, locale-dependent text), suppress the warning:
+
+```tsx
+<time suppressHydrationWarning>{new Date().toLocaleString()}</time>
+```
