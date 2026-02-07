@@ -62,6 +62,7 @@ website:
 - Drizzle/Prisma: `database.md`
 - wrangler.toml: `cloudflare-workers.md`
 - AI SDK: `ai-sdk.md`
+- Clerk/WorkOS: `auth.md`
 
 **For UI work, load interface rules:**
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`

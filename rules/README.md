@@ -34,6 +34,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [git.md](git.md) | Commits, PRs, workflow |
 | [env.md](env.md) | Environment variable handling |
 | [security.md](security.md) | Auth, input validation, headers, CSRF |
+| [auth.md](auth.md) | Clerk, WorkOS, provider-agnostic auth |
 | [error-handling.md](error-handling.md) | Error boundaries, logging, error pages |
 | [database.md](database.md) | Schema design, migrations, queries |
 | [turborepo.md](turborepo.md) | Monorepo package patterns |

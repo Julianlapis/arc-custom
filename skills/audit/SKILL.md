@@ -81,7 +81,7 @@ Pass relevant rules to each reviewer agent.
 
 | Reviewer | Core Rules to Pass |
 |----------|-------------------|
-| security-engineer | api.md, env.md, integrations.md |
+| security-engineer | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS) |
 | architecture-engineer | stack.md, turborepo.md |
 | lee-nextjs-engineer | nextjs.md, api.md |
 | senior-engineer | code-style.md, typescript.md, react.md, ai-sdk.md (if AI SDK) |

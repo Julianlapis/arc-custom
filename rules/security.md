@@ -4,11 +4,16 @@ Rules for application security. The `security-engineer` agent reviews for OWASP 
 
 ## Authentication & Sessions
 
+For Clerk, WorkOS, and provider-specific rules, see [auth.md](auth.md).
+
 - MUST: Store auth tokens in httpOnly cookies, not localStorage or sessionStorage.
 - MUST: Set `Secure`, `SameSite=Lax` (or `Strict`) on auth cookies.
 - MUST: Invalidate sessions server-side on logout — don't just delete the client cookie.
+- MUST: Verify webhook signatures before processing payloads. Use the provider's SDK verification, not manual HMAC.
+- MUST: Enforce RBAC at the data layer (queries/mutations), not just at route or middleware level.
 - NEVER: Store secrets, tokens, or API keys in client-accessible code or bundles.
 - SHOULD: Use short-lived access tokens with refresh token rotation.
+- SHOULD: Rotate refresh tokens on each use (one-time use tokens).
 
 ## Input & Output
 

@@ -85,6 +85,7 @@ Task [agent-name] model: [model]: "[task description with context]"
 | `drizzle` or `prisma` in package.json | database.md |
 | `wrangler.toml` exists | cloudflare-workers.md |
 | `ai` in package.json | ai-sdk.md |
+| `@clerk/nextjs` or `@workos-inc/authkit-nextjs` in package.json | auth.md |
 
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
 

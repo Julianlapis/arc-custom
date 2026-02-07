@@ -53,6 +53,27 @@ You will systematically execute these security scans:
    - Check for proper session management
    - Verify authorization checks at both route and resource levels
    - Look for privilege escalation possibilities
+   - Verify RBAC is enforced at the data layer, not just middleware/route level
+   - Check webhook endpoints verify signatures before processing payloads
+   - Ensure no secrets (`sk_*`, API keys, `CLERK_SECRET_KEY`, `WORKOS_API_KEY`) leak into client bundles
+
+   **If `@clerk/nextjs` detected:**
+   - Verify `auth()` calls use `await` (async in Next.js 15+). Missing `await` returns a truthy Promise.
+   - Check proxy/middleware matcher allows webhook routes (`/api/webhooks(.*)`) as public.
+   - Verify Server Actions use `auth.protect()` (throws) not `auth()` (returns null).
+   - Check cached data includes `userId` in cache keys to prevent cross-user data leakage.
+   - Verify webhook handler uses `svix` to verify signatures.
+   - Confirm `useAuth()` is not used for page-load access control (client-side only, runs after render).
+
+   **If `@workos-inc/authkit-nextjs` detected:**
+   - Verify root layout wraps children with `AuthKitProvider`. Missing provider causes silent auth failure.
+   - Check `proxy.ts` (or `middleware.ts`) includes `authkitMiddleware()`. Missing proxy means auth state is never set.
+   - Verify `WORKOS_REDIRECT_URI` matches the WorkOS dashboard configuration exactly.
+   - Check `WORKOS_COOKIE_PASSWORD` is 32+ characters.
+   - Verify client-side env vars use correct prefix (`NEXT_PUBLIC_`, `VITE_`, `REACT_APP_`).
+
+   **Required reading when auth packages detected:**
+   Load `${CLAUDE_PLUGIN_ROOT}/rules/auth.md` for MUST/NEVER/SHOULD constraints.
 
 5. **Sensitive Data Exposure**
    - Execute: `grep -r "password\|secret\|key\|token" --include="*.js"`
