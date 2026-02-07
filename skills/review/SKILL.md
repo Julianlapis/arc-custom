@@ -139,9 +139,6 @@ Check for context on what led to the plan being reviewed.
 - `requirements.txt`, `pyproject.toml` → python
 - `.ruler/*.md` → daniel-project (has coding rules)
 
-**Use Grep tool on `src/**/*.ts`:**
-- Pattern: `@materia/` → daniel-project
-
 **Select reviewers based on project type:**
 
 **Daniel's projects:**
