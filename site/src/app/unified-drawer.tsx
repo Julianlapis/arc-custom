@@ -106,7 +106,11 @@ export function UnifiedDrawer({
               opacity: showSource ? 0.85 : 1,
             }}
             className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.15)]"
-            exit={{ x: "105%", opacity: 0.6 }}
+            exit={
+              showSource
+                ? { opacity: 0, transition: { duration: 0.25 } }
+                : { x: "105%", opacity: 0.6 }
+            }
             initial={{ x: "100%" }}
             style={{ transformOrigin: "right center" }}
             transition={{
