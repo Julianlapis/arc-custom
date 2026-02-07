@@ -2,7 +2,7 @@
 
 import { ArrowRight, ChevronLeft, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
@@ -42,6 +42,18 @@ export function UnifiedDrawer({
   onAgentClick,
 }: UnifiedDrawerProps) {
   const [showSource, setShowSource] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(null);
+
+  // Staggered close: source exits first, then preview follows
+  const closeAll = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (showSource) {
+      setShowSource(false);
+      closeTimer.current = setTimeout(() => onOpenChange(false), 250);
+    } else {
+      onOpenChange(false);
+    }
+  }, [showSource, onOpenChange]);
 
   // Reset source view when content changes or drawer closes
   useEffect(() => {
@@ -50,6 +62,12 @@ export function UnifiedDrawer({
       return () => clearTimeout(t);
     }
   }, [open]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     setShowSource(false);
@@ -93,7 +111,7 @@ export function UnifiedDrawer({
             className="fixed inset-0 z-40 bg-black/20"
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
-            onClick={() => onOpenChange(false)}
+            onClick={closeAll}
             transition={{ duration: 0.3 }}
           />
 
@@ -106,11 +124,7 @@ export function UnifiedDrawer({
               opacity: showSource ? 0.85 : 1,
             }}
             className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.15)]"
-            exit={
-              showSource
-                ? { opacity: 0, transition: { duration: 0.25 } }
-                : { x: "105%", opacity: 0.6 }
-            }
+            exit={{ x: "105%", opacity: 0.6 }}
             initial={{ x: "100%" }}
             style={{ transformOrigin: "right center" }}
             transition={{
@@ -125,7 +139,7 @@ export function UnifiedDrawer({
               <button
                 aria-label="Close drawer"
                 className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
-                onClick={() => onOpenChange(false)}
+                onClick={closeAll}
                 type="button"
               >
                 <X className="size-5" />
@@ -169,11 +183,11 @@ export function UnifiedDrawer({
                   opacity: { duration: 0.25, ease: appleEase.out },
                 }}
               >
-                {/* Close button — goes back to preview, not closes everything */}
+                {/* Close button — staggers: source exits, then preview follows */}
                 <button
-                  aria-label="Back to preview"
+                  aria-label="Close drawer"
                   className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
-                  onClick={() => setShowSource(false)}
+                  onClick={closeAll}
                   type="button"
                 >
                   <X className="size-5" />
