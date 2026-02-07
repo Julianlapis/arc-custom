@@ -14,7 +14,7 @@ The full arc from idea to shipped code.
 
 ## What It Does
 
-Arc provides 24 skills covering the complete development lifecycle:
+Arc provides 23 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:go       - Main entry point, routes to right workflow
@@ -36,7 +36,6 @@ CROSS-CUTTING
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
         /arc:naming     - Generate and validate project names
-        /arc:dedup      - Detect semantic code duplication
         /arc:deps       - Dependency management and updates
         /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
@@ -242,7 +241,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:rules` | Apply coding standards | `.ruler/` directory |
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
-| `/arc:dedup` | Detect semantic code duplication | Duplicate report |
 | `/arc:deps` | Dependency management | Updated dependencies |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
 | `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |

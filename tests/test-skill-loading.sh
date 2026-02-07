@@ -14,7 +14,6 @@ EXPECTED_SKILLS=(
     "build"
     "prune-agents"
     "commit"
-    "dedup"
     "deps"
     "design"
     "detail"

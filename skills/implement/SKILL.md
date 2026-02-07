@@ -450,6 +450,18 @@ Wait for user confirmation or adjustments.
 
 ## Phase 4: Quality Checkpoints
 
+**Before creating new utility functions or services:**
+Spawn duplicate-detector to check for existing similar functionality:
+```
+Task [duplicate-detector] model: sonnet: "Scan for functions similar to what I'm about to create.
+
+New function purpose: [what it does]
+Search in: [src/utils/, src/lib/, src/helpers/ or relevant dirs]
+
+Report any semantic duplicates so we can reuse instead of reinvent."
+```
+If duplicates found → reuse existing code. Skip creating the new function.
+
 **After completing data/types tasks:**
 - Spawn data-engineer (from review agents) for quick review
 - Present findings as questions

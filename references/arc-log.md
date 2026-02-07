@@ -80,7 +80,6 @@ Look for:
 | `/arc:seo` | SEO audit results |
 | `/arc:deps` | Dependency audit results |
 | `/arc:worktree` | Worktree created |
-| `/arc:dedup` | Duplicates found |
 
 ## What Doesn't Get Logged
 

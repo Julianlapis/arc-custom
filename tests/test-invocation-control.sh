@@ -15,7 +15,6 @@ section "Invocation Control Tests"
 PROTECTED_SKILLS=(
     "prune-agents"
     "commit"
-    "dedup"
     "letsgo"
     "legal"
     "rules"
