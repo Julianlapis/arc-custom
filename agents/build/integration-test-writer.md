@@ -13,6 +13,14 @@ description: |
   </commentary>
   </example>
 model: sonnet
+color: yellow
+website:
+  desc: Integration test specialist
+  summary: Writes vitest integration tests for components working together, API interactions with MSW mocking, and authentication flows.
+  what: |
+    The integration test writer tests how parts connect — forms that submit to APIs, components that share state, authentication flows end-to-end. Uses MSW for API mocking so tests are realistic without external dependencies.
+  why: |
+    Unit tests prove parts work alone. Integration tests prove they work together. This agent fills the critical gap between isolated unit tests and full E2E browser tests.
 ---
 
 # Integration Test Writer Agent

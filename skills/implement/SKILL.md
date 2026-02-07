@@ -31,6 +31,8 @@ website:
 4. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
 5. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
 6. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
+7. ${CLAUDE_PLUGIN_ROOT}/disciplines/subagent-driven-development.md
+8. ${CLAUDE_PLUGIN_ROOT}/disciplines/verification-before-completion.md
 </required_reading>
 
 <build_agents>

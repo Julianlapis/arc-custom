@@ -23,6 +23,14 @@ description: |
   </commentary>
   </example>
 model: sonnet
+color: red
+website:
+  desc: Systematic bug investigator
+  summary: Investigates failing tests systematically. Finds root causes, distinguishes test bugs from implementation bugs, and applies minimal fixes.
+  what: |
+    The debugger traces failures methodically — reproducing the issue, checking assumptions, isolating the root cause. It distinguishes between test bugs and implementation bugs, prefers event-based solutions over timeout increases, and applies the minimum fix needed.
+  why: |
+    When tests fail unexpectedly, the instinct is to add timeouts or force-fix symptoms. A systematic debugger finds the actual root cause, producing fixes that last.
 ---
 
 # Debugger Agent

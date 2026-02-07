@@ -13,6 +13,14 @@ description: |
   </commentary>
   </example>
 model: haiku
+color: blue
+website:
+  desc: Spec compliance checker
+  summary: Verifies implementation matches the task specification exactly — nothing missing, nothing extra. Runs after implementation, before code review.
+  what: |
+    The spec reviewer compares what was built against what was specified. It catches over-building (features not in the spec) and under-building (missing requirements). Quick compliance check — not a quality review.
+  why: |
+    Over-building wastes time. Under-building creates bugs. A dedicated spec check before code review catches both, keeping implementation honest and focused.
 ---
 
 # Spec Reviewer Agent

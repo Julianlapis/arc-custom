@@ -13,6 +13,14 @@ description: |
   </commentary>
   </example>
 model: haiku
+color: yellow
+website:
+  desc: Vitest test executor
+  summary: Runs vitest suites, analyzes results, and identifies failure patterns. For E2E/Playwright, use e2e-runner instead.
+  what: |
+    The test runner executes vitest suites (unit and integration), captures output, identifies failure patterns, and provides actionable summaries. It spots common issues like import errors, missing mocks, and flaky timing.
+  why: |
+    Test output can be verbose and hard to parse. A dedicated runner agent keeps the noise contained and surfaces only what matters — which tests failed and why.
 ---
 
 # Test Runner Agent (Vitest)

@@ -13,6 +13,14 @@ description: |
   </commentary>
   </example>
 model: sonnet
+color: yellow
+website:
+  desc: Unit test specialist
+  summary: Writes vitest unit tests for pure functions, utilities, hooks, and components in isolation. Behavior-focused, fast, no external dependencies.
+  what: |
+    The unit test writer creates isolated vitest tests. It tests behavior not implementation — what the function does, not how. Covers happy path, edge cases, and error conditions. Tests are fast, independent, and require no external services.
+  why: |
+    Unit tests are the foundation of test confidence. A specialist that focuses on isolation and behavior testing produces a faster, more reliable test suite.
 ---
 
 # Unit Test Writer Agent

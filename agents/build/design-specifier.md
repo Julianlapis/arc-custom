@@ -23,6 +23,14 @@ description: |
   </commentary>
   </example>
 model: opus
+color: magenta
+website:
+  desc: On-the-fly design decisions
+  summary: Makes design decisions during implementation when specs are incomplete. Creates visual direction and actionable specs for ui-builder.
+  what: |
+    When implementation hits a gap — no design for an empty state, loading state, or error state — the design specifier makes the call. It chooses typography, colors, layout, and outputs a concrete spec that ui-builder can implement immediately.
+  why: |
+    Implementation stalls when design specs have gaps. Rather than blocking on a designer, this agent makes informed decisions on the fly so building can continue.
 ---
 
 # Designer Agent (Build)

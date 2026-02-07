@@ -13,6 +13,14 @@ description: |
   </commentary>
   </example>
 model: sonnet
+color: yellow
+website:
+  desc: E2E test specialist
+  summary: Writes Playwright E2E tests for complete user journeys — signup flows, checkout processes, authentication. Includes auth setup for Clerk and WorkOS.
+  what: |
+    The E2E test writer creates Playwright tests that verify complete user journeys in real browsers. Multi-page flows, form submissions, navigation, authentication — tested the way a real user would experience them.
+  why: |
+    E2E tests catch what unit and integration tests miss: the full user journey across pages, with real browser behavior. A specialist writes more resilient selectors and handles auth setup properly.
 ---
 
 # E2E Test Writer Agent

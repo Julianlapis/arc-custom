@@ -23,6 +23,14 @@ description: |
   </commentary>
   </example>
 model: haiku
+color: red
+website:
+  desc: TypeScript and lint fixer
+  summary: Resolves TypeScript errors and lint issues quickly without refactoring. Mechanical cleanup between implementation steps.
+  what: |
+    The fixer runs tsc and biome, reads the errors, applies minimal fixes, and verifies. No refactoring, no improvements — just fix the errors and move on. Type escape hatches (any, as unknown, ts-ignore) are banned.
+  why: |
+    TypeScript and lint errors after implementation are mechanical work. A dedicated fast agent handles them without the temptation to refactor or expand scope.
 ---
 
 # Fixer Agent

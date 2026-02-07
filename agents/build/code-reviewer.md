@@ -13,6 +13,14 @@ description: |
   </commentary>
   </example>
 model: haiku
+color: blue
+website:
+  desc: Quick code quality gate
+  summary: Fast code quality check per task. Verifies implementation is well-built, not just spec-compliant. Runs after spec-reviewer, before commit.
+  what: |
+    The code reviewer does a quick quality pass — no any types, no ts-ignore, no console.logs, no commented-out code, no hardcoded values. It checks that error handling exists where needed and naming follows conventions. Pass/fail, not deep review.
+  why: |
+    Spec compliance (what was built) and code quality (how it was built) are different concerns. This fast gate catches common quality issues before they get committed.
 ---
 
 # Code Reviewer Agent (Build Gate)

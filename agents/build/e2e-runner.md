@@ -22,6 +22,14 @@ description: |
   </commentary>
   </example>
 model: sonnet
+color: yellow
+website:
+  desc: Playwright test executor
+  summary: Runs and fixes Playwright E2E tests. Handles flaky tests, timing issues, and selector problems. Iterates until green or reports blockers.
+  what: |
+    The E2E runner executes Playwright tests, diagnoses failures, and fixes them systematically. It handles flaky selectors, timing issues, and race conditions — iterating until the suite passes or identifying blockers that need human input.
+  why: |
+    E2E tests are noisy and flaky by nature. Running them in a separate agent keeps verbose output contained and lets it iterate through fixes without polluting the main context.
 ---
 
 # E2E Runner Agent

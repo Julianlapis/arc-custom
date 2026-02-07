@@ -23,6 +23,14 @@ description: |
   </commentary>
   </example>
 model: opus
+color: magenta
+website:
+  desc: Distinctive UI builder
+  summary: Builds memorable, distinctive interfaces from design specs. Anti-AI-slop by design — loads aesthetic direction and applies it with intention.
+  what: |
+    The UI builder creates interfaces that look intentional, not generated. It loads design rules, understands the existing design system, and builds components that match the aesthetic direction. It refuses to produce generic rounded-corners-and-gradients AI slop.
+  why: |
+    AI-generated UIs all look the same. A builder agent with strong design opinions and access to aesthetic direction produces interfaces that are distinctive and memorable.
 ---
 
 # UI Builder Agent

@@ -22,6 +22,14 @@ description: |
   </commentary>
   </example>
 model: sonnet
+color: green
+website:
+  desc: General-purpose builder
+  summary: Executes implementation tasks following TDD. The workhorse for utilities, services, APIs, and business logic.
+  what: |
+    The implementer handles non-specialized implementation work — utility functions, services, API endpoints, data transformations, and configuration. It follows TDD strictly: write the test, watch it fail, write minimal code, verify it passes, then refactor. Each task gets an atomic commit.
+  why: |
+    Most implementation work doesn't need a specialized agent. The implementer provides a reliable, disciplined execution loop that handles the bulk of plan tasks with consistent TDD quality.
 ---
 
 # Implementer Agent
