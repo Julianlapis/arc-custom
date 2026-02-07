@@ -28,7 +28,11 @@ const categoryLabels: Record<Agent["category"], string> = {
   workflow: "Workflow Agent",
 };
 
-const sheetEase = [0.32, 0.72, 0, 1] as const;
+const appleEase = {
+  sheet: [0.32, 0.72, 0, 1] as const,
+  out: [0, 0.55, 0.45, 1] as const,
+  standard: [0.25, 0.1, 0.25, 1] as const,
+};
 
 export function UnifiedDrawer({
   content,
@@ -99,15 +103,17 @@ export function UnifiedDrawer({
               x: showSource ? -48 : 0,
               scale: showSource ? 0.95 : 1,
               borderRadius: showSource ? 20 : 0,
+              opacity: showSource ? 0.85 : 1,
             }}
             className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.15)]"
             exit={{ x: "105%", opacity: 0.6 }}
             initial={{ x: "100%" }}
             style={{ transformOrigin: "right center" }}
             transition={{
-              x: { duration: 0.4, ease: sheetEase },
-              scale: { duration: 0.35, ease: [0, 0.55, 0.45, 1] },
-              borderRadius: { duration: 0.35 },
+              x: { duration: 0.4, ease: appleEase.sheet },
+              scale: { duration: 0.35, ease: appleEase.out },
+              borderRadius: { duration: 0.3, ease: appleEase.standard },
+              opacity: { duration: 0.25, ease: appleEase.out },
             }}
           >
             {/* Close button */}
@@ -155,15 +161,15 @@ export function UnifiedDrawer({
                 exit={{ x: "105%", opacity: 0.6 }}
                 initial={{ x: "100%", opacity: 0.8 }}
                 transition={{
-                  x: { duration: 0.4, ease: sheetEase },
-                  opacity: { duration: 0.25 },
+                  x: { duration: 0.4, ease: appleEase.sheet },
+                  opacity: { duration: 0.25, ease: appleEase.out },
                 }}
               >
-                {/* Close button */}
+                {/* Close button — goes back to preview, not closes everything */}
                 <button
-                  aria-label="Close drawer"
+                  aria-label="Back to preview"
                   className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
-                  onClick={() => onOpenChange(false)}
+                  onClick={() => setShowSource(false)}
                   type="button"
                 >
                   <X className="size-5" />
