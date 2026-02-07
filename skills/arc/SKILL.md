@@ -29,8 +29,11 @@ Keep it brief — 5-10 bullet points max."
 
 **Check for existing Arc artifacts:**
 ```bash
-ls docs/vision.md docs/tasklist.md docs/plans/*.md 2>/dev/null | head -10
+ls docs/vision.md docs/plans/*.md 2>/dev/null | head -10
 ```
+
+**Check Linear (if MCP available):**
+If `mcp__linear__*` tools exist, check for active issues.
 
 **Read progress journal for recent work:**
 ```bash
@@ -48,8 +51,8 @@ Briefly share what you found:
 
 Present options based on context:
 
-**If tasklist has items:**
-"You have [N] items in your tasklist. Want to:"
+**If Linear has active issues:**
+"You have [N] active issues in Linear. Want to:"
 1. Work on one of those
 2. Start something new
 3. See suggestions (/arc:suggest)
@@ -93,5 +96,5 @@ Skill arc:[chosen]: "[user's description]"
 ## Interop
 
 - Routes to all other /arc:* commands
-- Reads /arc:tasklist, /arc:vision, /arc:progress for context
+- Reads Linear issues (if MCP available), /arc:vision, progress for context
 - Uses /arc:suggest when user is unsure

@@ -1,7 +1,7 @@
 ---
 name: suggest
 description: |
-  Opinionated recommendations for what to work on next based on tasklist and codebase.
+  Opinionated recommendations for what to work on next based on Linear issues and codebase.
   Use when asked "what should I work on", "what's next", "suggest priorities",
   or when starting a session and unsure where to begin.
 license: MIT
@@ -17,22 +17,29 @@ Check what was recently worked on to avoid re-suggesting completed work.
 
 # Suggest Workflow
 
-Analyze tasklist, codebase, and vision to give opinionated recommendations for what to work on next.
+Analyze Linear issues, codebase, and vision to give opinionated recommendations for what to work on next.
 
 ## Priority Cascade
 
-1. **Tasklist** (highest priority) — Already noted, most immediate
+1. **Linear issues** (if MCP available) — Already triaged, most immediate
 2. **Codebase issues** — Technical debt, gaps, patterns
 3. **Vision gaps** (lowest priority) — Only if 1 & 2 are empty
 
 ## Process
 
-### Step 1: Read Tasklist
+### Step 1: Check Linear (if available)
 
-**Use Read tool:** `docs/tasklist.md`
+**Check for Linear MCP:**
+Look for `mcp__linear__*` tools in available tools.
 
-If tasklist has items in "Up Next":
-→ Recommend those first with brief rationale
+**If Linear MCP available:**
+```
+mcp__linear__list_issues: { filter: { state: { type: { in: ["started", "unstarted"] } } }, first: 10 }
+```
+
+Prioritize issues marked as high priority or in current cycle.
+
+**If Linear not available:** Skip to Step 2.
 
 ### Step 2: Analyze Codebase
 
@@ -50,7 +57,7 @@ Prioritize by impact."
 
 ### Step 3: Read Vision (if needed)
 
-Only if tasklist is empty AND codebase analysis found nothing urgent:
+Only if Linear is empty/unavailable AND codebase analysis found nothing urgent:
 
 **Use Read tool:** `docs/vision.md`
 
@@ -65,6 +72,7 @@ Present top 3-5 suggestions:
 
 ### 1. [Top recommendation]
 **Why:** [Brief rationale]
+**Source:** [Linear issue / Codebase / Vision]
 **Command:** /arc:ideate [topic] or /arc:build [thing]
 
 ### 2. [Second recommendation]
@@ -84,8 +92,9 @@ If user picks one, invoke the relevant command.
 
 ## Suggestion Categories
 
-**From Tasklist:**
-- "You noted [X] — ready to tackle it?"
+**From Linear:**
+- "High priority: [issue title] — ready to tackle it?"
+- "Current cycle has [N] issues — start with [X]?"
 
 **From Codebase:**
 - "Found [N] TODOs in [area] — want to address them?"

@@ -30,7 +30,6 @@ DO      /arc:implement  - Plan + execute with TDD
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
         /arc:audit      - Comprehensive codebase audit (includes deslop)
-        /arc:tasklist   - Persistent task backlog
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations
         /arc:tidy       - Clean up completed plans
@@ -178,7 +177,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
-| `/arc:tasklist` | Manage backlog | `docs/tasklist.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
@@ -213,11 +211,28 @@ Implementation methodologies in `disciplines/`:
 
 Commands work together:
 
-- `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
+- `/arc:suggest` reads codebase, `/arc:vision`, and Linear (if configured)
 - `/arc:ideate` can flow to `/arc:implement`
 - `/arc:build` suggests `/arc:ideate` if scope is too large
 - `/arc:letsgo` runs `/arc:testing` and `/arc:audit --deslop` as part of quality checks
-- Any command can add to `/arc:tasklist`
+
+### Linear Integration (Optional)
+
+For complex projects, Arc integrates with Linear via MCP for issue tracking:
+
+```json
+// .mcp.json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/linear-mcp"]
+    }
+  }
+}
+```
+
+When Linear MCP is available, `/arc:suggest` queries active issues and `/arc:audit` can create issues from findings.
 
 ## Acknowledgments
 

@@ -426,14 +426,14 @@ Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
 ```
 What would you like to do?
 
-1. **Create tasks from findings** → Add critical/high issues to /arc:tasklist
+1. **Create Linear issues** → Add critical/high issues to Linear (if MCP available)
 2. **Focus on critical issues** → Create implementation plan for critical fixes
 3. **Deep dive on [domain]** → Explore specific domain findings
 4. **Done for now** → End session
 ```
 
 If user selects:
-- **Create tasks** → Write critical/high issues to `docs/tasklist.md`
+- **Create issues** → Create Linear issues for critical/high findings (requires Linear MCP)
 - **Focus on critical** → Invoke `/arc:implement` with critical issues as scope
 - **Deep dive** → Show full findings for selected domain
 - **Done** → End session
