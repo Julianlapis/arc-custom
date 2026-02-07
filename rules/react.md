@@ -33,6 +33,7 @@ Scope: All apps and packages.
 
 
 ## State Management
+- MUST: URL-visible state (filters, tabs, pagination, modals) goes in search params via [nuqs](https://nuqs.dev). URL is the source of truth.
 - SHOULD: Use `useState` for strictly local, ephemeral UI state.
 - SHOULD: Use Zustand stores for shared state across the app (or across non-trivial feature boundaries).
 - SHOULD: For complex component-internal sharing, provide a local Context or a local Zustand store/provider that is scoped to the component tree.

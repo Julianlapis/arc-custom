@@ -77,6 +77,10 @@ Use tweens for: fixed timing, opacity-only, <100ms.
 
 - NEVER: Scale from `0` — minimum `0.95`
 
+## Layout Animations
+
+- MUST: Use `layout="position"` instead of `layout` on elements whose aspect ratio changes during animation (prevents text/image distortion).
+
 ## Patterns
 
 ### Modal Entry

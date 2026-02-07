@@ -51,6 +51,7 @@ Strong preference. Use unless there's a specific reason not to.
 
 ### State
 
+- **nuqs** — Type-safe URL search params. Use for filters, tabs, pagination, expanded panels. URL is the source of truth.
 - **Zustand** — Global client state (persistence, selectors, devtools)
 
 ### Forms

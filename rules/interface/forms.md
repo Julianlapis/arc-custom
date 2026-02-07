@@ -51,11 +51,16 @@
 ## Form Behavior
 
 - MUST: Wrap inputs in `<form>` for Enter submission
-- MUST: ⌘/Ctrl+Enter submits `<textarea>`
-- MUST: Keep submit enabled until request starts, then disable + show spinner
+- MUST: ⌘/Ctrl+Enter submits `<textarea>`; Enter adds newline
+- MUST: Keep submit enabled until request starts, then disable + show spinner + keep original label
+- MUST: Use idempotency keys on submit to prevent duplicate requests
+- MUST: Accept free text input; validate after, don't block typing
+- MUST: Allow submitting incomplete forms to surface validation errors
 - MUST: Warn on unsaved changes before navigation
 - MUST: Allow pasting (never block paste)
 - MUST: Trim whitespace from values
+- MUST: Hydration-safe inputs — no lost focus or value after hydration
+- MUST: Compatible with password managers and 2FA; allow pasting one-time codes
 - SHOULD: Prefill with user data when available
 - SHOULD: Placeholder ends with ellipsis: `Search…`, `sk-012345…`
 

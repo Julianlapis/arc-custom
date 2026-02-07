@@ -2,7 +2,7 @@
 
 ## Keyboard
 
-- MUST: Full keyboard support per [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/)
+- MUST: Full keyboard support per [WAI-ARIA APG patterns](https://www.w3.org/WAI/ARIA/apg/patterns/)
 - MUST: Visible focus rings via `focus-visible:ring-2`
 - MUST: Focus trap in modals; return focus on close
 
@@ -79,7 +79,7 @@ document.addEventListener('visibilitychange', () => {
 ## Drag/Scroll
 
 - MUST: `overscroll-contain` in modals/drawers
-- MUST: During drag: `select-none`, set `inert` on container
+- MUST: During drag: `select-none`, disable text selection, set `inert` on dragged element/container
 - MUST: No dead zones — if it looks clickable, it is
 
 ### `inert` Attribute
