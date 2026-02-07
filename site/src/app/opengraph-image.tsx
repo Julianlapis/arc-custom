@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 
 export const alt = "Arc – The full arc from idea to shipped code";
@@ -39,8 +38,8 @@ export default async function Image() {
         }}
       >
         <span style={{ color: "#262626" }}>/arc</span>
-        <span style={{ color: "#7C9E9E" }}>:</span>
-        <span style={{ color: "#7C9E9E" }}>start</span>
+        <span style={{ color: "#5A7B7B" }}>:</span>
+        <span style={{ color: "#5A7B7B" }}>start</span>
       </div>
 
       {/* Bottom line */}

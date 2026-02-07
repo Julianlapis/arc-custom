@@ -7,7 +7,7 @@
 	:root {
 		--font-sans: "InterVariable", "Inter", system-ui, sans-serif;
 		--font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
-		--color-accent: #7C9E9E;
+		--color-accent: #5A7B7B;
 		/* Baseline grid: text-sm (14px) × leading-relaxed (1.625) = 22.75px */
 		--baseline: 22.75px;
 	}
