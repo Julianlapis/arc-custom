@@ -2,7 +2,7 @@
 description: Kill orphaned Claude subagent processes that didn't exit cleanly.
 ---
 
-Run the cleanup script to kill orphaned Claude agents:
+Run the prune script to kill orphaned Claude agents:
 
 ```bash
 ${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh

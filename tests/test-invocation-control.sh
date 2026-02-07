@@ -13,7 +13,7 @@ section "Invocation Control Tests"
 
 # Skills that MUST have disable-model-invocation: true
 PROTECTED_SKILLS=(
-    "cleanup"
+    "prune-agents"
     "commit"
     "dedup"
     "letsgo"

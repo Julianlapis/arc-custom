@@ -41,7 +41,7 @@ CROSS-CUTTING
         /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
         /arc:tidy       - Clean up completed plans
-        /arc:cleanup    - Kill orphaned subagent processes
+        /arc:prune-agents - Kill orphaned subagent processes
 
 TOOLS   /arc:worktree   - Create isolated git worktree for feature work
         /arc:commit     - Smart commit + push with auto-splitting
@@ -246,7 +246,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:deps` | Dependency management | Updated dependencies |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
 | `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |
-| `/arc:cleanup` | Kill orphaned subagent processes | Clean process state |
+| `/arc:prune-agents` | Kill orphaned subagent processes | Clean process state |
 
 ## Agents
 

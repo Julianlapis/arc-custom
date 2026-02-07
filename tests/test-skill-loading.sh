@@ -12,7 +12,7 @@ section "Skill Loading Tests"
 EXPECTED_SKILLS=(
     "audit"
     "build"
-    "cleanup"
+    "prune-agents"
     "commit"
     "dedup"
     "deps"

@@ -1,9 +1,9 @@
 ---
-name: cleanup
+name: prune-agents
 disable-model-invocation: true
 description: |
   Kill orphaned Claude subagent processes that didn't exit cleanly.
-  Use when asked to "clean up agents", "kill orphaned processes",
+  Use when asked to "prune agents", "clean up agents", "kill orphaned processes",
   or when subagents accumulate from Task tool usage.
 license: MIT
 metadata:
@@ -13,12 +13,12 @@ website:
   desc: Kill orphaned agents
   summary: Kills Claude Code processes that have become detached from their terminal. Safe to run anytime.
   what: |
-    Cleanup finds and kills Claude Code processes that have become orphaned — detached from their terminal (TTY shows "??"). These accumulate when the Task tool spawns subagents that don't cleanly exit after completion.
+    Prune-agents finds and kills Claude Code processes that have become orphaned — detached from their terminal (TTY shows "??"). These accumulate when the Task tool spawns subagents that don't cleanly exit after completion.
   why: |
-    Orphaned Claude processes consume memory and CPU in the background. Running cleanup periodically keeps your system clean without affecting active terminal sessions.
+    Orphaned Claude processes consume memory and CPU in the background. Pruning periodically keeps your system clean without affecting active terminal sessions.
 ---
 
-# Cleanup Orphaned Agents
+# Prune Orphaned Agents
 
 Run the cleanup script to kill orphaned Claude agent processes.
 

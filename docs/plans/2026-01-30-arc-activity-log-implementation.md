@@ -107,7 +107,7 @@ Look for:
 
 - `/arc:start` (routing only)
 - `/arc:suggest` (read-only)
-- `/arc:cleanup` (utility)
+- `/arc:prune-agents` (utility)
 - `/arc:tidy` (utility)
 - `/arc:rules` (one-time setup)
 - `/arc:naming` (standalone)
