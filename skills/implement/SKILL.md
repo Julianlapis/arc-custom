@@ -129,6 +129,37 @@ If tests fail before you start → stop and ask user.
 **Create TodoWrite tasks:**
 One todo per task in the plan. Mark first as `in_progress`.
 
+## Phase 2b: Plan Test Coverage
+
+**Before implementation, identify test needs:**
+
+```markdown
+## Test Coverage Plan
+
+### Unit Tests (per task)
+| Task | Test File | What to Test |
+|------|-----------|--------------|
+| Task 1: Create utility | src/utils/x.test.ts | Input/output, edge cases |
+| Task 2: Create component | src/components/x.test.tsx | Rendering, props |
+
+### Integration Tests (per feature)
+| Feature | Test File | What to Test |
+|---------|-----------|--------------|
+| Signup form | src/features/auth/signup.integration.test.ts | Form + API + validation |
+
+### E2E Tests (critical flows only)
+| Flow | Test File | What to Test |
+|------|-----------|--------------|
+| User signup → dashboard | tests/signup.spec.ts | Full journey |
+```
+
+**Determine auth testing needs:**
+- Uses Clerk? → integration-test-writer with Clerk mocks
+- Uses WorkOS? → integration-test-writer with WorkOS mocks
+- Has protected routes? → e2e-test-writer with auth.setup.ts
+
+This plan guides which test agent to spawn for each task.
+
 ## Phase 3: Execute in Batches
 
 **Default batch size: 3 tasks**
@@ -136,14 +167,16 @@ One todo per task in the plan. Mark first as `in_progress`.
 **Per-task loop:**
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  1. BUILD     → implementer / ui-builder / specialized  │
-│  2. TEST      → TDD cycle (test → fail → impl → pass)   │
-│  3. FIX       → fixer (TS/lint cleanup)                 │
-│  4. SPEC      → spec-reviewer (matches spec?)           │
+│  1. CLASSIFY  → what type of task? what test level?     │
+│  2. TEST      → spawn test agent (unit/integration/e2e) │
+│  3. BUILD     → implementer / ui-builder / specialized  │
+│  4. TDD       → run test (fail→impl→pass)               │
+│  5. FIX       → fixer (TS/lint cleanup)                 │
+│  6. SPEC      → spec-reviewer (matches spec?)           │
 │       ↳ issues? → fix → re-review                       │
-│  5. QUALITY   → code-reviewer (well-built?)             │
+│  7. QUALITY   → code-reviewer (well-built?)             │
 │       ↳ issues? → fix → re-review                       │
-│  6. COMMIT    → atomic commit, mark complete            │
+│  8. COMMIT    → atomic commit, mark complete            │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -178,10 +211,64 @@ Determine which build agent(s) may be needed:
 5. Did something break? → debugger or fixer
 6. Task complete? → spec-reviewer to verify
 
-### Step 3: Follow TDD cycle exactly
+### Step 3: Write Tests First (TDD)
+
+**Determine test type based on task:**
+
+| Task Type | Test Agent | Framework |
+|-----------|------------|-----------|
+| Pure function/utility | unit-test-writer | vitest |
+| Component with props | unit-test-writer | vitest + testing-library |
+| Component + API/state | integration-test-writer | vitest + MSW |
+| Auth-related feature | integration-test-writer | vitest + Clerk/WorkOS mocks |
+| User flow/journey | e2e-test-writer | Playwright |
+
+**Spawn appropriate test writer:**
+
+For unit tests:
+```
+Task [unit-test-writer] model: sonnet: "Write unit tests for [function/component].
+
+Behavior to test:
+- [expected behavior from plan]
+- [edge cases]
+- [error cases]
+
+File to create: [path/to/module.test.ts]
+Follow vitest patterns from testing-patterns.md"
+```
+
+For integration tests (API/auth):
+```
+Task [integration-test-writer] model: sonnet: "Write integration tests for [feature].
+
+Behavior to test:
+- [component + API interaction]
+- [auth states: loading, signed in, signed out]
+- [error handling]
+
+Auth: [Clerk/WorkOS/none]
+API endpoints to mock: [list]
+File to create: [path/to/feature.integration.test.ts]"
+```
+
+For E2E tests (critical flows):
+```
+Task [e2e-test-writer] model: sonnet: "Write E2E tests for [user journey].
+
+Flow to test:
+- [step 1]
+- [step 2]
+- [expected outcome]
+
+Auth setup: [Clerk/WorkOS/none]
+File to create: [tests/feature.spec.ts]"
+```
+
+### Step 4: TDD Cycle
 
 ```
-1. Write the test (copy from plan, or spawn unit-test-writer)
+1. Tests written (from Step 3)
 2. Run test → verify FAIL
 3. Write implementation (copy from plan, adapt as needed)
 4. Run test → verify PASS
@@ -237,7 +324,7 @@ Investigate root cause and fix. See ${CLAUDE_PLUGIN_ROOT}/disciplines/systematic
 
 If debugger can't resolve after one attempt → stop and ask user.
 
-### Step 4: Spec Compliance Check
+### Step 5: Spec Compliance Check
 
 After implementation, spawn spec-reviewer:
 ```
@@ -252,7 +339,7 @@ Check: nothing missing, nothing extra."
 If spec-reviewer finds issues → fix with implementer/fixer → re-run spec-reviewer.
 If compliant → proceed to code quality.
 
-### Step 5: Code Quality Gate
+### Step 6: Code Quality Gate
 
 After spec compliance passes, spawn code-reviewer:
 ```
@@ -266,7 +353,7 @@ Check: no any types, error handling, tests exist, style consistent."
 If code-reviewer finds issues → fix with fixer → re-run code-reviewer.
 If approved → commit and mark complete.
 
-### Step 6: Commit and Mark Complete
+### Step 7: Commit and Mark Complete
 
 ```bash
 git add [files]
@@ -275,7 +362,7 @@ git commit -m "feat(scope): [description from plan]"
 
 Update TodoWrite to mark task completed.
 
-### Step 7: Checkpoint after batch
+### Step 8: Checkpoint after batch
 
 After every 3 tasks:
 
