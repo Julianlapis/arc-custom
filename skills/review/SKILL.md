@@ -137,23 +137,20 @@ Check for context on what led to the plan being reviewed.
 
 **Use Glob tool:**
 - `requirements.txt`, `pyproject.toml` → python
-- `.ruler/*.md` → daniel-project (has coding rules)
 
 **Select reviewers based on project type:**
-
-**Daniel's projects:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
 
 **TypeScript/React:**
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
 
 **Next.js:**
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/lee-nextjs-engineer.md
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
 
 **Python:**
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
