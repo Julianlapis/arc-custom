@@ -56,6 +56,31 @@ Create distinctive, non-generic UI. Outputs concrete change specs that get imple
 Check for related prior design work and aesthetic decisions already made.
 </progress_context>
 
+## Agents
+
+**This skill works with these agents (reuse, don't duplicate):**
+
+| Agent | Location | When to Use |
+|-------|----------|-------------|
+| `ui-builder` | agents/build/ | Build UI from the change spec you create |
+| `figma-builder` | agents/build/ | Build UI when Figma URL is provided |
+| `design-specifier` | agents/build/ | Quick design decisions during implement (empty states, dropdowns) |
+| `designer` | agents/review/ | Review implemented UI for AI slop |
+
+**Workflow:**
+```
+/arc:design (this skill)
+     ↓ creates change spec
+ui-builder or figma-builder (builds it)
+     ↓ implements
+designer (reviews for AI slop)
+```
+
+**For mid-implementation design needs** (not full redesign):
+- Use `design-specifier` agent directly
+- It outputs specs for `ui-builder` to implement
+- Lighter weight than invoking the full design skill
+
 ## Prerequisites
 
 - **Dev server running** — Verify changes visually as you work
@@ -232,16 +257,31 @@ Go back to Step 3 and be bolder.
 
 ### Step 8: Build or Hand Off
 
-**Option A: Build now**
+**Option A: Build now with agents**
+
+If Figma URL available:
 ```
-Invoke /arc:implement with change spec attached.
-Pass the full change spec table to ui-builder.
+Task [figma-builder] model: opus: "Build from Figma: [URL]
+
+Change spec attached for reference.
+Verify spacing matches exactly."
 ```
 
-**Option B: Create plan**
+If building from change spec:
+```
+Task [ui-builder] model: opus: "Build UI from change spec.
+
+Aesthetic Direction: [paste]
+Change Spec: [paste full table]
+
+Verify each change spec row is implemented exactly."
+```
+
+**Option B: Create plan for /arc:implement**
 ```
 Invoke /arc:detail with aesthetic direction and change spec.
 Each change spec row becomes an implementation task.
+implement will use ui-builder agent.
 ```
 
 **Option C: Save design only**
@@ -249,6 +289,24 @@ Each change spec row becomes an implementation task.
 Save to docs/designs/YYYY-MM-DD-<component>-design.md
 Include: aesthetic direction, ASCII wireframe, full change spec
 ```
+
+### Step 8b: Design Review (After Build)
+
+Once built, spawn designer review agent:
+```
+Task [designer] model: opus: "Review implemented UI for AI slop.
+
+Aesthetic direction: [paste]
+Files: [list of component files]
+
+Check for:
+- Generic AI aesthetics
+- Deviation from aesthetic direction
+- Spacing/padding accuracy
+- Missing memorable elements"
+```
+
+Address any issues before marking complete.
 
 ### Step 9: Visual Verification Loop (MANDATORY)
 
