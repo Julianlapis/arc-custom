@@ -80,6 +80,9 @@ Task [agent-name] model: [model]: "[task description with context]"
 | `tailwindcss` in package.json | tailwind.md |
 | `.ts` or `.tsx` files | typescript.md |
 | `vitest` or `jest` in package.json | testing.md |
+| Always | error-handling.md |
+| Always | security.md |
+| `drizzle` or `prisma` in package.json | database.md |
 
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
 

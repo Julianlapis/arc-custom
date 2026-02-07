@@ -56,8 +56,8 @@ website:
 | senior-engineer | code-style.md, typescript.md, react.md |
 | architecture-engineer | stack.md, turborepo.md |
 | simplicity-engineer | code-style.md |
-| security-engineer | api.md, env.md |
-| data-engineer | testing.md, api.md |
+| security-engineer | security.md, api.md, env.md |
+| data-engineer | database.md, testing.md, api.md |
 | accessibility-engineer | (interface rules only — already in agent prompt) |
 | designer | design.md, colors.md, spacing.md, typography.md |
 </rules_context>

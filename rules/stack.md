@@ -34,19 +34,12 @@ Strong preference. Use unless there's a specific reason not to.
 
 ### API
 
-- **tRPC 11** — When a project needs a typesafe client data layer, tRPC is the answer
-- MUST: Use `queryOptions`/`mutationOptions` integration with React Query (not legacy hooks)
-- MUST: Use `@trpc/tanstack-react-query` (not `@trpc/react-query`)
-- **OpenAPI 3.1** — Specification for all HTTP APIs. Generate from code, never hand-write
-- SHOULD: `zod-openapi` for Zod-first HTTP APIs, `trpc-openapi` for tRPC REST exposure
-- See [api.md](api.md) for design conventions
+- **tRPC 11** — Typesafe client data layer. See [api.md](api.md) for conventions.
+- **OpenAPI 3.1** — Specification for HTTP APIs. Generate from code, never hand-write.
 
 ### CLI
 
-- **Commander** — Argument parsing for scripted mode
-- **Ink** — React-based interactive TUI (MUST for React projects)
-- Every project with an API ships a companion CLI (scripted + interactive dual-mode)
-- See [cli.md](cli.md) for conventions
+- **Commander + Ink** — Dual-mode CLI (scripted + interactive). See [cli.md](cli.md) for conventions.
 
 ### UI
 

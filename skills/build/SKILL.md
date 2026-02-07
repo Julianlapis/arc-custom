@@ -58,6 +58,8 @@ website:
 - Next.js: `nextjs.md`
 - Tailwind: `tailwind.md`
 - Testing: `testing.md`
+- Always: `error-handling.md`, `security.md`
+- Drizzle/Prisma: `database.md`
 
 **For UI work, load interface rules:**
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`

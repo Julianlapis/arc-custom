@@ -30,8 +30,6 @@ Scope: All apps and packages.
 3. Use the typed import in code (no direct `process.env`).
 
 ## Safety
-- NEVER: Log secrets.
+- NEVER: Log secrets. See [security.md](security.md).
 - NEVER: Commit `.env` files.
 - SHOULD: Fail fast on validation errors (default behavior).
-
-Rationale: Centralizing schema validation improves safety, DX, and consistency across the monorepo and prevents silent runtime errors.

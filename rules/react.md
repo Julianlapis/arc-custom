@@ -61,44 +61,15 @@ Scope: All apps and packages.
 - NEVER: Use array indices as keys (use stable IDs).
 
 ## React 19
-- MUST: Use ref-as-prop instead of legacy `forwardRef`
-- MUST: Use `use()` hook for reading promises and context
-- MUST: Use `<Context>` instead of `<Context.Provider>`
-- SHOULD: Use `useActionState` for form handling with server actions
+- MUST: Use ref-as-prop instead of legacy `forwardRef`.
+- MUST: Use `use()` hook for reading promises and context.
+- MUST: Use `<Context value={...}>` instead of `<Context.Provider value={...}>`.
+- SHOULD: Use `useActionState` for form handling with server actions.
 
 ```tsx
-// ref-as-prop (no forwardRef)
+// ref-as-prop (no forwardRef needed)
 function Input({ ref, ...props }: Props & { ref?: React.Ref<HTMLInputElement> }) {
   return <input ref={ref} {...props} />;
-}
-
-// use() hook for context
-function ThemeButton() {
-  const theme = use(ThemeContext);
-  return <button className={theme.buttonClass}>Click</button>;
-}
-
-// use() hook for promises in render
-function UserProfile({ userPromise }: { userPromise: Promise<User> }) {
-  const user = use(userPromise);
-  return <div>{user.name}</div>;
-}
-
-// Context without Provider
-<ThemeContext value={theme}>
-  {children}
-</ThemeContext>
-
-// useActionState for forms
-function LoginForm() {
-  const [state, action, pending] = useActionState(loginAction, initialState);
-  return (
-    <form action={action}>
-      <input name="email" />
-      <button disabled={pending}>Log in</button>
-      {state.error && <p>{state.error}</p>}
-    </form>
-  );
 }
 ```
 

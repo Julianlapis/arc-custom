@@ -5,7 +5,6 @@ Rules for HTTP APIs, tRPC routers, and server actions.
 ## Design Principles
 
 - MUST: Design APIs as contracts — consumers depend on stability.
-- MUST: Use OpenAPI 3.1 specification for all HTTP APIs.
 - MUST: Consistent error format across all endpoints (see Error Shape below).
 - SHOULD: Version via URL prefix (`/v1/`) only when introducing breaking changes.
 - SHOULD: Prefer cursor-based pagination over offset-based.
@@ -22,25 +21,12 @@ Rules for HTTP APIs, tRPC routers, and server actions.
 | PATCH | Partial update | No |
 | DELETE | Remove a resource | Yes |
 
-### Status Codes
-
-| Code | Meaning | When |
-|------|---------|------|
-| 200 | OK | Successful read or update |
-| 201 | Created | Successful creation |
-| 204 | No Content | Successful deletion |
-| 400 | Bad Request | Malformed input, validation failure |
-| 401 | Unauthorized | Missing or invalid auth |
-| 403 | Forbidden | Valid auth, insufficient permissions |
-| 404 | Not Found | Resource does not exist |
-| 409 | Conflict | Duplicate or state conflict |
-| 422 | Unprocessable | Valid syntax but semantic error |
-| 429 | Too Many Requests | Rate limit exceeded |
-| 500 | Internal Server Error | Unhandled failure |
+- MUST: Use appropriate status codes — `201` for creation, `204` for deletion, `409` for conflicts, `422` for semantic errors.
+- MUST: `401` for missing/invalid auth, `403` for insufficient permissions. Never conflate them.
 
 ## Error Shape
 
-All API errors return the same structure:
+All API errors MUST return:
 
 ```json
 {
@@ -58,8 +44,6 @@ All API errors return the same structure:
 
 ## tRPC
 
-When using tRPC as the typesafe client data layer:
-
 - MUST: Use `@trpc/tanstack-react-query` with `queryOptions`/`mutationOptions`.
 - MUST: Zod for all input validation.
 - MUST: Use `queryKey()` for cache invalidation — never manual string arrays.
@@ -68,55 +52,13 @@ When using tRPC as the typesafe client data layer:
 - SHOULD: Prefer optimistic updates for mutations that modify displayed data.
 - See [integrations.md](integrations.md) for adapter error handling rules.
 
-### Query Keys
-
-```ts
-// Partial key — matches all queries for procedure (good for invalidate/cancel)
-qc.invalidateQueries({ queryKey: trpc.posts.list.queryKey() });
-
-// Exact key — includes input (required for setQueryData/getQueryData)
-const queryOptions = trpc.posts.list.queryOptions({ limit: 10 });
-qc.setQueryData(queryOptions.queryKey, newData);
-
-// Wrong — manual strings won't match tRPC's nested key format
-qc.invalidateQueries({ queryKey: ["posts", "list"] });
-```
-
-### Optimistic Updates
-
-For mutations affecting displayed data, use the optimistic pattern:
-
-```ts
-// Get exact query key from queryOptions (includes input)
-const queryOptions = trpc.posts.list.queryOptions({ limit: 10 });
-const queryKey = queryOptions.queryKey;
-
-const mutation = useMutation({
-  mutationFn: trpc.posts.delete.mutationOptions().mutationFn,
-  onMutate: async (vars) => {
-    await qc.cancelQueries({ queryKey });
-    const previous = qc.getQueryData(queryKey);
-    qc.setQueryData(queryKey, (old) => old?.filter((p) => p.id !== vars.id));
-    return { previous };
-  },
-  onError: (_, __, ctx) => ctx?.previous && qc.setQueryData(queryKey, ctx.previous),
-  onSettled: () => qc.invalidateQueries({ queryKey }),
-});
-```
-
-## OpenAPI Generation
+## OpenAPI
 
 - MUST: Generate OpenAPI specs from code — never hand-write them.
-- SHOULD: Use `zod-openapi` when building Zod-first HTTP APIs.
-- SHOULD: Use `trpc-openapi` when exposing tRPC routers as REST endpoints.
+- SHOULD: Use `zod-openapi` for Zod-first HTTP APIs, `trpc-openapi` for tRPC REST exposure.
 - SHOULD: Serve the spec at `/api/openapi.json` for tooling and agent consumption.
-
-## Documentation
-
-- MUST: Every public API has a machine-readable spec (OpenAPI or tRPC router type).
-- SHOULD: Include example requests and responses in OpenAPI descriptions.
 - SHOULD: Document rate limits, auth requirements, and pagination in the spec.
 
 ## CLI Surface
 
-Every project with an API should ship a CLI that exposes it. See [cli.md](cli.md).
+Every project with an API SHOULD ship a CLI that exposes it. See [cli.md](cli.md).

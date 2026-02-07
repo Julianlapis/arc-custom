@@ -1,17 +1,14 @@
 # Complete Ruleset
 
-Copy this entire `rules/` directory to your project's `.ruler/` directory to use these rules.
+These rules are designed for [Ruler](https://github.com/intellectronica/ruler) — a tool that distributes a single `.ruler/` directory of markdown instructions to every AI coding agent (Claude Code, Cursor, Copilot, Aider, etc.) in the right format. Write rules once, `ruler apply`, and all agents follow the same standards.
 
 ## Quick Setup
 
 ```bash
-# Copy rules to your project
-cp -r /path/to/docs/rules/* /your-project/.ruler/
+# Copy rules to your project's .ruler/ directory
+cp -r /path/to/arc/rules/* /your-project/.ruler/
 
-# Rename README.md to agents.md
-mv /your-project/.ruler/README.md /your-project/.ruler/agents.md
-
-# Apply rules
+# Apply to all configured agents
 npx ruler apply
 ```
 
@@ -36,9 +33,12 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [testing.md](testing.md) | Unit, integration, E2E tests |
 | [git.md](git.md) | Commits, PRs, workflow |
 | [env.md](env.md) | Environment variable handling |
+| [security.md](security.md) | Auth, input validation, headers, CSRF |
+| [error-handling.md](error-handling.md) | Error boundaries, logging, error pages |
+| [database.md](database.md) | Schema design, migrations, queries |
 | [turborepo.md](turborepo.md) | Monorepo package patterns |
 | [integrations.md](integrations.md) | External service adapters |
-| [api.md](api.md) | API design, OpenAPI, error formats |
+| [api.md](api.md) | API design, tRPC, error formats |
 | [cli.md](cli.md) | CLI patterns, dual-mode, agent friendliness |
 | [plan-mode.md](plan-mode.md) | Constraints for Claude's plan mode |
 
@@ -69,4 +69,3 @@ Adapt these rules to fit your project:
 ## Notes
 
 - Internationalization: Intentionally out-of-scope (add if needed)
-- Security: Folded into env.md and integrations.md
