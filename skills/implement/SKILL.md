@@ -120,7 +120,15 @@ The detail skill will:
 4. Break down into TDD tasks
 5. Save implementation plan
 
-After plan is created, continue to Phase 1.
+After plan is created, offer review:
+
+```
+"Implementation plan ready. Would you like to:
+1. Review the plan first (/arc:review) — expert review before building
+2. Start implementing — skip review, begin execution"
+```
+
+If review requested → invoke `/arc:review`, then return here.
 
 ---
 

@@ -143,26 +143,52 @@ Task [reviewer-3] model: sonnet: "Review this plan for [specialty concerns]..."
 
 ## Phase 4: Consolidate and Present
 
-**Transform findings into Socratic questions:**
+**Separate your recommendations from agent suggestions:**
 
+Structure your review output in two distinct sections:
+
+### Section 1: My Recommendations (Review Skill)
+
+Based on reading the plan yourself, identify:
+- Missing pieces (no tests mentioned, unclear acceptance criteria, etc.)
+- Structural issues (tasks too big, wrong ordering, missing dependencies)
+- Inconsistencies within the plan
+
+Present as direct recommendations:
+```
+**My recommendations:**
+1. Task 3 should come before Task 2 (dependency)
+2. No test strategy mentioned — add unit/integration/e2e breakdown
+3. The API endpoint names are inconsistent (POST /users vs POST /create-user)
+```
+
+### Section 2: Agent Suggestions
+
+Transform agent findings into Socratic questions.
 See `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md` for approach.
 
-Instead of presenting critiques:
-- Turn findings into exploratory questions
-- "What if we..." not "You should..."
-- Collaborative spirit, not adversarial
+Group by severity:
+```
+**Agent suggestions:**
 
-**Example transformations:**
-- Reviewer: "This is overengineered"
-  → "We have three layers here. What if we started with one?"
-- Reviewer: "Missing error handling"
-  → "What happens if the API call fails? Should we handle that now or later?"
-- Reviewer: "Security concern"
-  → "This stores the token in localStorage. Is that acceptable for this use case?"
+🔴 Critical (from security-engineer):
+- "This stores the token in localStorage. Is that acceptable for this use case?"
 
-**Present questions one at a time:**
-- Wait for user response
-- If user wants to keep something, they probably have context
+🟡 Consider (from simplicity-engineer):
+- "We have three layers here. What if we started with one?"
+
+🟢 Minor (from architecture-engineer):
+- "What happens if the API call fails? Should we handle that now or later?"
+```
+
+**Why the distinction:**
+- Your recommendations = things that should probably change (plan has gaps)
+- Agent suggestions = expert perspectives to consider (user decides)
+
+**Present one section at a time:**
+- Start with your recommendations (often quicker to resolve)
+- Then agent suggestions by severity
+- Wait for user response before moving on
 - Track decisions as you go
 
 ## Phase 5: Apply Decisions
