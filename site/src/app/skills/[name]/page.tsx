@@ -21,6 +21,12 @@ export async function generateMetadata({
   return {
     title: `${title} – Arc`,
     description: skill.desc,
+    alternates: { canonical: `/skills/${name}` },
+    openGraph: {
+      title: `${title} – Arc`,
+      description: skill.desc,
+      url: `/skills/${name}`,
+    },
   };
 }
 

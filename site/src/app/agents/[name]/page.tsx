@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAgentByName, getAgents, sanitizeContent } from "@/lib/content";
+import {
+  AGENT_CATEGORY_LABELS,
+  getAgentByName,
+  getAgents,
+  sanitizeContent,
+} from "@/lib/content";
 import { DocumentContent } from "../../document-content";
-
-const categoryLabels: Record<string, string> = {
-  review: "Review Agent",
-  research: "Research Agent",
-  build: "Build Agent",
-  workflow: "Workflow Agent",
-};
 
 export function generateStaticParams() {
   return getAgents().map((a) => ({ name: a.name }));
@@ -27,6 +25,12 @@ export async function generateMetadata({
   return {
     title: `${agent.name} – Arc`,
     description: agent.desc,
+    alternates: { canonical: `/agents/${name}` },
+    openGraph: {
+      title: `${agent.name} – Arc`,
+      description: agent.desc,
+      url: `/agents/${name}`,
+    },
   };
 }
 
@@ -57,7 +61,7 @@ export default async function AgentPage({
         <header className="mb-[calc(var(--baseline)*2)] border-neutral-200 border-b pb-[calc(var(--baseline)*1)]">
           <h1 className="font-mono text-neutral-900 text-lg">{agent.name}</h1>
           <p className="mt-2 text-neutral-500 text-sm">
-            {categoryLabels[agent.category] ?? agent.category}
+            {AGENT_CATEGORY_LABELS[agent.category]}
           </p>
         </header>
 

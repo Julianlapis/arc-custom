@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Arc – The full arc from idea to shipped code",
   description:
     "A full development workflow for Claude Code. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
+  alternates: { canonical: "/" },
 };
 
 export default function ArcPage() {

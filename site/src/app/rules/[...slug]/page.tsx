@@ -17,8 +17,16 @@ export async function generateMetadata({
   const rule = getRuleBySlug(slug.join("/"));
   if (!rule) return {};
 
+  const description = `${rule.title} — coding rule for the Arc plugin.`;
   return {
     title: `${rule.title} – Arc Rules`,
+    description,
+    alternates: { canonical: `/rules/${slug.join("/")}` },
+    openGraph: {
+      title: `${rule.title} – Arc Rules`,
+      description,
+      url: `/rules/${slug.join("/")}`,
+    },
   };
 }
 
