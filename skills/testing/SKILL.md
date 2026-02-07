@@ -1,7 +1,7 @@
 ---
-name: test
+name: testing
 description: |
-  Comprehensive test strategy and execution. Creates test plans covering unit, integration, and E2E.
+  Comprehensive testing strategy. Creates test plans covering unit, integration, and E2E.
   Uses specialist agents for each test type. Supports vitest and Playwright with auth testing
   guidance for Clerk and WorkOS.
 license: MIT
@@ -9,7 +9,7 @@ metadata:
   author: howells
 ---
 
-# Test Workflow
+# Testing Strategy Workflow
 
 Create comprehensive test strategies covering the full test pyramid. Execute with specialist agents.
 
@@ -297,7 +297,7 @@ export default defineConfig({
 After creating test strategy or running tests:
 
 ```markdown
-## YYYY-MM-DD HH:MM — /arc:test
+## YYYY-MM-DD HH:MM — /arc:testing
 **Task:** [Create strategy / Run tests / Fix failing]
 **Feature:** [What was tested]
 **Coverage:**

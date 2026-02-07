@@ -155,7 +155,7 @@ Look for:
 | `/arc:detail` | Plan created, task count, scope |
 | `/arc:implement` | Tasks completed, tasks remaining, blockers |
 | `/arc:build` | What was built, files changed |
-| `/arc:test` | Test results, coverage changes |
+| `/arc:testing` | Test results, coverage changes |
 | `/arc:review` | Plan reviewed, changes made |
 | `/arc:audit` | Audit completed, issue counts by severity |
 | `/arc:design` | UI designed, aesthetic direction |

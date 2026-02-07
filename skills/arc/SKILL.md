@@ -77,7 +77,7 @@ Based on their answer:
 | "Not sure what to work on" | /arc:suggest |
 | "Review/improve existing code" | /arc:deslop or /arc:review |
 | "Ship to production" | /arc:letsgo |
-| "Run tests" | /arc:test |
+| "Run tests" | /arc:testing |
 
 **Invoke the skill:**
 ```

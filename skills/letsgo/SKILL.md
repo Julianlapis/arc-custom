@@ -560,7 +560,7 @@ After completing deployment or checklist, append to progress journal:
 
 ## Interop
 
-- Runs **/arc:test** as part of quality check
+- Runs **/arc:testing** as part of quality check
 - Runs **/arc:audit --deslop** as part of quality check (LLM artifact detection)
 - References **/arc:vision** to verify alignment
 - Invokes **/arc:legal** to generate missing legal documents
