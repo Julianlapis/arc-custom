@@ -9,7 +9,7 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--seo]
+argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo]
 metadata:
   author: howells
 website:
@@ -84,11 +84,11 @@ Pass relevant rules to each reviewer agent.
 | security-engineer | api.md, env.md, integrations.md |
 | architecture-engineer | stack.md, turborepo.md |
 | lee-nextjs-engineer | nextjs.md, api.md |
-| senior-engineer | code-style.md, typescript.md, react.md |
+| senior-engineer | code-style.md, typescript.md, react.md, ai-sdk.md (if AI SDK) |
 | data-engineer | testing.md, api.md |
 | organization-engineer | turborepo.md, code-style.md |
-| llm-engineer | stack.md, code-style.md |
-| daniel-product-engineer | react.md, typescript.md |
+| hygiene-engineer | stack.md, code-style.md, ai-sdk.md (if AI SDK) |
+| daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK) |
 | performance-engineer | (no core rules — uses own heuristics) |
 | seo-engineer | seo.md |
 
@@ -152,6 +152,17 @@ In addition to their domain-specific rules, both UI reviewers should verify:
 **Check for database/migrations:**
 
 **Use Glob tool:** `prisma/*`, `drizzle/*`, `migrations/*` → has-db
+
+**Check for AI SDK:**
+
+**Use Grep tool:** `"ai"` in `package.json` → has-ai-sdk
+
+If detected, run a quick deprecated API scan:
+```bash
+grep -rn --include='*.ts' --include='*.tsx' -E 'generateObject|maxTokens[^A-Z]|toDataStreamResponse|addToolResult|maxSteps[^A-Z]|part\.args|part\.result[^s]' src/ app/ 2>/dev/null | head -20
+```
+
+If deprecated APIs found, include count in the detection summary and flag for reviewers. These are mechanical fixes — load `${CLAUDE_PLUGIN_ROOT}/rules/ai-sdk.md` and pass the migration table to the implementing agent.
 
 **Run dependency vulnerability scan (critical/high only):**
 
@@ -230,6 +241,7 @@ Project type: [Next.js / React / Python / etc.]
 Project scale: [small / medium / large]
 Project stage: [prototype / development / pre-launch / production]
 Has database: [yes/no]
+Has AI SDK: [yes/no + deprecated API count if any]
 Has tests: [yes/no]
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
@@ -261,7 +273,7 @@ Execution mode: [batched (default) / parallel / team]
 - If UI-heavy (React/Next.js, medium/large) → add `designer`
 - If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
-- If recent AI-assisted work or branch audit → add `llm-engineer` (deslop)
+- If recent AI-assisted work or branch audit → add `hygiene-engineer`
 - If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
 
 **Focus flag overrides:**
@@ -271,7 +283,7 @@ Execution mode: [batched (default) / parallel / team]
 - `--organization` → only `organization-engineer`
 - `--design` → only `designer`
 - `--accessibility` → only `accessibility-engineer`
-- `--deslop` → only `llm-engineer`
+- `--hygiene` → only `hygiene-engineer`
 - `--seo` → only `seo-engineer`
 
 **Final reviewer list:**
@@ -344,7 +356,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | simplicity-engineer | sonnet | Complexity analysis |
 | data-engineer | sonnet | Data safety reasoning |
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
-| llm-engineer | sonnet | Pattern recognition for AI artifacts |
+| hygiene-engineer | sonnet | Pattern recognition for AI artifacts |
 | seo-engineer | sonnet | Pattern recognition for SEO elements |
 
 **Include project stage in every reviewer prompt.**

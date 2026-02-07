@@ -84,6 +84,7 @@ Task [agent-name] model: [model]: "[task description with context]"
 | Always | security.md |
 | `drizzle` or `prisma` in package.json | database.md |
 | `wrangler.toml` exists | cloudflare-workers.md |
+| `ai` in package.json | ai-sdk.md |
 
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
 
@@ -111,6 +112,7 @@ Rules are optional — proceed without them if the user prefers.
 - `${CLAUDE_PLUGIN_ROOT}/references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
 - `${CLAUDE_PLUGIN_ROOT}/references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
 - `${CLAUDE_PLUGIN_ROOT}/references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
+- `${CLAUDE_PLUGIN_ROOT}/references/ai-sdk.md` — AI SDK 6 patterns (if `ai` in package.json)
 </rules_context>
 
 <process>

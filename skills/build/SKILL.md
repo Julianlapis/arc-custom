@@ -61,6 +61,7 @@ website:
 - Always: `error-handling.md`, `security.md`
 - Drizzle/Prisma: `database.md`
 - wrangler.toml: `cloudflare-workers.md`
+- AI SDK: `ai-sdk.md`
 
 **For UI work, load interface rules:**
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`

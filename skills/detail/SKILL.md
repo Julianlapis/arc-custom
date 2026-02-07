@@ -15,6 +15,7 @@ metadata:
 2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
 3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
 4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+5. ${CLAUDE_PLUGIN_ROOT}/references/ai-sdk.md (if `ai` in package.json)
 
 **For UI work, also load interface rules:**
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles

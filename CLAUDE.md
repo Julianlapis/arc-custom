@@ -71,6 +71,7 @@ CROSS-CUTTING (available anytime):
               /arc:tidy       → Clean up completed plans
               /arc:rules      → Apply coding standards
               /arc:deps       → Dependency audit with batch upgrades
+              /arc:ai         → AI SDK 6 patterns and guidance
 ```
 
 ## Development

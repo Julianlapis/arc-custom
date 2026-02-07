@@ -453,7 +453,7 @@ This will detect data collection, gather business info, and create template page
 - [ ] All tests passing
 - [ ] No TypeScript errors (`pnpm tsc --noEmit`)
 - [ ] No lint errors (`pnpm biome check .` or eslint)
-- [ ] `/arc:audit --deslop` run (no LLM artifacts)
+- [ ] `/arc:audit --hygiene` run (no code artifacts)
 - [ ] Placeholder content replaced
 - [ ] Lorem ipsum removed
 
@@ -617,7 +617,7 @@ Letsgo is complete when:
 ## Interop
 
 - Runs **/arc:testing** as part of quality check
-- Runs **/arc:audit --deslop** as part of quality check (LLM artifact detection)
+- Runs **/arc:audit --hygiene** as part of quality check (code artifact detection)
 - References **/arc:vision** to verify alignment
 - Invokes **/arc:legal** to generate missing legal documents
 - Can invoke **vercel-react-best-practices** skill for performance review (if available)

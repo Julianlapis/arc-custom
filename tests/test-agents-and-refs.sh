@@ -16,7 +16,7 @@ REVIEW_AGENTS=(
     "data-engineer"
     "designer"
     "lee-nextjs-engineer"
-    "llm-engineer"
+    "hygiene-engineer"
     "organization-engineer"
     "performance-engineer"
     "security-engineer"

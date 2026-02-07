@@ -32,7 +32,7 @@ DO      /arc:implement  - Plan + execute with TDD
 
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
-        /arc:audit      - Comprehensive codebase audit (includes deslop)
+        /arc:audit      - Comprehensive codebase audit (includes hygiene)
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
         /arc:naming     - Generate and validate project names
@@ -251,7 +251,7 @@ Arc includes 22 specialized agents:
 | Category | Agents |
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
-| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
+| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, hygiene-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
 | **Design** | figma-implement |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer |
@@ -276,7 +276,7 @@ Commands work together:
 - `/arc:suggest` reads Linear issues (if configured), in-session tasks (TaskList), codebase, and `/arc:vision` (priority cascade with opt-in discovery mode)
 - `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
 - `/arc:build` suggests `/arc:ideate` if scope is too large
-- `/arc:letsgo` runs `/arc:testing` and `/arc:audit --deslop` as part of quality checks
+- `/arc:letsgo` runs `/arc:testing` and `/arc:audit --hygiene` as part of quality checks
 - Claude Code uses TaskList for in-session task tracking; Linear MCP for persistent issue tracking
 
 ### Linear Integration (Optional)
