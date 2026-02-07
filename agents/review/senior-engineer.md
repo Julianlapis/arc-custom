@@ -128,7 +128,12 @@ Consider extracting to a new file/module when you see multiple of these:
 - Prefer composition over configuration (multiple simple components over one with many props)
 - Extract hooks when component logic gets complex
 
-## 9. IMPORT HYGIENE (see `${CLAUDE_PLUGIN_ROOT}/references/architecture-patterns.md`)
+<required_reading>
+Read before reviewing:
+- `${CLAUDE_PLUGIN_ROOT}/references/architecture-patterns.md` — Import depth rules, one-way dependencies, package boundaries
+</required_reading>
+
+## 9. IMPORT HYGIENE
 
 **Deep imports = architectural smell**
 ```typescript

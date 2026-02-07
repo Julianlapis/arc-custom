@@ -62,7 +62,7 @@ designer (reviews for AI slop)
 
 **You MUST read these files before proceeding. Do not skip this step.**
 
-<mandatory_references>
+<required_reading>
 **Read ALL of these using the Read tool:**
 
 1. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, anti-patterns, design review checklist. **Critical.**
@@ -83,7 +83,7 @@ designer (reviews for AI slop)
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/app-ui.md` — If designing app UI (dashboards, settings, data views)
-</mandatory_references>
+</required_reading>
 
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)

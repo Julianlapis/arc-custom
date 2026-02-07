@@ -91,10 +91,12 @@ If found, read the design doc and note:
 
 This context guides every fix decision. If there's no design doc, that's fine — apply general responsive best practices from the interface rules.
 
-**Read interface rules:**
-1. `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md`
-2. `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md`
-3. `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md`
+<required_reading>
+Read before auditing:
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` — Layout patterns, z-index, viewport units
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system and scale
+</required_reading>
 
 ### Step 4: Discover Routes
 

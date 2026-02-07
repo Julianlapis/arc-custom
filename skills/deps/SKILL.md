@@ -23,6 +23,11 @@ website:
     - Rollback on failure. Each batch is checkpointed. If tests break, the upgrade is reverted and the next batch proceeds.
 ---
 
+<required_reading>
+Read during Phase 2 (Alternative Discovery):
+- `${CLAUDE_PLUGIN_ROOT}/references/dependency-alternatives.md` — Curated table of known package replacements with migration effort ratings
+</required_reading>
+
 <process>
 
 **Announce at start:** "I'm using the deps skill to audit your dependencies for vulnerabilities, outdated packages, and modern alternatives."
@@ -120,11 +125,7 @@ Outdated packages: N (N major, N minor, N patch)
 
 **If `--cve-only` flag is set, skip this phase entirely.**
 
-**Load curated alternatives:**
-
-**Use Read tool:** `${CLAUDE_PLUGIN_ROOT}/references/dependency-alternatives.md`
-
-This file contains a maintained table of known package replacements (lodash → es-toolkit, moment → date-fns, etc.) with migration effort ratings.
+**Load curated alternatives** (from `<required_reading>` above).
 
 **For each dependency in the project:**
 

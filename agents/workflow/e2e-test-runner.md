@@ -188,7 +188,10 @@ Repeat Steps 3-4 until all tests pass.
 | LLM API timeout | Payload too large OR model overloaded | Reduce input, try faster model |
 | "413 Payload Too Large" | Request body exceeds limit | Truncate input, remove images |
 
-**For LLM API failures:** See `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md` — payload size is the most common culprit.
+<required_reading>
+For LLM API failures, read:
+- `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md` — Payload size is the most common culprit
+</required_reading>
 
 ## Selector Strategy
 
