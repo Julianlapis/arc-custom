@@ -39,6 +39,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [turborepo.md](turborepo.md) | Monorepo package patterns |
 | [integrations.md](integrations.md) | External service adapters |
 | [api.md](api.md) | API design, tRPC, error formats |
+| [cloudflare-workers.md](cloudflare-workers.md) | Workers runtime, KV, R2, wrangler |
 | [cli.md](cli.md) | CLI patterns, dual-mode, agent friendliness |
 | [plan-mode.md](plan-mode.md) | Constraints for Claude's plan mode |
 

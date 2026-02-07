@@ -60,6 +60,7 @@ website:
 - Testing: `testing.md`
 - Always: `error-handling.md`, `security.md`
 - Drizzle/Prisma: `database.md`
+- wrangler.toml: `cloudflare-workers.md`
 
 **For UI work, load interface rules:**
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`

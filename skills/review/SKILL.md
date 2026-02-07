@@ -58,6 +58,7 @@ website:
 | simplicity-engineer | code-style.md |
 | security-engineer | security.md, api.md, env.md |
 | data-engineer | database.md, testing.md, api.md |
+| senior-engineer | cloudflare-workers.md (if wrangler.toml exists) |
 | accessibility-engineer | (interface rules only — already in agent prompt) |
 | designer | design.md, colors.md, spacing.md, typography.md |
 </rules_context>

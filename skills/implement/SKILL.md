@@ -83,6 +83,7 @@ Task [agent-name] model: [model]: "[task description with context]"
 | Always | error-handling.md |
 | Always | security.md |
 | `drizzle` or `prisma` in package.json | database.md |
+| `wrangler.toml` exists | cloudflare-workers.md |
 
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
 

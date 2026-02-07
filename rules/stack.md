@@ -69,6 +69,11 @@ Strong preference. Use unless there's a specific reason not to.
 
 Proven options for specific needs. Install when the project requires them.
 
+### Edge / Workers
+
+- **Cloudflare Workers** — Edge compute for API gateways, proxies, and lightweight services. See [cloudflare-workers.md](cloudflare-workers.md)
+- **Hono** — Lightweight web framework for Workers (alternative to raw fetch handler)
+
 ### Monorepo
 
 - **Turborepo** — When the app demands multiple packages/apps, or could demand it in the near future
