@@ -26,7 +26,9 @@ metadata:
 | `implementer` | sonnet | General task execution — utilities, services, APIs, business logic |
 | `fixer` | haiku | TypeScript errors, lint issues — fast mechanical fixes |
 | `debugger` | sonnet | Failing tests — systematic root cause analysis |
-| `test-writer` | sonnet | TDD test creation — behavior over implementation |
+| `unit-test-writer` | sonnet | Unit tests (vitest) — pure functions, components |
+| `integration-test-writer` | sonnet | Integration tests (vitest + MSW) — API, auth |
+| `e2e-test-writer` | sonnet | E2E tests (Playwright) — user journeys |
 | `ui-builder` | opus | UI components from design spec — anti-slop, memorable |
 | `design-specifier` | opus | Design decisions when no spec exists — empty states, visual direction |
 | `figma-builder` | opus | Build UI directly from Figma URL |
@@ -157,7 +159,9 @@ Determine which build agent(s) may be needed:
 | Task Type | Primary Agent | When to Use |
 |-----------|---------------|-------------|
 | General implementation | implementer | Utilities, services, APIs, business logic |
-| Write tests | test-writer | TDD test creation |
+| Write unit tests | unit-test-writer | Pure functions, components, hooks |
+| Write integration tests | integration-test-writer | API mocking, auth states |
+| Write E2E tests | e2e-test-writer | User journeys, Playwright |
 | Build UI from spec | ui-builder | UI components with existing design direction |
 | Build UI from Figma | figma-builder | Figma URL provided |
 | Design decisions needed | design-specifier | No spec exists (empty states, visual direction) |
@@ -177,7 +181,7 @@ Determine which build agent(s) may be needed:
 ### Step 3: Follow TDD cycle exactly
 
 ```
-1. Write the test (copy from plan, or spawn test-writer)
+1. Write the test (copy from plan, or spawn unit-test-writer)
 2. Run test → verify FAIL
 3. Write implementation (copy from plan, adapt as needed)
 4. Run test → verify PASS

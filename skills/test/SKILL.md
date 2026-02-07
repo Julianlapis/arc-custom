@@ -1,216 +1,324 @@
 ---
 name: test
 description: |
-  Test strategy and execution. Create test plans, run test suites, or fix failing tests.
-  Use when asked to "run tests", "create test strategy", "fix failing tests", "check coverage",
-  or when you need to verify code works. Supports vitest, playwright, jest, and cypress.
+  Comprehensive test strategy and execution. Creates test plans covering unit, integration, and E2E.
+  Uses specialist agents for each test type. Supports vitest and Playwright with auth testing
+  guidance for Clerk and WorkOS.
 license: MIT
 metadata:
   author: howells
 ---
+
+# Test Workflow
+
+Create comprehensive test strategies covering the full test pyramid. Execute with specialist agents.
+
+<required_reading>
+**Read before planning:**
+1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
+2. `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` — Project conventions
+3. `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md` — If testing LLM integrations
+</required_reading>
+
+## Agents
+
+**This skill uses 3 specialist agents + 1 runner:**
+
+| Agent | Model | Purpose | Framework |
+|-------|-------|---------|-----------|
+| `unit-test-writer` | sonnet | Pure functions, components, hooks | vitest |
+| `integration-test-writer` | sonnet | API mocking, component interactions, auth | vitest + MSW |
+| `e2e-test-writer` | sonnet | Full user journeys, real browser | Playwright |
+| `e2e-runner` | sonnet | Run and fix E2E tests | Playwright |
+
+**Test Pyramid:**
+```
+         /\
+        /  \       E2E (few)
+       /────\      - Critical user journeys
+      /      \     - Auth flows
+     /────────\    Integration (some)
+    /          \   - API interactions
+   /────────────\  - Component + state
+  /              \ Unit (many)
+ /────────────────\- Pure functions
+                   - Isolated components
+```
 
 <rules_context>
 **Check for project testing rules:**
 
 **Use Glob tool:** `.ruler/testing.md`
 
-**If file exists:** Read it for MUST/SHOULD/NEVER constraints on testing patterns, frameworks, and conventions.
+If exists, read for MUST/SHOULD/NEVER constraints.
 
-**If `.ruler/` doesn't exist:** Continue without rules — they're optional.
+**Detect test framework:**
+
+| File | Framework |
+|------|-----------|
+| `vitest.config.*` | vitest (unit + integration) |
+| `playwright.config.*` | Playwright (E2E) |
 </rules_context>
-
-<progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
-
-Check for recently implemented features that need testing.
-</progress_context>
-
-# Test Workflow
-
-Create or review test strategy. Optionally run test suite. Supports vitest and playwright primarily.
 
 ## Process
 
-### Step 1: Detect Test Setup
-
-**Use Glob tool to find test framework config:**
-
-| Glob Pattern | Framework |
-|-------------|-----------|
-| `vitest.config.*` | vitest |
-| `playwright.config.*` | playwright |
-| `jest.config.*` | jest |
-| `cypress.config.*` | cypress |
-
-### Step 1b: Verify Fail-Fast Configuration
-
-**Tests must fail fast.** Don't waste time waiting.
-
-**Check playwright.config.ts has sensible timeouts:**
-- `timeout: 30_000` (30s max per test)
-- `actionTimeout: 10_000` (10s per action)
-- `expect.timeout: 5_000` (5s for assertions)
-
-**If tests hit LLM APIs:** Use tighter timeouts (5-10s). See `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md`
-
-**Never:**
-- Set global timeout to minutes "just in case"
-- Retry 5+ times to mask flaky tests
-- Use arbitrary sleeps
-
-**Reference:** `${CLAUDE_PLUGIN_ROOT}/agents/workflow/e2e-test-runner.md` for full Playwright config
-
-### Step 2: Determine Intent
+### Step 1: Determine Intent
 
 "What would you like to do?"
-1. **Review strategy** — Analyze current test coverage and approach
-2. **Create strategy** — Design test plan for a feature
-3. **Run tests** — Execute test suite
-4. **Fix failing tests** — Debug and fix
 
-### For "Review Strategy"
+| Intent | Action |
+|--------|--------|
+| Create test strategy | Full test plan → dispatch agents |
+| Run tests | Execute with appropriate runner |
+| Fix failing tests | Dispatch debugger or e2e-runner |
+| Review coverage | Analyze gaps and recommend |
 
-**Analyze test coverage:**
+### Step 2: Understand What's Being Tested
 
-**Use Glob tool:** `**/*.test.*`, `**/*.spec.*` — count test files
+Gather context:
+1. What feature or component?
+2. Does it have auth? (Clerk, WorkOS, custom)
+3. Does it call APIs?
+4. Does it have critical user flows?
+5. What's the risk level?
 
-**Use Grep tool:** Pattern `coverage` in `vitest.config.*`, `playwright.config.*` — check coverage config
+### Step 3: Create Test Plan
 
-**Report:**
-- Number of test files
-- Unit vs E2E balance
-- Coverage gaps (if measurable)
-- Missing test patterns
+**For each feature, plan across all levels:**
 
-### For "Create Strategy"
-
-For the given feature:
-
-1. **Unit tests** (vitest)
-   - Pure functions
-   - Component rendering
-   - Hooks behavior
-
-2. **Integration tests** (vitest)
-   - Component interactions
-   - API mocking
-
-3. **E2E tests** (playwright)
-   - Critical user flows
-   - Happy path + key error states
-
-Output test plan:
 ```markdown
-## Test Strategy: [Feature]
+## Test Plan: [Feature Name]
 
-### Unit Tests
-- [ ] [Test case]: [What it verifies]
+### Risk Assessment
+- **Criticality**: [high/medium/low]
+- **Has Auth**: [yes/no — Clerk/WorkOS/custom]
+- **Has API Calls**: [yes/no]
+- **User-Facing**: [yes/no]
 
-### Integration Tests
-- [ ] [Test case]: [What it verifies]
+### Unit Tests (vitest)
+**Agent:** unit-test-writer
 
-### E2E Tests
-- [ ] [Test case]: [What it verifies]
+| Test Case | What it Verifies |
+|-----------|------------------|
+| `should [behavior]` | [Pure function/component behavior] |
+| `should [behavior]` | [Edge case handling] |
+| `should [behavior]` | [Error throwing] |
+
+**Files to create:**
+- `src/[path]/[module].test.ts`
+
+### Integration Tests (vitest + MSW)
+**Agent:** integration-test-writer
+
+| Test Case | What it Verifies |
+|-----------|------------------|
+| `should [behavior]` | [Component + API interaction] |
+| `should [behavior]` | [Auth state handling] |
+| `should [behavior]` | [Error from API] |
+
+**Mocking required:**
+- API endpoints: [list]
+- Auth: [Clerk/WorkOS mock setup]
+
+**Files to create:**
+- `src/[path]/[feature].integration.test.ts`
+
+### E2E Tests (Playwright)
+**Agent:** e2e-test-writer
+
+| Test Case | What it Verifies |
+|-----------|------------------|
+| `should [complete flow]` | [Happy path journey] |
+| `should [handle error]` | [User-visible error] |
+| `should [auth flow]` | [Login/logout if applicable] |
+
+**Auth setup required:**
+- Provider: [Clerk/WorkOS/none]
+- Test user: [env var names]
+
+**Files to create:**
+- `tests/[feature].spec.ts`
+- `tests/auth.setup.ts` (if auth needed)
 ```
 
-### For "Run Tests"
+### Step 4: Execute Test Plan
 
-**Determine test type from context or ask:**
-- Unit/Integration tests → Run inline
-- E2E tests → Run as background agent (prevents terminal crashes)
+Dispatch specialists in order:
 
-**Unit/Integration (vitest/jest) — Run inline:**
+**1. Unit tests first (fastest feedback):**
+```
+Task [unit-test-writer] model: sonnet: "Write unit tests for [feature].
+
+Test cases from plan:
+[paste unit test cases]
+
+Files to create: [paths]
+Follow vitest patterns from testing-patterns.md"
+```
+
+**2. Integration tests second:**
+```
+Task [integration-test-writer] model: sonnet: "Write integration tests for [feature].
+
+Test cases from plan:
+[paste integration test cases]
+
+Auth: [Clerk/WorkOS/none]
+API mocking: [endpoints to mock]
+Files to create: [paths]"
+```
+
+**3. E2E tests last:**
+```
+Task [e2e-test-writer] model: sonnet: "Write E2E tests for [feature].
+
+Test cases from plan:
+[paste e2e test cases]
+
+Auth: [Clerk/WorkOS/none]
+Fixtures needed: [list]
+Files to create: [paths]"
+```
+
+### Step 5: Run and Verify
+
+**Unit + Integration (inline):**
 ```bash
-# Vitest
 pnpm vitest run
-
-# With coverage
-pnpm vitest run --coverage
 ```
 
-**E2E tests (playwright/cypress) — Run as background agent:**
+**E2E (background agent — avoids terminal issues):**
 ```
-Task Bash run_in_background: true: "Run playwright e2e tests and report results.
+Task [e2e-runner] model: sonnet: "Run E2E tests and fix any failures.
 
-Commands:
-pnpm playwright test
-
-If tests fail, capture:
-- Which tests failed
-- Error messages
-- Screenshot paths (if any)
-
-Report summary when complete."
+Test files: [list]
+Iterate until green or report blockers."
 ```
 
-**Why background agent for E2E:**
-- Playwright spawns browsers which can consume significant resources
-- If tests hang or crash, your main session continues
-- Verbose trace output doesn't fill your context
-- You can continue working while tests run
+---
 
-Report results. If failures, offer to debug.
+## Auth Testing Quick Reference
 
-### For "Fix Failing Tests"
+### Clerk Testing
 
-Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md`:
-1. Read error message carefully
-2. Understand what test expects
-3. Determine if test or code is wrong
-4. Fix at source
+**Integration tests (vitest):**
+- Mock `useAuth` and `useUser` hooks
+- Test loading, signed in, signed out states
+- Mock `getToken` for API calls
 
-**CRITICAL: Never blame "network issues" vaguely.**
+**E2E tests (Playwright):**
+- Create `tests/auth.setup.ts` for login flow
+- Store session in `playwright/.auth/user.json`
+- Use `storageState` in playwright.config.ts
 
-It is almost NEVER a network problem. Common actual causes:
+**Common issues:**
+- ❌ Trying to mock ClerkProvider (mock hooks instead)
+- ❌ Not handling `isLoaded: false` state
+- ❌ Hardcoding tokens (use `getToken` mock)
 
-| Error Pattern | Likely Cause | NOT the cause |
-|---------------|--------------|---------------|
-| "ECONNREFUSED" | Server not running, wrong URL | "Network issues" |
-| "Timeout" | Slow operation OR payload too large | "Network issues" |
-| "400 Bad Request" | Invalid payload format | "Network issues" |
-| "500 Server Error" | Bug in your code | "Network issues" |
+### WorkOS Testing
 
-**For LLM API failures:** See `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md`
+**Integration tests (vitest):**
+- Mock `getUser` from `@workos-inc/authkit-nextjs`
+- Test with full user object including `organizationId`, `role`, `permissions`
+- Test SSO redirect behavior
+
+**E2E tests (Playwright):**
+- SSO flows are slow — consider test bypass endpoint
+- Create `/api/auth/test-login` for faster auth (test env only)
+- Store session state after auth
+
+**Common issues:**
+- ❌ Forgetting `organizationId` in mock (required for org-level features)
+- ❌ Not testing permission checks
+- ❌ SSO redirect timing issues (add proper waits)
+
+### Bypass Auth for Speed
+
+For faster E2E tests, create a test-only auth endpoint:
+
+```typescript
+// app/api/auth/test-login/route.ts
+// ONLY available in test/development
+export async function POST(request: Request) {
+  if (process.env.NODE_ENV === "production") {
+    return new Response("Not found", { status: 404 });
+  }
+  // Create session directly without SSO flow
+}
+```
+
+---
 
 ## Test Patterns
 
-From `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md`:
+### What to Test at Each Level
 
-**Good tests:**
-- Test behavior, not implementation
-- One assertion per concept
-- Clear names describing what's tested
-- Real code over mocks when possible
+| Level | Test | Don't Test |
+|-------|------|------------|
+| **Unit** | Pure functions, isolated components, hooks | API calls, multi-component flows |
+| **Integration** | Component + API, auth states, form submissions | Full user journeys |
+| **E2E** | Critical paths, auth flows, checkout/signup | Every possible input |
 
-**Bad tests:**
-- Testing mock behavior
-- Vague names ("test1", "it works")
-- Implementation details in assertions
+### Coverage Guidelines
 
-## LLM API Testing
+| Feature Type | Unit | Integration | E2E |
+|--------------|------|-------------|-----|
+| Utility functions | ✅ heavy | ❌ none | ❌ none |
+| UI components | ✅ rendering | ✅ with state | ❌ only if critical |
+| Forms | ✅ validation | ✅ submission | ✅ critical forms |
+| API routes | ✅ handlers | ✅ with mocking | ❌ via E2E |
+| Auth flows | ❌ none | ✅ mock states | ✅ real flow |
+| Checkout/payment | ✅ calculations | ✅ flow | ✅ full journey |
 
-When tests call LLM APIs (OpenRouter, OpenAI, Anthropic, etc.), follow the guidance in:
+### Fail-Fast Configuration
 
-`${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md`
+**Tests must fail fast. Never:**
+- Global timeout of minutes
+- 5+ retries to mask flakiness
+- Arbitrary sleeps
 
-Key points:
-- Validate payloads with schema before sending
-- Use fast models (-flash, -mini) for tests
-- Set aggressive timeouts (5-10s)
-- Never conclude "network issues" without evidence
+**Playwright config:**
+```typescript
+export default defineConfig({
+  timeout: 30_000,        // 30s max per test
+  expect: {
+    timeout: 5_000,       // 5s for assertions
+  },
+  use: {
+    actionTimeout: 10_000, // 10s per action
+  },
+});
+```
+
+---
 
 <progress_append>
-After running tests or creating strategy, append to progress journal:
+After creating test strategy or running tests:
 
 ```markdown
 ## YYYY-MM-DD HH:MM — /arc:test
-**Task:** [Run tests / Create strategy / Fix failing]
-**Outcome:** [Complete / X tests passing / Y failing]
-**Files:** [Test files if created/modified]
-**Decisions:**
-- [Coverage gaps identified]
-**Next:** [Fix failures / Continue]
+**Task:** [Create strategy / Run tests / Fix failing]
+**Feature:** [What was tested]
+**Coverage:**
+- Unit: [N] tests
+- Integration: [N] tests
+- E2E: [N] tests
+**Auth:** [Clerk/WorkOS/none]
+**Result:** [All passing / X failing]
+**Next:** [Fix failures / Done]
 
 ---
 ```
 </progress_append>
+
+<success_criteria>
+Test strategy is complete when:
+- [ ] Risk assessment done
+- [ ] Unit test cases identified
+- [ ] Integration test cases identified (with mocking plan)
+- [ ] E2E test cases identified (with auth setup if needed)
+- [ ] Specialist agents dispatched
+- [ ] All tests written and passing
+- [ ] Coverage gaps noted
+</success_criteria>
