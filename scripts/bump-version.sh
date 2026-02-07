@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bump patch version across all version files.
+# Bump version, commit, tag, and push.
 # Usage: ./scripts/bump-version.sh [major|minor|patch]
 #   Defaults to patch if no argument given.
 
@@ -26,4 +26,9 @@ jq --arg v "$new_version" '.version = $v' "$PLUGIN_JSON" > tmp.json && mv tmp.js
 jq --arg v "$new_version" '.metadata.version = $v | .plugins[0].version = $v' "$MARKETPLACE_JSON" > tmp.json && mv tmp.json "$MARKETPLACE_JSON"
 jq --arg v "$new_version" '.version = $v' "$PACKAGE_JSON" > tmp.json && mv tmp.json "$PACKAGE_JSON"
 
-echo "$current_version → $new_version"
+git add "$PLUGIN_JSON" "$MARKETPLACE_JSON" "$PACKAGE_JSON"
+git commit -m "chore: bump version to $new_version"
+git tag "v$new_version"
+git push && git push --tags
+
+echo "$current_version → $new_version (tagged v$new_version)"
