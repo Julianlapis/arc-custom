@@ -33,7 +33,6 @@ EXPECTED_SKILLS=(
     "testing"
     "tidy"
     "vision"
-    "worktree"
 )
 
 echo "Checking ${#EXPECTED_SKILLS[@]} expected skills..."

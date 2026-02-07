@@ -21,7 +21,6 @@ arc/
 │   ├── letsgo/SKILL.md     # 8. Ship: production readiness
 │   ├── legal/SKILL.md      # 8. Ship: privacy policy, ToS
 │   ├── naming/SKILL.md     # Cross-cutting: project naming
-│   ├── worktree/SKILL.md   # Cross-cutting: isolated workspaces
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
 │   ├── seo/SKILL.md        # Cross-cutting: SEO audit
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
@@ -63,7 +62,6 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 
 CROSS-CUTTING (available anytime):
               /arc:naming     → Generate and validate project names
-              /arc:worktree   → Create isolated git worktree
               /arc:responsive → Mobile responsive audit & fix
               /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit

@@ -19,7 +19,6 @@ PROTECTED_SKILLS=(
     "legal"
     "rules"
     "tidy"
-    "worktree"
 )
 
 echo "Verifying destructive skills are protected..."

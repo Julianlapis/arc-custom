@@ -79,7 +79,6 @@ Look for:
 | `/arc:legal` | Legal pages generated |
 | `/arc:seo` | SEO audit results |
 | `/arc:deps` | Dependency audit results |
-| `/arc:worktree` | Worktree created |
 
 ## What Doesn't Get Logged
 

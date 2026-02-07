@@ -14,7 +14,7 @@ The full arc from idea to shipped code.
 
 ## What It Does
 
-Arc provides 23 skills covering the complete development lifecycle:
+Arc provides 22 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:go       - Main entry point, routes to right workflow
@@ -42,8 +42,7 @@ CROSS-CUTTING
         /arc:tidy       - Clean up completed plans
         /arc:prune-agents - Kill orphaned subagent processes
 
-TOOLS   /arc:worktree   - Create isolated git worktree for feature work
-        /arc:commit     - Smart commit + push with auto-splitting
+TOOLS   /arc:commit     - Smart commit + push with auto-splitting
         /arc:rules      - Apply coding standards to project
 ```
 
@@ -237,7 +236,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
 | `/arc:naming` | Generate project names | Name candidates |
-| `/arc:worktree` | Create isolated worktree | Feature branch + workspace |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:rules` | Apply coding standards | `.ruler/` directory |
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
