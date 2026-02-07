@@ -178,6 +178,6 @@ NOT: overly cute, emoji-heavy, or verbose.
 ## Interop
 
 - **/arc:ideate** creates design plans
-- **/arc:detail** creates implementation plans
+- **/arc:implement** creates implementation plans
 - **/arc:implement** executes plans
 - **/arc:tidy** cleans up after implementation

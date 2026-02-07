@@ -434,7 +434,7 @@ What would you like to do?
 
 If user selects:
 - **Create tasks** → Write critical/high issues to `docs/tasklist.md`
-- **Focus on critical** → Invoke `/arc:detail` with critical issues as scope
+- **Focus on critical** → Invoke `/arc:implement` with critical issues as scope
 - **Deep dive** → Show full findings for selected domain
 - **Done** → End session
 

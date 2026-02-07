@@ -1,9 +1,10 @@
 ---
 name: implement
 description: |
-  Execute an implementation plan task-by-task with TDD and continuous quality checks.
-  Use when asked to "implement the plan", "execute the tasks", "start building from the plan",
-  or after /arc:detail has created an implementation plan ready for execution.
+  Plan and execute feature implementation with TDD and continuous quality checks.
+  Use when asked to "implement this", "build this feature", "execute the plan",
+  or after /arc:ideate has created a design doc. Creates implementation plan if needed,
+  then executes task-by-task with build agents.
 license: MIT
 metadata:
   author: howells
@@ -12,10 +13,11 @@ metadata:
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
-2. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
-3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
-4. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-5. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
+2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
+3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+4. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
+5. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+6. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
 </required_reading>
 
 <build_agents>
@@ -91,12 +93,143 @@ Rules are optional — proceed without them if the user prefers.
 ```
 /arc:ideate     → Design doc (on main) ✓
      ↓
-/arc:detail     → Implementation plan ✓
+/arc:implement  → Plan + Execute ← YOU ARE HERE
      ↓
-/arc:review     → Review (optional) ✓
-     ↓
-/arc:implement  → Execute task-by-task ← YOU ARE HERE
+/arc:review     → Review (optional, can run anytime)
 ```
+
+## Phase 0: Planning (if no plan exists)
+
+**Check for existing implementation plan:**
+```bash
+ls docs/plans/*-implementation.md 2>/dev/null | tail -1
+```
+
+**If plan exists:** Skip to Phase 1.
+
+**If no plan exists:** Create one from the design doc.
+
+### Step 0.1: Load Design Document
+
+Find and read the design doc:
+```bash
+ls docs/plans/*-design.md 2>/dev/null | tail -1
+```
+
+If no design doc exists, ask user:
+- "No design doc found. Should I create one first (/arc:ideate) or work from your description?"
+
+Extract from design doc:
+- User stories / acceptance criteria
+- ASCII UI wireframes (if any)
+- Data model
+- Component structure
+- API surface
+
+### Step 0.2: Detect Project Stack
+
+**Use Glob tool to detect in parallel:**
+
+| Check | Glob Pattern |
+|-------|-------------|
+| Test frameworks | `vitest.config.*`, `playwright.config.*`, `jest.config.*` |
+| Package manager | `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json` |
+
+**Record detected stack:**
+- Test runner: [vitest/jest/playwright]
+- Package manager: [pnpm/yarn/npm]
+- Framework: [next/react/etc]
+
+### Step 0.3: Find Reusable Patterns
+
+**Spawn agents to find existing code to leverage:**
+
+```
+Task Explore model: haiku: "Find existing patterns in this codebase that we can
+reuse for: [list components/features from design].
+
+Look for: similar components, utility functions, hooks, types, test patterns.
+
+Output:
+## Reusable Code
+- `file:line` — what it provides
+
+## Essential Files
+5-10 files most critical to understand before implementing."
+```
+
+### Step 0.4: Break Down Into Tasks
+
+**Each task = one TDD cycle (2-5 minutes):**
+
+```markdown
+### Task N: [Descriptive Name]
+
+**Files:**
+- Create: `exact/path/to/file.tsx`
+- Modify: `exact/path/to/existing.tsx:42-58`
+- Test: `exact/path/to/file.test.tsx`
+
+**Test first:**
+[describe what the test should verify]
+
+**Implementation:**
+[describe what code to write]
+
+**Commit:** `feat(scope): description`
+```
+
+**Task ordering:**
+1. Data/types first (foundation)
+2. Core logic (business rules)
+3. UI components (presentation)
+4. Integration (wiring together)
+5. E2E tests (critical flows only)
+
+### Step 0.5: Include UI Context
+
+For UI tasks, include aesthetic direction from design doc:
+
+```markdown
+### Task N: Create ProductCard Component
+
+**Aesthetic Direction:**
+- Tone: [from design doc]
+- Memorable element: [from design doc]
+- Typography: [from design doc]
+
+**Figma:** [URL if available]
+
+**ASCII Wireframe:**
+[from design doc]
+
+**Avoid:** Generic AI aesthetics (Inter, purple gradients, cookie-cutter)
+```
+
+### Step 0.6: Save Implementation Plan
+
+```markdown
+# [Feature Name] Implementation Plan
+
+**Design:** docs/plans/YYYY-MM-DD-[topic]-design.md
+**Goal:** [One sentence]
+**Stack:** [Framework] + [Test runner] + [Package manager]
+
+---
+
+## Tasks
+
+[All tasks from Step 0.4]
+```
+
+**Save to:** `docs/plans/YYYY-MM-DD-<topic>-implementation.md`
+
+```bash
+git add docs/plans/
+git commit -m "docs: add <topic> implementation plan"
+```
+
+---
 
 ## Phase 1: Setup
 
@@ -124,7 +257,7 @@ If tests fail before you start → stop and ask user.
 
 ## Phase 2: Load Plan and Create Todos
 
-**Read implementation plan:**
+**Read implementation plan** (created in Phase 0 or pre-existing):
 `docs/plans/YYYY-MM-DD-<topic>-implementation.md`
 
 **Create TodoWrite tasks:**
@@ -615,7 +748,7 @@ This is especially important after parallel agent runs.
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 
-Look for related ideate/detail sessions and any prior implementation attempts.
+Look for related ideate sessions and any prior implementation attempts.
 </progress_context>
 
 <progress_append>

@@ -73,7 +73,7 @@ Based on their answer:
 |--------|----------|
 | "I want to build [feature]" | /arc:ideate |
 | "Quick fix/small change" | /arc:build |
-| "Continue [existing plan]" | /arc:implement or /arc:detail |
+| "Continue [existing plan]" | /arc:implement or /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
 | "Review/improve existing code" | /arc:deslop or /arc:review |
 | "Ship to production" | /arc:letsgo |

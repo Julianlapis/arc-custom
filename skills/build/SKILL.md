@@ -3,7 +3,7 @@ name: build
 description: |
   Build small-to-medium features with lightweight planning and full agent orchestration.
   Use for "build this component", "add this feature", "create this utility" — work that doesn't
-  need full ideate/detail but still deserves proper planning and quality gates.
+  need full ideate/implement but still deserves proper planning and quality gates.
 license: MIT
 metadata:
   author: howells

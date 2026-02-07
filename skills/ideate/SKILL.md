@@ -304,29 +304,26 @@ git commit -m "docs: add <topic> design plan"
      ↓
 [Create worktree for feature branch]
      ↓
-/arc:detail     → Implementation plan (in worktree)
+/arc:implement  → Plan + Execute (in worktree)
      ↓
-/arc:review     → Review implementation plan (optional)
-     ↓
-/arc:implement  → Execute task-by-task
+/arc:review     → Review (optional, can run anytime)
 ```
 
 **Why this order:**
 - Design doc stays on main — it's the canonical "what we're building"
-- Implementation plan lives in the worktree — it's large and specific to this work
-- Review catches issues before you start coding
+- Implementation happens in worktree — keeps main clean
+- /arc:implement creates the implementation plan, then executes it
 
 **Present to user:**
 ```
 "Design committed to main. Ready to continue?
 
-The next step is creating a detailed implementation plan with exact file paths and TDD tasks.
-I recommend setting up a worktree first so the implementation plan lives with your feature branch."
+The next step is implementation. I recommend setting up a worktree first."
 ```
 
 **Options:**
-1. **Set up worktree → create implementation plan** (Recommended)
-2. **Create implementation plan on current branch** (skip worktree)
+1. **Set up worktree → implement** (Recommended)
+2. **Implement on current branch** (skip worktree)
 3. **Done for now** — just the design
 
 **If setting up worktree (option 1):**
@@ -334,11 +331,10 @@ I recommend setting up a worktree first so the implementation plan lives with yo
 2. Create branch: `feature/<topic-slug>`
 3. Run project setup (auto-detect from package.json, Cargo.toml, etc.)
 4. Verify clean baseline (tests pass)
-5. Route to `/arc:detail` to create implementation plan
+5. Route to `/arc:implement` to plan and build
 
 **If skipping worktree (option 2):**
-- Route to `/arc:detail` directly
-- Implementation plan will be created on current branch
+- Route to `/arc:implement` directly
 </process>
 
 <progress_append>
@@ -353,7 +349,7 @@ After completing the design, append to progress journal:
 - Approach: [chosen approach]
 - [Key decision 1]
 - [Key decision 2]
-**Next:** /arc:detail or /arc:implement
+**Next:** /arc:implement
 
 ---
 ```

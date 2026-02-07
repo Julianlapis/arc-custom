@@ -18,11 +18,9 @@ ENTRY   /arc:arc      - Main entry point, routes to right workflow
           ↓
 WHY     /arc:vision     - High-level goals (500-700 words)
           ↓
-WHAT    /arc:ideate     - From idea to working implementation
+WHAT    /arc:ideate     - From idea to design doc
           ↓
-HOW     /arc:detail     - Detailed implementation plan
-          ↓
-DO      /arc:implement  - Execute the plan with TDD
+DO      /arc:implement  - Plan + execute with TDD
         /arc:design     - UI/UX design with wireframes
         /arc:build      - Quick build (no formal plan)
         /arc:testing       - Test strategy and execution
@@ -64,7 +62,7 @@ Arc uses these plugins for enhanced functionality:
 
 | Plugin | Used by |
 |--------|---------|
-| **Figma** | `/arc:ideate`, `/arc:detail`, `/arc:figma` |
+| **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
 | **Context7** | `/arc:implement` |
 | **Chrome** | `figma-implement` agent |
 
@@ -126,8 +124,8 @@ Claude will ask clarifying questions, explore your codebase, and create a design
 ### 3. Follow the flow
 
 Arc commands chain together. After `/arc:ideate` creates a design:
-- Claude asks if you want to continue to `/arc:detail` (implementation plan)
-- Then to `/arc:implement` (write the code with TDD)
+- Claude asks if you want to continue to `/arc:implement` (plan and build)
+- Implementation creates its own plan, then executes with TDD
 
 You can also jump in at any point if you already have docs.
 
@@ -156,15 +154,15 @@ You can also jump in at any point if you already have docs.
 
 ## Primary Flow
 
-The main entry point is `/arc:ideate`, which can flow all the way through:
+The main entry point is `/arc:ideate`, which flows through to implementation:
 
 ```
-/arc:ideate → /arc:detail → /arc:implement
+/arc:ideate → /arc:implement
 ```
 
 Each step asks if you want to continue. You can also enter at any point:
-- Have a design doc already? Start at `/arc:detail`
-- Have an implementation plan? Start at `/arc:implement`
+- Have a design doc already? Start at `/arc:implement`
+- Have an implementation plan? `/arc:implement` will use it
 
 ## Commands
 
@@ -172,11 +170,9 @@ Each step asks if you want to continue. You can also enter at any point:
 |---------|-------------|--------|
 | `/arc:arc` | Main entry point, routes to workflow | Context-aware guidance |
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
-| `/arc:ideate` | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
-| `/arc:detail` | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
-| `/arc:implement` | Execute a plan | Code changes |
+| `/arc:ideate` | From idea to design doc | `docs/plans/YYYY-MM-DD-<feature>-design.md` |
+| `/arc:implement` | Plan + execute with TDD | Code changes |
 | `/arc:design` | UI/UX work | Wireframes + code |
-| `/arc:figma` | Implement from Figma | Code matching design |
 | `/arc:build` | Quick implementation | Code changes |
 | `/arc:testing` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
@@ -220,7 +216,7 @@ Implementation methodologies in `disciplines/`:
 Commands work together:
 
 - `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
-- `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
+- `/arc:ideate` can flow to `/arc:implement`
 - `/arc:build` suggests `/arc:ideate` if scope is too large
 - `/arc:letsgo` runs `/arc:testing` and `/arc:audit --deslop` as part of quality checks
 - Any command can add to `/arc:tasklist`

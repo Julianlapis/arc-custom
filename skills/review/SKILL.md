@@ -198,7 +198,7 @@ If plan came from a file:
 ```
 /arc:ideate     → Design doc (on main) ✓
      ↓
-/arc:detail     → Implementation plan ✓
+/arc:implement     → Implementation plan ✓
      ↓
 /arc:review     → Review implementation plan ✓ YOU ARE HERE
      ↓
@@ -208,7 +208,7 @@ If plan came from a file:
 **Offer next steps based on what was reviewed:**
 
 If reviewed a **design doc**:
-- "Ready to create an implementation plan?" → `/arc:detail`
+- "Ready to create an implementation plan?" → `/arc:implement`
 - "Done for now" → end
 
 If reviewed an **implementation plan**:

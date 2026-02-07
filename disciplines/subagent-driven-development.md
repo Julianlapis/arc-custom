@@ -229,7 +229,7 @@ Done!
 ## Integration
 
 **Required arc commands:**
-- **/arc:detail** - Creates the plan this workflow executes
+- **/arc:implement** - Creates the plan this workflow executes
 - **/arc:review** - Code review for reviewer subagents
 - **/arc:commit** - Complete development after all tasks
 

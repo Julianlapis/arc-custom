@@ -280,7 +280,7 @@ Verify each change spec row is implemented exactly."
 
 **Option B: Create plan for /arc:implement**
 ```
-Invoke /arc:detail with aesthetic direction and change spec.
+Invoke /arc:implement with aesthetic direction and change spec.
 Each change spec row becomes an implementation task.
 implement will use ui-builder agent.
 ```

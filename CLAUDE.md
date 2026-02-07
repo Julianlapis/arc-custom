@@ -12,12 +12,10 @@ arc/
 │   ├── arc/SKILL.md        # /arc:arc (main entry point)
 │   ├── vision/SKILL.md     # /arc:vision
 │   ├── ideate/SKILL.md     # /arc:ideate
-│   ├── detail/SKILL.md     # /arc:detail
 │   ├── implement/SKILL.md  # /arc:implement
 │   ├── design/SKILL.md     # /arc:design
-│   ├── figma/SKILL.md      # /arc:figma
 │   ├── build/SKILL.md      # /arc:build
-│   ├── testing/SKILL.md       # /arc:testing
+│   ├── testing/SKILL.md    # /arc:testing
 │   ├── letsgo/SKILL.md     # /arc:letsgo
 │   ├── legal/SKILL.md      # /arc:legal
 │   ├── review/SKILL.md     # /arc:review
@@ -49,9 +47,8 @@ All commands use the `/arc:` namespace prefix:
 ```
 ENTRY   /arc:arc        - Main entry point, routes to right workflow
 WHY     /arc:vision     - High-level goals
-WHAT    /arc:ideate     - From idea to working implementation
-HOW     /arc:detail     - Detailed implementation plan
-DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:testing, /arc:letsgo, /arc:legal
+WHAT    /arc:ideate     - From idea to design doc
+DO      /arc:implement, /arc:design, /arc:build, /arc:testing, /arc:letsgo, /arc:legal
 CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
 TOOLS   /arc:commit, /arc:rules
 ```
