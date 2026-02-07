@@ -1,180 +1,325 @@
 ---
 name: build
 description: |
-  Quick build for small-to-medium scope work without formal planning. Still uses TDD and verification.
-  Use when asked to "build this", "add a quick feature", "make this change", or for straightforward
-  implementation tasks that don't need extensive design work.
+  Build small-to-medium features with lightweight planning and full agent orchestration.
+  Use for "build this component", "add this feature", "create this utility" — work that doesn't
+  need full ideate/detail but still deserves proper planning and quality gates.
 license: MIT
 metadata:
   author: howells
 ---
+
+<required_reading>
+**Read these before building:**
+1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy
+2. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — If UI work
+3. `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — If React components
+</required_reading>
+
+<agents>
+**Build uses the same agents as implement:**
+
+| Agent | Model | Use For |
+|-------|-------|---------|
+| `implementer` | sonnet | General implementation (utilities, services) |
+| `ui-builder` | opus | UI components from spec |
+| `design-specifier` | opus | Design decisions when no spec exists |
+| `unit-test-writer` | sonnet | Unit tests (vitest) |
+| `integration-test-writer` | sonnet | Integration tests (vitest + MSW) |
+| `e2e-test-writer` | sonnet | E2E tests (Playwright) |
+| `fixer` | haiku | TS/lint cleanup |
+| `debugger` | sonnet | Failing tests |
+| `spec-reviewer` | haiku | Verify matches spec |
+| `code-reviewer` | haiku | Code quality gate |
+</agents>
 
 <rules_context>
 **Check for project coding rules:**
 
 **Use Glob tool:** `.ruler/*.md`
 
-**If `.ruler/` exists, detect stack and read relevant rules:**
+**If `.ruler/` exists, read relevant rules:**
+- Always: `code-style.md`
+- TypeScript: `typescript.md`
+- React: `react.md`
+- Next.js: `nextjs.md`
+- Tailwind: `tailwind.md`
+- Testing: `testing.md`
 
-| Check | Read from `.ruler/` |
-|-------|---------------------|
-| Always | code-style.md |
-| `next.config.*` exists | nextjs.md |
-| `react` in package.json | react.md |
-| `tailwindcss` in package.json | tailwind.md |
-| `.ts` or `.tsx` files | typescript.md |
-| `vitest` or `jest` in package.json | testing.md |
-
-These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
-
-**If `.ruler/` doesn't exist:** Continue without rules — they're optional.
-
-**For UI/frontend work, also load interface rules:**
-
-| Check | Read from `${CLAUDE_PLUGIN_ROOT}/rules/interface/` |
-|-------|---------------------------------------------------|
-| Building components/pages | design.md, colors.md, spacing.md, layout.md |
-| Typography changes | typography.md |
-| Adding animations | animation.md, performance.md |
-| Form work | forms.md, interactions.md |
-| Interactive elements | interactions.md |
-| Marketing pages | marketing.md |
-
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and anti-patterns.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` for React component patterns.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
+**For UI work, load interface rules:**
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md`
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md`
 </rules_context>
 
-# Build Workflow
+## When to Use Build vs Ideate
 
-Quick build for small-to-medium scope work. No formal plan, but still uses TDD and verification disciplines.
+| Use Build | Use Ideate |
+|-----------|------------|
+| Single component | New app or major feature |
+| Add utility function | Multiple interconnected features |
+| Extend existing feature | New architecture patterns |
+| 1-5 files affected | 10+ files affected |
+| Clear requirements | Exploratory/unclear scope |
+
+**If in doubt:** Start with build. If scope grows, pivot to ideate.
 
 ## Process
 
-### Step 1: Assess Scope
+### Phase 1: Scope Check
 
-Read the request. Consider:
+**Assess the request:**
 - How many files will this touch?
-- How many distinct components/features?
-- Are there complex interactions?
-- Is there significant new architecture?
+- Is this UI, logic, or both?
+- Does it need design decisions?
+- What test levels needed?
 
-**If scope is large** (>5 files, multiple features, new patterns):
+**If scope is large (>5 files, new patterns):**
 ```
-"This looks substantial. It would benefit from proper design and planning.
-Want me to run /arc:ideate instead?"
+"This looks substantial — multiple features and new patterns.
+Would benefit from /arc:ideate for proper design. Want me to switch?"
 ```
-Wait for response. If yes, invoke ideate workflow.
 
-**If scope is small/medium:** Proceed to Step 2.
+**If scope is appropriate:** Proceed.
 
-### Step 1b: Consider Worktree
+### Phase 2: Create Build Plan
 
-If not already on a feature branch:
+**Document a lightweight plan (not just mental notes):**
+
+```markdown
+## Build Plan: [Feature Name]
+
+### What We're Building
+[1-2 sentence description]
+
+### Files to Create/Modify
+| File | Action | Purpose |
+|------|--------|---------|
+| src/components/OrgSwitcher.tsx | Create | Main component |
+| src/components/OrgSwitcher.test.tsx | Create | Unit tests |
+| src/hooks/useOrganizations.ts | Create | Data fetching hook |
+
+### Implementation Approach
+1. [First step]
+2. [Second step]
+3. [Third step]
+
+### Agents Needed
+| Task | Agent |
+|------|-------|
+| Component UI | ui-builder or design-specifier |
+| Hook logic | implementer |
+| Unit tests | unit-test-writer |
+| Integration tests | integration-test-writer (if API calls) |
+
+### Test Coverage
+- Unit: [what to test]
+- Integration: [what to test, if any]
+- E2E: [what to test, if critical flow]
+
+### Design Decisions (if UI)
+- [ ] Needs design-specifier? [yes/no]
+- [ ] Has existing patterns to follow? [reference]
+```
+
+**Share with user:** "Here's my build plan. Look right?"
+
+Wait for confirmation before proceeding.
+
+### Phase 3: Set Up Branch
+
+If not on a feature branch:
 
 ```bash
 git branch --show-current
 ```
 
-**If on main/master:**
-```
-"I recommend creating a feature branch and worktree for this work. Keeps main clean and allows easy rollback."
-```
-
-Options:
-1. **Yes, set up worktree** (Recommended for multi-file changes) → Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
-2. **No, work on main** → Proceed (fine for trivial single-file fixes)
-
-### Step 2: Quick Mental Model
-
-Briefly outline (don't write a doc):
-- What needs to change
-- What order to do it
-- What to test
-
-Share with user: "Here's my approach: [2-3 bullets]. Sound right?"
-
-### Step 3: Build with TDD
-
-Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md`:
-
-For each piece:
-1. Write failing test
-2. Verify it fails
-3. Write minimal code to pass
-4. Verify it passes
-5. Refactor if needed
-
-### Step 4: Continuous Quality
-
-After each implementation:
+**If on main:**
 ```bash
-pnpm tsc --noEmit    # TypeScript check
-pnpm biome check .   # Lint
+git checkout -b feat/[feature-name]
+# or for isolated work:
+git worktree add .worktrees/[feature-name] -b feat/[feature-name]
 ```
 
-Fix issues immediately.
+### Phase 4: Execute Build
 
-### Step 5: Verify Before Done
-
-Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/verification-before-completion.md`:
-- Run full test suite
-- Check all tests pass
-- Confirm no TypeScript errors
-- Confirm no lint errors
-
-Only then claim completion.
-
-### Step 5b: E2E Tests (If Any)
-
-If e2e tests exist for the changed code:
+**For each task in the plan, follow the per-task loop:**
 
 ```
-Task Bash run_in_background: true: "Run e2e tests and report any failures"
+┌─────────────────────────────────────────────────────────┐
+│  1. TEST      → spawn test agent (unit/integration)     │
+│  2. BUILD     → spawn build agent (implementer/ui)      │
+│  3. TDD       → run test (fail → impl → pass)           │
+│  4. FIX       → fixer (TS/lint cleanup)                 │
+│  5. SPEC      → spec-reviewer (matches plan?)           │
+│  6. QUALITY   → code-reviewer (well-built?)             │
+│  7. COMMIT    → atomic commit                           │
+└─────────────────────────────────────────────────────────┘
 ```
 
-Spawning a background task keeps verbose e2e output from filling context.
+### Step 4a: Write Tests First
 
-### Step 5b: React/Next.js Performance Check (Optional)
+**Determine test type:**
+| Building | Test Agent |
+|----------|------------|
+| Pure function/hook | unit-test-writer |
+| Component with props | unit-test-writer |
+| Component + API | integration-test-writer |
+| Auth-related | integration-test-writer (with Clerk/WorkOS mocks) |
 
-For React/Next.js projects, if `vercel-react-best-practices` skill is available:
+**Spawn test agent:**
 ```
-Skill vercel-react-best-practices: "Quick review of [component/feature] for performance issues"
+Task [unit-test-writer] model: sonnet: "Write unit tests for [component/function].
+
+From build plan:
+- [what to test]
+- [edge cases]
+
+File: [path]"
 ```
 
-### Step 6: Offer Next Steps
+### Step 4b: Build Implementation
 
-"Build complete. Would you like to:"
-1. Run /arc:test to verify coverage
-2. Run /arc:document to capture what we built
-3. Add follow-up items to /arc:tasklist
-4. Done for now
+**Select build agent based on task:**
 
-<progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+For UI components:
+```
+Task [ui-builder] model: opus: "Build [component] from plan.
 
-Check for related prior work.
-</progress_context>
+Requirements:
+- [from build plan]
+
+Existing patterns: [reference similar components]
+Follow spacing and design rules."
+```
+
+For logic/utilities:
+```
+Task [implementer] model: sonnet: "Implement [function/service].
+
+Requirements:
+- [from build plan]
+
+Follow project conventions."
+```
+
+If design decisions needed (no existing spec):
+```
+Task [design-specifier] model: opus: "Design [component/feature].
+
+Context: [what it's for]
+Output spec for ui-builder."
+```
+
+### Step 4c: TDD Cycle
+
+```bash
+pnpm vitest run [test-file]  # Should FAIL first
+# Implementation happens
+pnpm vitest run [test-file]  # Should PASS
+```
+
+### Step 4d: Quality Gates
+
+**Fixer (TS/lint):**
+```bash
+pnpm tsc --noEmit
+pnpm biome check --write .
+```
+
+If issues:
+```
+Task [fixer] model: haiku: "Fix TS/lint errors in [files]"
+```
+
+**Spec review:**
+```
+Task [spec-reviewer] model: haiku: "Verify implementation matches build plan.
+
+Plan said: [requirements]
+Files: [list]
+
+Check: nothing missing, nothing extra."
+```
+
+**Code quality:**
+```
+Task [code-reviewer] model: haiku: "Quick code quality check.
+
+Files: [list]
+Check: no any, error handling, tests exist."
+```
+
+### Phase 5: Final Verification
+
+```bash
+pnpm test              # All tests pass
+pnpm tsc --noEmit      # No TS errors
+pnpm biome check .     # No lint errors
+```
+
+**If UI work, screenshot and verify:**
+```
+mcp__claude-in-chrome__computer action=screenshot
+```
+
+### Phase 6: Complete
+
+**Commit:**
+```bash
+git add .
+git commit -m "feat([scope]): [description]"
+```
+
+**Report:**
+```markdown
+## Build Complete: [Feature]
+
+### Created
+- [file] — [purpose]
+
+### Tests
+- Unit: [N] tests
+- Integration: [N] tests (if any)
+
+### Verified
+- [X] All tests passing
+- [X] TS/lint clean
+- [X] Spec review passed
+- [X] Code review passed
+```
+
+**Offer next steps:**
+1. Merge to main
+2. Create PR
+3. Add more features
+4. Done
 
 <progress_append>
-After completing the build, append to progress journal:
+After completing the build:
 
 ```markdown
 ## YYYY-MM-DD HH:MM — /arc:build
 **Task:** [What was built]
 **Outcome:** Complete
-**Files:** [Key files created/modified]
-**Decisions:**
-- [Key decision if any]
-**Next:** Continue working
+**Files:** [Key files]
+**Agents used:** [list]
+**Tests:** [N] unit, [N] integration
+**Next:** [Merge / PR / Continue]
 
 ---
 ```
 </progress_append>
 
-## What Build is NOT
-
-- Not for large features (use /arc:ideate)
-- Not for exploratory work (use /arc:ideate)
-- Not for things needing design review
-- Not a shortcut to skip quality
+<success_criteria>
+Build is complete when:
+- [ ] Build plan documented and confirmed
+- [ ] Feature branch created
+- [ ] Tests written first (appropriate level)
+- [ ] Implementation complete
+- [ ] Spec review passed
+- [ ] Code review passed
+- [ ] All tests passing
+- [ ] TS/lint clean
+- [ ] Progress journal updated
+</success_criteria>
