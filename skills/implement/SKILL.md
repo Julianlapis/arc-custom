@@ -1,35 +1,67 @@
 ---
 name: implement
 description: |
-  Execute an implementation plan task-by-task with TDD and continuous quality checks.
-  Use when asked to "implement the plan", "execute the tasks", "start building from the plan",
-  or after /arc:detail has created an implementation plan ready for execution.
+  Plan and execute feature implementation with TDD and continuous quality checks.
+  Use when asked to "implement this", "build this feature", "execute the plan",
+  or after /arc:ideate has created a design doc. Creates implementation plan if needed,
+  then executes task-by-task with build agents.
 license: MIT
 metadata:
   author: howells
 website:
-  order: 6
-  desc: Execute the plan
-  summary: Execute your plan task by task. Tests first, then implementation—and with an LLM, writing tests is finally easy.
+  order: 5
+  desc: Plan + execute
+  summary: Creates an implementation plan from your design, then executes it task by task with TDD. Tests first, then code—LLMs make this easy.
   what: |
-    Implement takes your plan from /arc:detail and executes it task by task. For each task: write the test, make it pass, run type checks and lint. The AI writes the tests for you—TDD used to be tedious, but LLMs make it trivial. You get the benefits of test coverage without the friction.
+    Implement reads your design doc from /arc:ideate, breaks it into ordered tasks, then executes each one. For each task: write the test, make it pass, run type checks and lint. The AI writes the tests for you—TDD used to be tedious, but LLMs make it trivial. Strongly recommends /arc:review before execution.
   why: |
-    TDD produces better code, but developers skip it because writing tests is boring. LLMs remove that excuse. Implement enforces the discipline—test first, then code—while the AI handles the tedious parts. You end up with tested, working code and a clean git history.
+    TDD produces better code, but developers skip it because writing tests is boring. LLMs remove that excuse. Implement enforces the discipline—test first, then code—while handling both planning and execution in one flow.
   decisions:
+    - Planning is built in. Reads design doc and creates task breakdown automatically.
     - Test-first is mandatory. The AI writes them, so there's no reason to skip.
-    - One task at a time. Each task is committed before moving to the next.
     - Quality gates after every task. TypeScript and lint errors don't accumulate.
+    - Strongly recommends review before building.
 ---
 
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
-2. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
-3. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-4. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
-5. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
-6. ${CLAUDE_PLUGIN_ROOT}/disciplines/subagent-driven-development.md
+2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
+3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+4. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
+5. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+6. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
 </required_reading>
+
+<build_agents>
+**Available build agents in `${CLAUDE_PLUGIN_ROOT}/agents/build/`:**
+
+| Agent | Model | Use For |
+|-------|-------|---------|
+| `implementer` | sonnet | General task execution — utilities, services, APIs, business logic |
+| `fixer` | haiku | TypeScript errors, lint issues — fast mechanical fixes |
+| `debugger` | sonnet | Failing tests — systematic root cause analysis |
+| `unit-test-writer` | sonnet | Unit tests (vitest) — pure functions, components |
+| `integration-test-writer` | sonnet | Integration tests (vitest + MSW) — API, auth |
+| `e2e-test-writer` | sonnet | E2E tests (Playwright) — user journeys |
+| `ui-builder` | opus | UI components from design spec — anti-slop, memorable |
+| `design-specifier` | opus | Design decisions when no spec exists — empty states, visual direction |
+| `figma-builder` | opus | Build UI directly from Figma URL |
+| `test-runner` | haiku | Run vitest, analyze failures |
+| `e2e-runner` | sonnet | Playwright tests — iterate until green or report blockers |
+| `spec-reviewer` | haiku | Quick spec compliance check — nothing missing, nothing extra |
+| `code-reviewer` | haiku | Quick code quality gate — no `any`, proper error handling, tests exist |
+
+**Before spawning a build agent:**
+1. Read the agent file: `${CLAUDE_PLUGIN_ROOT}/agents/build/[agent-name].md`
+2. Use the model specified in the agent's frontmatter
+3. Include relevant context from the task
+
+**Spawn syntax:**
+```
+Task [agent-name] model: [model]: "[task description with context]"
+```
+</build_agents>
 
 <rules_context>
 **Check for project coding rules:**
@@ -67,29 +99,62 @@ Rules are optional — proceed without them if the user prefers.
 | Interactive elements | interactions.md |
 | Marketing pages | marketing.md |
 
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and anti-patterns.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` for React component patterns.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` for motion design.
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/nextjs-app-router.md` for Next.js App Router patterns (if using Next.js).
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/tanstack-query-trpc.md` for TanStack Query + tRPC patterns (if using data fetching).
-Reference: `${CLAUDE_PLUGIN_ROOT}/references/tanstack-table.md` for TanStack Table v8 patterns (if building data tables).
+**Additional references (load as needed):**
+- `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
+- `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` — Motion design
+- `${CLAUDE_PLUGIN_ROOT}/references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
+- `${CLAUDE_PLUGIN_ROOT}/references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
+- `${CLAUDE_PLUGIN_ROOT}/references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
 </rules_context>
 
 <process>
-
-**Announce at start:** "I'm using the implement skill to execute the plan task-by-task with TDD."
 
 **You are here in the arc:**
 ```
 /arc:ideate     → Design doc (on main) ✓
      ↓
-/arc:detail     → Implementation plan ✓
+/arc:implement  → Plan + Execute ← YOU ARE HERE
      ↓
-/arc:review     → Review (optional) ✓
-     ↓
-/arc:implement  → Execute task-by-task ← YOU ARE HERE
+/arc:review     → Review (optional, can run anytime)
 ```
+
+## Phase 0: Planning (if no plan exists)
+
+**Check for existing implementation plan:**
+```bash
+ls docs/plans/*-implementation.md 2>/dev/null | tail -1
+```
+
+**If plan exists:** Skip to Phase 1.
+
+**If no plan exists:** Follow the detail skill to create one:
+
+```
+Read: ${CLAUDE_PLUGIN_ROOT}/skills/detail/SKILL.md
+```
+
+The detail skill will:
+1. Load design document
+2. Detect project stack
+3. Find reusable patterns
+4. Break down into TDD tasks
+5. Save implementation plan
+
+After plan is created, strongly recommend review:
+
+```
+"Implementation plan ready.
+
+I strongly recommend reviewing the plan before building — it's much cheaper to
+catch issues now than after writing code.
+
+1. Review first (/arc:review) — recommended
+2. Skip review and start implementing"
+```
+
+If review requested → invoke `/arc:review`, then return here.
+
+---
 
 ## Phase 1: Setup
 
@@ -125,55 +190,158 @@ If tests fail before you start → stop and ask user.
 
 ## Phase 2: Load Plan and Create Todos
 
-**Read implementation plan:**
+**Read implementation plan** (created in Phase 0 or pre-existing):
 `docs/plans/YYYY-MM-DD-<topic>-implementation.md`
 
-**Create tasks with TaskCreate:**
-One task per task in the plan. Mark first as `in_progress` with TaskUpdate.
+**Create TodoWrite tasks:**
+One todo per task in the plan. Mark first as `in_progress`.
+
+## Phase 2b: Plan Test Coverage
+
+**Before implementation, identify test needs:**
+
+```markdown
+## Test Coverage Plan
+
+### Unit Tests (per task)
+| Task | Test File | What to Test |
+|------|-----------|--------------|
+| Task 1: Create utility | src/utils/x.test.ts | Input/output, edge cases |
+| Task 2: Create component | src/components/x.test.tsx | Rendering, props |
+
+### Integration Tests (per feature)
+| Feature | Test File | What to Test |
+|---------|-----------|--------------|
+| Signup form | src/features/auth/signup.integration.test.ts | Form + API + validation |
+
+### E2E Tests (critical flows only)
+| Flow | Test File | What to Test |
+|------|-----------|--------------|
+| User signup → dashboard | tests/signup.spec.ts | Full journey |
+```
+
+**Determine auth testing needs:**
+- Uses Clerk? → integration-test-writer with Clerk mocks
+- Uses WorkOS? → integration-test-writer with WorkOS mocks
+- Has protected routes? → e2e-test-writer with auth.setup.ts
+
+This plan guides which test agent to spawn for each task.
 
 ## Phase 3: Execute in Batches
 
 **Default batch size: 3 tasks**
 
+**Per-task loop:**
+```
+┌─────────────────────────────────────────────────────────┐
+│  1. CLASSIFY  → what type of task? what test level?     │
+│  2. TEST      → spawn test agent (unit/integration/e2e) │
+│  3. BUILD     → implementer / ui-builder / specialized  │
+│  4. TDD       → run test (fail→impl→pass)               │
+│  5. FIX       → fixer (TS/lint cleanup)                 │
+│  6. SPEC      → spec-reviewer (matches spec?)           │
+│       ↳ issues? → fix → re-review                       │
+│  7. QUALITY   → code-reviewer (well-built?)             │
+│       ↳ issues? → fix → re-review                       │
+│  8. COMMIT    → atomic commit, mark complete            │
+└─────────────────────────────────────────────────────────┘
+```
+
 For each task:
 
 ### Step 1: Mark in_progress
-Update task with TaskUpdate.
+Update TodoWrite.
 
-### Step 2: Follow TDD cycle exactly
+### Step 2: Classify Task Type
 
-Read `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md` for full methodology.
+Determine which build agent(s) may be needed:
 
-<tdd_enforcement>
-**THE IRON LAW: No production code without a failing test first.**
+| Task Type | Primary Agent | When to Use |
+|-----------|---------------|-------------|
+| General implementation | implementer | Utilities, services, APIs, business logic |
+| Write unit tests | unit-test-writer | Pure functions, components, hooks |
+| Write integration tests | integration-test-writer | API mocking, auth states |
+| Write E2E tests | e2e-test-writer | User journeys, Playwright |
+| Build UI from spec | ui-builder | UI components with existing design direction |
+| Build UI from Figma | figma-builder | Figma URL provided |
+| Design decisions needed | design-specifier | No spec exists (empty states, visual direction) |
+| Fix TS/lint errors | fixer | Mechanical cleanup |
+| Debug failing tests | debugger | Test failures |
+| Run E2E tests | e2e-runner | Playwright test suites |
+| Verify spec compliance | spec-reviewer | After implementation, before code quality |
 
-The FIRST file you touch for each task MUST be the test file. Not the implementation file.
+**Agent selection flow:**
+1. Is this general code (no UI)? → implementer
+2. Is this UI with Figma? → figma-implement
+3. Is this UI with design spec? → ui-builder
+4. Is this UI with no spec? → design-specifier first, then ui-builder
+5. Did something break? → debugger or fixer
+6. Task complete? → spec-reviewer to verify
 
-If the plan includes test code, use it. If the plan doesn't include test code, write it yourself — but write it BEFORE the implementation.
+### Step 3: Write Tests First (TDD)
 
-**Cycle — follow exactly, every time:**
+**Determine test type based on task:**
 
-1. **Write the test file first.** Create/open the `.test.ts` file. Write one failing test (copy from plan if available, otherwise write it yourself).
-2. **Run test → verify FAIL.** If it passes immediately, the test is wrong — fix it or the behavior already exists.
-   ```bash
-   pnpm vitest run path/to/file.test.ts  # or jest/playwright equivalent
-   ```
-3. **Now write implementation** (copy from plan, adapt as needed). Only the minimum code to pass the test.
-4. **Run test → verify PASS.**
-   ```bash
-   pnpm vitest run path/to/file.test.ts
-   ```
-5. **Fix TypeScript + lint** (see below)
-6. **Commit with message from plan**
+| Task Type | Test Agent | Framework |
+|-----------|------------|-----------|
+| Pure function/utility | unit-test-writer | vitest |
+| Component with props | unit-test-writer | vitest + testing-library |
+| Component + API/state | integration-test-writer | vitest + MSW |
+| Auth-related feature | integration-test-writer | vitest + Clerk/WorkOS mocks |
+| User flow/journey | e2e-test-writer | Playwright |
 
-**Self-check gate — before moving to next task:**
-- [ ] Test file was created/modified BEFORE implementation file
-- [ ] Test was run and observed to FAIL before implementation
-- [ ] Test failure was because feature was missing (not typo/import error)
-- [ ] Only enough code was written to pass the test
+**Spawn appropriate test writer:**
 
-If any answer is "no" — delete the implementation, write the test first.
-</tdd_enforcement>
+For unit tests:
+```
+Task [unit-test-writer] model: sonnet: "Write unit tests for [function/component].
+
+Behavior to test:
+- [expected behavior from plan]
+- [edge cases]
+- [error cases]
+
+File to create: [path/to/module.test.ts]
+Follow vitest patterns from testing-patterns.md"
+```
+
+For integration tests (API/auth):
+```
+Task [integration-test-writer] model: sonnet: "Write integration tests for [feature].
+
+Behavior to test:
+- [component + API interaction]
+- [auth states: loading, signed in, signed out]
+- [error handling]
+
+Auth: [Clerk/WorkOS/none]
+API endpoints to mock: [list]
+File to create: [path/to/feature.integration.test.ts]"
+```
+
+For E2E tests (critical flows):
+```
+Task [e2e-test-writer] model: sonnet: "Write E2E tests for [user journey].
+
+Flow to test:
+- [step 1]
+- [step 2]
+- [expected outcome]
+
+Auth setup: [Clerk/WorkOS/none]
+File to create: [tests/feature.spec.ts]"
+```
+
+### Step 4: TDD Cycle
+
+```
+1. Tests written (from Step 3)
+2. Run test → verify FAIL
+3. Write implementation (copy from plan, adapt as needed)
+4. Run test → verify PASS
+5. Fix TypeScript + lint (spawn fixer if issues)
+6. Commit with message from plan
+```
 
 <continuous_quality>
 **After every implementation, before commit:**
@@ -181,22 +349,22 @@ If any answer is "no" — delete the implementation, write the test first.
 **TypeScript check:**
 ```bash
 pnpm tsc --noEmit
-# or: pnpm typecheck (if script exists)
 ```
 
 **Biome lint + format:**
 ```bash
 pnpm biome check --write .
-# or: pnpm lint:fix (if script exists)
 ```
 
-**If issues found:**
-- Fix immediately
-- Don't accumulate debt
-- If stuck on a type issue → spawn a quick agent:
-  ```
-  Task general-purpose model: haiku: "Fix TypeScript error in [file]: [error message]"
-  ```
+**If issues found — spawn fixer:**
+```
+Task [fixer] model: haiku: "Fix TypeScript and lint errors.
+
+Files with issues: [list files]
+Errors: [paste error output]
+
+Project rules: .ruler/typescript.md, .ruler/code-style.md"
+```
 
 **Why continuous:**
 - Catching TS errors early is easier than fixing 20 at once
@@ -209,97 +377,67 @@ pnpm biome check --write .
 - Implementation might already exist
 - Stop and ask user
 
-**If test doesn't pass after implementation:**
-Spawn debugger agent immediately:
+**If test doesn't pass after implementation — spawn debugger:**
 ```
-Task general-purpose model: sonnet: "Test failing unexpectedly.
+Task [debugger] model: sonnet: "Test failing unexpectedly.
+
 Test file: [path]
 Test name: [name]
-Error: [error message]
-Implementation: [path]
-Debug and fix."
+Error: [paste full error]
+Implementation file: [path]
+
+Investigate root cause and fix. See ${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md"
 ```
 
-If debugger can't resolve after one attempt → stop and ask user
+If debugger can't resolve after one attempt → stop and ask user.
 
-### Step 3: Mark completed
-Update task with TaskUpdate.
+### Step 5: Spec Compliance Check
 
-### Step 4: Batch Review Gate
-
-After every 3 tasks, run a two-stage review before continuing.
-
-**Stage 1 — Spec Compliance (mandatory):**
-
-Re-read the relevant tasks from the implementation plan, then spawn a spec compliance reviewer:
-
+After implementation, spawn spec-reviewer:
 ```
-Task general-purpose model: sonnet: "Compare the git diff of the last batch of commits against the plan text below.
+Task [spec-reviewer] model: haiku: "Verify implementation matches spec.
 
-PLAN TASKS:
-[paste the 3 task descriptions from the plan]
+Task spec: [paste task specification]
+Files created/modified: [list]
 
-GIT DIFF:
-[output of: git diff HEAD~3..HEAD]
-
-Check:
-1. Anything MISSING that the plan specifies?
-2. Anything EXTRA that the plan doesn't call for?
-3. Is test coverage adequate for each task?
-
-Report: list of issues or ✅ compliant."
+Check: nothing missing, nothing extra."
 ```
 
-**If issues found → fix → re-review (max 2 cycles).** If still failing after 2 cycles, stop and ask user.
+If spec-reviewer finds issues → fix with implementer/fixer → re-run spec-reviewer.
+If compliant → proceed to code quality.
 
-**Stage 2 — Domain Quality Review:**
+### Step 6: Code Quality Gate
 
-Detect what the batch touched:
+After spec compliance passes, spawn code-reviewer:
+```
+Task [code-reviewer] model: haiku: "Quick code quality check.
+
+Files: [list of files created/modified]
+
+Check: no any types, error handling, tests exist, style consistent."
+```
+
+If code-reviewer finds issues → fix with fixer → re-run code-reviewer.
+If approved → commit and mark complete.
+
+### Step 7: Commit and Mark Complete
+
 ```bash
-git diff --name-only HEAD~3..HEAD
+git add [files]
+git commit -m "feat(scope): [description from plan]"
 ```
 
-Select 1-2 reviewers from `agents/review/` based on file patterns:
+Update TodoWrite to mark task completed.
 
-| Files touched | Reviewer(s) |
-|---------------|-------------|
-| DB migrations, ORM models, schema files | data-engineer |
-| API routes, endpoints, handlers | security-engineer |
-| Auth, middleware, session logic | security-engineer |
-| UI components, pages, layouts | senior-engineer |
-| Complex business logic, domain services | architecture-engineer |
-| Test infrastructure only | test-quality-engineer |
-| Mixed/unclear | senior-engineer (default) |
+### Step 8: Checkpoint after batch
 
-If the batch spans multiple domains, run the top 2 reviewers **in parallel**.
-
-Each reviewer gets the git diff and instructions to categorize findings as:
-- **Blockers** — Must fix before continuing
-- **Should-fix** — Fix now if quick, otherwise note for later
-- **Suggestions** — Log for final review, don't block progress
+After every 3 tasks:
 
 ```
-Task [reviewer-type] model: sonnet: "Review this batch of changes.
-
-GIT DIFF:
-[output of: git diff HEAD~3..HEAD]
-
-Categorize each finding as: blocker / should-fix / suggestion.
-Focus on your domain. Be specific — cite file and line."
-```
-
-**If blockers found → fix → re-review (max 2 cycles).** Should-fix items: fix if under 5 minutes, otherwise note. Suggestions: log for final review.
-
-**Then present batch summary and wait for user:**
-
-```
-Batch [N] complete:
-- Task X: [description] ✓
-- Task Y: [description] ✓
-- Task Z: [description] ✓
-
-Spec compliance: ✅ (or: fixed [N] issues)
-Quality review ([reviewer names]): ✅ (or: [N] blockers fixed, [N] suggestions noted)
+Completed:
+- Task 1: [description] ✓
+- Task 2: [description] ✓
+- Task 3: [description] ✓
 
 Tests passing: [X/X]
 
@@ -310,10 +448,39 @@ Wait for user confirmation or adjustments.
 
 ## Phase 4: Quality Checkpoints
 
-**Before starting UI tasks — INVOKE ARC:DESIGN FOR BUILD:**
+**After completing data/types tasks:**
+- Spawn data-engineer (from review agents) for quick review
+- Present findings as questions
 
+**Before starting UI tasks:**
+
+**If design spec exists** — spawn ui-builder:
 ```
-Skill arc:design: "Build UI components for [feature].
+Read: ${CLAUDE_PLUGIN_ROOT}/agents/build/ui-builder.md
+```
+
+**If no design spec** (empty states, undefined visuals) — spawn design-specifier first:
+```
+Task [design-specifier] model: opus: "Create design spec for [component].
+
+Context: [what this is for, user's emotional state]
+Existing patterns: [what it should feel like]
+Project aesthetic: [tone from design doc]
+
+Output actionable spec for ui-builder to implement."
+```
+
+Then spawn ui-builder with the design-specifier's output.
+
+**If Figma URL provided** — spawn figma-builder:
+```
+Read: ${CLAUDE_PLUGIN_ROOT}/agents/build/figma-builder.md
+Task [figma-builder] model: opus: "Implement from Figma: [URL]"
+```
+
+**For ui-builder, spawn:
+```
+Task [ui-builder] model: opus: "Build UI components for [feature].
 
 Aesthetic Direction (from design doc):
 - Tone: [tone]
@@ -325,29 +492,21 @@ Aesthetic Direction (from design doc):
 Figma: [URL if available]
 Files to create: [list from implementation plan]
 
+Interface rules: ${CLAUDE_PLUGIN_ROOT}/rules/interface/
+Project rules: .ruler/react.md, .ruler/tailwind.md
+
 Apply the aesthetic direction to every decision. Make it memorable, not generic."
 ```
 
-**Why invoke the skill, not just follow principles:**
-- The skill has creative energy and specific guidance
-- It makes bold decisions, not safe ones
-- It catches generic patterns as they're written, not after
-
-**Fetch Figma context:**
+**Fetch Figma context (if available):**
 ```
 mcp__figma__get_design_context: fileKey, nodeId
 mcp__figma__get_screenshot: fileKey, nodeId
 ```
 
-**After each UI task, quick self-check:**
-- [ ] Would a designer call this "generic AI slop"?
-- [ ] Is the memorable element actually memorable?
-- [ ] Did I avoid Roboto/Arial/system-ui and purple gradients?
-
-**After completing ALL UI tasks — INVOKE ARC:DESIGN FOR REVIEW:**
-
+**After completing ALL UI tasks — spawn designer review:**
 ```
-Task general-purpose model: opus: "Review the completed UI implementation.
+Task [designer] model: opus: "Review the completed UI implementation.
 
 Aesthetic Direction (from design doc):
 - Tone: [tone]
@@ -367,22 +526,7 @@ Check for:
 - Missing states (loading, error, empty)"
 ```
 
-- Run playwright visual test if available
-- Take screenshots of key states
-- Compare against Figma screenshot
-- Address any review findings before proceeding
-
-**Optional: Web Interface Guidelines Review**
-If `web-design-guidelines` skill is available:
-```
-Skill web-design-guidelines: "Review [components] for Web Interface Guidelines compliance"
-```
-
-**Optional: Composition Patterns Review**
-For React projects with component architecture work (new compound components, context providers, or components accumulating boolean props), if `vercel-composition-patterns` skill is available:
-```
-Skill vercel-composition-patterns: "Review [components] for composition patterns — check for boolean prop proliferation, compound component opportunities, and context usage"
-```
+Address any review findings before proceeding.
 
 **When implementing unfamiliar library APIs:**
 ```
@@ -397,35 +541,36 @@ Use current documentation to ensure correct API usage.
 
 ## Phase 5: Final Quality Sweep
 
-**Always run (in parallel agents for speed):**
+**Spawn parallel build agents for speed:**
 
 ```
-Task general-purpose model: haiku: "Run TypeScript check (tsc --noEmit) and fix any errors"
-Task general-purpose model: haiku: "Run Biome check (biome check --write .) and fix any issues"
-Task general-purpose model: haiku: "Run test suite and report results"
+Task [fixer] model: haiku: "Run TypeScript check (tsc --noEmit) and fix any errors. Report results."
+
+Task [fixer] model: haiku: "Run Biome check (biome check --write .) and fix any issues. Report results."
 ```
 
-Wait for all agents to complete. If issues found, fix before proceeding.
+Wait for agents to complete. If issues found, fix before proceeding.
 
-**Optional: React/Next.js Performance Review**
-For React/Next.js projects, if `vercel-react-best-practices` skill is available:
-```
-Skill vercel-react-best-practices: "Review implementation for React/Next.js performance patterns"
+**Run test suite:**
+```bash
+pnpm test
 ```
 
-**Optional: React Native Performance Review**
-For React Native/Expo projects, if `vercel-react-native-skills` skill is available:
-```
-Skill vercel-react-native-skills: "Review implementation for React Native performance — check list rendering, animations, native module usage, and platform-specific optimizations"
-```
+If tests fail, spawn debugger to investigate.
 
 ## Phase 5b: E2E Tests (If Created)
 
 If e2e tests were created as part of this implementation:
 
-**Spawn dedicated agent to run and fix e2e tests:**
+**Spawn e2e-runner agent:**
 ```
-Task Bash run_in_background: true: "Run e2e tests for the feature we just implemented. Fix any failures and iterate until all pass."
+Task [e2e-runner] model: sonnet: "Run E2E tests for the feature we just implemented.
+
+Test files: [list e2e test files]
+Feature: [brief description]
+
+Run tests, fix any failures, and iterate until all pass or report blockers.
+See ${CLAUDE_PLUGIN_ROOT}/agents/build/e2e-runner.md for protocol."
 ```
 
 **Why a separate agent?**
@@ -435,26 +580,22 @@ Task Bash run_in_background: true: "Run e2e tests for the feature we just implem
 
 Wait for agent to complete. Review its summary of fixes applied.
 
-## Phase 6: Implementation Review (Mandatory)
+## Phase 6: Expert Review (Optional)
 
-Run a final review of the entire implementation. This is **not optional** — skip only if the user explicitly says so.
+For significant features, offer parallel review:
 
-**Always spawn 2 reviewers in parallel:**
+"Feature complete. Run expert review before PR?"
+
+If yes, spawn review agents in parallel (all use sonnet):
 
 ```
-Task arc:review:simplicity-engineer model: sonnet: "Review the entire implementation diff for YAGNI violations, over-engineering, unnecessary abstractions, and complexity that isn't justified by current requirements.
+Task [simplicity-engineer] model: sonnet: "Review implementation for unnecessary complexity.
+Files: [list of new/modified files]
+See ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md"
 
-GIT DIFF (full feature):
-[output of: git diff main..HEAD]
-
-Be specific — cite file and line. Categorize as: blocker / should-fix / suggestion."
-
-Task arc:review:architecture-engineer model: sonnet: "Review the entire implementation diff for boundary violations, import hygiene, layer leaks, and structural concerns.
-
-GIT DIFF (full feature):
-[output of: git diff main..HEAD]
-
-Be specific — cite file and line. Categorize as: blocker / should-fix / suggestion."
+Task [architecture-engineer] model: sonnet: "Review implementation for architectural concerns.
+Files: [list of new/modified files]
+See ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md"
 ```
 
 **Add a conditional third reviewer based on what was built:**
@@ -465,74 +606,28 @@ Be specific — cite file and line. Categorize as: blocker / should-fix / sugges
 | Significant UI (components, pages) | senior-engineer |
 | Database migrations, data models | data-engineer |
 
-**Process findings:**
-1. Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`)
-2. **Blockers → fix → re-verify (max 2 cycles)**
-3. Should-fix → fix if quick, otherwise note as follow-up
-4. Suggestions → present to user, don't block
-
-**If user wants to skip:** They must explicitly say "skip review" or "no review". Don't skip silently.
+Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
+Blockers → fix → re-verify (max 2 cycles). Should-fix → fix if quick, otherwise note as follow-up.
 
 ## Post-Completion: Doc Staleness Check
 
-Before offering next steps, check if documentation may need updating:
+Before shipping, check if documentation may need updating:
 
-1. **Get modified files** — List files modified during this session (from git status or tracking)
-2. **Check for existing docs** — Glob for `docs/**/*.md`, `docs/**/*.mdx`, `content/**/*.md`, `content/**/*.mdx`
-3. **If no docs exist** — Skip this check entirely
-4. **If docs exist** — Search doc files for references to modified file paths, exported function names, or component names
-5. **If matches found** — Use AskUserQuestion:
-   ```
-   Question: "These docs reference code you just changed. Update them?"
-   Header: "Stale docs"
-   Options:
-     - label: "Yes, update now"
-       description: "I'll update the affected sections to match your changes"
-     - label: "Skip for now"
-       description: "Continue to next steps"
-   ```
-6. **If user says yes** — Read each stale doc file and the changed source files. Rewrite only the affected sections to reflect the current code. Do not rewrite unaffected sections.
-7. **If user says no or no matches** — Continue to next steps
+1. **Get modified files** from git status
+2. **Check for existing docs** — Glob for `docs/**/*.md`, `docs/**/*.mdx`, `content/**/*.md`
+3. **If docs exist** — Search doc files for references to modified file paths, exported function names, or component names
+4. **If matches found** — Ask user: "These docs reference code you just changed. Update them?"
+5. **If user says yes** — Read each stale doc and the changed source. Rewrite only affected sections.
 
-## Phase 7: Finish the Branch
+## Phase 7: Ship
 
-Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md`
-
-**First, verify tests pass:**
+**Ensure all tests pass:**
 ```bash
 pnpm test
 pnpm lint
 ```
 
-**If tests fail:** Stop. Cannot proceed until tests pass.
-
-**If tests pass, present the 4 options:**
-
-**Use AskUserQuestion tool:**
-```
-Question: "Implementation complete. What would you like to do?"
-Header: "Finish"
-Options:
-  1. "Merge to main locally" — Merge, delete branch, cleanup worktree
-  2. "Push and create PR" (Recommended) — Push branch, open PR for review
-  3. "Keep branch as-is" — I'll handle it later
-  4. "Discard this work" — Delete branch and worktree (requires confirmation)
-```
-
-### Option 1: Merge Locally
-
-```bash
-git checkout main
-git pull
-git merge feature/<feature-name>
-pnpm test  # Verify tests pass on merged result
-git branch -d feature/<feature-name>
-```
-
-Then cleanup worktree (see below).
-
-### Option 2: Push and Create PR
-
+**Create PR:**
 ```bash
 git push -u origin feature/<feature-name>
 
@@ -558,51 +653,34 @@ EOF
 )"
 ```
 
-Report PR URL to user. Keep worktree until PR is merged.
+**Report to user:**
+- PR URL
+- Summary of what was built
+- Any follow-up items
 
-### Option 3: Keep As-Is
-
-Report: "Keeping branch [name]. Worktree preserved at [path]."
-
-Don't cleanup worktree.
-
-### Option 4: Discard
-
-**Require typed confirmation:**
-```
-This will permanently delete:
-- Branch [name]
-- All commits since [base]
-- Worktree at [path]
-
-Type 'discard' to confirm.
-```
-
-Wait for exact confirmation. If confirmed:
+**Cleanup worktree (optional):**
 ```bash
-git checkout main
-git branch -D feature/<feature-name>
-```
-
-Then cleanup worktree.
-
-### Worktree Cleanup (Options 1, 2, 4)
-
-```bash
-# Only for options 1, 2, and 4
 cd ..
 git worktree remove .worktrees/<feature-name>
 ```
 
-**Report to user:**
-- What happened (merged/PR created/discarded)
-- Summary of what was built
-- Any follow-up items
+## Phase 8: Cleanup
+
+**Kill orphaned subagent processes:**
+
+After spawning multiple build agents, some may not exit cleanly. Run cleanup:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+```
+
+This is especially important after parallel agent runs.
+
 </process>
 
 <when_to_stop>
 **STOP and ask user when:**
-- Test fails unexpectedly
+- Test fails unexpectedly and debugger can't resolve
 - Implementation doesn't match plan
 - Stuck after 2 debug attempts
 - Plan has ambiguity
@@ -615,25 +693,25 @@ git worktree remove .worktrees/<feature-name>
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 
-Look for related ideate/detail sessions and any prior implementation attempts.
+Look for related ideate sessions and any prior implementation attempts.
 </progress_context>
 
-<tasklist_context>
-**Use TaskList tool** to check for existing tasks related to this work.
+<progress_append>
+After completing implementation (or pausing), append to progress journal:
 
-If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
-</tasklist_context>
+```markdown
+## YYYY-MM-DD HH:MM — /arc:implement
+**Task:** [Feature name]
+**Outcome:** [Complete / In Progress (X/Y tasks) / Blocked]
+**Files:** [Key files created/modified]
+**Agents spawned:** [list of agents used]
+**Decisions:**
+- [Key implementation decision]
+**Next:** [PR created / Continue tomorrow / Blocked on X]
 
-<tasklist_update>
-**After implementation completes (or pauses):**
-
-1. **If feature complete** → Use **TaskUpdate** to mark related task as `completed`
-2. **If discovered new tasks** → Use **TaskCreate** for each:
-   - **subject:** Brief imperative title
-   - **description:** What needs to be done and why
-   - **activeForm:** Present continuous form
-3. **If blocked** → Use **TaskCreate** for the blocker
-</tasklist_update>
+---
+```
+</progress_append>
 
 <arc_log>
 **After completing this skill, append to the activity log.**
@@ -644,13 +722,11 @@ Entry: `/arc:implement — [Feature name] ([X/Y] tasks complete)`
 
 <success_criteria>
 Execution is complete when:
-- [ ] All tasks marked completed with TaskUpdate
+- [ ] All tasks marked completed in TodoWrite
 - [ ] All tests passing
 - [ ] Linting passes
-- [ ] Batch spec compliance reviews passed (all batches)
-- [ ] Batch quality reviews passed (all batches)
-- [ ] Final implementation review passed (mandatory)
 - [ ] PR created
 - [ ] User informed of completion
 - [ ] Progress journal updated
+- [ ] Orphaned agents cleaned up
 </success_criteria>

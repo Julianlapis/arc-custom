@@ -1,24 +1,12 @@
 ---
 name: detail
 description: |
-  Create a detailed implementation plan with exact file paths, test code, and TDD cycles.
-  Use when asked to "create an implementation plan", "break this down into tasks",
-  "detail the steps", or after /arc:ideate to turn a design into executable tasks.
+  Internal skill for creating implementation plans. Invoked by /arc:implement, not directly.
+  Creates detailed plans with exact file paths, test code, and TDD cycles.
+internal: true
 license: MIT
 metadata:
   author: howells
-website:
-  order: 4
-  desc: Spec → task breakdown
-  summary: Turn your spec into a step-by-step implementation plan with exact file paths, test cases, and a clear order of operations.
-  what: |
-    Detail takes your spec and breaks it into ordered tasks. Each task specifies exactly which files to create or modify, what test to write first, and what "done" looks like. The output is a markdown plan file—a recipe precise enough that /arc:implement can execute it task by task. You review it, tweak it, then run.
-  why: |
-    "I know what I want but not where to start" is where projects stall. Detail does the breakdown for you—turning a spec into a checklist you can execute without thinking about what comes next.
-  decisions:
-    - Exact file paths, not vague descriptions. "Create src/lib/auth.ts" not "add authentication".
-    - Test-first by design. Each task starts with the test that proves it works.
-    - Human-reviewable. It's a markdown file you can read, edit, and approve before execution.
 ---
 
 <required_reading>
@@ -40,8 +28,6 @@ website:
 </required_reading>
 
 <process>
-**Announce at start:** "I'm using the detail skill to create an implementation plan with exact file paths and TDD tasks."
-
 ## Step 1: Detect Project Stack
 
 **Use Glob tool to detect in parallel:**
@@ -256,83 +242,8 @@ git add docs/plans/
 git commit -m "docs: add <topic> implementation plan"
 ```
 
-**Check workspace:**
-```bash
-git branch --show-current
-```
-
-**Show the remaining arc:**
-```
-/arc:ideate     → Design doc (on main) ✓
-     ↓
-[Worktree]      → Feature branch ✓ (if set up)
-     ↓
-/arc:detail     → Implementation plan ✓ YOU ARE HERE
-     ↓
-/arc:review     → Review implementation plan (recommended)
-     ↓
-/arc:implement  → Execute task-by-task
-```
-
-**If on main/master:**
-```
-"Implementation plan ready, but you're still on main.
-
-I recommend setting up a worktree before implementing — this keeps main clean
-and lets you easily abandon the work if needed."
-```
-
-**Use AskUserQuestion tool:**
-```
-Question: "How would you like to proceed?"
-Header: "Next step"
-Options:
-  1. "Set up worktree first" (Recommended) — Isolated workspace, plan moves with branch
-  2. "Continue on main" — Not recommended for multi-file changes
-  3. "Done for now" — End session
-```
-
-**If option 1:** Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, move plan, then continue with the next question below.
-
-**If already on feature branch (recommended path):**
-
-**Use AskUserQuestion tool:**
-```
-Question: "Implementation plan ready. How would you like to proceed?"
-Header: "Next step"
-Options:
-  1. "Review the plan" (Recommended) — Expert reviewers validate before execution
-  2. "Execute now" — Skip review, start implementing
-  3. "Done for now" — End session
-```
-
-**IMPORTANT: Do NOT automatically invoke skills. Set up environment only, then STOP.**
-
-**If option 1:** Tell the user: "Run `/arc:review` to have expert reviewers validate the plan."
-**If option 2:** Tell the user: "Run `/arc:implement` to start executing the plan task-by-task."
-**If option 3:** Tell the user the plan is ready and they can return later.
-
-**Do NOT invoke `/arc:review` or `/arc:implement` yourself — wait for the user to do so.**
+Plan is ready. Return control to implement skill.
 </process>
-
-<progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
-
-Look for related ideate sessions or prior work on this feature.
-</progress_context>
-
-<tasklist_context>
-**Use TaskList tool** to check for existing tasks related to this work.
-
-If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
-</tasklist_context>
-
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
-
-Entry: `/arc:detail — [Feature name] implementation plan ([N] tasks)`
-</arc_log>
 
 <success_criteria>
 Implementation plan is complete when:
@@ -343,8 +254,5 @@ Implementation plan is complete when:
 - [ ] Each task has test code + implementation code
 - [ ] Each task has exact test commands
 - [ ] ASCII UI references included for UI tasks
-- [ ] Plan committed to git (in worktree if set up)
-- [ ] Remaining arc shown (review → implement)
-- [ ] User chose next step (review, implement, or done)
-- [ ] Progress journal updated
+- [ ] Plan committed to git
 </success_criteria>

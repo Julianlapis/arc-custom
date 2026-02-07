@@ -17,17 +17,16 @@ The full arc from idea to shipped code.
 Arc provides 24 skills covering the complete development lifecycle:
 
 ```
-ENTRY   /arc:start    - Main entry point, routes to right workflow
+ENTRY   /arc:go       - Main entry point, routes to right workflow
           ↓
 WHY     /arc:vision     - High-level goals (500-700 words)
           ↓
-WHAT    /arc:ideate     - From idea to working implementation
+WHAT    /arc:ideate     - From idea to design doc
           ↓
-HOW     /arc:detail     - Detailed implementation plan
-          ↓
-DO      /arc:implement  - Execute the plan with TDD
+DO      /arc:implement  - Plan + execute with TDD
         /arc:design     - UI/UX design with wireframes
-        /arc:test       - Test strategy and execution
+        /arc:build      - Quick build (no formal plan)
+        /arc:testing    - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
         /arc:legal      - Generate privacy policy and terms
 
@@ -114,7 +113,7 @@ Arc uses these plugins for enhanced functionality:
 
 | Plugin | Used by |
 |--------|---------|
-| **Figma** | `/arc:ideate`, `/arc:detail`, `/arc:figma` |
+| **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
 | **Context7** | `/arc:implement` |
 | **Chrome** | `figma-implement` agent |
 
@@ -178,8 +177,8 @@ Claude will ask clarifying questions, explore your codebase, and create a design
 ### 3. Follow the flow
 
 Arc commands chain together. After `/arc:ideate` creates a design:
-- Claude asks if you want to continue to `/arc:detail` (implementation plan)
-- Then to `/arc:implement` (write the code with TDD)
+- Claude asks if you want to continue to `/arc:implement` (plan and build)
+- Implementation creates its own plan, then executes with TDD
 
 You can also jump in at any point if you already have docs.
 
@@ -211,28 +210,27 @@ You can also jump in at any point if you already have docs.
 
 ## Primary Flow
 
-The main entry point is `/arc:ideate`, which can flow all the way through:
+The main entry point is `/arc:ideate`, which flows through to implementation:
 
 ```
-/arc:ideate → /arc:detail → /arc:implement
+/arc:ideate → /arc:implement
 ```
 
 Each step asks if you want to continue. You can also enter at any point:
-- Have a design doc already? Start at `/arc:detail`
-- Have an implementation plan? Start at `/arc:implement`
+- Have a design doc already? Start at `/arc:implement`
+- Have an implementation plan? `/arc:implement` will use it
 
 ## Commands
 
 | Command | When to use | Output |
 |---------|-------------|--------|
-| `/arc:start` | Main entry point, routes to workflow | Context-aware guidance |
+| `/arc:go` | Main entry point, routes to workflow | Context-aware guidance |
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
-| `/arc:ideate` | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
-| `/arc:detail` | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
-| `/arc:implement` | Execute a plan | Code changes |
+| `/arc:ideate` | From idea to design doc | `docs/plans/YYYY-MM-DD-<feature>-design.md` |
+| `/arc:implement` | Plan + execute with TDD | Code changes |
 | `/arc:design` | UI/UX work | Wireframes + code |
-| `/arc:figma` | Implement from Figma | Code matching design |
-| `/arc:test` | Test strategy | Test files |
+| `/arc:build` | Quick implementation | Code changes |
+| `/arc:testing` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
 | `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
@@ -258,8 +256,9 @@ Arc includes 22 specialized agents:
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
 | **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
+| **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
 | **Design** | figma-implement |
-| **Workflow** | spec-flow-analyzer, e2e-test-runner |
+| **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer |
 
 ## Disciplines
 
@@ -278,11 +277,29 @@ Implementation methodologies in `disciplines/`:
 
 Commands work together:
 
-- `/arc:suggest` reads existing tasks (TaskList in Claude Code), codebase, `/arc:vision`, and external market trends (priority cascade with opt-in discovery mode)
-- `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
-- `/arc:ideate` naturally handles small scope quickly, larger scope with more depth
-- `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
-- Claude Code can create tasks via TaskCreate; in Codex, track tasks in issues/docs instead.
+- `/arc:suggest` reads Linear issues (if configured), in-session tasks (TaskList), codebase, and `/arc:vision` (priority cascade with opt-in discovery mode)
+- `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
+- `/arc:build` suggests `/arc:ideate` if scope is too large
+- `/arc:letsgo` runs `/arc:testing` and `/arc:audit --deslop` as part of quality checks
+- Claude Code uses TaskList for in-session task tracking; Linear MCP for persistent issue tracking
+
+### Linear Integration (Optional)
+
+For complex projects, Arc integrates with Linear via MCP for issue tracking:
+
+```json
+// .mcp.json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/linear-mcp"]
+    }
+  }
+}
+```
+
+When Linear MCP is available, `/arc:suggest` queries active issues and `/arc:audit` can create issues from findings.
 
 ## Acknowledgments
 

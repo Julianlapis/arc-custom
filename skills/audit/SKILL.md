@@ -751,7 +751,9 @@ Present these options (include all that apply):
 
 3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
-4. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
+4. **Create Linear issues** → If Linear MCP is available (`mcp__linear__*` tools exist), create Linear issues for critical/high findings. Each cluster becomes an issue with findings in the description.
+
+5. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
 
 5. **Done for now** → End session. Report is committed, user can return to it later.
 

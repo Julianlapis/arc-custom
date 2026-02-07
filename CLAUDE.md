@@ -9,28 +9,29 @@ arc/
 ├── .claude-plugin/
 │   └── plugin.json         # Plugin metadata
 ├── skills/                  # Each skill = one /arc:* command
-│   ├── start/SKILL.md      # 1. Entry point
+│   ├── go/SKILL.md         # 1. Entry point
 │   ├── vision/SKILL.md     # 2. Foundation: project goals
 │   ├── ideate/SKILL.md     # 3. Design: idea → validated design
-│   ├── detail/SKILL.md     # 4. Plan: design → implementation plan
+│   ├── detail/SKILL.md     # 4. Plan (internal, invoked by implement)
 │   ├── review/SKILL.md     # 5. Review: validate before execution
-│   ├── implement/SKILL.md  # 6. Execute: TDD implementation
+│   ├── implement/SKILL.md  # 6. Execute: plan + TDD implementation
 │   ├── design/SKILL.md     # 6. Execute: distinctive UI
-│   ├── figma/SKILL.md      # 6. Execute: from Figma designs
-│   ├── test/SKILL.md       # 7. Test: strategy & execution
+│   ├── build/SKILL.md      # 6. Execute: quick builds
+│   ├── testing/SKILL.md    # 7. Test: strategy & execution
 │   ├── letsgo/SKILL.md     # 8. Ship: production readiness
 │   ├── legal/SKILL.md      # 8. Ship: privacy policy, ToS
 │   ├── naming/SKILL.md     # Cross-cutting: project naming
 │   ├── worktree/SKILL.md   # Cross-cutting: isolated workspaces
+│   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
 │   ├── seo/SKILL.md        # Cross-cutting: SEO audit
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
 │   ├── document/SKILL.md   # Cross-cutting: capture solutions
 │   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
-│   ├── responsive/SKILL.md  # Cross-cutting: mobile responsive audit
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
-│   └── deps/SKILL.md       # Cross-cutting: dependency audit
+│   ├── deps/SKILL.md       # Cross-cutting: dependency audit
+│   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized reviewers
 │   ├── review/
 │   ├── research/
@@ -49,22 +50,21 @@ arc/
 All commands use the `/arc:` namespace prefix. The typical workflow:
 
 ```
-1. ENTRY      /arc:start      → Routes to right workflow based on context
+1. ENTRY      /arc:go         → Routes to right workflow based on context
 2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
 3. DESIGN     /arc:ideate     → Turn idea into validated design doc
-4. PLAN       /arc:detail     → Create step-by-step implementation plan
-5. REVIEW     /arc:review     → Expert validation before execution
-6. EXECUTE    /arc:implement  → TDD implementation of plan
+4. REVIEW     /arc:review     → Expert validation before execution
+5. EXECUTE    /arc:implement  → Plan + TDD implementation
               /arc:design     → Create distinctive UI
-              /arc:figma      → Implement from Figma designs
-7. TEST       /arc:test       → Test strategy and execution
-8. SHIP       /arc:letsgo     → Production readiness checklist
+              /arc:build      → Quick builds for smaller scope
+6. TEST       /arc:testing    → Test strategy and execution
+7. SHIP       /arc:letsgo     → Production readiness checklist
               /arc:legal      → Privacy policy, Terms of Service
 
 CROSS-CUTTING (available anytime):
               /arc:naming     → Generate and validate project names
               /arc:worktree   → Create isolated git worktree
-              /arc:responsive  → Mobile responsive audit & fix
+              /arc:responsive → Mobile responsive audit & fix
               /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting

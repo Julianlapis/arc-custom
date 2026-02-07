@@ -1,7 +1,7 @@
 ---
 name: ideate
 description: |
-  Turn ideas into validated designs through collaborative dialogue.
+  Turn ideas into validated designs through collaborative dialogue with built-in expert review.
   Use when asked to "design a feature", "plan an approach", "think through implementation",
   or when starting new work that needs architectural thinking before coding.
 license: MIT
@@ -9,16 +9,16 @@ metadata:
   author: howells
 website:
   order: 3
-  desc: Idea → spec
-  summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear spec of what to build.
+  desc: Idea → design doc
+  summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear design doc of what to build.
   what: |
-    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete spec—user flows, data models, edge cases. Review happens throughout—scope checks early, approach validation mid-flow, simplification at every step.
+    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete design—user flows, data models, edge cases. Review happens throughout—scope checks early, approach validation mid-flow, simplification at every step.
   why: |
     Vague ideas lead to wasted code. Ideate forces you to get specific—what exactly happens when a user clicks that button?—so you're not making it up as you implement. The conversation surfaces gaps you didn't know you had.
   decisions:
     - Knows your codebase first. Asks informed questions, not generic ones.
     - One question at a time. A real conversation, not a form to fill out.
-    - Output is a spec, not code. Implementation comes later with /arc:detail.
+    - Output is a design doc. Implementation planning happens in /arc:implement.
   agents:
     - security-engineer
     - performance-engineer
@@ -60,66 +60,68 @@ If `docs/vision.md` exists, read it. Anchor the design conversation to the proje
 1. ${CLAUDE_PLUGIN_ROOT}/references/design-phases.md
 2. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
 3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
+4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+5. ${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md (if UI work involved)
+6. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
 
-**For UI work, also load:**
-- ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md
-- ${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md
+**For UI work, also load interface rules:**
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md — Layout patterns
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md — If motion is involved
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md — If marketing pages
 </required_reading>
 
 <process>
-# The Conversation
+## Phase 1: Context Gathering
 
-This is collaborative dialogue, not a form to fill out. The conversation IS the process.
+**Read progress journal and solutions for past decisions:**
 
-## Starting Out
+**Use Read tool:** `docs/progress.md` (first 50 lines)
 
-**Get oriented so you can ask informed questions (not generic ones):**
-- Glance at project structure — what patterns exist? What's the architecture?
-- Check **TaskList tool** briefly — if this idea exists as a task, acknowledge it
-- Note similar features that already exist — you'll reference these in questions
-- Identify project type (TypeScript/Python/Go) for later reviewer selection
+**Use Glob tool:** `docs/solutions/**/*.md` — find past solutions that might be relevant
 
-This context-gathering should be **fast and invisible**. Don't dump findings on the user. Use them to ask better questions.
-
-**Then start the conversation.** If the user already described their idea in the initial prompt, skip straight to your first clarifying question. Otherwise, ask them to describe it — this is the ONE exception where a plain text prompt ("Tell me what you're thinking.") is acceptable since you're just opening the floor.
-
-**Wait for their response. Then ask ONE clarifying question using `AskUserQuestion`.**
-
-The first question should show you understand the codebase. Examples:
-- "I see you have [existing feature]. Is this related, or completely separate?"
-- "The current architecture uses [pattern]. Should this follow that, or is there a reason to diverge?"
-- "There's already [similar thing]. Should we extend it or build fresh?"
-
-## Understanding the Idea
-
-Ask questions **one at a time using the AskUserQuestion tool**. Pick the most important unknown and ask about it. Then wait. Then ask the next one.
-
-Example topics to explore (one per message):
-- Purpose: "What problem does this solve?"
-- Users: "Who uses this?"
-- Scope: "What's the simplest version that's useful?"
-- Constraints: "What's explicitly out of scope?"
-- Success: "How will you know it's working?"
-
-**Always use AskUserQuestion with concrete options when possible:**
+**Spawn Explore agent for codebase understanding (in parallel):**
 ```
-AskUserQuestion:
-  question: "Which of these matters most for v1?"
-  header: "Priority"
-  options:
-    - label: "Speed of implementation"
-      description: "Get it shipped fast, iterate later"
-    - label: "Flexibility for future changes"
-      description: "More upfront design for extensibility"
-    - label: "Perfect UX"
-      description: "Polish the experience before shipping"
+Task Explore model: haiku: "Analyze codebase structure, key patterns, and conventions.
+Focus on: architecture patterns, component organization, state management,
+testing approach, and any similar features that already exist.
+
+Structure your findings as:
+## Architecture Patterns
+- Pattern with `file:line` reference
+
+## Existing Similar Features
+- Feature and where it lives
+
+## Essential Files for This Feature
+List 5-10 files most critical to understand before implementing:
+- `file.ts` — why it matters for this feature
+"
 ```
 
-**Keep going until you can explain the idea in one sentence.** Don't rush to propose solutions. Understanding first.
+**If extending existing feature, also spawn:**
+```
+Task git-history-analyzer model: haiku: "Analyze git history for [related files/feature].
+Look for: why patterns exist, key contributors, evolution of approach,
+any gotchas or issues that were fixed."
+```
+
+**While agents run, gather basics:**
+- Identify project type (TypeScript/Python/Go) for reviewer selection
+- Note any obvious constraints from project structure
+
+**When Explore completes:**
+- Review findings for relevant patterns
+- Note what can be reused vs. built fresh
+- Identify any constraints that affect design
+- **Share the Essential Files list with user** — these are required reading before implementation
+
+**Understand the idea:**
+- Ask questions **one at a time** to refine understanding
+- Prefer multiple choice questions when possible
+- Focus on: purpose, constraints, success criteria, scope boundaries
 
 <conversation_flow>
 **When to dig deeper:**
@@ -160,49 +162,51 @@ If user picks "Not sure", follow up with one of:
 - "What's the smallest version that would be useful?"
 - "If we had to ship in a day, what would we cut?"
 - "Which part solves the core problem?"
-
-**Why do this now:** Scope creep is easier to catch before any design work begins. Once you've invested in detailed approaches, it's harder to cut scope without feeling like wasted effort.
 </scope_check>
 
 <reference_capture>
-**As you talk, capture reference materials:**
+**Capture all reference materials as they're shared:**
 
 When user shares a **Figma link**:
-1. Extract fileKey and nodeId from URL
-2. Fetch context: `mcp__figma__get_design_context` and `mcp__figma__get_screenshot`
-3. Save screenshot to `docs/plans/assets/YYYY-MM-DD-<topic>/`
-4. Note in design doc under "## Reference Materials"
+1. Immediately extract and store: `figma_url: [full URL]`
+2. Extract fileKey and nodeId from URL
+3. Fetch design context:
+   ```
+   mcp__figma__get_design_context: fileKey, nodeId
+   mcp__figma__get_screenshot: fileKey, nodeId
+   ```
+4. Save screenshot to `docs/plans/assets/YYYY-MM-DD-<topic>/figma-[node-id].png`
+5. Include in design doc under "## Reference Materials"
 
-When user shares **any link or image**:
-1. Acknowledge it
-2. Note URL/description for the design doc
-3. Ask user to save important images to `docs/plans/assets/` if needed
+When user shares **any image**:
+1. Note the image was shared (can't be persisted, but acknowledge)
+2. Describe what the image shows in the design doc
+3. Ask user to save important images to `docs/plans/assets/` manually
 
-**Why capture immediately:** Links shared in conversation are lost when session ends. The design doc becomes the single source of truth.
+When user shares **external links** (docs, examples, inspiration):
+1. Capture URL and brief description
+2. Include in design doc under "## Reference Materials"
+
+**Why capture immediately:**
+- Links shared in conversation are lost when session ends
+- Implementation may happen in different session/worktree
+- Design doc becomes single source of truth
 </reference_capture>
 
 **Decision gate:**
-When you feel you understand, check:
-"I think I understand: [one sentence summary]. Ready for me to propose some approaches, or should we clarify more?"
+After 3-5 questions, ask:
+"I think I understand. Ready for me to propose approaches, or do you want to clarify more?"
 
-## Exploring Approaches
+## Phase 2: Approach Exploration
 
 **Propose 2-3 approaches with trade-offs:**
+- Lead with your recommendation
+- Explain why you recommend it
+- Show what you'd lose with each alternative
+- Keep it conversational, not a formal document
 
-Lead with your recommendation and explain why:
-"I'd recommend Option A because [reason]. Here's what we'd lose with the alternatives..."
-
-For each option:
-- What you gain
-- What you lose
-- Why you do or don't recommend it
-
-**Keep it conversational.** This isn't a formal document yet.
-
-**Ask which direction appeals to them.** Listen to their reasoning — they have context you don't.
-
-<early_review>
-**Once they've chosen an approach, offer a quick sanity check via `AskUserQuestion`:**
+**Quick validation checkpoint:**
+Once the user has chosen an approach, offer a sanity check via `AskUserQuestion`:
 
 ```
 AskUserQuestion:
@@ -215,91 +219,173 @@ AskUserQuestion:
       description: "Move straight to detailed design"
 ```
 
-**Why now, not later:** Catching architectural issues before investing in detailed design saves significant rework. A 2-minute review now can prevent a 20-minute redesign later.
+**Why now, not later:** Catching architectural issues before investing in detailed design saves significant rework.
 
 **If yes:**
-- Spawn 2-3 reviewers based on project type:
-  - TypeScript/React: architecture-engineer, simplicity-engineer
-  - Python: architecture-engineer, simplicity-engineer
-  - General: architecture-engineer, security-engineer
+- Spawn 2-3 reviewers based on project type (architecture-engineer, simplicity-engineer, security-engineer as relevant)
 - Focus review on: "Is this approach sound for the problem stated?"
 - Transform findings into questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`)
 - Walk through **one at a time**: "Looking at the approach, one reviewer asked: [question]. What do you think?"
 
-**If no:** Move straight to detailed design. User can always request review later.
-</early_review>
+**If no:** Move straight to detailed design.
 
-## Presenting the Design
+## Phase 3: Incremental Design with Micro-Reviews
 
-Once you've agreed on an approach, present the design **in 200-300 word sections**.
+**Present design in 200-300 word sections:**
 
-After each section, ask: "Does this look right? Anything here we could simplify or defer to v2?"
+For each major section:
+1. Write the section (data model, API design, component structure, etc.)
+2. Ask: "Does this look right so far?"
+3. If user approves, continue
+4. If user has concerns, address them before moving on
 
-If they have concerns → address them before continuing.
-If they want to simplify → discuss what to cut and update the section.
-If they approve → move to the next section.
+**Micro-reviews (optional, for complex sections):**
+After completing a major section that warrants it:
+- Data model → spawn data-engineer for quick review
+- API design → spawn architecture-engineer for quick review
+- Security-sensitive → spawn security-engineer for quick review
 
-**Why ask about simplification per-section:** Complexity is easier to cut before you've built a whole design around it. Each section is a chance to question whether every piece earns its place.
+Present micro-review findings immediately. Incorporate feedback before next section.
 
-**Sections to cover (as relevant):**
+**Sections to cover:**
 - Problem statement / user story
 - High-level approach
+- **UI wireframes (ASCII)** - if any UI involved
 - Data model (if applicable)
 - Component/module structure
 - API surface (if applicable)
 - Error handling strategy
 - Testing approach
 
-<ui_design>
-**For UI work, establish aesthetic direction FIRST:**
+<ui_wireframes>
+**For any UI work, establish aesthetic direction BEFORE wireframes.**
 
-Ask (one at a time, each using `AskUserQuestion`):
-1. "What tone fits this UI?" — options: minimal, bold, playful, editorial (+ Other)
-2. "What should be memorable about this?" — options: animation, typography, layout, a specific interaction
-3. "Any existing brand/style to match, or fresh start?" — options: match existing brand, fresh start
+See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for full principles.
+
+<aesthetic_direction>
+**Ask the user (one at a time):**
+
+1. "What tone fits this UI?"
+   - Offer options: minimal, bold/maximalist, playful, editorial, luxury, brutalist, retro, organic
+   - Or ask them to describe the feeling they want
+
+2. "What should be memorable about this?"
+   - The animation? The typography? The layout? A specific interaction?
+
+3. "Any existing brand/style to match, or fresh start?"
+
+**Capture decisions:**
+```markdown
+## Aesthetic Direction
+- **Tone**: [chosen direction]
+- **Memorable element**: [what stands out]
+- **Typography**: [display font] + [body font] (avoid Roboto/Arial/system-ui)
+- **Color strategy**: [approach - NOT purple gradients on white]
+- **Motion**: [where animation matters most]
+```
+</aesthetic_direction>
 
 **Then create ASCII wireframes:**
 
 See `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md` for patterns.
 
+**Why ASCII:**
+- Forces thinking about layout and flow
+- Easy to iterate in conversation
+- No tooling required
+- Captures structure before aesthetics
+
+**What to include:**
+- Key screens/states
+- Component hierarchy
+- Interactive elements
+- Loading/error/empty states
+- Notes on where motion/memorable elements appear
+
+**Example with aesthetic notes:**
 ```
 ┌─────────────────────────────────────┐
 │  Logo        [Search...]    [Menu]  │  ← subtle hover animations
 ├─────────────────────────────────────┤
 │                                     │
-│  ┌─────────┐  ┌─────────┐          │  ← staggered fade-in
+│  ┌─────────┐  ┌─────────┐          │  ← staggered fade-in on load
 │  │  Card   │  │  Card   │  ...     │
+│  │  -----  │  │  -----  │          │
+│  │  desc   │  │  desc   │          │
 │  └─────────┘  └─────────┘          │
 │                                     │
 │  [Load More]                        │  ← satisfying click feedback
 └─────────────────────────────────────┘
 ```
 
-Include: key screens, component hierarchy, interactive elements, loading/error/empty states.
+Ask: "Does this layout and aesthetic direction feel right?"
+</ui_wireframes>
 
-Ask: "Does this layout feel right?"
-</ui_design>
+## Phase 4: Collaborative Simplification
 
-## Finalization
+**The same Socratic dialogue that built the design now simplifies it.**
 
-**Write the design doc:**
-Location: `docs/plans/YYYY-MM-DD-<topic>-design.md`
+Run parallel expert review to gather raw input:
 
+**Detect project type and select reviewers** (see SKILL.md `<reviewer_selection>`).
+
+Use Task tool to spawn 3 reviewer agents in parallel:
+```
+Task: "Review this design plan for [specific concerns based on reviewer specialty]"
+Subagent: [appropriate agent from reviewer_selection]
+```
+
+**Transform findings into collaborative questions:**
+
+See `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md` for the Socratic approach.
+
+Instead of presenting reviewer critiques:
+- Turn findings into exploratory questions
+- Same collaborative spirit as the design phase
+- "What if we..." not "You should..."
+
+**Example transformations:**
+- Reviewer: "Remove the caching layer"
+  → "Do we need caching in v1, or could we add it when we see performance issues?"
+- Reviewer: "This is overengineered"
+  → "We have three layers here. What if we started with one?"
+- Reviewer: "Premature abstraction"
+  → "We're building for flexibility we might not need. What if we hardcoded it for now?"
+
+**Walk through together:**
+Present questions one at a time. Listen to reasoning. If user wants to keep something, they probably have context the reviewer doesn't.
+
+**Track decisions:**
+- Note what was simplified and why
+- Note what was kept and why
+- Both inform the final design doc
+
+## Phase 5: Finalization
+
+**Write the validated design:**
+- Location: `docs/plans/YYYY-MM-DD-<topic>-design.md`
+- Include:
+  - **Reference Materials** section (Figma links, screenshots, external docs)
+  - ASCII UI wireframes
+  - Reviewer sign-off summary
+  - Any open questions
+
+**Design doc template:**
 ```markdown
 # [Feature Name] Design
 
 ## Reference Materials
 - Figma: [URL] (screenshot: `./assets/figma-*.png`)
-- [Any other links shared]
+- [Any other links/docs shared]
 
 ## Problem Statement
-[One paragraph]
-
-## Approach
-[What we're building and why]
+...
 
 ## UI Wireframes
-[ASCII wireframes if applicable]
+[ASCII wireframes here]
+
+## Approach
+...
 
 ## Design Decisions
 | Decision | Rationale |
@@ -307,69 +393,72 @@ Location: `docs/plans/YYYY-MM-DD-<topic>-design.md`
 | ... | ... |
 
 ## Open Questions
-- [Anything still unresolved]
+- ...
 ```
 
-**Commit the design to main:**
+**Commit the design:**
 ```bash
 git add docs/plans/
 git commit -m "docs: add <topic> design plan"
 ```
 
-The design doc stays on main — it's the canonical "what we're building."
+**What's next — the full arc:**
 
-## What Happens Next
-
-**Present the options clearly:**
-
-"Design committed. What would you like to do next?
-
-**Option A: Review the design** (Recommended)
-- Expert reviewers validate your design before you invest in planning
-- Catches architectural issues early when they're cheapest to fix
-
-**Option B: Create implementation plan**
-- I'll set up a worktree for isolated development
-- Then create a detailed plan with exact file paths and TDD tasks
-
-**Option C: Done for now**
-- Design is saved — return later with `/arc:review` to review, `/arc:detail` to plan, then `/arc:implement` to execute"
-
-**Use AskUserQuestion tool:**
 ```
-Question: "How would you like to proceed?"
-Header: "Next step"
-Options:
-  1. "Review the design" (Recommended) — Expert reviewers validate before planning
-  2. "Create implementation plan" — Worktree + detailed TDD plan before coding
-  3. "Done for now" — Keep just the design, continue later
+/arc:ideate     → Design doc (on main) ✓ YOU ARE HERE
+     ↓
+[Create worktree for feature branch]
+     ↓
+/arc:implement  → Plan + Execute (in worktree)
+     ↓
+/arc:review     → Review (optional, can run anytime)
 ```
 
-<next_step_routing>
-**IMPORTANT: Do NOT automatically invoke skills. Wait for the user to choose, then perform the setup steps only.**
+**Why this order:**
+- Design doc stays on main — it's the canonical "what we're building"
+- Implementation happens in worktree — keeps main clean
+- /arc:implement creates the implementation plan, then executes it
 
-**If Option 1 (review the design):**
-- **STOP.** Tell the user: "Run `/arc:review` to have expert reviewers validate the design before planning."
+**Present to user:**
+```
+"Design committed to main. Ready to continue?
 
-**If Option 2 (implementation plan):**
-1. Create worktree: follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
-2. Branch name: `feature/<topic-slug>`
-3. Copy design doc to worktree: `docs/plans/`
-4. **STOP.** Tell the user: "Worktree ready. Run `/arc:detail` to create the implementation plan."
-5. Do NOT invoke `/arc:detail` yourself — wait for the user to do so.
+The next step is implementation. I recommend setting up a worktree first."
+```
 
-**If Option 3 (done for now):**
-- Design is complete and committed
-- **STOP.** Tell the user they can return later with `/arc:review` to review, `/arc:detail` to plan, then `/arc:implement` to execute
-</next_step_routing>
+**Options:**
+1. **Set up worktree → implement** (Recommended)
+2. **Implement on current branch** (skip worktree)
+3. **Done for now** — just the design
+
+**If setting up worktree (option 1):**
+1. Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
+2. Create branch: `feature/<topic-slug>`
+3. Run project setup (auto-detect from package.json, Cargo.toml, etc.)
+4. Verify clean baseline (tests pass)
+5. Route to `/arc:implement` to plan and build
+
+**If skipping worktree (option 2):**
+- Route to `/arc:implement` directly
 </process>
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+<progress_append>
+After completing the design, append to progress journal:
 
-Entry: `/arc:ideate — [Feature name] design complete`
-</arc_log>
+```markdown
+## YYYY-MM-DD HH:MM — /arc:ideate
+**Task:** [Feature name/description]
+**Outcome:** Complete
+**Files:** docs/plans/YYYY-MM-DD-[topic]-design.md
+**Decisions:**
+- Approach: [chosen approach]
+- [Key decision 1]
+- [Key decision 2]
+**Next:** /arc:implement
+
+---
+```
+</progress_append>
 
 <spec_flow_analysis>
 After the design document is written and committed, offer optional user flow analysis:
@@ -388,12 +477,13 @@ This step is optional — skip if the user declines or wants to move straight to
 
 <success_criteria>
 Design is complete when:
-- [ ] User's idea is fully understood (you can explain it in one sentence)
-- [ ] Scope clarified before proposing solutions
+- [ ] User's idea is fully understood (no ambiguity)
 - [ ] 2-3 approaches were considered, trade-offs explained
-- [ ] Approach sanity-checked (if user opted for early review)
-- [ ] Design presented in sections, each validated with simplification check
+- [ ] ASCII UI wireframes created (if UI involved)
+- [ ] Design presented in sections, each validated by user
+- [ ] Expert review completed, findings discussed collaboratively
 - [ ] Design document written and committed to main
-- [ ] User chose next step (plan in worktree, build directly, or done)
-- [ ] If continuing: worktree created and routed to appropriate skill
+- [ ] Full arc presented (ideate → worktree → detail → review → implement)
+- [ ] User chose next step (worktree setup, direct to detail, or done)
+- [ ] Progress journal updated
 </success_criteria>

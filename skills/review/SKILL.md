@@ -317,21 +317,19 @@ If plan came from a file:
 - [Any unresolved items]
 ```
 
-**Show remaining arc (if reviewing implementation plan):**
+**Show remaining arc:**
 ```
 /arc:ideate     → Design doc (on main) ✓
      ↓
-/arc:detail     → Implementation plan ✓
+/arc:review     → Review ✓ YOU ARE HERE
      ↓
-/arc:review     → Review implementation plan ✓ YOU ARE HERE
-     ↓
-/arc:implement  → Execute task-by-task
+/arc:implement  → Plan + Execute task-by-task
 ```
 
 **Offer next steps based on what was reviewed:**
 
 If reviewed a **design doc**:
-- "Ready to create an implementation plan?" → `/arc:detail`
+- "Ready to implement?" → `/arc:implement` (which will create the plan internally)
 - "Done for now" → end
 
 If reviewed an **implementation plan**:

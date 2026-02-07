@@ -1,5 +1,5 @@
 ---
-name: start
+name: go
 description: |
   The main entry point. Understands your codebase and routes to the right workflow.
   Use when starting a session, saying "let's work on something", or unsure which
@@ -9,19 +9,19 @@ metadata:
   author: howells
 website:
   order: 1
-  desc: Start here
-  summary: Start here—whether it's an empty folder or an existing codebase. Arc understands your context and guides you to what's next.
+  desc: Main entry point
+  summary: The front door to Arc. Understands your codebase, checks Linear for active issues, and routes you to the right workflow.
   what: |
-    Arc works in an empty folder or a mature codebase. It gathers context (or notes the absence of it), then kicks off an interactive process to figure out what you're building and how to get there. You'll end up in the right workflow—vision for new projects, ideate for new features, implement for existing plans.
+    Go explores your codebase to understand what you're working with, checks Linear for active issues (if MCP available), reads recent progress, and asks what you want to do. Based on your answer, it routes you to the appropriate Arc command—ideate for new features, implement for execution, suggest if you're unsure.
   why: |
-    Starting is the hardest part. Arc removes the "where do I begin?" paralysis by meeting you where you are—blank slate or legacy monolith—and guiding you forward through conversation.
+    Starting is the hardest part. Go gives you context immediately and asks one focused question: what do you want to work on? No need to remember which Arc command does what.
   decisions:
-    - Works with nothing. An empty folder is a valid starting point.
-    - Interactive, not prescriptive. Asks what you want to build rather than assuming.
-    - Context-aware routing. Existing plans, tasklists, and code inform the recommendation.
+    - Codebase exploration first. Knows your stack before asking questions.
+    - Linear integration. Shows active issues if Linear MCP is available.
+    - Routes, doesn't replace. Points you to the right command, then gets out of the way.
 ---
 
-# /arc:start
+# /arc:go
 
 The front door to Arc. Understands context, asks what you want to do, routes to the right workflow.
 
@@ -44,12 +44,12 @@ Keep it brief — 5-10 bullet points max."
 ls docs/vision.md docs/plans/*.md 2>/dev/null | head -10
 ```
 
-**Check for existing tasks:**
-Use **TaskList tool** to see if there are pending tasks.
+**Check Linear (if MCP available):**
+If `mcp__linear__*` tools exist, check for active issues.
 
-**Read activity log for recent work:**
+**Read progress journal for recent work:**
 ```bash
-head -50 .arc/log.md 2>/dev/null
+head -50 docs/progress.md 2>/dev/null
 ```
 
 ### Step 2: Present Context
@@ -57,14 +57,14 @@ head -50 .arc/log.md 2>/dev/null
 Briefly share what you found:
 - Project type and key patterns
 - Any existing plans or tasks
-- Recent work from activity log (if found)
+- Recent work from progress journal (if found)
 
 ### Step 3: Ask What They Want to Do
 
 Present options based on context:
 
-**If pending tasks exist:**
-"You have [N] pending tasks. Want to:"
+**If Linear has active issues:**
+"You have [N] active issues in Linear. Want to:"
 1. Work on one of those
 2. Start something new
 3. See suggestions (/arc:suggest)
@@ -87,20 +87,20 @@ Based on their answer:
 | Intent | Route to |
 |--------|----------|
 | "I want to build [feature]" | /arc:ideate |
-| "Quick fix/small change" | /arc:ideate |
-| "Continue [existing plan]" | /arc:implement or /arc:detail |
+| "Quick fix/small change" | /arc:build |
+| "Continue [existing plan]" | /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
-| "Review/improve existing code" | /arc:audit --deslop or /arc:review |
+| "Review/improve existing code" | /arc:audit or /arc:review |
 | "Make it responsive/fix mobile" | /arc:responsive |
 | "Ship to production" | /arc:letsgo |
-| "Run tests" | /arc:test |
+| "Run tests" | /arc:testing |
 
 **Invoke the skill:**
 ```
 Skill arc:[chosen]: "[user's description]"
 ```
 
-## What /arc:start is NOT
+## What /arc:go is NOT
 
 - Not a replacement for specific commands — it routes TO them
 - Not for when you already know what command to use
@@ -109,5 +109,5 @@ Skill arc:[chosen]: "[user's description]"
 ## Interop
 
 - Routes to all other /arc:* commands
-- Reads TaskList, /arc:vision, .arc/log.md for context
+- Reads Linear issues (if MCP available), /arc:vision, progress for context
 - Uses /arc:suggest when user is unsure

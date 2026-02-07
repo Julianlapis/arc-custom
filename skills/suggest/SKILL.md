@@ -1,7 +1,7 @@
 ---
 name: suggest
 description: |
-  Opinionated recommendations for what to work on next based on existing tasks and codebase.
+  Opinionated recommendations for what to work on next based on Linear issues, tasks, and codebase.
   Use when asked "what should I work on", "what's next", "suggest priorities",
   or when starting a session and unsure where to begin.
 license: MIT
@@ -16,7 +16,7 @@ website:
   why: |
     Starting is the hardest part. When you sit down with an hour to code, decision fatigue can burn half of it. Suggest removes the "what should I work on?" loop.
   decisions:
-    - "Priority cascade: Tasklist first, codebase issues second, vision gaps third, discovery fourth."
+    - "Priority cascade: Linear issues first, tasks second, codebase issues third, vision gaps fourth, discovery fifth."
     - Opinionated, not neutral. It picks winners and says why.
     - One click to act. Each suggestion includes the exact command to run.
     - Discovery mode researches externally — market trends, competitors, emerging tech — and proposes new features.
@@ -30,18 +30,33 @@ Check what was recently worked on to avoid re-suggesting completed work.
 
 # Suggest Workflow
 
-Analyze tasks, codebase, and vision to give opinionated recommendations for what to work on next.
+Analyze Linear issues, tasks, codebase, and vision to give opinionated recommendations for what to work on next.
 
 ## Priority Cascade
 
-1. **Existing tasks** (highest priority) — Already noted, most immediate
-2. **Codebase issues** — Technical debt, gaps, patterns
-3. **Vision gaps** — Goals not yet implemented
-4. **Discovery** (lowest priority, opt-in) — New feature ideas from external research
+1. **Linear issues** (highest priority, if MCP available) — Already triaged, most immediate
+2. **Existing tasks** — Already noted, pending action
+3. **Codebase issues** — Technical debt, gaps, patterns
+4. **Vision gaps** — Goals not yet implemented
+5. **Discovery** (lowest priority, opt-in) — New feature ideas from external research
 
 ## Process
 
-### Step 1: Check Tasks
+### Step 1: Check Linear (if available)
+
+**Check for Linear MCP:**
+Look for `mcp__linear__*` tools in available tools.
+
+**If Linear MCP available:**
+```
+mcp__linear__list_issues: { filter: { state: { type: { in: ["started", "unstarted"] } } }, first: 10 }
+```
+
+Prioritize issues marked as high priority or in current cycle.
+
+**If Linear not available:** Check TaskList.
+
+### Step 1b: Check Tasks
 
 **Use TaskList tool** to check for existing tasks.
 
@@ -64,7 +79,7 @@ Prioritize by impact."
 
 ### Step 3: Read Vision (if needed)
 
-Only if no tasks exist AND codebase analysis found nothing urgent:
+Only if no Linear issues/tasks exist AND codebase analysis found nothing urgent:
 
 **Use Read tool:** `docs/vision.md`
 
@@ -175,6 +190,10 @@ If user picks one, invoke the relevant command.
 
 ## Suggestion Categories
 
+**From Linear:**
+- "High priority: [issue title] — ready to tackle it?"
+- "Current cycle has [N] issues — start with [X]?"
+
 **From Tasks:**
 - "You noted [X] — ready to tackle it?"
 
@@ -195,7 +214,7 @@ If user picks one, invoke the relevant command.
 ## What Suggest is NOT
 
 - Not a code review (use /arc:audit or /arc:review)
-- Not a test runner (use /arc:test)
+- Not a test runner (use /arc:testing)
 - Not a planner (use /arc:ideate)
 
 It's a compass, not a map. Discovery mode just points the compass outward.

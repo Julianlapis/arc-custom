@@ -38,6 +38,26 @@ Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cut
 
 ---
 
+## Agents
+
+**This skill works with these agents (reuse, don't duplicate):**
+
+| Agent | Location | When to Use |
+|-------|----------|-------------|
+| `ui-builder` | agents/build/ | Build UI from the change spec you create |
+| `figma-builder` | agents/build/ | Build UI when Figma URL is provided |
+| `design-specifier` | agents/build/ | Quick design decisions during implement (empty states, dropdowns) |
+| `designer` | agents/review/ | Review implemented UI for AI slop |
+
+**Workflow:**
+```
+/arc:design (this skill)
+     ↓ creates change spec
+ui-builder or figma-builder (builds it)
+     ↓ implements
+designer (reviews for AI slop)
+```
+
 ## Phase 0: Load References (MANDATORY)
 
 **You MUST read these files before proceeding. Do not skip this step.**
@@ -355,6 +375,56 @@ Beyond basic layout, make deliberate choices about:
 **If App UI mode:** You MUST include at least one state variant beyond the populated state (empty, loading, or error). App UI without state design is incomplete.
 
 **Ask:** "Does this layout feel right before I continue?"
+
+---
+
+## Phase 5.5: Create Change Spec
+
+**THIS IS CRITICAL.** Translate aesthetic direction into **specific, measurable changes**:
+
+```markdown
+## Change Spec
+
+### Typography
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| h1 | 24px Inter regular | 48px Instrument Serif bold | typography.md: display hierarchy |
+| body | 14px system-ui | 16px/1.6 DM Sans | typography.md: body readability |
+
+### Colors
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| background | white #fff | warm off-white #faf9f7 | colors.md: warmth |
+| accent | none | coral #ff6b4a | colors.md: accent strategy |
+
+### Spacing
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| section padding | p-4 (16px) | p-12 (48px) | spacing.md: generous whitespace |
+
+### Layout
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| hero | centered text | asymmetric split with image overlap | layout.md: break the grid |
+
+### Motion (if applicable)
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| page load | none | staggered fade-up, 50ms delay | animation.md: entrance sequence |
+```
+
+**Rules for change specs:**
+- Every change references a rule from the interface rules
+- Changes must be **substantial**, not tweaks
+- Specific values, not vague descriptions
+
+**Self-check:**
+- [ ] At least 3 typography changes?
+- [ ] Color palette actually different?
+- [ ] Spacing significantly adjusted?
+- [ ] Memorable element clearly identified and designed?
+
+**If you're only changing padding values, STOP. That's not a redesign.**
 
 ---
 
