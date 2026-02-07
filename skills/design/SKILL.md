@@ -85,6 +85,7 @@ designer (reviews for AI slop)
 
 - **Dev server running** — Verify changes visually as you work
 - **Browser tool available** — For mandatory screenshots
+- **Figma MCP (optional)** — If implementing from Figma designs, use the Figma MCP to extract specs (colors, typography, spacing, shadows). See: https://github.com/figma/figma-mcp
 
 <browser_tools>
 **Use ONE of these for screenshots (in order of preference):**
