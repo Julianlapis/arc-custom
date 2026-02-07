@@ -85,6 +85,55 @@ pnpm vitest run --coverage
 ```
 </vitest_patterns>
 
+<vitest_gotchas>
+## vi.mock() Hoisting
+
+vi.mock() is hoisted above imports. Variables declared before the mock call aren't available inside it:
+
+```typescript
+// ❌ BROKEN — mockFn doesn't exist when vi.mock runs
+const mockFn = vi.fn();
+vi.mock("./module", () => ({ doThing: mockFn }));
+
+// ✅ CORRECT — use vi.hoisted() for variables used in mocks
+const { mockFn } = vi.hoisted(() => ({ mockFn: vi.fn() }));
+vi.mock("./module", () => ({ doThing: mockFn }));
+```
+
+## Async False Positives
+
+Forgetting to `await` an async assertion silently passes:
+
+```typescript
+// ❌ BROKEN — test passes even if assertion would fail
+it("should reject", () => {
+  expect(asyncFn()).rejects.toThrow(); // missing await!
+});
+
+// ✅ CORRECT
+it("should reject", async () => {
+  await expect(asyncFn()).rejects.toThrow();
+});
+```
+
+## Fake Timers
+
+```typescript
+import { vi, beforeEach, afterEach } from "vitest";
+
+beforeEach(() => { vi.useFakeTimers(); });
+afterEach(() => { vi.useRealTimers(); });
+
+it("should debounce", () => {
+  const fn = vi.fn();
+  const debounced = debounce(fn, 300);
+  debounced();
+  vi.advanceTimersByTime(300);
+  expect(fn).toHaveBeenCalledOnce();
+});
+```
+</vitest_gotchas>
+
 <playwright_patterns>
 **File naming:** `[name].spec.ts`
 
@@ -153,6 +202,53 @@ pnpm playwright test --debug
 pnpm playwright codegen http://localhost:3000
 ```
 </playwright_patterns>
+
+<playwright_gotchas>
+## Next.js Hydration
+
+In Next.js apps, the server-rendered HTML is visible before client-side JavaScript hydrates event handlers. Clicking before hydration completes causes missed interactions:
+
+```typescript
+// ✅ Wait for a known interactive element before interacting
+await page.goto("/dashboard");
+await page.waitForFunction(() => document.readyState === "complete");
+// Or wait for a specific interactive element:
+await expect(page.getByRole("button", { name: "Save" })).toBeEnabled();
+```
+
+## Trace Viewer for CI
+
+Enable traces for failed tests in CI — shows timeline, screenshots, DOM snapshots, and network:
+
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  use: {
+    trace: "on-first-retry", // or "on" for all
+  },
+});
+```
+
+```bash
+# View traces locally
+npx playwright show-trace test-results/trace.zip
+```
+
+## API Auth (Fast Setup)
+
+Authenticate via API in globalSetup instead of UI login (~100ms vs 2-5s):
+
+```typescript
+// tests/auth.setup.ts
+setup("authenticate", async ({ request }) => {
+  const response = await request.post("/api/auth/test-login", {
+    data: { email: process.env.TEST_USER_EMAIL },
+  });
+  // Save cookies for workers
+  await request.storageState({ path: authFile });
+});
+```
+</playwright_gotchas>
 
 <tdd_cycle>
 **Red-Green-Refactor:**

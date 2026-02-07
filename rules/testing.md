@@ -22,6 +22,17 @@
 - SHOULD: Use Browser Mode (`@vitest/browser-playwright`) for component tests that need a real DOM.
 - SHOULD: Use `expect.element()` with `toBeInViewport()` for visibility assertions in browser mode.
 
+### Vitest Gotchas
+
+- MUST: Always `await` or `return` promises in tests. Forgetting causes tests to exit before assertions run (silent false pass).
+- MUST: Use `vi.hoisted()` for variables referenced inside `vi.mock()` — mock calls are hoisted above imports, so normal `const` declarations aren't available yet.
+- MUST: Use `vi.mocked(fn)` to access mock methods with full TypeScript types instead of casting.
+- SHOULD: Use `happy-dom` over `jsdom` for component tests — significantly faster, sufficient for most cases.
+- SHOULD: Use `vi.useFakeTimers()` for time-dependent code (debounce, throttle, setTimeout). Call `vi.useRealTimers()` in `afterEach`.
+- SHOULD: Use `expect.assertions(N)` in async tests to catch cases where assertions never execute.
+- SHOULD: Use `// @vitest-environment jsdom` comment to override environment per file when most tests use `node`.
+- SHOULD: Use `--shard=1/N` in CI to distribute tests across parallel runners.
+
 ## Playwright
 
 - MUST: Use `data-testid` attributes for E2E selectors.
@@ -29,6 +40,16 @@
 - NEVER: Select by text content, CSS classes, or DOM structure — these change frequently.
 - SHOULD: Use semantic locators (`getByRole`, `getByLabel`) for accessible elements.
 - SHOULD: Prefix child element test IDs with the parent component name.
+
+### Playwright Gotchas
+
+- MUST: Wait for hydration before interacting in Next.js apps. Clicking before hydration completes causes missed event handlers. Use `page.waitForFunction(() => document.readyState === 'complete')` or wait for a known interactive element.
+- MUST: Use `--trace on` in CI for failed test debugging. Trace viewer shows timeline, screenshots, DOM snapshots, and network — essential for diagnosing CI-only failures.
+- SHOULD: Authenticate via API calls in `globalSetup`, not UI login flows. API auth takes ~100ms vs 2-5s for UI login per worker.
+- SHOULD: Store auth state with `storageState` and load it per worker for parallel test isolation.
+- SHOULD: Use `--shard=1/N` to distribute E2E tests across CI machines.
+- SHOULD: Block unnecessary requests (analytics, tracking pixels, images) with `page.route()` + `route.abort()` to speed up tests.
+- SHOULD: Use `expect.soft()` for non-blocking assertions when you want to collect multiple failures in one run.
 
 ## E2E with External APIs
 

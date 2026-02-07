@@ -338,3 +338,10 @@ pnpm playwright test tests/feature.spec.ts
 - Never hardcode secrets — use env vars
 - Test both success and error paths
 - Keep tests independent (no shared state)
+
+## Critical Gotchas
+
+- **Next.js hydration**: Always wait for hydration before clicking. Server-rendered HTML is visible before event handlers attach. Use `page.waitForFunction(() => document.readyState === 'complete')` or wait for a specific interactive element.
+- **Auth via API**: Use API-based auth in setup (~100ms) instead of UI login flows (~2-5s per worker).
+- **Trace viewer**: Enable `trace: "on-first-retry"` in config for CI debugging.
+- **Block unnecessary requests**: Speed up tests by aborting analytics/tracking: `page.route('**/*analytics*', route => route.abort())`.

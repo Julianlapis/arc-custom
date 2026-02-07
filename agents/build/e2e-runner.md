@@ -64,6 +64,12 @@ You run Playwright E2E tests, diagnose failures, and fix them systematically. Yo
    - Apply fix
    - Re-run to verify
 
+   **If running in CI or debugging flaky failures:**
+   ```bash
+   pnpm playwright test --trace on
+   npx playwright show-trace test-results/trace.zip
+   ```
+
 3. **Iterate** until all pass or you hit a blocker
 
 ## Failure Categories

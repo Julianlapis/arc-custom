@@ -189,3 +189,11 @@ pnpm vitest run path/to/module.test.ts
 - No `any` types in tests
 - No console.log left in tests
 - Tests must be deterministic (no random, no Date.now)
+
+## Vitest Gotchas
+
+- `vi.mock()` is hoisted above imports — use `vi.hoisted()` for variables referenced inside mocks
+- Always `await` async assertions — `expect(fn()).rejects.toThrow()` without `await` silently passes
+- Use `vi.mocked(fn)` for type-safe mock access instead of casting
+- Use `happy-dom` over `jsdom` when possible (faster, sufficient for most tests)
+- Use `vi.useFakeTimers()` for time-dependent code; call `vi.useRealTimers()` in `afterEach`
