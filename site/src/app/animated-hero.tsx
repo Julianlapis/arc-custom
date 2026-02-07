@@ -10,12 +10,19 @@ interface AnimatedHeroProps {
 export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
   const [index, setIndex] = useState(0);
 
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   useEffect(() => {
+    if (prefersReducedMotion) return;
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % commandNames.length);
+      if (document.visibilityState === "visible") {
+        setIndex((prev) => (prev + 1) % commandNames.length);
+      }
     }, 2000);
     return () => clearInterval(interval);
-  }, [commandNames.length]);
+  }, [commandNames.length, prefersReducedMotion]);
 
   return (
     <h1 className="font-mono font-normal text-4xl text-neutral-800 tracking-tight md:text-5xl">
@@ -24,10 +31,18 @@ export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
       <span className="relative inline-block min-w-[180px] md:min-w-[240px]">
         <AnimatePresence mode="wait">
           <motion.span
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: prefersReducedMotion ? 0 : 0 }}
             className="inline-block text-[var(--color-accent)]"
-            exit={{ opacity: 0, y: -10 }}
-            initial={{ opacity: 0, y: 10 }}
+            exit={
+              prefersReducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: -10 }
+            }
+            initial={
+              prefersReducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: 10 }
+            }
             key={commandNames[index]}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
