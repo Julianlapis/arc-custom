@@ -34,6 +34,10 @@ Scope: All apps and packages.
 
 ## State Management
 - MUST: URL-visible state (filters, tabs, pagination, modals) goes in search params via [nuqs](https://nuqs.dev). URL is the source of truth.
+- MUST: Wrap the app in `NuqsAdapter` (from `nuqs/adapters/next/app`). Without it, hooks silently fail.
+- MUST: In Server Components, use `createSearchParamsCache` — call `parse()` at the page level, then `get()` in nested components.
+- MUST: Use `throttleMs` on rapid-update inputs (search boxes, sliders) to avoid browser History API rate limiting.
+- SHOULD: Set `shallow: false` when URL state changes should trigger a server re-render.
 - SHOULD: Use `useState` for strictly local, ephemeral UI state.
 - SHOULD: Use Zustand stores for shared state across the app (or across non-trivial feature boundaries).
 - SHOULD: For complex component-internal sharing, provide a local Context or a local Zustand store/provider that is scoped to the component tree.
