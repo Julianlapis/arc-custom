@@ -20,7 +20,7 @@ arc/
 │   ├── legal/SKILL.md      # /arc:legal
 │   ├── review/SKILL.md     # /arc:review
 │   ├── audit/SKILL.md      # /arc:audit
-│   ├── progress/SKILL.md   # /arc:progress
+│   ├── progress/SKILL.md   # internal (progress journal)
 │   ├── tasklist/SKILL.md   # /arc:tasklist
 │   ├── document/SKILL.md   # /arc:document
 │   ├── suggest/SKILL.md    # /arc:suggest
@@ -49,7 +49,7 @@ ENTRY   /arc:arc        - Main entry point, routes to right workflow
 WHY     /arc:vision     - High-level goals
 WHAT    /arc:ideate     - From idea to design doc
 DO      /arc:implement, /arc:design, /arc:build, /arc:testing, /arc:letsgo, /arc:legal
-CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
+CROSS   /arc:review, /arc:audit, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
 TOOLS   /arc:commit, /arc:rules
 ```
 

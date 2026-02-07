@@ -30,7 +30,6 @@ DO      /arc:implement  - Plan + execute with TDD
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
         /arc:audit      - Comprehensive codebase audit (includes deslop)
-        /arc:progress   - Session journal for knowledge persistence
         /arc:tasklist   - Persistent task backlog
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations
@@ -179,7 +178,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
-| `/arc:progress` | View/manage session journal | `docs/progress.md` |
 | `/arc:tasklist` | Manage backlog | `docs/tasklist.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next | Recommendations |
