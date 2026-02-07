@@ -7,6 +7,18 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 7
+  desc: Quick build
+  summary: For small-to-medium features that don't need the full ideate → implement flow. Lightweight planning, same quality gates.
+  what: |
+    Build is for when you know what you want and just need it done—"add a logout button", "create a date picker component", "write a validation utility". It does quick planning inline, uses the same build agents as implement, and runs the same quality gates (TDD, type checks, lint). If scope creeps, it suggests switching to /arc:ideate.
+  why: |
+    Not everything needs a design doc. Build is the fast path for well-understood work. Same quality, less ceremony.
+  decisions:
+    - Scope-appropriate. For small-to-medium work only. Suggests ideate if scope is too large.
+    - Same agents as implement. Implementer, fixer, test writers—all available.
+    - Same quality gates. TDD, TypeScript, lint. No shortcuts on quality.
 ---
 
 <required_reading>

@@ -7,6 +7,18 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 1
+  desc: Main entry point
+  summary: The front door to Arc. Understands your codebase, checks Linear for active issues, and routes you to the right workflow.
+  what: |
+    Go explores your codebase to understand what you're working with, checks Linear for active issues (if MCP available), reads recent progress, and asks what you want to do. Based on your answer, it routes you to the appropriate Arc command—ideate for new features, implement for execution, suggest if you're unsure.
+  why: |
+    Starting is the hardest part. Go gives you context immediately and asks one focused question: what do you want to work on? No need to remember which Arc command does what.
+  decisions:
+    - Codebase exploration first. Knows your stack before asking questions.
+    - Linear integration. Shows active issues if Linear MCP is available.
+    - Routes, doesn't replace. Points you to the right command, then gets out of the way.
 ---
 
 # /arc:go

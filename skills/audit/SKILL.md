@@ -11,6 +11,29 @@ license: MIT
 metadata:
   author: howells
   argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--design]
+website:
+  order: 13
+  desc: Codebase audit
+  summary: Run a comprehensive audit of your entire codebase—or target a specific area. Spawns specialist reviewers and can create Linear issues from findings.
+  what: |
+    Audit spins up multiple specialist agents—security, performance, architecture, data, UI, simplicity—each analyzing your code through their lens. Run it on your whole project before launch, or target a specific path (`/arc:audit apps/api`) for focused feedback. Findings are consolidated into a report. Can create Linear issues from critical/high findings if Linear MCP is available.
+  why: |
+    A security expert misses performance issues. A performance expert misses architectural violations. Audit gives you a panel of specialists in one command—the kind of thorough review you'd want before shipping, without coordinating six different people.
+  decisions:
+    - Whole project or targeted. Run on everything, or scope to a path like `src/lib/auth`.
+    - Agents run in batches (2 at a time by default). Use `--parallel` for speed if you have resources.
+    - Focus flags available. `--security`, `--performance`, `--design`, `--deslop` for targeted audits.
+    - Linear integration. Can create issues from findings if Linear MCP is configured.
+  agents:
+    - security-engineer
+    - performance-engineer
+    - architecture-engineer
+    - daniel-product-engineer
+    - lee-nextjs-engineer
+    - senior-engineer
+    - designer
+    - data-engineer
+    - llm-engineer
 ---
 
 <required_reading>

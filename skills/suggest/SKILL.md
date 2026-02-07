@@ -7,6 +7,19 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 17
+  desc: Opinionated next steps
+  summary: Opinionated recommendations for what to work on next. Checks Linear issues, scans codebase for TODOs and tech debt, compares against vision.
+  what: |
+    Suggest checks Linear for active issues (if MCP available), scans your codebase for TODOs and technical debt, and compares against your vision doc. It synthesizes this into 3-5 ranked recommendations with clear rationale and the command to start each one.
+  why: |
+    Starting is the hardest part. When you sit down with an hour to code, decision fatigue can burn half of it. Suggest removes the "what should I work on?" loop.
+  decisions:
+    - Priority cascade. Linear issues first, codebase issues second, vision gaps third.
+    - Opinionated, not neutral. It picks winners and says why.
+    - One click to act. Each suggestion includes the exact command to run.
+    - Linear integration. Queries active issues if Linear MCP is available.
 ---
 
 <progress_context>

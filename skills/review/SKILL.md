@@ -9,6 +9,26 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 4
+  desc: Get expert eyes
+  summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Distinguishes skill recommendations from agent suggestions.
+  what: |
+    Review spins up specialized agents based on what it's looking at—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently. Output is in two sections: the skill's own recommendations (gaps it identified) and agent suggestions (presented as Socratic questions grouped by severity).
+  why: |
+    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. Strongly recommended by /arc:implement before execution—it's much cheaper to catch issues in the plan than after writing code.
+  decisions:
+    - Skill recommendations vs agent suggestions. Clear distinction between what the skill identifies and what reviewers suggest.
+    - Agent selection is dynamic. It picks reviewers based on what the code touches.
+    - Output is prioritized. Critical issues first, then warnings, then suggestions.
+  agents:
+    - security-engineer
+    - performance-engineer
+    - architecture-engineer
+    - data-engineer
+    - senior-engineer
+    - simplicity-engineer
+    - designer
 ---
 
 <required_reading>

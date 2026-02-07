@@ -8,6 +8,19 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 5
+  desc: Plan + execute
+  summary: Creates an implementation plan from your design, then executes it task by task with TDD. Tests first, then code—LLMs make this easy.
+  what: |
+    Implement reads your design doc from /arc:ideate, breaks it into ordered tasks, then executes each one. For each task: write the test, make it pass, run type checks and lint. The AI writes the tests for you—TDD used to be tedious, but LLMs make it trivial. Strongly recommends /arc:review before execution.
+  why: |
+    TDD produces better code, but developers skip it because writing tests is boring. LLMs remove that excuse. Implement enforces the discipline—test first, then code—while handling both planning and execution in one flow.
+  decisions:
+    - Planning is built in. Reads design doc and creates task breakdown automatically.
+    - Test-first is mandatory. The AI writes them, so there's no reason to skip.
+    - Quality gates after every task. TypeScript and lint errors don't accumulate.
+    - Strongly recommends review before building.
 ---
 
 <required_reading>

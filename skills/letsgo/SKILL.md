@@ -7,6 +7,18 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 11
+  desc: Pre-launch checklist
+  summary: The pre-launch checklist. Walks through domains, SEO, security headers, error pages, analytics, legal docs, and deployment—tailored to what your project actually uses.
+  what: |
+    Letsgo scans your project to understand what you're using (auth? payments? database?), then generates a tailored checklist. It covers: domain setup, DNS configuration, SSL. SEO basics—meta tags, OG images, sitemap, robots.txt. Security headers and environment variables. Error pages (404, 500). Analytics and monitoring. Legal pages (triggers /arc:legal if missing). Performance basics. For Vercel projects, it can deploy directly.
+  why: |
+    The difference between "it works on my machine" and "it works in production" is a hundred small things—DNS, headers, error pages, meta tags. Letsgo is the checklist so you don't ship with a missing favicon and broken OG images.
+  decisions:
+    - Scans your stack first. Knows if you have Stripe, auth, a database—tailors the checklist.
+    - Interactive walkthrough. One section at a time, tracks what's done.
+    - Triggers /arc:legal automatically if privacy policy or terms are missing.
 ---
 
 <progress_context>

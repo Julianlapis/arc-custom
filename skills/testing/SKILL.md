@@ -7,6 +7,24 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 10
+  desc: Run & fix tests
+  summary: Run your tests, fix failures, or create a test strategy. Supports vitest, jest, playwright—with special handling for auth testing (Clerk, WorkOS).
+  what: |
+    Testing runs your test suite and helps fix what's broken. For unit tests (vitest, jest), it's straightforward—run, read failures, fix. For e2e tests (playwright), it spawns a dedicated agent that can handle the verbose output, retry flaky tests, and work through failures methodically. Includes specialized guidance for auth testing with Clerk and WorkOS.
+  why: |
+    E2e tests are painful—slow, flaky, verbose output that fills your context. Testing handles this by running playwright in a background agent that can retry, screenshot failures, and fix issues without overwhelming your main session. Auth testing gets special treatment because mocking Clerk/WorkOS is tricky.
+  decisions:
+    - Framework detection is automatic. It finds your test config and runs the right thing.
+    - E2e tests get special treatment. Background agent handles retries and verbose output.
+    - Auth testing guidance built in. Clerk mocks, WorkOS mocks, test bypass endpoints.
+  agents:
+    - unit-test-writer
+    - integration-test-writer
+    - e2e-test-writer
+    - test-runner
+    - e2e-runner
 ---
 
 # Testing Strategy Workflow

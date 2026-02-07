@@ -7,6 +7,22 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 3
+  desc: Idea → design doc
+  summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear design doc of what to build.
+  what: |
+    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete design—user flows, data models, edge cases. Review happens throughout—scope checks early, approach validation mid-flow, simplification at every step.
+  why: |
+    Vague ideas lead to wasted code. Ideate forces you to get specific—what exactly happens when a user clicks that button?—so you're not making it up as you implement. The conversation surfaces gaps you didn't know you had.
+  decisions:
+    - Knows your codebase first. Asks informed questions, not generic ones.
+    - One question at a time. A real conversation, not a form to fill out.
+    - Output is a design doc. Implementation planning happens in /arc:implement.
+  agents:
+    - security-engineer
+    - performance-engineer
+    - architecture-engineer
 ---
 
 <required_reading>

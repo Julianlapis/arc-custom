@@ -7,6 +7,19 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  order: 8
+  desc: Visual design direction
+  summary: Establish the visual identity for your UI—colors, typography, spacing, tone. Comes with opinionated references to avoid generic AI aesthetics.
+  what: |
+    Design walks you through visual decisions: What's the tone? What makes this memorable? It produces a design direction document—color palette, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. Uses browser screenshots to verify implementation matches intent.
+  why: |
+    AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
+  decisions:
+    - Opinionated references built in. Font choices, spacing scales, animation patterns—not starting from scratch.
+    - ASCII wireframes over mockups. Version-controllable, forces focus on structure.
+    - Visual verification via screenshots. Catches when implementation drifts from intent.
+    - Figma MCP optional. Can extract specs directly from Figma if available.
 ---
 
 # Design Workflow
