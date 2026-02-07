@@ -6,6 +6,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
+
+const remarkPlugins = [remarkGfm];
+import { AGENT_CATEGORY_LABELS } from "@/lib/content";
 import type { Agent, Rule, Skill } from "./page";
 
 type DrawerContent =
@@ -20,13 +23,6 @@ interface UnifiedDrawerProps {
   onSkillClick?: (skillName: string) => void;
   onAgentClick?: (agentName: string) => void;
 }
-
-const categoryLabels: Record<Agent["category"], string> = {
-  review: "Review Agent",
-  research: "Research Agent",
-  build: "Build Agent",
-  workflow: "Workflow Agent",
-};
 
 const appleEase = {
   sheet: [0.32, 0.72, 0, 1] as const,
@@ -43,6 +39,8 @@ export function UnifiedDrawer({
 }: UnifiedDrawerProps) {
   const [showSource, setShowSource] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(null);
+  const triggerRef = useRef<HTMLElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   // Staggered close: source exits first, then preview follows
   const closeAll = useCallback(() => {
@@ -54,6 +52,28 @@ export function UnifiedDrawer({
       onOpenChange(false);
     }
   }, [showSource, onOpenChange]);
+
+  // Escape key closes drawer
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAll();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, closeAll]);
+
+  // Focus management: move focus into drawer on open, restore on close
+  useEffect(() => {
+    if (open) {
+      triggerRef.current = document.activeElement as HTMLElement;
+      // Delay to let animation start before focusing
+      const t = setTimeout(() => drawerRef.current?.focus(), 50);
+      return () => clearTimeout(t);
+    }
+    // Restore focus to trigger element on close
+    triggerRef.current?.focus();
+  }, [open]);
 
   // Reset source view when content changes or drawer closes
   useEffect(() => {
@@ -117,16 +137,21 @@ export function UnifiedDrawer({
 
           {/* Preview sheet (bottom of stack) */}
           <motion.div
+            ref={drawerRef}
             animate={{
               x: showSource ? -48 : 0,
               scale: showSource ? 0.95 : 1,
               borderRadius: showSource ? 20 : 0,
               opacity: showSource ? 0.85 : 1,
             }}
+            aria-label={content ? getDrawerLabel(content) : undefined}
+            aria-modal="true"
             className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.15)]"
             exit={{ x: "105%", opacity: 0.6 }}
             initial={{ x: "100%" }}
+            role="dialog"
             style={{ transformOrigin: "right center" }}
+            tabIndex={-1}
             transition={{
               x: { duration: 0.4, ease: appleEase.sheet },
               scale: { duration: 0.35, ease: appleEase.out },
@@ -209,7 +234,7 @@ export function UnifiedDrawer({
                     </h2>
 
                     <div className="prose">
-                      <Markdown remarkPlugins={[remarkGfm]}>
+                      <Markdown remarkPlugins={remarkPlugins}>
                         {sourceContent}
                       </Markdown>
                     </div>
@@ -222,6 +247,17 @@ export function UnifiedDrawer({
       )}
     </AnimatePresence>
   );
+}
+
+function getDrawerLabel(content: DrawerContent): string {
+  switch (content.type) {
+    case "skill":
+      return content.data.name;
+    case "agent":
+      return content.data.name;
+    case "rule":
+      return content.data.title;
+  }
 }
 
 function getContentUrl(content: DrawerContent): string {
@@ -377,7 +413,7 @@ function AgentContent({
           <span className="text-[var(--color-accent)]">{agent.name}</span>
         </h2>
         <p className="mt-2 text-neutral-500 text-sm">
-          {categoryLabels[agent.category]}
+          {AGENT_CATEGORY_LABELS[agent.category]}
         </p>
       </header>
 
@@ -448,7 +484,7 @@ function RuleContent({
       </header>
 
       <div className="prose">
-        <Markdown remarkPlugins={[remarkGfm]}>{body}</Markdown>
+        <Markdown remarkPlugins={remarkPlugins}>{body}</Markdown>
       </div>
 
       <ViewSourceButton onClick={onViewSource} />
