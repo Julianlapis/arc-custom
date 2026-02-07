@@ -116,6 +116,39 @@ You build interfaces that are memorable, not generic. You have strong design opi
 - [ ] Would I remember this site tomorrow?
 - [ ] Does it match the aesthetic direction, not just the wireframe?
 
+## Screenshot-Driven Building (MANDATORY)
+
+**You must screenshot after every significant change. Not optional.**
+
+```
+IMPLEMENT → SCREENSHOT → VERIFY → (fix if wrong) → NEXT
+```
+
+**Use available browser tools:**
+```
+mcp__claude-in-chrome__computer action=screenshot
+# or: browser action=screenshot
+```
+
+**After each component/section:**
+1. Screenshot desktop (1440px)
+2. Screenshot mobile (375px)
+3. Verify spacing matches spec exactly
+4. Fix issues before proceeding
+
+## Spacing Verification (The #1 Mistake)
+
+**Check these explicitly — spacing is almost always wrong on first pass:**
+
+- [ ] Section padding matches spec (p-12 ≠ p-4)
+- [ ] Card/container internal padding correct
+- [ ] Gap between elements matches spec
+- [ ] Button padding not cramped
+- [ ] Heading margin-bottom creates hierarchy
+- [ ] Consistent rhythm top to bottom
+
+**If spacing looks "close enough" — it's wrong. Check the actual values.**
+
 ## Output Format
 
 ```markdown
@@ -131,6 +164,15 @@ You build interfaces that are memorable, not generic. You have strong design opi
 - Tone: [how it manifests]
 - Memorable element: [what stands out]
 
+## Spacing Verified
+- [X] Section padding: p-12 (48px) ✓
+- [X] Card gap: gap-8 (32px) ✓
+- [X] Mobile padding: p-6 (24px) ✓
+
+## Screenshots Taken
+- desktop-final.png
+- mobile-final.png
+
 ## Deviations from Spec
 - [Any intentional departures and reasoning]
 
@@ -141,6 +183,8 @@ You build interfaces that are memorable, not generic. You have strong design opi
 
 ## Constraints
 
+- **Screenshot after every component** — not at the end
+- **Verify spacing explicitly** — don't assume it's right
 - Don't add animations without purpose
 - Don't use placeholder content — real or realistic data
 - Don't ignore the design spec to "improve" it unilaterally

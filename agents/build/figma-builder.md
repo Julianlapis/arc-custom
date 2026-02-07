@@ -63,37 +63,80 @@ Write code that:
 - **Gets padding and spacing right** — extract exact values from Figma for inner padding, gaps, and margins (this is the most commonly missed detail)
 - **Handles responsive behavior** if the design includes breakpoints
 
-### 4. Review and Compare
+### 4. Screenshot-Driven Review Loop (MANDATORY)
 
-After implementation, perform a systematic visual review:
+**Screenshot after EVERY component. Not at the end — after each one.**
 
-**Capture the Result**
-- Use Chrome MCP (claude-in-chrome) to screenshot the implemented component at the same viewport size as the Figma design
-- Capture interactive states (hover, focus, active) if the design includes them
+```
+IMPLEMENT COMPONENT → SCREENSHOT → COMPARE TO FIGMA → FIX → REPEAT
+```
 
-**Compare Against Figma**
-Check each of these dimensions:
-- **Layout**: Alignment, proportions match
-- **Typography**: Font family, size, weight, line-height, letter-spacing
-- **Colors**: Backgrounds, text, borders, shadows
-- **Padding & Spacing** (most commonly missed — check carefully):
-  - Inner padding of containers, cards, buttons
-  - Gaps between elements (siblings)
-  - Margins around sections
-  - Whitespace above/below text
-- **Interactive states**: Hover, focus, active, disabled appearances
+**Use available browser tools:**
+```
+mcp__claude-in-chrome__computer action=screenshot
+# or: browser action=screenshot
+```
+
+**For each component:**
+
+1. **Screenshot immediately after implementing**
+
+2. **Compare against Figma screenshot side-by-side**
+
+3. **Check each dimension:**
+   - **Layout**: Alignment, proportions match
+   - **Typography**: Font family, size, weight, line-height, letter-spacing
+   - **Colors**: Backgrounds, text, borders, shadows
+   - **Interactive states**: Hover, focus, active, disabled
+
+4. **Check spacing explicitly (THE #1 MISTAKE):**
+   - [ ] Inner padding of containers/cards — exact px match?
+   - [ ] Button padding — both horizontal AND vertical?
+   - [ ] Gaps between elements — matches Figma?
+   - [ ] Section margins — top and bottom?
+   - [ ] Whitespace around text — matches Figma rhythm?
+
+5. **If anything is off → fix and re-screenshot**
+   - Don't proceed with "close enough"
+   - Figma values are exact — match them
+
+6. **Check responsive:**
+   ```
+   mcp__claude-in-chrome__resize_window width=375 height=812
+   mcp__claude-in-chrome__computer action=screenshot
+   ```
+
+### Spacing Verification Checklist
+
+**Run this checklist for every component:**
+
+```markdown
+## Spacing Check: [Component Name]
+
+### Padding (from Figma)
+- [ ] Container padding: [Figma value] → [implemented value] ✓/✗
+- [ ] Card padding: [Figma value] → [implemented value] ✓/✗
+- [ ] Button padding: [Figma value] → [implemented value] ✓/✗
+
+### Gaps (from Figma)
+- [ ] Element gap: [Figma value] → [implemented value] ✓/✗
+- [ ] Section gap: [Figma value] → [implemented value] ✓/✗
+
+### Result
+All spacing matches: ✅ / ❌ (fix before proceeding)
+```
+
+**Common spacing mistakes:**
+- Using Tailwind `p-4` when Figma shows 24px (should be `p-6`)
+- Forgetting asymmetric padding (py-4 px-6)
+- Using gap when Figma uses margins (or vice versa)
+- Mobile padding too tight
 
 **Report Discrepancies**
 For any differences found:
-1. Identify if it's intentional (design system constraint, accessibility improvement, technical limitation)
-2. If unintentional, fix it before completing
+1. Identify if intentional (design system constraint, accessibility, technical limitation)
+2. If unintentional, fix before completing
 3. Document intentional deviations with reasoning
-
-**Iterate if Needed**
-If the comparison reveals issues:
-- Fix discrepancies
-- Re-capture screenshot
-- Re-compare until the implementation matches or all deviations are justified
 
 ## Guidelines
 

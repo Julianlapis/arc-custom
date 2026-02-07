@@ -1,9 +1,9 @@
 ---
 name: design
 description: |
-  Create distinctive, non-generic UI designs with aesthetic direction and ASCII wireframes.
-  Use when asked to "design the UI", "create a layout", "wireframe this", or when building
-  UI that should be memorable rather than generic. Avoids AI slop patterns.
+  Create distinctive, non-generic UI designs with aesthetic direction and concrete change specs.
+  Use when asked to "design the UI", "redesign this", "improve the layout", or when building
+  UI that should be memorable rather than generic. Outputs actionable change specs, not just direction.
 license: MIT
 metadata:
   author: howells
@@ -11,148 +11,349 @@ metadata:
 
 # Design Workflow
 
-Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
+Create distinctive, non-generic UI. Outputs concrete change specs that get implemented, not just abstract direction.
+
+<required_reading>
+**Read these design references NOW:**
+
+**Core philosophy:**
+1. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles (Refactoring UI)
+2. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, anti-patterns, review checklist
+
+**Patterns:**
+3. `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md` — ASCII wireframe conventions
+4. `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` — Motion design (when animation involved)
+5. `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
+
+**If using Tailwind:**
+6. `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` — Tailwind v4 syntax
+</required_reading>
 
 <rules_context>
-**Load interface rules for UI work:**
+**Load interface rules based on what you're designing:**
 
-**Use Read tool:** `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md`
-
-Then load relevant rules based on the task:
+**Always read first:**
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md` — Overview and quick reference
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Typography rules
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` — Layout patterns, z-index
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — If motion is involved
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — If designing forms
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
 
-Also load references:
-- `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles
-- `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, checklist, anti-patterns
-- `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
+**Then load as relevant:**
+| Designing... | Load |
+|--------------|------|
+| Any UI | colors.md, spacing.md, typography.md |
+| Page layouts | layout.md |
+| Forms | forms.md, interactions.md |
+| Interactive elements | interactions.md |
+| Animations | animation.md, performance.md |
+| Marketing pages | marketing.md |
+| Accessible content | content-accessibility.md |
+
+**These are comprehensive** — read them, use them, reference specific rules in your change spec.
 </rules_context>
 
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 
-Check for related prior design work and aesthetic decisions.
+Check for related prior design work and aesthetic decisions already made.
 </progress_context>
 
 ## Prerequisites
 
-- **Dev server running** — Ensure the app is running locally so you can visually verify changes
-- **Chrome MCP available** — Use browser automation to screenshot and check layouts frequently
+- **Dev server running** — Verify changes visually as you work
+- **Browser tool available** — For mandatory screenshots
+
+<browser_tools>
+**Use ONE of these for screenshots (in order of preference):**
+
+1. **Chrome MCP (claude-in-chrome):**
+   ```
+   mcp__claude-in-chrome__computer action=screenshot
+   mcp__claude-in-chrome__resize_window width=375 height=812
+   ```
+
+2. **Vercel Browser (if available):**
+   ```
+   browser action=screenshot
+   browser action=snapshot  # for DOM inspection
+   ```
+
+3. **Playwright (fallback):**
+   ```bash
+   npx playwright screenshot http://localhost:3000 screenshot.png
+   ```
+
+**Screenshots are NOT optional.** If you can't screenshot, STOP and tell the user.
+</browser_tools>
 
 ## Process
 
 ### Step 1: Understand Scope
 
 "What are we designing?"
-1. New component/page from scratch
-2. Redesign existing UI
-3. Review and refine current implementation
 
-### Step 2: Gather Aesthetic Direction
+| Scope | Approach |
+|-------|----------|
+| New from scratch | Full aesthetic direction → wireframe → change spec |
+| Redesign existing | Capture before state → identify problems → change spec |
+| Improve specific feature | Screenshot current → targeted change spec |
+
+### Step 2: Capture Before State
+
+**For redesigns/improvements — MANDATORY:**
+
+1. **Screenshot current state:**
+   ```
+   mcp__claude-in-chrome__computer action=screenshot
+   ```
+
+2. **Note current values:**
+   - Typography: what fonts, sizes, weights
+   - Colors: what palette, what's dominant
+   - Spacing: what scale, how dense
+   - Layout: what structure, what's predictable
+
+3. **Identify what's wrong:**
+   - Generic/forgettable?
+   - Inconsistent?
+   - Wrong tone?
+   - Missed opportunity?
+
+**You cannot measure change without knowing the starting point.**
+
+### Step 3: Gather Aesthetic Direction
 
 Ask one at a time:
 
 1. "What tone fits this UI?"
    - Minimal, bold, playful, editorial, luxury, brutalist, retro, organic
+   - See `design-philosophy.md` personality table
 
 2. "What should be memorable about this?"
    - The animation? Typography? Layout? A specific interaction?
+   - There must be ONE thing that stands out
 
 3. "Any existing brand/style to match, or fresh start?"
 
 4. "Any reference designs or inspiration?"
    - Capture Figma links, screenshots, URLs immediately
 
-### Step 3: Capture Direction
+### Step 4: Create Aesthetic Direction
 
 ```markdown
 ## Aesthetic Direction
-- **Tone**: [chosen]
-- **Memorable element**: [what stands out]
-- **Typography**: [display] + [body] (NOT Roboto/Arial/system-ui)
-- **Color strategy**: [approach - NOT purple gradients]
-- **Motion**: [where animation matters]
+- **Tone**: [specific choice from design-philosophy.md]
+- **Memorable element**: [ONE thing that will stand out]
+- **Typography**: [display font] + [body font] (from frontend-design.md font list)
+- **Color strategy**: [dominant + accent, NOT purple gradients]
+- **Motion**: [philosophy — subtle/bold/functional, see animation-patterns.md]
 ```
 
-### Step 4: ASCII Wireframe First
+### Step 5: ASCII Wireframe (For New Designs)
 
-Before any code, create ASCII wireframe. See `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md`.
+Before any code, create ASCII wireframe. See `ascii-ui-patterns.md`.
 
 ```
-┌─────────────────────────────────┐
-│  Header                         │
-├─────────────────────────────────┤
-│  ┌─────────┐  ┌─────────┐      │
-│  │  Card   │  │  Card   │      │
-│  └─────────┘  └─────────┘      │
-└─────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│  [Header structure]                             │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  [Main content layout — show hierarchy]         │
+│                                                 │
+│  ┌──────────────────┐  ┌──────────────────┐    │
+│  │  [Component]     │  │  [Component]     │    │
+│  └──────────────────┘  └──────────────────┘    │
+│                                                 │
+└─────────────────────────────────────────────────┘
 ```
 
 Ask: "Does this layout feel right?"
 
-### Step 5: Build or Hand Off
+### Step 6: Create Change Spec
 
-Options:
-1. **Build now** → Use /arc:build or /arc:implement
-2. **Create plan** → Invoke /arc:detail
-3. **Just the design** → Save to docs/plans/ and stop
+**THIS IS THE CRITICAL STEP.**
 
-### Step 5b: Visual Verification (During Build)
+Translate aesthetic direction into **specific, measurable changes**:
 
-**Use Chrome MCP tools liberally** to check how the layout actually looks as you build:
+```markdown
+## Change Spec
 
-1. **After each significant change** — Take a screenshot to verify:
+### Typography
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| h1 | 24px Inter regular | 48px Instrument Serif bold | typography.md: display hierarchy |
+| body | 14px system-ui | 16px/1.6 DM Sans | typography.md: body readability |
+| nav | 14px medium | 13px uppercase tracking-wide | typography.md: UI text |
+
+### Colors
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| background | white #fff | warm off-white #faf9f7 | colors.md: warmth |
+| primary | blue-500 | custom #1a1a1a | colors.md: intentional palette |
+| accent | none | coral #ff6b4a | colors.md: accent strategy |
+
+### Spacing
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| section padding | p-4 (16px) | p-12 (48px) | spacing.md: generous whitespace |
+| card gap | gap-4 | gap-8 | spacing.md: breathing room |
+| content max-width | max-w-7xl | max-w-4xl | layout.md: reading width |
+
+### Layout
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| hero | centered text + 2 buttons | asymmetric split with image overlap | layout.md: break the grid |
+| cards | uniform 3-col grid | varied sizes, masonry | layout.md: visual interest |
+
+### Motion (if applicable)
+| Element | Before | After | Rule Reference |
+|---------|--------|-------|----------------|
+| page load | none | staggered fade-up, 50ms delay | animation.md: entrance sequence |
+| hover | opacity change | subtle scale + shadow lift | animation.md: micro-interactions |
+```
+
+**Rules for change specs:**
+- Every change references a rule from the interface rules
+- Changes must be **substantial**, not tweaks
+- If the "after" is similar to "before", it's not a redesign
+- Specific values, not vague descriptions
+
+### Step 7: Verify Change Spec is Substantial
+
+Self-check before proceeding:
+
+- [ ] At least 3 typography changes?
+- [ ] Color palette actually different?
+- [ ] Spacing significantly adjusted (not just +/- 4px)?
+- [ ] Layout structure changed, not just spacing?
+- [ ] Memorable element clearly identified and designed?
+
+**If you're only changing padding values, STOP. That's not a redesign.**
+
+Go back to Step 3 and be bolder.
+
+### Step 8: Build or Hand Off
+
+**Option A: Build now**
+```
+Invoke /arc:implement with change spec attached.
+Pass the full change spec table to ui-builder.
+```
+
+**Option B: Create plan**
+```
+Invoke /arc:detail with aesthetic direction and change spec.
+Each change spec row becomes an implementation task.
+```
+
+**Option C: Save design only**
+```
+Save to docs/designs/YYYY-MM-DD-<component>-design.md
+Include: aesthetic direction, ASCII wireframe, full change spec
+```
+
+### Step 9: Visual Verification Loop (MANDATORY)
+
+**Screenshot after EVERY significant change. Not optional.**
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  IMPLEMENT CHANGE                                       │
+│       ↓                                                 │
+│  SCREENSHOT                                             │
+│       ↓                                                 │
+│  VERIFY (matches spec? spacing correct?)                │
+│       ↓                                                 │
+│  ❌ Wrong? → FIX → SCREENSHOT → VERIFY (loop)          │
+│  ✅ Correct? → NEXT CHANGE                              │
+└─────────────────────────────────────────────────────────┘
+```
+
+**For each change in the spec:**
+
+1. **Implement the change**
+
+2. **Screenshot immediately:**
    ```
+   mcp__claude-in-chrome__computer action=screenshot
+   # or: browser action=screenshot
+   ```
+
+3. **Verify against spec:**
+   - Does it match the "After" column exactly?
+   - Is spacing/padding correct (measure visually)?
+   - Any clipping, overflow, or alignment issues?
+
+4. **If wrong → fix and re-screenshot** (do NOT proceed)
+
+5. **Check responsive:**
+   ```
+   mcp__claude-in-chrome__resize_window width=375 height=812
    mcp__claude-in-chrome__computer action=screenshot
    ```
 
-2. **Check responsive behavior** — Resize and screenshot:
-   ```
-   mcp__claude-in-chrome__resize_window width=375 height=812  # Mobile
-   mcp__claude-in-chrome__computer action=screenshot
-   mcp__claude-in-chrome__resize_window width=1440 height=900 # Desktop
-   ```
+**Never move to the next change until the current one is verified.**
 
-3. **Verify spacing, alignment, typography** — Don't assume it looks right. See it.
+### Step 9b: Spacing & Padding Verification
 
-4. **Check for visual conflicts** — Look for:
-   - Components overlapping or clipping each other
-   - Elements clashing with existing UI (headers, footers, sidebars)
-   - Z-index issues causing unexpected layering
-   - Scroll containers behaving unexpectedly
-   - Fixed/sticky elements interfering with content
+**Spacing is the #1 thing that goes wrong. Check explicitly:**
 
-5. **Iterate visually** — If something looks off, fix it immediately before moving on.
+```markdown
+## Spacing Verification Checklist
 
-**When to screenshot:**
-- After implementing a new component
-- After adding responsive styles
-- After adjusting spacing/layout
-- Before declaring a section "done"
-- When something feels uncertain
+### Padding (inside elements)
+- [ ] Section padding matches spec (e.g., p-12 = 48px)
+- [ ] Card/container padding consistent
+- [ ] Button padding correct (vertical AND horizontal)
+- [ ] Input field padding matches design
 
-The goal: **never commit UI code without visually verifying it looks correct.**
+### Gaps (between elements)
+- [ ] Grid/flex gap matches spec
+- [ ] Vertical spacing between sections
+- [ ] Spacing between heading and content
+- [ ] List item spacing
 
-### Anti-Patterns to Avoid
+### Margins (outside elements)
+- [ ] Container margins/max-width correct
+- [ ] Component margins not causing unexpected spacing
+- [ ] No double-margins from adjacent elements
 
-See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for the full list of anti-patterns and the design review checklist.
-
-### Step 6: Optional UI Compliance Review
-
-If the `web-design-guidelines` skill is available:
-```
-Skill web-design-guidelines: "Review the design against Web Interface Guidelines.
-Focus on: [specific areas of concern]"
+### Visual Rhythm
+- [ ] Spacing feels consistent throughout
+- [ ] Hierarchy clear through spacing (more important = more space)
+- [ ] No cramped areas next to spacious areas
 ```
 
-This provides external validation against established UI best practices.
+**How to verify spacing visually:**
+
+1. **Screenshot at 100% zoom** — padding/margins should be obvious
+2. **Use browser dev tools** — inspect computed values if unsure
+3. **Compare to Figma** (if available) — overlay or side-by-side
+4. **Eyeball the rhythm** — scan top to bottom, does spacing feel consistent?
+
+**Common spacing mistakes to catch:**
+- Using `p-4` when spec says `p-8` (half the intended size)
+- Inconsistent padding inside similar components
+- Gaps too tight between sections
+- Button padding that makes text cramped
+- Missing margin-bottom on headings
+
+### Step 10: Verify Changes Were Made
+
+**Post-implementation checklist:**
+
+```markdown
+## Change Verification
+
+| Change Spec Item | Implemented? | Evidence |
+|------------------|--------------|----------|
+| h1: 48px Instrument Serif | ✅ | screenshot shows new typography |
+| hero: asymmetric layout | ✅ | layout clearly different |
+| section padding: p-12 | ✅ | generous whitespace visible |
+| accent color: coral | ❌ | still using blue — FIX |
+```
+
+**If items are ❌, go back and implement them.**
+
+The design isn't done until every change spec item is ✅.
 
 <progress_append>
 After completing the design work, append to progress journal:
@@ -161,20 +362,25 @@ After completing the design work, append to progress journal:
 ## YYYY-MM-DD HH:MM — /arc:design
 **Task:** [UI/component designed]
 **Outcome:** Complete
-**Files:** [Design doc or component files]
-**Decisions:**
-- Tone: [aesthetic direction]
-- Memorable: [key element]
-**Next:** /arc:build or /arc:implement
+**Files:** [Design doc, change spec, or component files]
+**Aesthetic Direction:**
+- Tone: [choice]
+- Memorable: [element]
+**Change Spec:** [N] changes specified, [N] verified implemented
+**Next:** /arc:implement or done
 
 ---
 ```
 </progress_append>
 
-## Interop
-
-- Can invoke **/arc:build** for quick implementation
-- Can invoke **/arc:implement** for planned implementation
-- Aesthetic direction feeds into implementation tasks
-- Can invoke **web-design-guidelines** skill for compliance review (if available)
-- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual verification throughout
+<success_criteria>
+Design is complete when:
+- [ ] Before state captured (for redesigns)
+- [ ] Aesthetic direction documented
+- [ ] Change spec created with specific values
+- [ ] Change spec references interface rules
+- [ ] Changes are substantial, not tweaks
+- [ ] All change spec items verified implemented
+- [ ] Before/after comparison shows clear difference
+- [ ] Progress journal updated
+</success_criteria>
