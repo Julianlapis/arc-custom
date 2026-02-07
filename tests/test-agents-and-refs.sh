@@ -165,9 +165,44 @@ for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
 done
 
 if [ $ref_errors -eq 0 ] && [ $ref_checked -gt 0 ]; then
-    pass "All $ref_checked CLAUDE_PLUGIN_ROOT references are valid"
+    pass "All $ref_checked CLAUDE_PLUGIN_ROOT references are valid in skills"
 elif [ $ref_checked -eq 0 ]; then
-    skip "No CLAUDE_PLUGIN_ROOT references found"
+    skip "No CLAUDE_PLUGIN_ROOT references found in skills"
+fi
+
+echo ""
+echo "Checking CLAUDE_PLUGIN_ROOT references in agents..."
+echo ""
+
+agent_ref_errors=0
+agent_ref_checked=0
+
+for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
+    agent_name="$(basename "$(dirname "$agent_file")")/$(basename "$agent_file" .md)"
+
+    refs=$(grep -oE '\$\{CLAUDE_PLUGIN_ROOT\}/[a-zA-Z0-9/_.-]+' "$agent_file" 2>/dev/null)
+
+    if [ -n "$refs" ]; then
+        while IFS= read -r ref; do
+            rel_path="${ref#\$\{CLAUDE_PLUGIN_ROOT\}/}"
+            full_path="$PLUGIN_ROOT/$rel_path"
+
+            ((agent_ref_checked++))
+
+            if [ -e "$full_path" ] || [ -e "${full_path}.md" ]; then
+                : # exists
+            else
+                fail "agent/$agent_name references missing: $rel_path"
+                ((agent_ref_errors++))
+            fi
+        done <<< "$refs"
+    fi
+done
+
+if [ $agent_ref_errors -eq 0 ] && [ $agent_ref_checked -gt 0 ]; then
+    pass "All $agent_ref_checked CLAUDE_PLUGIN_ROOT references are valid in agents"
+elif [ $agent_ref_checked -eq 0 ]; then
+    skip "No CLAUDE_PLUGIN_ROOT references found in agents"
 fi
 
 # Verify no unexpected agents
