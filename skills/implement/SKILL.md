@@ -40,18 +40,18 @@ website:
 
 | Agent | Model | Use For |
 |-------|-------|---------|
-| `implementer` | sonnet | General task execution — utilities, services, APIs, business logic |
+| `implementer` | opus | General task execution — utilities, services, APIs, business logic |
 | `fixer` | haiku | TypeScript errors, lint issues — fast mechanical fixes |
 | `debugger` | sonnet | Failing tests — systematic root cause analysis |
 | `unit-test-writer` | sonnet | Unit tests (vitest) — pure functions, components |
 | `integration-test-writer` | sonnet | Integration tests (vitest + MSW) — API, auth |
-| `e2e-test-writer` | sonnet | E2E tests (Playwright) — user journeys |
+| `e2e-test-writer` | opus | E2E tests (Playwright) — user journeys |
 | `ui-builder` | opus | UI components from design spec — anti-slop, memorable |
 | `design-specifier` | opus | Design decisions when no spec exists — empty states, visual direction |
 | `figma-builder` | opus | Build UI directly from Figma URL |
 | `test-runner` | haiku | Run vitest, analyze failures |
-| `e2e-runner` | sonnet | Playwright tests — iterate until green or report blockers |
-| `spec-reviewer` | haiku | Quick spec compliance check — nothing missing, nothing extra |
+| `e2e-runner` | opus | Playwright tests — iterate until green or report blockers |
+| `spec-reviewer` | sonnet | Spec compliance check — nothing missing, nothing extra |
 | `code-reviewer` | haiku | Quick code quality gate — no `any`, proper error handling, tests exist |
 
 **Before spawning a build agent:**
@@ -323,7 +323,7 @@ File to create: [path/to/feature.integration.test.ts]"
 
 For E2E tests (critical flows):
 ```
-Task [e2e-test-writer] model: sonnet: "Write E2E tests for [user journey].
+Task [e2e-test-writer] model: opus: "Write E2E tests for [user journey].
 
 Flow to test:
 - [step 1]
@@ -397,7 +397,7 @@ If debugger can't resolve after one attempt → stop and ask user.
 
 After implementation, spawn spec-reviewer:
 ```
-Task [spec-reviewer] model: haiku: "Verify implementation matches spec.
+Task [spec-reviewer] model: sonnet: "Verify implementation matches spec.
 
 Task spec: [paste task specification]
 Files created/modified: [list]
@@ -566,7 +566,7 @@ If e2e tests were created as part of this implementation:
 
 **Spawn e2e-runner agent:**
 ```
-Task [e2e-runner] model: sonnet: "Run E2E tests for the feature we just implemented.
+Task [e2e-runner] model: opus: "Run E2E tests for the feature we just implemented.
 
 Test files: [list e2e test files]
 Feature: [brief description]

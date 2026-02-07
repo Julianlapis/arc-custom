@@ -33,16 +33,16 @@ website:
 
 | Agent | Model | Use For |
 |-------|-------|---------|
-| `implementer` | sonnet | General implementation (utilities, services) |
+| `implementer` | opus | General implementation (utilities, services) |
 | `ui-builder` | opus | UI components from spec |
 | `design-specifier` | opus | Design decisions when no spec exists |
 | `unit-test-writer` | sonnet | Unit tests (vitest) |
 | `integration-test-writer` | sonnet | Integration tests (vitest + MSW) |
-| `e2e-test-writer` | sonnet | E2E tests (Playwright) |
+| `e2e-test-writer` | opus | E2E tests (Playwright) |
 | `fixer` | haiku | TS/lint cleanup |
 | `debugger` | sonnet | Failing tests |
 | `test-runner` | haiku | Run vitest, analyze results |
-| `spec-reviewer` | haiku | Verify matches spec |
+| `spec-reviewer` | sonnet | Verify matches spec |
 | `code-reviewer` | haiku | Code quality gate |
 </agents>
 
@@ -208,7 +208,7 @@ Follow spacing and design rules."
 
 For logic/utilities:
 ```
-Task [implementer] model: sonnet: "Implement [function/service].
+Task [implementer] model: opus: "Implement [function/service].
 
 Requirements:
 - [from build plan]
@@ -247,7 +247,7 @@ Task [fixer] model: haiku: "Fix TS/lint errors in [files]"
 
 **Spec review:**
 ```
-Task [spec-reviewer] model: haiku: "Verify implementation matches build plan.
+Task [spec-reviewer] model: sonnet: "Verify implementation matches build plan.
 
 Plan said: [requirements]
 Files: [list]

@@ -47,9 +47,9 @@ Create comprehensive test strategies covering the full test pyramid. Execute wit
 |-------|-------|---------|-----------|
 | `unit-test-writer` | sonnet | Write unit tests | vitest |
 | `integration-test-writer` | sonnet | Write integration tests (API, auth) | vitest + MSW |
-| `e2e-test-writer` | sonnet | Write E2E tests | Playwright |
+| `e2e-test-writer` | opus | Write E2E tests | Playwright |
 | `test-runner` | haiku | Run vitest, analyze failures | vitest |
-| `e2e-runner` | sonnet | Run Playwright, fix issues, iterate | Playwright |
+| `e2e-runner` | opus | Run Playwright, fix issues, iterate | Playwright |
 
 **Test Pyramid:**
 ```
@@ -190,7 +190,7 @@ Files to create: [paths]"
 
 **3. E2E tests last:**
 ```
-Task [e2e-test-writer] model: sonnet: "Write E2E tests for [feature].
+Task [e2e-test-writer] model: opus: "Write E2E tests for [feature].
 
 Test cases from plan:
 [paste e2e test cases]
@@ -209,7 +209,7 @@ pnpm vitest run
 
 **E2E (background agent — avoids terminal issues):**
 ```
-Task [e2e-runner] model: sonnet: "Run E2E tests and fix any failures.
+Task [e2e-runner] model: opus: "Run E2E tests and fix any failures.
 
 Test files: [list]
 Iterate until green or report blockers."

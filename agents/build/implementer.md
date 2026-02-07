@@ -21,7 +21,7 @@ description: |
   API work is general implementation. Implementer follows TDD and project conventions.
   </commentary>
   </example>
-model: sonnet
+model: opus
 color: green
 website:
   desc: General-purpose builder

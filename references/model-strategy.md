@@ -7,14 +7,17 @@
 | Task Type | Model | Why |
 |-----------|-------|-----|
 | Explore codebase | haiku | Pattern matching, file finding |
-| Git history analysis | haiku | Mechanical parsing |
-| Gather docs | haiku | Fetch and summarize |
-| Run TS/lint checks | haiku | Mechanical error fixing |
-| Code review | sonnet | Needs judgment |
+| Run TS/lint checks (fixer) | haiku | Mechanical error fixing |
+| Run test suites (test-runner) | haiku | Execute + parse output |
+| Code quality gate (code-reviewer) | haiku | Checklist pattern matching |
+| Code review (all review agents) | sonnet | Needs domain judgment |
 | Debug failing tests | sonnet | Requires reasoning |
-| Security analysis | sonnet | Pattern recognition + context |
-| UI/design review | opus | Aesthetic judgment |
-| Architecture decisions | opus | Complex trade-offs |
+| Security/performance analysis | sonnet | Pattern recognition + context |
+| Spec compliance (spec-reviewer) | sonnet | Semantic comparison |
+| Implementation (implementer) | opus | Production code quality matters most |
+| E2E tests (writer + runner) | opus | Complex user flows, flaky test diagnosis |
+| UI/design (ui-builder, figma-builder) | opus | Aesthetic judgment |
+| Design decisions (design-specifier) | opus | Creative judgment |
 
 ## Model Tiers
 
@@ -40,26 +43,27 @@ Task general-purpose model: haiku: "Run tsc --noEmit and fix errors"
 
 ### Sonnet (balanced)
 
-- Code reviews (all reviewer agents)
+- All review agents (architecture, security, performance, etc.)
 - Debugging failing tests
-- Security analysis
-- Data integrity checks
-- Most subagent work
+- Spec compliance checks
+- Writing unit and integration tests
+- Research agents (docs, git history, naming)
 
 ```
-Task debugging-toolkit:debugger model: sonnet: "Debug failing test..."
+Task debugger model: sonnet: "Debug failing test..."
 Task simplicity-engineer model: sonnet: "Review this code..."
 ```
 
 ### Opus (full power)
 
-- Frontend design review (aesthetic judgment)
-- Complex architecture decisions
-- Creative/design work
-- Nuanced trade-off analysis
+- Implementation (production code)
+- E2E test writing and running
+- UI building and design specification
+- Design review (aesthetic judgment)
 
 ```
-Task compound-engineering:frontend-design model: opus: "Review UI implementation..."
+Task implementer model: opus: "Implement [feature]..."
+Task ui-builder model: opus: "Build [component] from design spec..."
 ```
 
 ## Rationale

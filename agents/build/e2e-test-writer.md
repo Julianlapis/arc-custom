@@ -12,7 +12,7 @@ description: |
   Multi-page user journey = E2E test. Real browser, real interactions.
   </commentary>
   </example>
-model: sonnet
+model: opus
 color: yellow
 website:
   desc: E2E test specialist

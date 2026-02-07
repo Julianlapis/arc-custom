@@ -21,7 +21,7 @@ description: |
   UI changes often break selectors. e2e-runner will update them systematically.
   </commentary>
   </example>
-model: sonnet
+model: opus
 color: yellow
 website:
   desc: Playwright test executor
