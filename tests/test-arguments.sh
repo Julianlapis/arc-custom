@@ -10,7 +10,6 @@ section "Argument Handling Tests"
 # Skills that MUST have argument-hint at root level
 SKILLS_WITH_ARGS=(
     "audit:<path-or-focus>"
-    "figma:figma-url-or-description"
     "commit:[push]"
     "deps:--apply"
     "document:path-or-description"

@@ -26,8 +26,9 @@ for arg in "$@"; do
 done
 
 # Find orphaned Claude processes (detached from terminal, shown as "??" in TTY)
-# Excludes: chrome-mcp helpers, Claude desktop app
-orphans=$(ps aux | grep "/opt/homebrew/bin/claude" | grep -v grep | grep -v "chrome-mcp" | awk '$7 == "??" {print $2}' || true)
+# Matches any 'claude' binary regardless of install location
+# Excludes: chrome-mcp helpers, this grep itself
+orphans=$(ps aux | grep -E '[c]laude' | grep -v "chrome-mcp" | grep -v "Claude.app" | awk '$7 == "??" {print $2}' || true)
 
 if [ -z "$orphans" ]; then
   $QUIET || echo "No orphaned Claude agents found."
@@ -48,10 +49,5 @@ fi
 echo "$orphans" | xargs kill 2>/dev/null || true
 
 $QUIET || echo "Killed $count orphaned Claude agent(s)."
-
-# Log to Arc's subagent log for visibility
-log_file="/tmp/arc-subagent-completions.log"
-timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-echo "[$timestamp] Cleanup: killed $count orphaned agents" >> "$log_file"
 
 exit 0

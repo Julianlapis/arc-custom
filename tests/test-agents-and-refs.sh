@@ -34,8 +34,20 @@ RESEARCH_AGENTS=(
     "naming"
 )
 
-DESIGN_AGENTS=(
-    "figma-implement"
+BUILD_AGENTS=(
+    "code-reviewer"
+    "debugger"
+    "design-specifier"
+    "e2e-runner"
+    "e2e-test-writer"
+    "figma-builder"
+    "fixer"
+    "implementer"
+    "integration-test-writer"
+    "spec-reviewer"
+    "test-runner"
+    "ui-builder"
+    "unit-test-writer"
 )
 
 WORKFLOW_AGENTS=(
@@ -68,14 +80,14 @@ for agent in "${RESEARCH_AGENTS[@]}"; do
 done
 
 echo ""
-echo "Checking design agents..."
+echo "Checking build agents..."
 echo ""
-for agent in "${DESIGN_AGENTS[@]}"; do
-    agent_file="$PLUGIN_ROOT/agents/design/$agent.md"
+for agent in "${BUILD_AGENTS[@]}"; do
+    agent_file="$PLUGIN_ROOT/agents/build/$agent.md"
     if [ -f "$agent_file" ]; then
-        pass "agents/design/$agent exists"
+        pass "agents/build/$agent exists"
     else
-        fail "agents/design/$agent.md not found"
+        fail "agents/build/$agent.md not found"
     fi
 done
 
@@ -164,7 +176,7 @@ echo "Checking for unexpected agent files..."
 ALL_EXPECTED_AGENTS=(
     "${REVIEW_AGENTS[@]}"
     "${RESEARCH_AGENTS[@]}"
-    "${DESIGN_AGENTS[@]}"
+    "${BUILD_AGENTS[@]}"
     "${WORKFLOW_AGENTS[@]}"
 )
 

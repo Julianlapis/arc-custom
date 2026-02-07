@@ -43,7 +43,7 @@ echo "Verifying non-destructive skills are NOT protected..."
 UNPROTECTED_SKILLS=(
     "ideate"
     "implement"
-    "test"
+    "testing"
     "suggest"
 )
 
