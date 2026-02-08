@@ -70,14 +70,6 @@ export function PageContent({
 
   return (
     <>
-      {/* Workflow Diagram */}
-      <WorkflowGraph
-        agents={agents}
-        assetCounts={assetCounts}
-        onSkillClick={openSkill}
-        workflowData={workflowData}
-      />
-
       {/* Content Browser */}
       <ContentBrowser
         agents={agents}
