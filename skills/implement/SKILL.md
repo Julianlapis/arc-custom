@@ -23,6 +23,14 @@ website:
     - Strongly recommends review before building.
 ---
 
+<tool_restrictions>
+# Tool Restrictions — READ THESE FIRST
+
+**NEVER use `EnterPlanMode`.** This skill has its own structured process — planning (via detail skill) and execution (via build agents). Claude's built-in plan mode would bypass this entire orchestration. Follow the phases below instead.
+
+**NEVER use `ExitPlanMode`.** You are never in plan mode.
+</tool_restrictions>
+
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md

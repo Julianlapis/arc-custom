@@ -9,6 +9,14 @@ metadata:
   author: howells
 ---
 
+<tool_restrictions>
+# Tool Restrictions — READ THESE FIRST
+
+**NEVER use `EnterPlanMode`.** This skill creates an implementation plan by following a structured process — it replaces Claude's built-in planning entirely. The steps below ARE the planning. Do not meta-plan them.
+
+**NEVER use `ExitPlanMode`.** You are never in plan mode.
+</tool_restrictions>
+
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
@@ -50,10 +58,18 @@ metadata:
 
 ## Step 2: Load Design Document
 
-Read the design document created in the previous phase:
-`docs/plans/YYYY-MM-DD-<topic>-design.md`
+**Find the design doc:**
+```
+Glob: docs/plans/*-design.md
+```
 
-Extract:
+Pick the most recent one (highest date prefix). Read it. This is the source of truth for what to build.
+
+**Derive implementation plan filename:** Replace `-design.md` with `-implementation.md`.
+- Design: `docs/plans/2025-06-15-user-dashboard-design.md`
+- Implementation: `docs/plans/2025-06-15-user-dashboard-implementation.md`
+
+**Extract from the design doc:**
 - User stories / acceptance criteria
 - ASCII UI wireframes
 - Data model
@@ -224,8 +240,8 @@ Files:
 
 > **For Claude:** Use /arc:implement to implement this plan task-by-task.
 
-**Design:** [Link to design doc]
-**Goal:** [One sentence]
+**Design:** `docs/plans/YYYY-MM-DD-<topic>-design.md` (the actual filename from Step 2)
+**Goal:** [One sentence from design doc's problem statement]
 **Stack:** [Framework] + [Test runner] + [Package manager]
 
 ---
@@ -234,7 +250,7 @@ Files:
 **Tasks section:**
 Write all tasks following the template from Step 3.
 
-**Save to:** `docs/plans/YYYY-MM-DD-<topic>-implementation.md`
+**Save to:** The filename derived in Step 2 (e.g., `docs/plans/2025-06-15-user-dashboard-implementation.md`)
 
 ## Step 7: Commit and Offer Next Steps
 
