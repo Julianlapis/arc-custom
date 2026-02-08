@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Agent, Rule, Skill, WorkflowData } from "@/lib/types";
 import { ContentBrowser } from "./content-browser";
 import { UnifiedDrawer } from "./unified-drawer";
-import { WorkflowDiagram } from "./workflow-diagram";
+import { WorkflowGraph } from "./workflow-graph";
 
 type DrawerContent =
   | { type: "skill"; data: Skill }
@@ -16,6 +16,7 @@ interface PageContentProps {
   agents: Agent[];
   rules: Rule[];
   workflowData: WorkflowData;
+  assetCounts: { references: number; disciplines: number };
 }
 
 export function PageContent({
@@ -23,6 +24,7 @@ export function PageContent({
   agents,
   rules,
   workflowData,
+  assetCounts,
 }: PageContentProps) {
   const [drawerContent, setDrawerContent] = useState<DrawerContent | null>(
     null
@@ -43,6 +45,7 @@ export function PageContent({
     const agent = agents.find((a) => a.name === name);
     if (agent) {
       setDrawerContent({ type: "agent", data: agent });
+      setDrawerOpen(true);
     }
   };
 
@@ -68,7 +71,12 @@ export function PageContent({
   return (
     <>
       {/* Workflow Diagram */}
-      <WorkflowDiagram onSkillClick={openSkill} workflowData={workflowData} />
+      <WorkflowGraph
+        agents={agents}
+        assetCounts={assetCounts}
+        onSkillClick={openSkill}
+        workflowData={workflowData}
+      />
 
       {/* Content Browser */}
       <ContentBrowser

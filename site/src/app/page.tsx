@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   getAgents,
+  getAssetCounts,
   getRules,
   getSkills,
   getVersion,
@@ -24,6 +25,7 @@ export default function ArcPage() {
   const rules = getRules();
   const version = getVersion();
   const workflowData = getWorkflowData(skills);
+  const assetCounts = getAssetCounts();
   const skillNames = skills.filter((s) => s.invokable).map((s) => s.name);
   return (
     <main className="min-h-screen p-[calc(var(--baseline)*1)] md:p-[calc(var(--baseline)*2)] lg:p-[calc(var(--baseline)*3)]">
@@ -206,6 +208,7 @@ export default function ArcPage() {
         {/* Workflow Diagram + Content Browser (client, shared drawer) */}
         <PageContent
           agents={agents}
+          assetCounts={assetCounts}
           rules={rules}
           skills={skills}
           workflowData={workflowData}

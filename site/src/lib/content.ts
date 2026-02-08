@@ -359,6 +359,19 @@ export function getWorkflowData(skills?: Skill[]): WorkflowData {
 
 export { sanitizeContent } from "./sanitize";
 
+export function getAssetCounts(): { references: number; disciplines: number } {
+  const refsDir = resolve(ROOT, "references");
+  const discsDir = resolve(ROOT, "disciplines");
+  return {
+    references: existsSync(refsDir)
+      ? readdirSync(refsDir).filter((f) => f.endsWith(".md")).length
+      : 0,
+    disciplines: existsSync(discsDir)
+      ? readdirSync(discsDir).filter((f) => f.endsWith(".md")).length
+      : 0,
+  };
+}
+
 export function getVersion(): string | null {
   const content = readLocalFile(".claude-plugin/plugin.json");
   if (!content) return null;

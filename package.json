@@ -4,6 +4,7 @@
   "private": true,
   "description": "Arc workflows for Claude Code and Codex",
   "scripts": {
+    "dev": "pnpm --dir site dev",
     "test": "bash tests/run-skill-tests.sh",
     "prepare": "husky"
   },
