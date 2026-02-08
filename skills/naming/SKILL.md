@@ -19,6 +19,8 @@ website:
     - "Domain availability is checked via whois (.com) and dig (all other TLDs). Priority TLDs: .com, .dev, .app, .sh, .io."
     - "GitHub is checked for popular repos (1k+ stars), not username availability."
     - "Web search validates no existing products share the name in the same space."
+  workflow:
+    position: utility
 ---
 
 # Naming Workflow

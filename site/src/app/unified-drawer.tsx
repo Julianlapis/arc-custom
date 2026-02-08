@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
 
 const remarkPlugins = [remarkGfm];
+
 import type { Agent, Rule, Skill } from "@/lib/types";
 import { AGENT_CATEGORY_LABELS } from "@/lib/types";
 
@@ -96,7 +97,7 @@ export function UnifiedDrawer({
   const rawSource = content ? getSourceContent(content) : null;
   const sourceContent = useMemo(
     () => (rawSource ? sanitizeContent(rawSource) : null),
-    [rawSource],
+    [rawSource]
   );
   const contentUrl = content ? getContentUrl(content) : null;
 
@@ -137,7 +138,6 @@ export function UnifiedDrawer({
 
           {/* Preview sheet (bottom of stack) */}
           <motion.div
-            ref={drawerRef}
             animate={{
               x: showSource ? -48 : 0,
               scale: showSource ? 0.95 : 1,
@@ -149,6 +149,7 @@ export function UnifiedDrawer({
             className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.15)]"
             exit={{ x: "105%", opacity: 0.6 }}
             initial={{ x: "100%" }}
+            ref={drawerRef}
             role="dialog"
             style={{ transformOrigin: "right center" }}
             tabIndex={-1}
@@ -319,7 +320,7 @@ function SkillContent({
             <span className="text-[var(--color-accent)]">{skill.name}</span>
           )}
           {!skill.invokable && (
-            <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-neutral-500 text-[10px] leading-none">
+            <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-[10px] text-neutral-500 leading-none">
               internal
             </span>
           )}

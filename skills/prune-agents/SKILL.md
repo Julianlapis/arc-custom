@@ -16,6 +16,8 @@ website:
     Prune-agents finds and kills Claude Code processes that have become orphaned — detached from their terminal (TTY shows "??"). These accumulate when the Task tool spawns subagents that don't cleanly exit after completion.
   why: |
     Orphaned Claude processes consume memory and CPU in the background. Pruning periodically keeps your system clean without affecting active terminal sessions.
+  workflow:
+    position: utility
 ---
 
 # Prune Orphaned Agents

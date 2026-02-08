@@ -19,6 +19,8 @@ website:
     - Codebase exploration first. Knows your stack before asking questions.
     - Linear integration. Shows active issues if Linear MCP is available.
     - Routes, doesn't replace. Points you to the right command, then gets out of the way.
+  workflow:
+    position: spine
 ---
 
 # /arc:go

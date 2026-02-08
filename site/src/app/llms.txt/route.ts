@@ -15,21 +15,21 @@ export function GET() {
     "",
     ...skills.map(
       (s) =>
-        `- [${s.invokable ? `/arc:${s.name}` : s.name}](https://github.com/howells/arc/blob/main/skills/${s.name}/SKILL.md): ${s.desc}`,
+        `- [${s.invokable ? `/arc:${s.name}` : s.name}](https://github.com/howells/arc/blob/main/skills/${s.name}/SKILL.md): ${s.desc}`
     ),
     "",
     "## Agents",
     "",
     ...agents.map(
       (a) =>
-        `- [${a.name}](https://github.com/howells/arc/blob/main/agents/${a.category}/${a.name}.md): ${a.desc}`,
+        `- [${a.name}](https://github.com/howells/arc/blob/main/agents/${a.category}/${a.name}.md): ${a.desc}`
     ),
     "",
     "## Rules",
     "",
     ...rules.map(
       (r) =>
-        `- [${r.title}](https://github.com/howells/arc/blob/main/rules/${r.slug}.md)`,
+        `- [${r.title}](https://github.com/howells/arc/blob/main/rules/${r.slug}.md)`
     ),
     "",
     "## Links",

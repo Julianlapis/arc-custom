@@ -20,6 +20,8 @@ website:
     - One at a time presentation. Never bulk-deletes without review.
     - Evidence-based status detection. Checks if planned files exist and have commits.
     - Archive over delete. Completed plans move to docs/plans/archive/ by default.
+  workflow:
+    position: utility
 ---
 
 # Tidy Workflow

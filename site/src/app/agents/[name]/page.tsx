@@ -59,7 +59,7 @@ export default async function AgentPage({
 
         {/* Header */}
         <header className="mb-[calc(var(--baseline)*2)] border-neutral-200 border-b pb-[calc(var(--baseline)*1)]">
-          <h1 className="font-mono text-neutral-900 text-lg">{agent.name}</h1>
+          <h1 className="font-mono text-lg text-neutral-900">{agent.name}</h1>
           <p className="mt-2 text-neutral-500 text-sm">
             {AGENT_CATEGORY_LABELS[agent.category]}
           </p>

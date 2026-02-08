@@ -29,6 +29,9 @@ website:
     - senior-engineer
     - simplicity-engineer
     - designer
+  workflow:
+    position: spine
+    after: ideate
 ---
 
 <required_reading>

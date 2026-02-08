@@ -22,7 +22,7 @@ export function SkillList({ skills, onSkillClick }: SkillListProps) {
               {skill.invokable ? `/arc:${skill.name}` : skill.name}
             </span>
             {!skill.invokable && (
-              <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-neutral-500 text-[10px] leading-none">
+              <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-[10px] text-neutral-500 leading-none">
                 internal
               </span>
             )}

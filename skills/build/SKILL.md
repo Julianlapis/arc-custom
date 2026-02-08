@@ -19,6 +19,9 @@ website:
     - Scope-appropriate. For small-to-medium work only. Suggests ideate if scope is too large.
     - Same agents as implement. Implementer, fixer, test writers—all available.
     - Same quality gates. TDD, TypeScript, lint. No shortcuts on quality.
+  workflow:
+    position: branch
+    joins: implement
 ---
 
 <required_reading>

@@ -2,11 +2,32 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
+import type {
+  Agent,
+  AgentCategory,
+  Rule,
+  RuleCategory,
+  Skill,
+  SkillWorkflow,
+  WorkflowData,
+} from "./types";
 import { AGENT_CATEGORIES } from "./types";
-import type { Agent, AgentCategory, Rule, RuleCategory, Skill } from "./types";
 
-export type { Agent, AgentCategory, Rule, RuleCategory, Skill };
-export { AGENT_CATEGORY_LABELS, AGENT_CATEGORIES, RULE_CATEGORIES } from "./types";
+export type {
+  Agent,
+  AgentCategory,
+  Rule,
+  RuleCategory,
+  Skill,
+  SkillWorkflow,
+  WorkflowData,
+};
+export {
+  AGENT_CATEGORIES,
+  AGENT_CATEGORY_LABELS,
+  RULE_CATEGORIES,
+  WORKFLOW_POSITIONS,
+} from "./types";
 
 // Resolve repo root: site/ → arc/
 // process.cwd() is the Next.js project root (site/), go up one level to arc/
@@ -63,10 +84,9 @@ function getInvokableSkills(): Set<string> {
   return new Set(
     readdirSync(commandsDir)
       .filter((f) => f.endsWith(".md"))
-      .map((f) => f.replace(/\.md$/, "")),
+      .map((f) => f.replace(/\.md$/, ""))
   );
 }
-
 
 const CORE_RULES = new Set([
   "stack",
@@ -107,6 +127,11 @@ interface SkillFrontmatter {
     why: string;
     decisions: string[];
     agents?: string[];
+    workflow?: {
+      position: string;
+      after?: string;
+      joins?: string;
+    };
   };
 }
 
@@ -155,9 +180,17 @@ export function getSkills(): Skill[] {
           what: String(website.what || ""),
           why: String(website.why || ""),
           decisions: (website.decisions || []).map((d) =>
-            typeof d === "string" ? d : JSON.stringify(d),
+            typeof d === "string" ? d : JSON.stringify(d)
           ),
           agents: website.agents,
+          workflow: website.workflow
+            ? {
+                position: website.workflow
+                  .position as SkillWorkflow["position"],
+                after: website.workflow.after,
+                joins: website.workflow.joins,
+              }
+            : undefined,
           content: body.trim(),
         });
       }
@@ -231,7 +264,7 @@ export function getRules(): Rule[] {
 
   // Top-level rules (Core + Workflow)
   const topFiles = readdirSync(rulesDir).filter(
-    (f) => f.endsWith(".md") && f !== "README.md",
+    (f) => f.endsWith(".md") && f !== "README.md"
   );
 
   for (const file of topFiles) {
@@ -250,7 +283,7 @@ export function getRules(): Rule[] {
   const interfaceDir = resolve(rulesDir, "interface");
   if (existsSync(interfaceDir)) {
     const interfaceFiles = readdirSync(interfaceDir).filter(
-      (f) => f.endsWith(".md") && f !== "index.md",
+      (f) => f.endsWith(".md") && f !== "index.md"
     );
 
     for (const file of interfaceFiles) {
@@ -282,6 +315,46 @@ export function getAgentByName(name: string): Agent | null {
 
 export function getRuleBySlug(slug: string): Rule | null {
   return getRules().find((r) => r.slug === slug) ?? null;
+}
+
+/**
+ * Build structured workflow data from skill frontmatter.
+ * Follows the linked list (after:) to order the spine,
+ * groups branches by their joins target, and lists utilities separately.
+ */
+export function getWorkflowData(skills?: Skill[]): WorkflowData {
+  const all = skills ?? getSkills();
+
+  const spineSkills = all.filter((s) => s.workflow?.position === "spine");
+  const branchSkills = all.filter((s) => s.workflow?.position === "branch");
+  const utilities = all.filter((s) => s.workflow?.position === "utility");
+
+  // Build spine by following the linked list
+  const byName = new Map(spineSkills.map((s) => [s.name, s]));
+  const start = spineSkills.find((s) => !s.workflow?.after);
+  const spine: Skill[] = [];
+
+  if (start) {
+    let current: Skill | undefined = start;
+    const visited = new Set<string>();
+    while (current && !visited.has(current.name)) {
+      visited.add(current.name);
+      spine.push(current);
+      current = spineSkills.find((s) => s.workflow?.after === current!.name);
+    }
+  }
+
+  // Group branches by their join target
+  const branches: Record<string, Skill[]> = {};
+  for (const branch of branchSkills) {
+    const target = branch.workflow?.joins;
+    if (target) {
+      branches[target] = branches[target] ?? [];
+      branches[target].push(branch);
+    }
+  }
+
+  return { spine, branches, utilities };
 }
 
 export { sanitizeContent } from "./sanitize";

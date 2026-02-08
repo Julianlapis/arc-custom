@@ -30,10 +30,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className={`${mono.variable} min-h-svh touch-manipulation`} lang="en">
       <head>
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link href="https://rsms.me/" rel="preconnect" />
+        <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
       </head>
-      <body className="bg-neutral-100 text-neutral-950 antialiased isolate break-words">
+      <body className="isolate break-words bg-neutral-100 text-neutral-950 antialiased">
         {children}
       </body>
     </html>

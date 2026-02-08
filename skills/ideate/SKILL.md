@@ -23,6 +23,9 @@ website:
     - security-engineer
     - performance-engineer
     - architecture-engineer
+  workflow:
+    position: spine
+    after: vision
 ---
 
 <behavioral_mode>

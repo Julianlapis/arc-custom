@@ -22,7 +22,7 @@ export function RuleList({ rules, onRuleClick }: RuleListProps) {
       acc[category] = rules.filter((r) => r.category === category);
       return acc;
     },
-    {} as Record<RuleCategory, Rule[]>,
+    {} as Record<RuleCategory, Rule[]>
   );
 
   return (
@@ -44,9 +44,7 @@ export function RuleList({ rules, onRuleClick }: RuleListProps) {
                   onClick={() => onRuleClick(rule)}
                   type="button"
                 >
-                  <ChevronRight
-                    className="size-3.5 shrink-0 text-neutral-300 transition-transform duration-200 group-hover:text-[var(--color-accent)]"
-                  />
+                  <ChevronRight className="size-3.5 shrink-0 text-neutral-300 transition-transform duration-200 group-hover:text-[var(--color-accent)]" />
                   <span className="font-mono text-neutral-700 text-sm">
                     {rule.title}
                   </span>

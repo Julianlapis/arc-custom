@@ -20,6 +20,8 @@ website:
     - Copy, not symlink. Projects can customize rules for their needs.
     - Backup on update. Your customizations are never lost.
     - Optional Ruler integration. Distributes rules to Copilot, Cursor, and other agents.
+  workflow:
+    position: utility
 ---
 
 ```

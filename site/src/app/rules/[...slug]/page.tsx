@@ -56,7 +56,7 @@ export default async function RulePage({
         </nav>
 
         <header className="mb-[calc(var(--baseline)*2)] border-neutral-200 border-b pb-[calc(var(--baseline)*1)]">
-          <h1 className="font-mono text-neutral-900 text-lg">{rule.title}</h1>
+          <h1 className="font-mono text-lg text-neutral-900">{rule.title}</h1>
           <p className="mt-2 text-neutral-500 text-sm">Rule</p>
         </header>
 

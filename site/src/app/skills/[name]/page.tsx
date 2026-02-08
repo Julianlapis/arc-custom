@@ -56,10 +56,10 @@ export default async function SkillPage({
 
         {/* Header */}
         <header className="mb-[calc(var(--baseline)*2)] border-neutral-200 border-b pb-[calc(var(--baseline)*1)]">
-          <h1 className="flex items-center gap-2 font-mono text-neutral-900 text-lg">
+          <h1 className="flex items-center gap-2 font-mono text-lg text-neutral-900">
             {title}
             {!skill.invokable && (
-              <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-neutral-500 text-[10px] leading-none">
+              <span className="rounded bg-neutral-200 px-1.5 py-0.5 font-mono text-[10px] text-neutral-500 leading-none">
                 internal
               </span>
             )}

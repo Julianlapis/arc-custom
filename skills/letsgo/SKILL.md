@@ -20,6 +20,9 @@ website:
     - Scans your stack first. Knows if you have Stripe, auth, a database—tailors the checklist.
     - Interactive walkthrough. One section at a time, tracks what's done.
     - Triggers /arc:legal automatically if privacy policy or terms are missing.
+  workflow:
+    position: spine
+    after: testing
 ---
 
 <progress_context>

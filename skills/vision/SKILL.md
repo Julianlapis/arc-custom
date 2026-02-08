@@ -19,6 +19,9 @@ website:
     - "Written for two audiences: you and the AI. Clear enough for both to act on."
     - Non-goals section mandatory. What you won't build prevents scope creep.
     - Lives in docs/vision.md. Arc reads it automatically in future sessions.
+  workflow:
+    position: spine
+    after: go
 ---
 
 # Vision Workflow

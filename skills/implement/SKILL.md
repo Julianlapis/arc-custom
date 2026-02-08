@@ -21,6 +21,9 @@ website:
     - Test-first is mandatory. The AI writes them, so there's no reason to skip.
     - Quality gates after every task. TypeScript and lint errors don't accumulate.
     - Strongly recommends review before building.
+  workflow:
+    position: spine
+    after: review
 ---
 
 <tool_restrictions>

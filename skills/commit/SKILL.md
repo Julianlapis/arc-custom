@@ -21,6 +21,8 @@ website:
     - Auto-detects domains. Feature code, tests, docs, config—grouped by what changed.
     - Conventional commit format. Enables automated changelogs and clear history.
     - Each commit is atomic. Independently revertable, cherry-pickable, bisectable.
+  workflow:
+    position: utility
 ---
 
 <progress_context>

@@ -21,6 +21,8 @@ website:
     - Report first, act later. The report is useful standalone—batches are pre-computed so you can work through them manually or let the tool apply them.
     - Curated alternatives for common cases. A maintained reference file covers lodash, moment, chalk, and other common swaps instantly. Web search catches the long tail.
     - Rollback on failure. Each batch is checkpointed. If tests break, the upgrade is reverted and the next batch proceeds.
+  workflow:
+    position: utility
 ---
 
 <required_reading>

@@ -22,6 +22,8 @@ website:
     - Fix scale determines next step. 1-3 files, fix now. 4-10, your choice. 10+, generate a plan.
   agents:
     - seo-engineer
+  workflow:
+    position: utility
 ---
 
 <tasklist_context>

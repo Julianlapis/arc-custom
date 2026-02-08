@@ -19,6 +19,9 @@ website:
     - Opinionated references built in. Font choices, spacing scales, animation patterns—not starting from scratch.
     - ASCII wireframes over mockups. Version-controllable, forces focus on structure.
     - Visual verification via screenshots. Catches when implementation drifts from intent.
+  workflow:
+    position: branch
+    joins: implement
 ---
 
 # Design Workflow

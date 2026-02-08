@@ -25,6 +25,9 @@ website:
     - e2e-test-writer
     - test-runner
     - e2e-runner
+  workflow:
+    position: spine
+    after: implement
 ---
 
 # Testing Strategy Workflow

@@ -23,6 +23,8 @@ website:
     - Framework-aware, not framework-coupled. Detects Fumadocs/Nextra/etc. and adapts format. Recommends a framework if none exists, but doesn't install it.
   agents:
     - docs-writer
+  workflow:
+    position: utility
 ---
 
 <tool_restrictions>

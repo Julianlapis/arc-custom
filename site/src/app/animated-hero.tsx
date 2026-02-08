@@ -34,14 +34,10 @@ export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
             animate={{ opacity: 1, y: prefersReducedMotion ? 0 : 0 }}
             className="inline-block text-[var(--color-accent)]"
             exit={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : { opacity: 0, y: -10 }
+              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 }
             }
             initial={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : { opacity: 0, y: 10 }
+              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }
             }
             key={commandNames[index]}
             transition={{ duration: 0.3, ease: "easeInOut" }}

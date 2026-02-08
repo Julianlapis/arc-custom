@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAgents, getRules, getSkills, getVersion } from "@/lib/content";
+import {
+  getAgents,
+  getRules,
+  getSkills,
+  getVersion,
+  getWorkflowData,
+} from "@/lib/content";
 import { AnimatedHero } from "./animated-hero";
-import { ContentBrowser } from "./content-browser";
 import { CopyButton } from "./copy-button";
-
+import { PageContent } from "./page-content";
 
 export const metadata: Metadata = {
   title: "Arc – The full arc from idea to shipped code",
@@ -18,6 +23,7 @@ export default function ArcPage() {
   const agents = getAgents();
   const rules = getRules();
   const version = getVersion();
+  const workflowData = getWorkflowData(skills);
   const skillNames = skills.filter((s) => s.invokable).map((s) => s.name);
   return (
     <main className="min-h-screen p-[calc(var(--baseline)*1)] md:p-[calc(var(--baseline)*2)] lg:p-[calc(var(--baseline)*3)]">
@@ -197,7 +203,13 @@ export default function ArcPage() {
           <span>·</span>
         </div>
 
-        <ContentBrowser agents={agents} rules={rules} skills={skills} />
+        {/* Workflow Diagram + Content Browser (client, shared drawer) */}
+        <PageContent
+          agents={agents}
+          rules={rules}
+          skills={skills}
+          workflowData={workflowData}
+        />
 
         {/* Footer */}
         <footer className="border-neutral-200 border-t pt-[calc(var(--baseline)*1)] text-sm">

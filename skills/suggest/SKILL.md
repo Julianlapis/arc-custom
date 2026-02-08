@@ -20,6 +20,8 @@ website:
     - Opinionated, not neutral. It picks winners and says why.
     - One click to act. Each suggestion includes the exact command to run.
     - Discovery mode researches externally — market trends, competitors, emerging tech — and proposes new features.
+  workflow:
+    position: utility
 ---
 
 <arc_log>

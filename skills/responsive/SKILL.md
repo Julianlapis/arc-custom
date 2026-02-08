@@ -22,6 +22,8 @@ website:
     - Design-aware. Reads your design doc first to preserve aesthetic intent, not just fix layout.
     - Chrome MCP required. No fallback path—single code path, already the Arc standard.
     - Container queries for components. Reusable components adapt to their container, not the viewport.
+  workflow:
+    position: utility
 ---
 
 <tool_restrictions>

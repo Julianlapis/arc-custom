@@ -21,6 +21,9 @@ website:
     - Codebase scan first. Detects Stripe, Google Analytics, auth providers—knows your stack.
     - Minimal questions. Only asks what it can't infer from code.
     - Output is markdown. Drop into your site, style to match.
+  workflow:
+    position: branch
+    joins: letsgo
 ---
 
 <progress_context>

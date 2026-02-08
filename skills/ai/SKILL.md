@@ -19,6 +19,8 @@ website:
     - Cross-cutting skill. Available anytime, like /arc:deps or /arc:responsive.
     - Loads both patterns (reference) and constraints (rules). Patterns teach what to do. Rules prevent what not to do.
     - Version-aware. Checks installed AI SDK version and warns about v5 → v6 migration.
+  workflow:
+    position: utility
 ---
 
 ```
