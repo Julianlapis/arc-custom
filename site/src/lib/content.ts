@@ -4,7 +4,6 @@ import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
 import type {
   Agent,
-  AgentCategory,
   Rule,
   RuleCategory,
   Skill,
@@ -12,22 +11,6 @@ import type {
   WorkflowData,
 } from "./types";
 import { AGENT_CATEGORIES } from "./types";
-
-export type {
-  Agent,
-  AgentCategory,
-  Rule,
-  RuleCategory,
-  Skill,
-  SkillWorkflow,
-  WorkflowData,
-};
-export {
-  AGENT_CATEGORIES,
-  AGENT_CATEGORY_LABELS,
-  RULE_CATEGORIES,
-  WORKFLOW_POSITIONS,
-} from "./types";
 
 // Resolve repo root: site/ → arc/
 // process.cwd() is the Next.js project root (site/), go up one level to arc/
@@ -37,6 +20,8 @@ const ROOT = resolve(process.cwd(), "..");
 const FRONTMATTER_REGEX = /^---\n([\s\S]*?)\n---/;
 const NAME_REGEX = /^name:\s*(.+)$/m;
 const WEBSITE_REGEX = /^website:\n((?: {2}.+\n?)+)/m;
+const MD_EXTENSION_REGEX = /\.md$/;
+const HEADING_REGEX = /^#\s+(.+)$/m;
 
 /**
  * Extract and parse only the website section from frontmatter.
@@ -48,14 +33,18 @@ function extractWebsiteSection(content: string): {
   website?: Record<string, unknown>;
 } | null {
   const match = content.match(FRONTMATTER_REGEX);
-  if (!match) return null;
+  if (!match) {
+    return null;
+  }
 
   const frontmatter = match[1];
   const nameMatch = frontmatter.match(NAME_REGEX);
   const name = nameMatch?.[1]?.trim();
 
   const websiteMatch = frontmatter.match(WEBSITE_REGEX);
-  if (!websiteMatch) return { name };
+  if (!websiteMatch) {
+    return { name };
+  }
 
   try {
     const websiteYaml = `website:\n${websiteMatch[1]}`;
@@ -70,7 +59,9 @@ function extractWebsiteSection(content: string): {
 
 function readLocalFile(relativePath: string): string | null {
   const fullPath = resolve(ROOT, relativePath);
-  if (!existsSync(fullPath)) return null;
+  if (!existsSync(fullPath)) {
+    return null;
+  }
   return readFileSync(fullPath, "utf-8");
 }
 
@@ -80,11 +71,13 @@ function readLocalFile(relativePath: string): string | null {
  */
 function getInvokableSkills(): Set<string> {
   const commandsDir = resolve(ROOT, "commands");
-  if (!existsSync(commandsDir)) return new Set();
+  if (!existsSync(commandsDir)) {
+    return new Set();
+  }
   return new Set(
     readdirSync(commandsDir)
       .filter((f) => f.endsWith(".md"))
-      .map((f) => f.replace(/\.md$/, ""))
+      .map((f) => f.replace(MD_EXTENSION_REGEX, ""))
   );
 }
 
@@ -98,7 +91,7 @@ const CORE_RULES = new Set([
   "tailwind",
 ]);
 
-const WORKFLOW_RULES = new Set([
+const _WORKFLOW_RULES = new Set([
   "testing",
   "git",
   "env",
@@ -152,17 +145,23 @@ interface AgentFrontmatter {
  */
 export function getSkills(): Skill[] {
   const skillsDir = resolve(ROOT, "skills");
-  if (!existsSync(skillsDir)) return [];
+  if (!existsSync(skillsDir)) {
+    return [];
+  }
 
   const invokable = getInvokableSkills();
   const skills: Skill[] = [];
   const entries = readdirSync(skillsDir, { withFileTypes: true });
 
   for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
+    if (!entry.isDirectory()) {
+      continue;
+    }
 
     const raw = readLocalFile(`skills/${entry.name}/SKILL.md`);
-    if (!raw) continue;
+    if (!raw) {
+      continue;
+    }
 
     try {
       const { data, content: body } = matter(raw);
@@ -208,19 +207,25 @@ export function getSkills(): Skill[] {
  */
 export function getAgents(): Agent[] {
   const agentsDir = resolve(ROOT, "agents");
-  if (!existsSync(agentsDir)) return [];
+  if (!existsSync(agentsDir)) {
+    return [];
+  }
 
   const agents: Agent[] = [];
 
   for (const category of AGENT_CATEGORIES) {
     const categoryDir = resolve(agentsDir, category);
-    if (!existsSync(categoryDir)) continue;
+    if (!existsSync(categoryDir)) {
+      continue;
+    }
 
     const files = readdirSync(categoryDir).filter((f) => f.endsWith(".md"));
 
     for (const file of files) {
       const raw = readLocalFile(`agents/${category}/${file}`);
-      if (!raw) continue;
+      if (!raw) {
+        continue;
+      }
 
       try {
         const extracted = extractWebsiteSection(raw);
@@ -232,7 +237,7 @@ export function getAgents(): Agent[] {
           const body = fmMatch ? raw.slice(fmMatch[0].length).trim() : raw;
 
           agents.push({
-            name: extracted?.name || file.replace(/\.md$/, ""),
+            name: extracted?.name || file.replace(MD_EXTENSION_REGEX, ""),
             category,
             desc: website.desc,
             summary: website.summary,
@@ -258,7 +263,9 @@ export function getAgents(): Agent[] {
  */
 export function getRules(): Rule[] {
   const rulesDir = resolve(ROOT, "rules");
-  if (!existsSync(rulesDir)) return [];
+  if (!existsSync(rulesDir)) {
+    return [];
+  }
 
   const rules: Rule[] = [];
 
@@ -269,10 +276,12 @@ export function getRules(): Rule[] {
 
   for (const file of topFiles) {
     const content = readLocalFile(`rules/${file}`);
-    if (!content) continue;
+    if (!content) {
+      continue;
+    }
 
-    const slug = file.replace(/\.md$/, "");
-    const titleMatch = content.match(/^#\s+(.+)$/m);
+    const slug = file.replace(MD_EXTENSION_REGEX, "");
+    const titleMatch = content.match(HEADING_REGEX);
     const title = titleMatch?.[1] ?? slug;
     const category: RuleCategory = CORE_RULES.has(slug) ? "core" : "workflow";
 
@@ -288,11 +297,13 @@ export function getRules(): Rule[] {
 
     for (const file of interfaceFiles) {
       const content = readLocalFile(`rules/interface/${file}`);
-      if (!content) continue;
+      if (!content) {
+        continue;
+      }
 
-      const slug = `interface/${file.replace(/\.md$/, "")}`;
-      const titleMatch = content.match(/^#\s+(.+)$/m);
-      const title = titleMatch?.[1] ?? file.replace(/\.md$/, "");
+      const slug = `interface/${file.replace(MD_EXTENSION_REGEX, "")}`;
+      const titleMatch = content.match(HEADING_REGEX);
+      const title = titleMatch?.[1] ?? file.replace(MD_EXTENSION_REGEX, "");
 
       rules.push({ slug, title, category: "interface", content });
     }
@@ -330,7 +341,7 @@ export function getWorkflowData(skills?: Skill[]): WorkflowData {
   const utilities = all.filter((s) => s.workflow?.position === "utility");
 
   // Build spine by following the linked list
-  const byName = new Map(spineSkills.map((s) => [s.name, s]));
+  const _byName = new Map(spineSkills.map((s) => [s.name, s]));
   const start = spineSkills.find((s) => !s.workflow?.after);
   const spine: Skill[] = [];
 
@@ -340,7 +351,7 @@ export function getWorkflowData(skills?: Skill[]): WorkflowData {
     while (current && !visited.has(current.name)) {
       visited.add(current.name);
       spine.push(current);
-      current = spineSkills.find((s) => s.workflow?.after === current!.name);
+      current = spineSkills.find((s) => s.workflow?.after === current?.name);
     }
   }
 
@@ -357,6 +368,7 @@ export function getWorkflowData(skills?: Skill[]): WorkflowData {
   return { spine, branches, utilities };
 }
 
+// biome-ignore lint/performance/noBarrelFile: re-export used by page components
 export { sanitizeContent } from "./sanitize";
 
 export function getAssetCounts(): { references: number; disciplines: number } {
@@ -374,7 +386,9 @@ export function getAssetCounts(): { references: number; disciplines: number } {
 
 export function getVersion(): string | null {
   const content = readLocalFile(".claude-plugin/plugin.json");
-  if (!content) return null;
+  if (!content) {
+    return null;
+  }
   try {
     const parsed = JSON.parse(content) as { version?: string };
     return parsed.version ?? null;

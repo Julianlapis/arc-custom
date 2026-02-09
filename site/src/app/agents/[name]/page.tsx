@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  AGENT_CATEGORY_LABELS,
-  getAgentByName,
-  getAgents,
-  sanitizeContent,
-} from "@/lib/content";
+import { getAgentByName, getAgents, sanitizeContent } from "@/lib/content";
+import { AGENT_CATEGORY_LABELS } from "@/lib/types";
 import { DocumentContent } from "../../document-content";
 
 export function generateStaticParams() {
@@ -20,7 +16,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { name } = await params;
   const agent = getAgentByName(name);
-  if (!agent) return {};
+  if (!agent) {
+    return {};
+  }
 
   return {
     title: `${agent.name} – Arc`,
@@ -41,7 +39,9 @@ export default async function AgentPage({
 }) {
   const { name } = await params;
   const agent = getAgentByName(name);
-  if (!agent) notFound();
+  if (!agent) {
+    notFound();
+  }
 
   const cleaned = sanitizeContent(agent.content);
 

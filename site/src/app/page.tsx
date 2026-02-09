@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  getAgents,
-  getAssetCounts,
-  getRules,
-  getSkills,
-  getVersion,
-  getWorkflowData,
-} from "@/lib/content";
+import { getAgents, getRules, getSkills, getVersion } from "@/lib/content";
 import { AnimatedHero } from "./animated-hero";
 import { CopyButton } from "./copy-button";
 import { PageContent } from "./page-content";
@@ -24,8 +17,6 @@ export default function ArcPage() {
   const agents = getAgents();
   const rules = getRules();
   const version = getVersion();
-  const workflowData = getWorkflowData(skills);
-  const assetCounts = getAssetCounts();
   const skillNames = skills.filter((s) => s.invokable).map((s) => s.name);
   return (
     <main className="min-h-screen p-[calc(var(--baseline)*1)] md:p-[calc(var(--baseline)*2)] lg:p-[calc(var(--baseline)*3)]">
@@ -95,9 +86,9 @@ export default function ArcPage() {
             <div className="flex items-center justify-between rounded bg-neutral-800 px-4 py-3 font-mono text-neutral-100 text-sm">
               <span className="flex items-center gap-2">
                 <span className="text-neutral-500">$</span>
-                <span>claude plugins install arc@howells-arc</span>
+                <span>claude plugins install arc@howells</span>
               </span>
-              <CopyButton light text="claude plugins install arc@howells-arc" />
+              <CopyButton light text="claude plugins install arc@howells" />
             </div>
           </div>
           <p className="mt-[calc(var(--baseline)*0.5)] max-w-md text-pretty text-neutral-500 text-xs leading-relaxed">
@@ -206,13 +197,7 @@ export default function ArcPage() {
         </div>
 
         {/* Workflow Diagram + Content Browser (client, shared drawer) */}
-        <PageContent
-          agents={agents}
-          assetCounts={assetCounts}
-          rules={rules}
-          skills={skills}
-          workflowData={workflowData}
-        />
+        <PageContent agents={agents} rules={rules} skills={skills} />
 
         {/* Footer */}
         <footer className="border-neutral-200 border-t pt-[calc(var(--baseline)*1)] text-sm">

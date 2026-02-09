@@ -15,7 +15,9 @@ export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      return;
+    }
     const interval = setInterval(() => {
       if (document.visibilityState === "visible") {
         setIndex((prev) => (prev + 1) % commandNames.length);

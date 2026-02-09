@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getRuleBySlug, getRules, sanitizeContent } from "@/lib/content";
 import { DocumentContent } from "../../document-content";
 
+const STRIP_HEADING_REGEX = /^#\s+.+\n+/;
+
 export function generateStaticParams() {
   return getRules().map((r) => ({ slug: r.slug.split("/") }));
 }
@@ -15,7 +17,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const rule = getRuleBySlug(slug.join("/"));
-  if (!rule) return {};
+  if (!rule) {
+    return {};
+  }
 
   const description = `${rule.title} — coding rule for the Arc plugin.`;
   return {
@@ -37,10 +41,12 @@ export default async function RulePage({
 }) {
   const { slug } = await params;
   const rule = getRuleBySlug(slug.join("/"));
-  if (!rule) notFound();
+  if (!rule) {
+    notFound();
+  }
 
   // Strip the first heading (already shown in the header) and sanitize
-  const body = rule.content.replace(/^#\s+.+\n+/, "");
+  const body = rule.content.replace(STRIP_HEADING_REGEX, "");
   const cleaned = sanitizeContent(body);
 
   return (

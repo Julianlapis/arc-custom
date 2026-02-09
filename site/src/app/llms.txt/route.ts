@@ -34,7 +34,7 @@ export function GET() {
     "",
     "## Links",
     "",
-    "- Install: claude plugins install arc@howells-arc",
+    "- Install: claude plugins install arc@howells",
     "- GitHub: https://github.com/howells/arc",
     "- Docs: https://usearc.dev",
     "",

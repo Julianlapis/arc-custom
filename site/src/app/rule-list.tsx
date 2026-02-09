@@ -29,7 +29,9 @@ export function RuleList({ rules, onRuleClick }: RuleListProps) {
     <div className="space-y-[calc(var(--baseline)*1.5)]">
       {categoryOrder.map((category) => {
         const categoryRules = grouped[category];
-        if (categoryRules.length === 0) return null;
+        if (categoryRules.length === 0) {
+          return null;
+        }
 
         return (
           <div key={category}>

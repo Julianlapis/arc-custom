@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { Agent, Rule, Skill, WorkflowData } from "@/lib/types";
+import type { Agent, Rule, Skill } from "@/lib/types";
 import { ContentBrowser } from "./content-browser";
 import { UnifiedDrawer } from "./unified-drawer";
-import { WorkflowGraph } from "./workflow-graph";
 
 type DrawerContent =
   | { type: "skill"; data: Skill }
@@ -15,17 +14,9 @@ interface PageContentProps {
   skills: Skill[];
   agents: Agent[];
   rules: Rule[];
-  workflowData: WorkflowData;
-  assetCounts: { references: number; disciplines: number };
 }
 
-export function PageContent({
-  skills,
-  agents,
-  rules,
-  workflowData,
-  assetCounts,
-}: PageContentProps) {
+export function PageContent({ skills, agents, rules }: PageContentProps) {
   const [drawerContent, setDrawerContent] = useState<DrawerContent | null>(
     null
   );

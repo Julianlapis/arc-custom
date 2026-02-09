@@ -15,7 +15,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { name } = await params;
   const skill = getSkillByName(name);
-  if (!skill) return {};
+  if (!skill) {
+    return {};
+  }
 
   const title = skill.invokable ? `/arc:${skill.name}` : skill.name;
   return {
@@ -37,7 +39,9 @@ export default async function SkillPage({
 }) {
   const { name } = await params;
   const skill = getSkillByName(name);
-  if (!skill) notFound();
+  if (!skill) {
+    notFound();
+  }
 
   const title = skill.invokable ? `/arc:${skill.name}` : skill.name;
   const cleaned = sanitizeContent(skill.content);

@@ -60,7 +60,7 @@ TOOLS   /arc:commit     - Smart commit + push with auto-splitting
 ### Claude Code
 
 ```
-claude plugins install arc@howells-arc
+claude plugins install arc@howells
 ```
 
 ### Codex

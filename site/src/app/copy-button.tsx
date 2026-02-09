@@ -63,9 +63,9 @@ export function CopyButton({ text, light }: CopyButtonProps) {
           </svg>
         )}
       </button>
-      <span aria-live="polite" className="sr-only" role="status">
+      <output aria-live="polite" className="sr-only">
         {copied ? "Copied to clipboard" : ""}
-      </span>
+      </output>
     </>
   );
 }

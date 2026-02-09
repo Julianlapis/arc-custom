@@ -1,5 +1,6 @@
 "use client";
 
+// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as Tabs from "@radix-ui/react-tabs";
 import type { Agent, Rule, Skill } from "@/lib/types";
 import { AgentList } from "./agent-list";

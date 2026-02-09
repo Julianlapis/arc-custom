@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
 
 const remarkPlugins = [remarkGfm];
+const HEADING_REGEX = /^#\s+.+\n+/;
 
 import type { Agent, Rule, Skill } from "@/lib/types";
 import { AGENT_CATEGORY_LABELS } from "@/lib/types";
@@ -45,7 +46,9 @@ export function UnifiedDrawer({
 
   // Staggered close: source exits first, then preview follows
   const closeAll = useCallback(() => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+    }
     if (showSource) {
       setShowSource(false);
       closeTimer.current = setTimeout(() => onOpenChange(false), 250);
@@ -56,9 +59,13 @@ export function UnifiedDrawer({
 
   // Escape key closes drawer
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      return;
+    }
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeAll();
+      if (e.key === "Escape") {
+        closeAll();
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -86,13 +93,15 @@ export function UnifiedDrawer({
 
   useEffect(() => {
     return () => {
-      if (closeTimer.current) clearTimeout(closeTimer.current);
+      if (closeTimer.current) {
+        clearTimeout(closeTimer.current);
+      }
     };
   }, []);
 
   useEffect(() => {
     setShowSource(false);
-  }, [content]);
+  }, []);
 
   const rawSource = content ? getSourceContent(content) : null;
   const sourceContent = useMemo(
@@ -174,24 +183,12 @@ export function UnifiedDrawer({
 
             <div className="flex-1 overflow-y-auto">
               <div className="px-8 py-8 md:px-10 md:py-10">
-                {content.type === "skill" ? (
-                  <SkillContent
-                    onAgentClick={onAgentClick}
-                    onViewSource={() => setShowSource(true)}
-                    skill={content.data}
-                  />
-                ) : content.type === "agent" ? (
-                  <AgentContent
-                    agent={content.data}
-                    onSkillClick={onSkillClick}
-                    onViewSource={() => setShowSource(true)}
-                  />
-                ) : (
-                  <RuleContent
-                    onViewSource={() => setShowSource(true)}
-                    rule={content.data}
-                  />
-                )}
+                <ContentRenderer
+                  content={content}
+                  onAgentClick={onAgentClick}
+                  onSkillClick={onSkillClick}
+                  onViewSource={() => setShowSource(true)}
+                />
               </div>
             </div>
           </motion.div>
@@ -258,6 +255,8 @@ function getDrawerLabel(content: DrawerContent): string {
       return content.data.name;
     case "rule":
       return content.data.title;
+    default:
+      return "";
   }
 }
 
@@ -269,6 +268,8 @@ function getContentUrl(content: DrawerContent): string {
       return `/agents/${content.data.name}`;
     case "rule":
       return `/rules/${content.data.slug}`;
+    default:
+      return "/";
   }
 }
 
@@ -280,6 +281,43 @@ function getSourceContent(content: DrawerContent): string | null {
       return content.data.content;
     case "rule":
       return content.data.content;
+    default:
+      return null;
+  }
+}
+
+function ContentRenderer({
+  content,
+  onAgentClick,
+  onSkillClick,
+  onViewSource,
+}: {
+  content: DrawerContent;
+  onAgentClick?: (name: string) => void;
+  onSkillClick?: (name: string) => void;
+  onViewSource: () => void;
+}) {
+  switch (content.type) {
+    case "skill":
+      return (
+        <SkillContent
+          onAgentClick={onAgentClick}
+          onViewSource={onViewSource}
+          skill={content.data}
+        />
+      );
+    case "agent":
+      return (
+        <AgentContent
+          agent={content.data}
+          onSkillClick={onSkillClick}
+          onViewSource={onViewSource}
+        />
+      );
+    case "rule":
+      return <RuleContent onViewSource={onViewSource} rule={content.data} />;
+    default:
+      return null;
   }
 }
 
@@ -473,7 +511,7 @@ function RuleContent({
   rule: Rule;
   onViewSource: () => void;
 }) {
-  const body = rule.content.replace(/^#\s+.+\n+/, "");
+  const body = rule.content.replace(HEADING_REGEX, "");
 
   return (
     <>
