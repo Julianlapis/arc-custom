@@ -261,7 +261,7 @@ git add docs/plans/
 git commit -m "docs: add <topic> implementation plan"
 ```
 
-Plan is ready. Return control to implement skill.
+Plan is ready. Tell the user the plan is saved and offer next steps as plain text. Do NOT call EnterPlanMode or ExitPlanMode. Just print the summary and ask what they want to do next.
 </process>
 
 <success_criteria>
@@ -275,3 +275,7 @@ Implementation plan is complete when:
 - [ ] ASCII UI references included for UI tasks
 - [ ] Plan committed to git
 </success_criteria>
+
+<tool_restrictions_reminder>
+REMINDER: You must NEVER call `EnterPlanMode` or `ExitPlanMode` at any point during this skill — not at the start, not in the middle, not at the end. The plan file you just wrote IS the deliverable. Present it to the user as a normal message.
+</tool_restrictions_reminder>

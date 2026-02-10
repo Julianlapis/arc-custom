@@ -1,16 +1,16 @@
 #!/bin/sh
 
 # Auto-bump patch version when plugin files change
-# Skips for site-only changes and version bump commits (prevents infinite loop)
+# Skips for site-only changes. Uses env var to prevent infinite loop.
 
-commit_msg=$(git log -1 --pretty=%B)
-if echo "$commit_msg" | grep -q "^chore: bump version to"; then
+# Prevent re-entrancy: the amend below triggers post-commit again
+if [ "$ARC_BUMPING_VERSION" = "1" ]; then
   exit 0
 fi
 
 # Only bump if plugin-related files changed (not site/ only)
 changed_files=$(git diff-tree --no-commit-id --name-only -r HEAD)
-plugin_changes=$(echo "$changed_files" | grep -v '^site/' | grep -v '^\.husky/' || true)
+plugin_changes=$(echo "$changed_files" | grep -v '^site/' | grep -v '^\.husky/' | grep -v '^\.claude-plugin/plugin\.json' | grep -v '^\.claude-plugin/marketplace\.json' | grep -v '^package\.json$' || true)
 
 if [ -z "$plugin_changes" ]; then
   exit 0
@@ -30,4 +30,4 @@ jq --arg v "$new_version" '.metadata.version = $v | .plugins[0].version = $v' "$
 jq --arg v "$new_version" '.version = $v' "$PACKAGE_JSON" > tmp.json && mv tmp.json "$PACKAGE_JSON"
 
 git add "$PLUGIN_JSON" "$MARKETPLACE_JSON" "$PACKAGE_JSON"
-git commit --amend --no-edit --no-verify >/dev/null 2>&1
+ARC_BUMPING_VERSION=1 git commit --amend --no-edit --no-verify >/dev/null 2>&1

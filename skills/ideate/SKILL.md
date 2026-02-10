@@ -504,3 +504,7 @@ Design is complete when:
 - [ ] User chose next step (worktree setup, direct to detail, or done)
 - [ ] Progress journal updated
 </success_criteria>
+
+<tool_restrictions_reminder>
+REMINDER: You must NEVER call `EnterPlanMode` or `ExitPlanMode` at any point during this skill — not at the start, not in the middle, not when presenting the design doc, not at the end. All output goes directly to the user as normal messages via `AskUserQuestion` or plain text.
+</tool_restrictions_reminder>

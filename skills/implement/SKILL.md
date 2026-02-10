@@ -764,3 +764,7 @@ Execution is complete when:
 - [ ] Progress journal updated
 - [ ] Orphaned agents cleaned up
 </success_criteria>
+
+<tool_restrictions_reminder>
+REMINDER: You must NEVER call `EnterPlanMode` or `ExitPlanMode` at any point during this skill — not at the start, not after creating the plan, not before implementation, not at the end. This skill manages its own flow. All output goes directly to the user as normal messages.
+</tool_restrictions_reminder>
