@@ -39,7 +39,7 @@ export default async function Image() {
       >
         <span style={{ color: "#262626" }}>/arc</span>
         <span style={{ color: "#5A7B7B" }}>:</span>
-        <span style={{ color: "#5A7B7B" }}>start</span>
+        <span style={{ color: "#5A7B7B" }}>go</span>
       </div>
 
       {/* Bottom line */}

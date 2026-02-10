@@ -82,7 +82,7 @@ Look for:
 
 ## What Doesn't Get Logged
 
-- `/arc:start` (routing only)
+- `/arc:go` (routing only)
 - `/arc:suggest` (read-only)
 - `/arc:prune-agents` (utility)
 - `/arc:tidy` (utility)

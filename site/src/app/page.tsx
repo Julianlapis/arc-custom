@@ -121,8 +121,8 @@ export default function ArcPage() {
           </h2>
           <div className="group max-w-md">
             <div className="flex items-center justify-between border-neutral-300 border-b py-3 font-mono text-sm transition-colors">
-              <span>/arc:start</span>
-              <CopyButton text="/arc:start" />
+              <span>/arc:go</span>
+              <CopyButton text="/arc:go" />
             </div>
           </div>
           <p className="mt-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
