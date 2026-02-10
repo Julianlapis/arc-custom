@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # Validate plugin structure before commit
-# Version bumping is done locally via ./scripts/bump-version.sh
-# GitHub Actions creates a tag + release when it detects a new version
+# Version auto-bumps via post-commit hook when plugin files change
 
 .husky/validate-plugin.sh || exit 1
 
