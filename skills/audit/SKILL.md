@@ -38,6 +38,14 @@ website:
     position: utility
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+</tool_restrictions>
+
 <tasklist_context>
 **Use TaskList tool** to check for existing tasks related to this work.
 

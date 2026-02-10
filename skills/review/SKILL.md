@@ -34,6 +34,14 @@ website:
     after: ideate
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+</tool_restrictions>
+
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md

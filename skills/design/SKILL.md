@@ -24,6 +24,14 @@ website:
     joins: implement
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own multi-phase design process. Execute the phases below directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+</tool_restrictions>
+
 # Design Workflow
 
 Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).

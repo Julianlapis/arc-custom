@@ -25,6 +25,14 @@ website:
     position: utility
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+</tool_restrictions>
+
 <required_reading>
 Read during Phase 2 (Alternative Discovery):
 - `${CLAUDE_PLUGIN_ROOT}/references/dependency-alternatives.md` — Curated table of known package replacements with migration effort ratings

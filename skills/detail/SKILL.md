@@ -10,11 +10,13 @@ metadata:
 ---
 
 <tool_restrictions>
-# Tool Restrictions — READ THESE FIRST
+# MANDATORY Tool Restrictions
 
-**NEVER use `EnterPlanMode`.** This skill creates an implementation plan by following a structured process — it replaces Claude's built-in planning entirely. The steps below ARE the planning. Do not meta-plan them.
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill IS the planning process. The steps below replace Claude's built-in planning entirely. You are NOT doing a task that needs plan mode — you ARE already executing a structured plan-creation process. Calling EnterPlanMode would bypass the skill and waste the user's time.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
-**NEVER use `ExitPlanMode`.** You are never in plan mode.
+If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` steps below. They ARE the plan. Execute them directly.
 </tool_restrictions>
 
 <required_reading>

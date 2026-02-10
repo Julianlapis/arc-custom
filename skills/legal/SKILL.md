@@ -26,6 +26,14 @@ website:
     joins: letsgo
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own multi-step process. Execute the steps below directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+</tool_restrictions>
+
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 

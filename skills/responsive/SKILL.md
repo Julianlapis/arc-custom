@@ -27,13 +27,16 @@ website:
 ---
 
 <tool_restrictions>
-# Tool Restrictions
+# MANDATORY Tool Restrictions
 
-**Do NOT use the `EnterPlanMode` tool.** This skill manages its own workflow and writes results directly. Claude's built-in plan mode would bypass this process.
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill manages its own workflow and writes results directly. Claude's built-in plan mode would bypass this process.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
-**Do NOT use the `ExitPlanMode` tool.** This skill is never in plan mode.
+## REQUIRED TOOLS:
+- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text in your response. Every question to the user — whether confirming routes, choosing options, or validating fixes — MUST use the `AskUserQuestion` tool. This enforces one question at a time and prevents walls of text. If you need to provide context before asking, keep it to 2-3 sentences max, then use the tool.
 
-**ALWAYS use the `AskUserQuestion` tool for questions.** Never ask questions as plain text in your response. Every question to the user — whether confirming routes, choosing options, or validating fixes — MUST use the `AskUserQuestion` tool. This enforces one question at a time and prevents walls of text. If you need to provide context before asking, keep it to 2-3 sentences max, then use the tool.
+If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` steps below. Execute them directly.
 </tool_restrictions>
 
 # Responsive Audit & Fix

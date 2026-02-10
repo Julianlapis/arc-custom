@@ -30,6 +30,14 @@ website:
     after: implement
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured testing workflow. Execute it directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+</tool_restrictions>
+
 # Testing Strategy Workflow
 
 Create comprehensive test strategies covering the full test pyramid. Execute with specialist agents.

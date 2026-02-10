@@ -27,11 +27,13 @@ website:
 ---
 
 <tool_restrictions>
-# Tool Restrictions — READ THESE FIRST
+# MANDATORY Tool Restrictions
 
-**NEVER use `EnterPlanMode`.** This skill has its own structured process — planning (via detail skill) and execution (via build agents). Claude's built-in plan mode would bypass this entire orchestration. Follow the phases below instead.
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process — planning (via detail skill) and execution (via build agents). Claude's built-in plan mode would bypass this entire orchestration. Follow the phases below instead.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
-**NEVER use `ExitPlanMode`.** You are never in plan mode.
+If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` phases below. Phase 0 creates the plan via the detail skill. Phases 1-7 execute it. Execute them directly.
 </tool_restrictions>
 
 <required_reading>
