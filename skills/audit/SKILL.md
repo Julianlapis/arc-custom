@@ -8,8 +8,9 @@ description: |
 
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
+  Use --docs for a focused JSDoc/documentation coverage audit.
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo]
+argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs]
 metadata:
   author: howells
 website:
@@ -23,7 +24,7 @@ website:
   decisions:
     - Whole project or targeted. Run on everything, or scope to a path like `src/lib/auth`.
     - Agents run in batches (2 at a time by default). Use `--parallel` for speed if you have resources.
-    - Focus flags available. `--security`, `--performance`, `--design` for targeted audits.
+    - Focus flags available. `--security`, `--performance`, `--design`, `--docs` for targeted audits.
   agents:
     - security-engineer
     - performance-engineer
@@ -34,6 +35,7 @@ website:
     - senior-engineer
     - designer
     - data-engineer
+    - documentation-engineer
   workflow:
     position: utility
 ---
@@ -98,6 +100,7 @@ Pass relevant rules to each reviewer agent.
 | data-engineer | testing.md, api.md |
 | organization-engineer | turborepo.md, code-style.md |
 | hygiene-engineer | stack.md, code-style.md, ai-sdk.md (if AI SDK) |
+| documentation-engineer | typescript.md, code-style.md |
 | daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK) |
 | performance-engineer | (no core rules — uses own heuristics) |
 | seo-engineer | seo.md |
@@ -285,6 +288,7 @@ Execution mode: [batched (default) / parallel / team]
 - If test files detected (medium/large) → add `test-quality-engineer`
 - If recent AI-assisted work or branch audit → add `hygiene-engineer`
 - If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
+- If TypeScript/JavaScript project (`.ts`/`.tsx`/`.js`/`.jsx` files, medium/large) → add `documentation-engineer`
 
 **Focus flag overrides:**
 - `--security` → only `security-engineer`
@@ -295,6 +299,7 @@ Execution mode: [batched (default) / parallel / team]
 - `--accessibility` → only `accessibility-engineer`
 - `--hygiene` → only `hygiene-engineer`
 - `--seo` → only `seo-engineer`
+- `--docs` → only `documentation-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -368,6 +373,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
 | hygiene-engineer | sonnet | Pattern recognition for AI artifacts |
 | seo-engineer | sonnet | Pattern recognition for SEO elements |
+| documentation-engineer | sonnet | JSDoc coverage analysis |
 
 **Include project stage in every reviewer prompt.**
 
