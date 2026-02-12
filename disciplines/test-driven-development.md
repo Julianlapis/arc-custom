@@ -184,12 +184,18 @@ Confirm:
 
 ### REFACTOR - Clean Up
 
-After green only:
-- Remove duplication
-- Improve names
-- Extract helpers
+After green only. Keep tests green. Don't add behavior.
 
-Keep tests green. Don't add behavior.
+| Smell | Fix |
+|-------|-----|
+| Duplication | Extract shared logic into a named function |
+| Long method (>15 lines) | Split into steps — each step becomes a function |
+| Shallow module (thin wrapper, no real logic) | Merge into caller or deepen with real behavior |
+| Feature envy (function uses another module's data more than its own) | Move the function to where the data lives |
+| Primitive obsession (passing raw strings/numbers everywhere) | Introduce a type or value object (`Email`, `Money`, `DateRange`) |
+| Poor names | Rename to describe WHAT, not HOW (`processData` → `calculateMonthlyRevenue`) |
+
+**Refactoring rule:** One change at a time. Run tests after each. If tests break, undo and try smaller.
 
 ### Repeat
 
@@ -348,6 +354,60 @@ Can't check all boxes? You skipped TDD. Start over.
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
 
+### Testable Design
+
+If code is hard to test, the code is telling you something. Fix the design, not the test.
+
+**Dependency injection** — Accept collaborators as parameters instead of importing them directly.
+
+<Bad>
+```typescript
+import { db } from './database';
+
+export async function getActiveUsers() {
+  return db.query('SELECT * FROM users WHERE active = true');
+}
+```
+Requires mocking the `db` module to test. Coupled to a specific database.
+</Bad>
+
+<Good>
+```typescript
+export async function getActiveUsers(db: Database) {
+  return db.query('SELECT * FROM users WHERE active = true');
+}
+```
+Pass a real test database, an in-memory fake, or anything that implements `Database`. No mocks needed.
+</Good>
+
+**Functional purity** — Return results instead of causing side effects.
+
+<Bad>
+```typescript
+function processOrder(order: Order) {
+  updateInventory(order.items);
+  sendConfirmationEmail(order.email);
+  logAnalytics('order_completed', order.id);
+}
+```
+Three side effects, all invisible to the caller. Must mock everything to test.
+</Bad>
+
+<Good>
+```typescript
+function processOrder(order: Order): OrderResult {
+  return {
+    inventoryChanges: calculateInventoryChanges(order.items),
+    email: { to: order.email, template: 'confirmation', data: order },
+    event: { name: 'order_completed', id: order.id },
+  };
+}
+```
+Pure function — returns data describing what should happen. Test the return value. Execute side effects at the boundary.
+</Good>
+
+**Minimal interfaces** — Fewer public methods = fewer tests needed. A module with 2 public methods is easier to test than one with 12.
+
 ## Debugging Integration
 
 Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
@@ -356,7 +416,7 @@ Never fix bugs without a test.
 
 ## Testing Anti-Patterns
 
-When adding mocks or test utilities, read @testing-anti-patterns.md to avoid common pitfalls:
+When adding mocks or test utilities, read ${CLAUDE_PLUGIN_ROOT}/references/testing-anti-patterns.md to avoid common pitfalls:
 - Testing mock behavior instead of real behavior
 - Adding test-only methods to production classes
 - Mocking without understanding dependencies

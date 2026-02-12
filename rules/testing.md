@@ -68,3 +68,37 @@ Tests that hit real external APIs MUST run — don't skip them because "no live 
 - MUST: Each test has a single clear assertion. No "test everything" blocks.
 - NEVER: Use `sleep`/`setTimeout` in tests. Wait for specific conditions.
 - SHOULD: Use MSW for API mocking in integration tests, not manual fetch stubs.
+
+## Mocking Boundaries
+
+Mock at system boundaries. Never mock your own code.
+
+**Litmus test:** Would a different implementation producing the same behavior still pass this test? If not, you're testing implementation.
+
+### Where to Mock
+
+| Boundary | Mock Tool | Example |
+|----------|-----------|---------|
+| External HTTP APIs | MSW (`http.get(...)`) | Third-party REST/GraphQL services |
+| Database | Test database or in-memory adapter | Postgres, Redis, SQLite |
+| Time | `vi.useFakeTimers()` | Debounce, expiry, scheduled jobs |
+| File system | `memfs` or temp directories | File uploads, log writing |
+| Randomness | Seeded values or `vi.spyOn(Math, 'random')` | UUIDs, tokens, shuffling |
+| Environment | `vi.stubEnv()` | `NODE_ENV`, feature flags |
+
+### Where NOT to Mock
+
+| Don't Mock | Do This Instead |
+|------------|-----------------|
+| Your own modules (`vi.mock('./utils')`) | Import and call the real code |
+| Internal collaborators | Use dependency injection, test through the public API |
+| Simple data transformations | Test input → output directly |
+| Framework internals (React, Next.js) | Use testing-library, render real components |
+
+### Rules
+
+- MUST: Mock only at system boundaries — external APIs, databases, time, file system, randomness.
+- NEVER: Mock your own modules or internal collaborators. If you need `vi.mock('./my-module')`, your design needs dependency injection instead.
+- SHOULD: Design APIs as SDK-style interfaces (`{ getUser, createOrder }`) that accept a client parameter, not hardcoded `fetch` calls.
+- SHOULD: Accept dependencies as parameters — functions that take a `db` or `client` argument are trivially testable with real or fake implementations.
+- SHOULD: Prefer fakes (simplified real implementations) over mocks when a boundary is complex. A fake in-memory store is more trustworthy than `vi.fn()` with `.mockResolvedValue()`.

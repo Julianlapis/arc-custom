@@ -102,6 +102,43 @@ Task 7: Create registration form component (UI only)
 - E2E validates the whole chain
 </ordering>
 
+<ordering_strategy>
+**Choose ordering based on feature complexity:**
+
+**Bottom-up (default)** — Types → utilities → components → integration. Use for well-understood features where the data shape and boundaries are clear.
+
+**Tracer bullet (complex features)** — Implement one complete behavior through ALL layers first (type → utility → component → API → E2E test), then expand. Use when:
+- Feature spans 3+ layers (e.g., new form → API route → database → email)
+- Architecture is unproven (new pattern, unfamiliar library, first feature of its kind)
+- User expresses uncertainty about the right approach
+
+**Why tracer bullet works:** It proves the architecture early. If the database schema is wrong or the API shape doesn't fit the UI, you discover it on task 1 — not task 15. The first vertical slice is the hardest; every subsequent slice is faster because the pattern is proven.
+
+**Example — adding a comments feature:**
+
+Bottom-up:
+```
+Task 1: Create Comment type
+Task 2: Create CommentList component (UI only)
+Task 3: Create CommentForm component (UI only)
+Task 4: Create comments API route
+Task 5: Wire CommentForm to API
+Task 6: Wire CommentList to API
+Task 7: E2E test for commenting flow
+```
+
+Tracer bullet:
+```
+Task 1: Create Comment type + API route + CommentForm + E2E test (one comment, end-to-end)
+Task 2: Add CommentList with real data
+Task 3: Add validation and error handling
+Task 4: Add editing and deletion
+Task 5: Add pagination
+```
+
+When suggesting tracer bullet, explain the tradeoff: "The first task is bigger, but it proves the whole architecture works before we invest in details."
+</ordering_strategy>
+
 <commit_messages>
 **Use conventional commits:**
 
