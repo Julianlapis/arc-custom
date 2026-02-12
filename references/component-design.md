@@ -123,7 +123,8 @@ components/
 |--------------|-----|
 | Prop explosion (`leftIcon`, `rightIcon`, `iconSize`...) | Use children: `<Button><Icon /> Text</Button>` |
 | Boolean variants (`primary`, `large`, `rounded`) | Explicit variants: `variant="primary" size="lg"` |
-| Premature abstraction | Wait until you've copy-pasted 2-3 times |
+| Duplicating an existing component with small changes | Search the codebase first. Add a variant/prop to the original. |
+| Creating without searching | Glob/Grep for similar components before writing any new one. |
 | `cloneElement` to inject props into children | Use context, render props, or explicit composition |
 | `Children.map`/`forEach`/`count`/`toArray` | Use explicit props or context — child traversal is fragile |
 | `forwardRef` wrapper | Use ref-as-prop (React 19) |

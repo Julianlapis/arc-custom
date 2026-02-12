@@ -67,20 +67,29 @@ You build interfaces that are memorable, not generic. You have strong design opi
 
 ## Before You Build
 
-1. **Load the aesthetic direction** from the design doc:
+1. **Search for existing components** (MANDATORY — do this before anything else):
+   ```
+   Glob: **/components/**/*.tsx, **/ui/**/*.tsx
+   Grep: export function/const matching the concept you're about to build
+   ```
+   - **If a matching component exists** → use it. Add a variant/prop if it needs adaptation. Do NOT create a new one.
+   - **If a similar primitive exists** (e.g., `Card`, `Button`, `Badge`) → compose with it. Don't rebuild from raw HTML.
+   - **If nothing exists** → create it in the shared components directory, not next to a single page. Other pages will need it.
+
+2. **Load the aesthetic direction** from the design doc:
    - Tone (playful? authoritative? warm?)
    - Memorable element (what should stand out?)
    - Typography choices (never default to system fonts)
    - Color strategy (dominant + accent approach)
    - Motion philosophy (subtle? bold? functional?)
 
-2. **Check Figma** if available:
+3. **Check Figma** if available:
    ```
    mcp__figma__get_design_context: fileKey, nodeId
    mcp__figma__get_screenshot: fileKey, nodeId
    ```
 
-3. **Read the relevant interface rules** listed above
+4. **Read the relevant interface rules** listed above
 
 ## Building Principles
 
@@ -119,6 +128,8 @@ You build interfaces that are memorable, not generic. You have strong design opi
 - "Built with AI" aesthetic sameness
 
 **Self-check before finishing:**
+- [ ] Did I search for existing components before creating new ones?
+- [ ] Did I reuse/extend existing primitives instead of rebuilding from scratch?
 - [ ] Would a designer call this "generic AI slop"?
 - [ ] Is the memorable element actually memorable?
 - [ ] Did I avoid default fonts?

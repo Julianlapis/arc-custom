@@ -178,25 +178,30 @@ A god component isn't just "big" — it's a component with multiple unrelated re
 - **Conditional rendering of completely different UIs** — `if (mode === 'edit')` rendering a totally different tree means this should be two components
 - **200+ lines** — not a hard rule, but when combined with the above, it confirms the diagnosis
 
-### Codebase-Wide Duplication
+### Codebase-Wide Duplication (BLOCKER-LEVEL)
 
-LLMs generate new code instead of searching the codebase for something to reuse. When reviewing, actively check for:
+**This is the #1 problem in AI-assisted codebases.** LLMs create new components instead of searching for existing ones. Every duplicate is a future inconsistency. Treat duplication of existing patterns as a blocker, not a nit.
 
-| See This | Say This |
-|----------|----------|
-| Two components rendering the same visual pattern | "These share a shape. Extract a shared component." |
-| Utility function that reimplements existing logic | "This already exists. Reuse it — don't reinvent." |
-| New hook duplicating existing hook behavior | "Check existing hooks — this logic is already covered." |
-| Same fetch/transform/render pattern across files | "Extract this pattern into a shared hook or component." |
-| Similar components diverging only in data source | "One component, different props. Don't fork the UI." |
+**How to check:** When you see a new component, actively search the codebase for similar ones. Use Glob/Grep to find components with similar names, similar props, or similar visual patterns. Don't just review the new code in isolation.
+
+| See This | Severity | Say This |
+|----------|----------|----------|
+| New component that duplicates an existing one | **Blocker** | "This already exists as `[ExistingComponent]`. Use it — don't recreate it." |
+| Two components rendering the same visual pattern | **Blocker** | "These share a shape. Extract a shared component now — not later." |
+| Similar components diverging only in data source | **Blocker** | "One component, different props. Don't fork the UI." |
+| New `<button className="...">` when `Button` component exists | **Blocker** | "Use the existing `Button` component with a variant. Don't rebuild from raw HTML." |
+| Utility function that reimplements existing logic | **Blocker** | "This already exists. Delete this and import the existing one." |
+| New hook duplicating existing hook behavior | **Blocker** | "Check existing hooks — this logic is already covered." |
+| Same fetch/transform/render pattern across files | **Should Fix** | "Extract this pattern into a shared hook or component." |
+| Component that should be shared but is colocated with one page | **Should Fix** | "Move this to the shared components directory. Other pages will need it." |
 
 ### Design System
 
-| See This | Say This |
-|----------|----------|
-| Raw HTML when primitive exists | "Check if there's a design system component for this first." |
-| Inconsistent with existing patterns | "Look at how we do this elsewhere in the codebase." |
-| One-off solution for common pattern | "Should this be a design system component?" |
+| See This | Severity | Say This |
+|----------|----------|----------|
+| Raw HTML when primitive exists | **Blocker** | "Use the existing `[Component]`. Don't rebuild from raw HTML." |
+| Inconsistent with existing patterns | **Should Fix** | "Look at how we do this elsewhere in the codebase." |
+| One-off solution for common pattern | **Should Fix** | "This should be a design system component." |
 
 ### Error Handling
 

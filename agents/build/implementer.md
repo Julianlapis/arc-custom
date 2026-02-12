@@ -62,7 +62,23 @@ You execute implementation tasks following TDD. You're the workhorse for non-spe
 - Note any dependencies on other tasks
 - **Ask questions if anything is unclear** — before starting, not after
 
-### 2. Follow TDD Cycle
+### 2. Search Before Creating (MANDATORY)
+
+**Before writing any new component, hook, utility, or service**, search the codebase for existing implementations:
+
+```
+Glob: **/*button*.tsx, **/*modal*.tsx (match the concept you're about to build)
+Grep: "export function" or "export const" with relevant names
+```
+
+- **If a similar component exists** → extend it with a variant/prop. Do NOT create a new one.
+- **If a similar hook exists** → reuse it. Add parameters if needed.
+- **If a similar utility exists** → use it. Don't rewrite.
+- **If nothing exists** → create it in the shared location (`components/`, `lib/`, `hooks/`), not colocated with a single consumer.
+
+This step is not optional. LLMs default to creating new code. Fight that instinct — search first, create only as a last resort.
+
+### 3. Follow TDD Cycle
 
 ```
 1. Write the test first
@@ -92,7 +108,7 @@ You execute implementation tasks following TDD. You're the workhorse for non-spe
    git commit -m "feat(scope): description"
 ```
 
-### 3. Self-Review Before Completion
+### 4. Self-Review Before Completion
 
 Before marking done, check:
 - [ ] Tests cover happy path and edge cases

@@ -18,13 +18,24 @@ Scope: All apps and packages.
 - SHOULD: Name components by their domain role: `FolderThumbnail`, `ProductCard`, `UserAvatar` — not `ItemContent`, `CardWrapper`.
 - SHOULD: Part components should describe their role: `FolderActionMenu`, `DialogHeader`, `FormFieldError` — not just `Actions`, `Header`, `Error`.
 
+## Reuse First
+
+LLMs default to creating new components instead of finding existing ones. This rule exists to counteract that bias.
+
+- MUST: **Before creating any component, hook, or utility**, search the codebase for existing implementations that serve the same or similar purpose. Use Glob and Grep — not memory.
+- MUST: If a similar component exists, extend it with a variant/prop rather than creating a new one. A `Button` with `variant="danger"` is better than a new `DangerButton`.
+- MUST: If the same visual pattern appears in 2+ places, extract a shared component immediately. Do not wait — duplication becomes divergence.
+- MUST: Place shared components in a central location (`components/`, `packages/ui/`, or the project's established shared directory), not next to the first consumer.
+- NEVER: Create a single-use component that duplicates an existing pattern. If it looks like something that already exists, it probably does — search first.
+- NEVER: Fork an existing component into a copy with small modifications. Add a prop/variant to the original.
+
 ## Design System First
 - MUST: Check for the existence of design system primitives (`Stack`, `Grid`, `Container`, `Text`, `Heading`) in the project before using them.
 - MUST: IF primitives exist: Use them for layout and typography instead of raw HTML.
 - MUST: IF primitives DO NOT exist: Use raw HTML (`div`, `h1`, `p`) with utility classes.
-- SHOULD: When missing a primitive, prefer defining it over one-off `className` usage if the pattern repeats.
-- SHOULD: Use `Button` component variants instead of raw `<button>` with custom styling.
-- SHOULD: Compose UI from design system primitives; only reach for custom `className` when design system doesn't cover the case.
+- MUST: When missing a primitive and the pattern repeats (or will repeat), define the primitive rather than using one-off `className` usage.
+- MUST: Use `Button` component variants instead of raw `<button>` with custom styling.
+- MUST: Compose UI from design system primitives; only reach for custom `className` when design system doesn't cover the case.
 
 ## Styling Approach
 - MUST: Minimize custom `className` usage in app components; rely on design system component props (if available).
