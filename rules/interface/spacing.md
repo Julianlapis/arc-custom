@@ -112,6 +112,51 @@ NEVER let body text span the full viewport width on large screens.
 
 ---
 
+## Vertical Rhythm in Content Stacks
+
+When elements form a vertical content stack (e.g., logo → subtitle → body → actions), spacing must reflect hierarchy and relationship.
+
+### Heading Belongs to Its Body
+
+A heading MUST be closer to the content it introduces than to the content above it. Space above a heading > space below it.
+
+```
+Bad (equal spacing):
+  [Section Title]
+         ← 24px
+  [Body Text]
+         ← 24px
+  [Next Section Title]
+
+Good (heading attached to its body):
+  [Section Title]
+         ← 12px
+  [Body Text]
+
+         ← 32px
+  [Next Section Title]
+         ← 12px
+  [Body Text]
+```
+
+### Use a Consistent Ratio
+
+Gaps within a content stack SHOULD follow a ratio (2:1 is clean and easy to maintain):
+
+| Relationship | Spacing | Why |
+|---|---|---|
+| Display element → subtitle | Larger (e.g., `mb-6 lg:mb-8`) | Different visual scales |
+| Subtitle → body text | Smaller (e.g., `mt-3 lg:mt-4`) | Same thought, different detail |
+| Last content → different group | Matches the largest gap | Group boundary separation |
+
+The ratio between adjacent gaps matters more than the absolute values. Pick a ratio and apply it consistently within a stack.
+
+### Group Boundaries
+
+When a content group meets a different functional group (e.g., copy → action buttons), the gap SHOULD be equal to or greater than the largest within-group gap. Borders, dividers, or background changes reinforce group boundaries and reduce the space needed.
+
+---
+
 ## Anti-Patterns
 
 NEVER:
