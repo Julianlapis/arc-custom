@@ -70,6 +70,11 @@ Scope: All apps and packages.
 - MUST: Use `use()` hook for reading promises and context.
 - MUST: Use `<Context value={...}>` instead of `<Context.Provider value={...}>`.
 - SHOULD: Use `useActionState` for form handling with server actions.
+- NEVER: Use `cloneElement` — it silently injects props and breaks with wrappers/fragments. Use context, render props, or explicit composition.
+- NEVER: Use `Children.map`/`forEach`/`toArray`/`count`/`only` — child traversal is fragile. Use explicit props or context.
+- NEVER: Use class components, `defaultProps`, or `propTypes` — use function components, JS defaults, and TypeScript.
+- NEVER: Use `createRef` in function components — use `useRef`.
+- NEVER: Use string refs — removed in React 19.
 
 ```tsx
 // ref-as-prop (no forwardRef needed)

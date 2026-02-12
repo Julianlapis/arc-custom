@@ -206,6 +206,23 @@ LLMs generate new code instead of searching the codebase for something to reuse.
 | `catch (e) { /* ignore */ }` | "Don't swallow errors. At minimum, log it." |
 | Non-deterministic behavior from fallbacks | "This makes debugging impossible. Surface the error." |
 
+### Legacy React APIs
+
+React 19 deprecated or removed several APIs. These create fragile implicit contracts or have modern replacements.
+
+| See This | Say This |
+|----------|----------|
+| `React.cloneElement` | "cloneElement silently injects props — it's fragile and breaks with wrappers/fragments. Use context, render props, or explicit composition." |
+| `React.Children.map`/`forEach`/`toArray` | "Child traversal is fragile — it breaks with fragments, conditionals, and wrapper components. Use explicit props or context instead." |
+| `React.Children.count`/`only` | "Relying on child count/shape is brittle. Accept explicit props or use context." |
+| `forwardRef` | "Use ref-as-prop. React 19 passes ref as a regular prop — no wrapper needed." |
+| `class extends Component` or `PureComponent` | "Convert to a function component with hooks." |
+| `defaultProps` on function components | "Use JS default parameters: `function Button({ size = 'md' })`." |
+| `propTypes` | "Use TypeScript. Runtime prop checking is redundant with static types." |
+| `createRef` in function components | "Use `useRef`. `createRef` creates a new ref every render in function components." |
+| `<Context.Provider value={...}>` | "Use `<Context value={...}>` directly. The `.Provider` wrapper is unnecessary in React 19." |
+| String refs (`ref="myInput"`) | "String refs were removed in React 19. Use `useRef` + ref-as-prop." |
+
 ### Legacy Code & Unnecessary Fallbacks
 
 **Philosophy:** Fail fast, deterministic behavior, clean codebases. No silent fallbacks hiding errors. No legacy cruft muddying behavior.

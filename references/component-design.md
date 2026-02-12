@@ -30,14 +30,12 @@
 - MUST: Positive boolean names (`disabled`, not `notEnabled`)
 - MUST: Event handlers prefixed with `on` (`onChange`, `onOpenChange`)
 - MUST: Spread `...props` to underlying element
-- MUST: Forward refs
+- MUST: Accept ref as a prop (React 19 — no `forwardRef`)
 
-```jsx
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = "primary", size = "md", className, ...props }, ref) => (
-    <button ref={ref} className={cn(variants({ variant, size }), className)} {...props} />
-  )
-);
+```tsx
+function Button({ variant = "primary", size = "md", className, ref, ...props }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
+  return <button ref={ref} className={cn(variants({ variant, size }), className)} {...props} />;
+}
 ```
 
 ### Customization Layers
@@ -126,6 +124,12 @@ components/
 | Prop explosion (`leftIcon`, `rightIcon`, `iconSize`...) | Use children: `<Button><Icon /> Text</Button>` |
 | Boolean variants (`primary`, `large`, `rounded`) | Explicit variants: `variant="primary" size="lg"` |
 | Premature abstraction | Wait until you've copy-pasted 2-3 times |
+| `cloneElement` to inject props into children | Use context, render props, or explicit composition |
+| `Children.map`/`forEach`/`count`/`toArray` | Use explicit props or context — child traversal is fragile |
+| `forwardRef` wrapper | Use ref-as-prop (React 19) |
+| Class components (`extends Component`) | Convert to function component with hooks |
+| `defaultProps` on function components | Use JS default parameters |
+| `propTypes` | Use TypeScript |
 
 ## Explicit Variants (over Boolean Props)
 
