@@ -9,8 +9,9 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
   Use --docs for a focused JSDoc/documentation coverage audit.
+  Use --copy for a focused UX writing/copy quality audit.
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs]
+argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy]
 metadata:
   author: howells
 website:
@@ -24,7 +25,7 @@ website:
   decisions:
     - Whole project or targeted. Run on everything, or scope to a path like `src/lib/auth`.
     - Agents run in batches (2 at a time by default). Use `--parallel` for speed if you have resources.
-    - Focus flags available. `--security`, `--performance`, `--design`, `--docs` for targeted audits.
+    - Focus flags available. `--security`, `--performance`, `--design`, `--docs`, `--copy` for targeted audits.
   agents:
     - security-engineer
     - performance-engineer
@@ -36,6 +37,7 @@ website:
     - designer
     - data-engineer
     - documentation-engineer
+    - ux-writing-engineer
   workflow:
     position: utility
 ---
@@ -101,6 +103,7 @@ Pass relevant rules to each reviewer agent.
 | organization-engineer | turborepo.md, code-style.md |
 | hygiene-engineer | stack.md, code-style.md, ai-sdk.md (if AI SDK) |
 | documentation-engineer | typescript.md, code-style.md |
+| ux-writing-engineer | code-style.md |
 | daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK) |
 | performance-engineer | (no core rules — uses own heuristics) |
 | seo-engineer | seo.md |
@@ -112,6 +115,7 @@ Pass relevant rules to each reviewer agent.
 | designer | design.md, colors.md, typography.md, marketing.md |
 | daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md |
 | lee-nextjs-engineer | layout.md, performance.md |
+| ux-writing-engineer | content-accessibility.md, marketing.md |
 
 Interface rules location: `${CLAUDE_PLUGIN_ROOT}/rules/interface/`
 
@@ -300,6 +304,7 @@ Execution mode: [batched (default) / parallel / team]
 - `--hygiene` → only `hygiene-engineer`
 - `--seo` → only `seo-engineer`
 - `--docs` → only `documentation-engineer`
+- `--copy` → only `ux-writing-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -374,6 +379,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | hygiene-engineer | sonnet | Pattern recognition for AI artifacts |
 | seo-engineer | sonnet | Pattern recognition for SEO elements |
 | documentation-engineer | sonnet | JSDoc coverage analysis |
+| ux-writing-engineer | sonnet | UX copy quality and LLM-smell detection |
 
 **Include project stage in every reviewer prompt.**
 
