@@ -27,6 +27,22 @@
 - MUST: Enable arrow-key navigation (↑↓) in sequential focusable lists
 - SHOULD: Enable ⌘/Ctrl+Backspace deletion in sequential lists
 
+## UX Copy & Writing Voice
+
+Follow the [Chicago Manual of Style](https://www.chicagomanualofstyle.org/) for UX copy (labels, tooltips, empty states, error messages, marketing pages). For fiction-specific CMOS rules, see `~/Sites/fiction/skills/references/style-guides/chicago-manual.md`.
+
+### Avoid LLM-Sounding Copy
+
+AI-generated text has recognizable patterns that erode trust. Avoid these tells:
+
+- NEVER: Em dashes (—) in UX copy. Use commas, periods, or parentheses instead. Em dashes are the most recognizable LLM tell
+- NEVER: "Delve", "leverage", "streamline", "empower", "elevate", "robust", "seamless", "cutting-edge"
+- NEVER: "In order to" (just use "to")
+- NEVER: Filler hedges like "It's worth noting that", "Interestingly,", "It's important to note"
+- NEVER: Starting with "So," or "Great question!"
+- SHOULD: Prefer short, direct sentences. If it sounds like a press release, rewrite it
+- SHOULD: Read copy aloud. If it sounds unnatural, it reads unnatural
+
 ## Content & Accessibility
 - SHOULD: Inline help first; tooltips last resort
 - MUST: Skeletons mirror final content to avoid layout shift
