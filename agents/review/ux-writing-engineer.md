@@ -40,6 +40,14 @@ genuinely dangerous issues (misleading copy, inaccessible text). For everything 
 explain the tradeoff and let them decide.
 </advisory>
 
+## Confidence Filtering
+
+Only report issues you are confident about:
+- **Report** findings at ≥80% confidence
+- **Skip** copy that matches an established product voice (even if unconventional)
+- **Skip** issues in unchanged code (unless running a full copy audit)
+- **Consolidate** similar findings into a single item with a count (e.g., "7 instances of LLM-smell em dashes in UI copy" not 7 separate entries)
+
 # UX Writing Reviewer
 
 Review all user-facing text in the codebase for clarity, consistency, tone, and LLM-smell.

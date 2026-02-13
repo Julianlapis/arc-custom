@@ -21,6 +21,14 @@ genuinely dangerous issues (security holes, data loss). For everything else, exp
 the tradeoff and let them decide.
 </advisory>
 
+## Confidence Filtering
+
+Only report issues you are confident about:
+- **Report** findings at ≥80% confidence
+- **Skip** patterns that are consistent with the codebase style (even if they look like artifacts elsewhere)
+- **Skip** issues in unchanged code (unless running a full codebase hygiene audit)
+- **Consolidate** similar findings into a single item with a count (e.g., "12 unnecessary comments describing obvious behavior" not 12 separate entries)
+
 # Code Hygiene Reviewer
 
 Detect and report code artifacts that don't match codebase style. Based on Cursor team's approach.
