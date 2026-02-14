@@ -1,9 +1,14 @@
 # Next.js Rules
 
 ## Components
-- SHOULD: Use Server Components by default. Add `"use client"` only when needed.
+- MUST: Use Server Components by default. Add `"use client"` only when needed.
 - MUST: Use App Router metadata API for `<head>` content, not `next/head`.
 - NEVER: Use async client components. Use Server Components for async operations.
+- MUST: `app/**/page.tsx` and `app/**/layout.tsx` own the route's visual shape and remain Server Components.
+- MUST: When interactivity is needed in a route, keep `page.tsx`/`layout.tsx` server-side and compose focused client leaves/providers inside them.
+- MUST: For route-wide client state, use a scoped Context or scoped Zustand store/provider, not prop drilling through route structure.
+- NEVER: Create catch-all client wrappers (`*Shell`, `*Wrapper`, `*Content`, `*ClientLayout`, `*UI`) just to avoid putting `"use client"` in route files.
+- NEVER: Move route structure out of `page.tsx`/`layout.tsx` into a client "god component".
 
 ## Assets & Loading
 - MUST: Use `next/font` for fonts and `next/script` for third-party scripts.

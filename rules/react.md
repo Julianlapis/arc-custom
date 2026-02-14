@@ -15,6 +15,7 @@ Scope: All apps and packages.
 ## Component Naming
 - MUST: Use specific, descriptive names that convey purpose. Avoid generic suffixes like `-content`, `-wrapper`, `-container`, `-component`.
 - NEVER: Create "god components" with vague names like `PageContent`, `MainWrapper`, `ComponentContainer`.
+- NEVER: Create boundary-hack components (for example `DashboardShell`, `DashboardWrapper`, `PageContent`, `ClientLayout`) whose primary purpose is hosting `"use client"` for an entire route.
 - SHOULD: Name components by their domain role: `FolderThumbnail`, `ProductCard`, `UserAvatar` — not `ItemContent`, `CardWrapper`.
 - SHOULD: Part components should describe their role: `FolderActionMenu`, `DialogHeader`, `FormFieldError` — not just `Actions`, `Header`, `Error`.
 

@@ -24,7 +24,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [code-style.md](code-style.md) | Formatting, syntax, naming |
 | [typescript.md](typescript.md) | Type definitions and safety |
 | [react.md](react.md) | Component patterns and hooks |
-| [nextjs.md](nextjs.md) | App Router, assets, structure |
+| [nextjs.md](nextjs.md) | App Router, assets, structure, and server-owned route shape (`page.tsx`/`layout.tsx`) |
 | [tailwind.md](tailwind.md) | Tailwind v4 configuration |
 
 ### Workflow Rules
