@@ -130,8 +130,9 @@ export default function ArcPage() {
                   <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
                     <span className="shrink-0 text-neutral-500">$</span>
                     <span className="truncate">
-                      bash &lt;(curl -fsSL
-                      https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
+                      curl -fsSL
+                      https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh
+                      | bash -s -- --auto-update --interval-hours 6
                     </span>
                   </span>
                 </div>
@@ -142,17 +143,17 @@ export default function ArcPage() {
                 <div className="absolute inset-y-0 right-4 flex items-center">
                   <CopyButton
                     light
-                    text="bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)"
+                    text="curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6"
                   />
                 </div>
               </div>
               <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
-                Codex install (uses <code>~/.agents/skills</code>). Optional
-                auto-update:{" "}
+                Codex install (uses <code>~/.agents/skills</code>) with
+                auto-update every 6 hours. One-time install without auto-update:{" "}
                 <code>
-                  bash &lt;(curl -fsSL
-                  https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
-                  --auto-update --interval-hours 6
+                  curl -fsSL
+                  https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh
+                  | bash
                 </code>
                 .
               </p>

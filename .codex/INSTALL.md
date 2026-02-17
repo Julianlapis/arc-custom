@@ -12,23 +12,23 @@ Codex best-practice path is `~/.agents/skills` (legacy `~/.codex/skills` still w
 
 ## Quick Install (Recommended)
 
-Install Arc and link it into Codex skills:
+Install Arc and enable scheduled auto-updates every 6 hours:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
+curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6
 ```
 
-Install with scheduled auto-updates every 6 hours:
+Install once without auto-update:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh) --auto-update --interval-hours 6
+curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash
 ```
 
 What this does:
 
 1. Clones Arc to `~/.codex/arc` (or fast-forwards if already installed).
 2. Symlinks `~/.agents/skills/arc` to `~/.codex/arc/skills`.
-3. Optionally configures scheduled updates using launchd (macOS) or cron (Linux).
+3. Configures scheduled updates using launchd (macOS) or cron (Linux) when `--auto-update` is used.
 
 Restart Codex if skills do not appear immediately.
 

@@ -35,7 +35,7 @@ export function GET() {
     "## Links",
     "",
     "- Install (Claude): claude plugins install arc@howells",
-    "- Install (Codex): bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)",
+    "- Install (Codex): curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6",
     "- GitHub: https://github.com/howells/arc",
     "- Docs: https://usearc.dev",
     "",

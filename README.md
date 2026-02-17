@@ -72,13 +72,13 @@ Codex discovers skills from `~/.agents/skills` (legacy `~/.codex/skills` still w
 Run:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
+curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6
 ```
 
-Enable auto-update (every 6 hours):
+Install once without auto-update:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh) --auto-update --interval-hours 6
+curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash
 ```
 
 ## Using In Codex
