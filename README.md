@@ -65,21 +65,27 @@ claude plugins install arc@howells
 
 ### Codex
 
-Codex discovers skills from `~/.agents/skills` (and from `.agents/skills` inside repositories).
+Codex discovers skills from `~/.agents/skills` (legacy `~/.codex/skills` still works, and repo-local `.agents/skills` is also discovered).
 
 **Recommended (install once, use anywhere):**
 
-Tell Codex:
+Run:
 
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/howells/arc/refs/heads/main/.codex/INSTALL.md
+
+Enable auto-update (every 6 hours):
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh) --auto-update --interval-hours 6
 ```
 
 ## Using In Codex
 
 ### Install Once (Recommended)
 
-Follow `.codex/INSTALL.md`, then in any project you can invoke Arc skills directly.
+Follow `.codex/INSTALL.md` (or run the one-line installer above), then invoke Arc skills in any project.
 
 ### Repo-Local (Project Skills)
 
