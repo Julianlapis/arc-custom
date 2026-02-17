@@ -1,262 +1,87 @@
 "use client";
 
+import { createStacksheet, useSheetPanel } from "@howells/stacksheet";
 import { ArrowRight, ChevronLeft, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
+import type { Agent, Rule, Skill } from "@/lib/types";
+import { AGENT_CATEGORY_LABELS } from "@/lib/types";
 
 const remarkPlugins = [remarkGfm];
 const HEADING_REGEX = /^#\s+.+\n+/;
-
-import type { Agent, Rule, Skill } from "@/lib/types";
-import { AGENT_CATEGORY_LABELS } from "@/lib/types";
 
 type DrawerContent =
   | { type: "skill"; data: Skill }
   | { type: "agent"; data: Agent }
   | { type: "rule"; data: Rule };
 
-interface UnifiedDrawerProps {
-  content: DrawerContent | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSkillClick?: (skillName: string) => void;
-  onAgentClick?: (agentName: string) => void;
+interface ArcSheetMap {
+  detail: {
+    content: DrawerContent;
+    skillsByName: Record<string, Skill>;
+    agentsByName: Record<string, Agent>;
+  };
+  source: {
+    contentUrl: string;
+    sourceContent: string;
+  };
 }
 
-const appleEase = {
-  sheet: [0.32, 0.72, 0, 1] as const,
-  out: [0, 0.55, 0.45, 1] as const,
-  standard: [0.25, 0.1, 0.25, 1] as const,
-};
-
-export function UnifiedDrawer({
-  content,
-  open,
-  onOpenChange,
-  onSkillClick,
-  onAgentClick,
-}: UnifiedDrawerProps) {
-  const [showSource, setShowSource] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout>>(null);
-  const triggerRef = useRef<HTMLElement>(null);
-  const drawerRef = useRef<HTMLDivElement>(null);
-
-  // Staggered close: source exits first, then preview follows
-  const closeAll = useCallback(() => {
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-    }
-    if (showSource) {
-      setShowSource(false);
-      closeTimer.current = setTimeout(() => onOpenChange(false), 250);
-    } else {
-      onOpenChange(false);
-    }
-  }, [showSource, onOpenChange]);
-
-  // Escape key closes drawer
-  useEffect(() => {
-    if (!open) {
+const { StacksheetProvider, useSheet } = createStacksheet<ArcSheetMap>({
+  ariaLabel: "Arc details",
+  closeOnBackdrop: true,
+  closeOnEscape: true,
+  maxWidth: "100vw",
+  spring: "stiff",
+  width: 640,
+  onCloseComplete: () => {
+    if (typeof window === "undefined") {
       return;
     }
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        closeAll();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, closeAll]);
-
-  // Focus management: move focus into drawer on open, restore on close
-  useEffect(() => {
-    if (open) {
-      triggerRef.current = document.activeElement as HTMLElement;
-      // Delay to let animation start before focusing
-      const t = setTimeout(() => drawerRef.current?.focus(), 50);
-      return () => clearTimeout(t);
+    const path = window.location.pathname;
+    if (
+      path.startsWith("/skills/") ||
+      path.startsWith("/agents/") ||
+      path.startsWith("/rules/")
+    ) {
+      window.history.replaceState(null, "", "/");
     }
-    // Restore focus to trigger element on close
-    triggerRef.current?.focus();
-  }, [open]);
+  },
+});
 
-  // Reset source view when content changes or drawer closes
-  useEffect(() => {
-    if (!open) {
-      const t = setTimeout(() => setShowSource(false), 300);
-      return () => clearTimeout(t);
-    }
-  }, [open]);
-
-  useEffect(() => {
-    return () => {
-      if (closeTimer.current) {
-        clearTimeout(closeTimer.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    setShowSource(false);
-  }, []);
-
-  const rawSource = content ? getSourceContent(content) : null;
-  const sourceContent = useMemo(
-    () => (rawSource ? sanitizeContent(rawSource) : null),
-    [rawSource]
-  );
-  const contentUrl = content ? getContentUrl(content) : null;
-
-  // Shallow URL update when source panel opens
-  useEffect(() => {
-    if (showSource && contentUrl) {
-      window.history.pushState(null, "", contentUrl);
-    }
-  }, [showSource, contentUrl]);
-
-  // Restore URL when drawer closes
-  useEffect(() => {
-    if (!open) {
-      const path = window.location.pathname;
-      if (
-        path.startsWith("/skills/") ||
-        path.startsWith("/agents/") ||
-        path.startsWith("/rules/")
-      ) {
-        window.history.replaceState(null, "", "/");
-      }
-    }
-  }, [open]);
-
+export function ArcSheetsProvider({ children }: { children: ReactNode }) {
   return (
-    <AnimatePresence>
-      {open && content && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 z-40 bg-black/20"
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
-            onClick={closeAll}
-            transition={{ duration: 0.3 }}
-          />
-
-          {/* Preview sheet (bottom of stack) */}
-          <motion.div
-            animate={{
-              x: showSource ? -48 : 0,
-              scale: showSource ? 0.95 : 1,
-              borderRadius: showSource ? 20 : 0,
-              opacity: showSource ? 0.85 : 1,
-            }}
-            aria-label={content ? getDrawerLabel(content) : undefined}
-            aria-modal="true"
-            className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.15)]"
-            exit={{ x: "105%", opacity: 0.6 }}
-            initial={{ x: "100%" }}
-            ref={drawerRef}
-            role="dialog"
-            style={{ transformOrigin: "right center" }}
-            tabIndex={-1}
-            transition={{
-              x: { duration: 0.4, ease: appleEase.sheet },
-              scale: { duration: 0.35, ease: appleEase.out },
-              borderRadius: { duration: 0.3, ease: appleEase.standard },
-              opacity: { duration: 0.25, ease: appleEase.out },
-            }}
-          >
-            {/* Close button */}
-            {!showSource && (
-              <button
-                aria-label="Close drawer"
-                className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
-                onClick={closeAll}
-                type="button"
-              >
-                <X className="size-5" />
-              </button>
-            )}
-
-            <div className="flex-1 overflow-y-auto">
-              <div className="px-8 py-8 md:px-10 md:py-10">
-                <ContentRenderer
-                  content={content}
-                  onAgentClick={onAgentClick}
-                  onSkillClick={onSkillClick}
-                  onViewSource={() => setShowSource(true)}
-                />
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Source sheet (top of stack) */}
-          <AnimatePresence>
-            {showSource && sourceContent && (
-              <motion.div
-                animate={{ x: 0, opacity: 1 }}
-                className="fixed top-0 right-0 bottom-0 z-[60] flex w-full max-w-xl flex-col overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.3)]"
-                exit={{ x: "105%", opacity: 0.6 }}
-                initial={{ x: "100%", opacity: 0.8 }}
-                transition={{
-                  x: { duration: 0.4, ease: appleEase.sheet },
-                  opacity: { duration: 0.25, ease: appleEase.out },
-                }}
-              >
-                {/* Close button — staggers: source exits, then preview follows */}
-                <button
-                  aria-label="Close drawer"
-                  className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
-                  onClick={closeAll}
-                  type="button"
-                >
-                  <X className="size-5" />
-                </button>
-
-                <div className="flex-1 overflow-y-auto">
-                  <div className="px-8 py-8 pr-14 md:px-10 md:py-10 md:pr-16">
-                    <button
-                      className="mb-[calc(var(--baseline)*1)] inline-flex items-center gap-1 font-mono text-neutral-400 text-xs transition-colors hover:text-[var(--color-accent)]"
-                      onClick={() => setShowSource(false)}
-                      type="button"
-                    >
-                      <ChevronLeft className="size-3" />
-                      Back
-                    </button>
-
-                    <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-400 text-xs uppercase tracking-wider">
-                      Source document
-                    </h2>
-
-                    <div className="prose">
-                      <Markdown remarkPlugins={remarkPlugins}>
-                        {sourceContent}
-                      </Markdown>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </>
-      )}
-    </AnimatePresence>
+    <StacksheetProvider
+      classNames={{
+        backdrop: "bg-black/20",
+        panel:
+          "overflow-hidden bg-white shadow-[-16px_0_64px_-16px_rgba(0,0,0,0.18)]",
+      }}
+      renderHeader={false}
+      sheets={SHEET_COMPONENTS}
+    >
+      {children}
+    </StacksheetProvider>
   );
 }
 
-function getDrawerLabel(content: DrawerContent): string {
+export function useArcSheets() {
+  return useSheet();
+}
+
+export function getContentId(content: DrawerContent): string {
   switch (content.type) {
     case "skill":
-      return content.data.name;
+      return `skill:${content.data.name}`;
     case "agent":
-      return content.data.name;
+      return `agent:${content.data.name}`;
     case "rule":
-      return content.data.title;
+      return `rule:${content.data.slug}`;
     default:
-      return "";
+      return "detail";
   }
 }
 
@@ -285,6 +110,128 @@ function getSourceContent(content: DrawerContent): string | null {
       return null;
   }
 }
+
+function DetailSheet({
+  content,
+  skillsByName,
+  agentsByName,
+}: ArcSheetMap["detail"]) {
+  const { close } = useSheetPanel();
+  const { navigate, push } = useSheet();
+
+  const contentUrl = getContentUrl(content);
+
+  const openAgentByName = (name: string) => {
+    const agent = agentsByName[name];
+    if (!agent) {
+      return;
+    }
+
+    const nextContent: DrawerContent = { type: "agent", data: agent };
+    navigate("detail", getContentId(nextContent), {
+      agentsByName,
+      content: nextContent,
+      skillsByName,
+    });
+  };
+
+  const openSkillByName = (name: string) => {
+    const skill = skillsByName[name];
+    if (!skill) {
+      return;
+    }
+
+    const nextContent: DrawerContent = { type: "skill", data: skill };
+    navigate("detail", getContentId(nextContent), {
+      agentsByName,
+      content: nextContent,
+      skillsByName,
+    });
+  };
+
+  const openSource = () => {
+    const rawSource = getSourceContent(content);
+    if (!rawSource) {
+      return;
+    }
+
+    push("source", `${getContentId(content)}:source`, {
+      contentUrl,
+      sourceContent: sanitizeContent(rawSource),
+    });
+  };
+
+  return (
+    <div className="relative flex h-full flex-col bg-white">
+      <button
+        aria-label="Close drawer"
+        className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
+        onClick={close}
+        type="button"
+      >
+        <X className="size-5" />
+      </button>
+
+      <div className="flex-1 overflow-y-auto">
+        <div className="px-8 py-8 md:px-10 md:py-10">
+          <ContentRenderer
+            content={content}
+            onAgentClick={openAgentByName}
+            onSkillClick={openSkillByName}
+            onViewSource={openSource}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SourceSheet({ contentUrl, sourceContent }: ArcSheetMap["source"]) {
+  const { back, close } = useSheetPanel();
+
+  useEffect(() => {
+    window.history.pushState(null, "", contentUrl);
+  }, [contentUrl]);
+
+  return (
+    <div className="relative flex h-full flex-col bg-white">
+      <button
+        aria-label="Close drawer"
+        className="absolute top-4 right-4 z-10 rounded-full bg-white/80 p-2 text-neutral-500 backdrop-blur-sm transition-colors hover:bg-white hover:text-neutral-900"
+        onClick={close}
+        type="button"
+      >
+        <X className="size-5" />
+      </button>
+
+      <div className="flex-1 overflow-y-auto">
+        <div className="px-8 py-8 pr-14 md:px-10 md:py-10 md:pr-16">
+          <button
+            className="mb-[calc(var(--baseline)*1)] inline-flex items-center gap-1 font-mono text-neutral-400 text-xs transition-colors hover:text-[var(--color-accent)]"
+            onClick={back}
+            type="button"
+          >
+            <ChevronLeft className="size-3" />
+            Back
+          </button>
+
+          <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-400 text-xs uppercase tracking-wider">
+            Source document
+          </h2>
+
+          <div className="prose">
+            <Markdown remarkPlugins={remarkPlugins}>{sourceContent}</Markdown>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const SHEET_COMPONENTS = {
+  detail: DetailSheet,
+  source: SourceSheet,
+};
 
 function ContentRenderer({
   content,
@@ -369,7 +316,7 @@ function SkillContent({
       <div className="space-y-[calc(var(--baseline)*1.5)]">
         <section>
           <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-            <span className="text-[var(--color-accent)]">—</span>
+            <span className="text-[var(--color-accent)]">-</span>
             <span className="text-neutral-900">What it does</span>
           </h3>
           <p className="pl-6 text-neutral-600 text-sm leading-relaxed">
@@ -379,7 +326,7 @@ function SkillContent({
 
         <section>
           <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-            <span className="text-[var(--color-accent)]">—</span>
+            <span className="text-[var(--color-accent)]">-</span>
             <span className="text-neutral-900">Why it exists</span>
           </h3>
           <p className="pl-6 text-neutral-600 text-sm leading-relaxed">
@@ -390,7 +337,7 @@ function SkillContent({
         {skill.decisions && skill.decisions.length > 0 && (
           <section>
             <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-              <span className="text-[var(--color-accent)]">—</span>
+              <span className="text-[var(--color-accent)]">-</span>
               <span className="text-neutral-900">Design decisions</span>
             </h3>
             <ul className="space-y-[calc(var(--baseline)*0.25)] pl-6">
@@ -400,7 +347,7 @@ function SkillContent({
                   key={decision}
                 >
                   <span className="select-none text-[var(--color-accent)]">
-                    —
+                    -
                   </span>
                   <span>{decision}</span>
                 </li>
@@ -412,7 +359,7 @@ function SkillContent({
         {skill.agents && skill.agents.length > 0 && (
           <section>
             <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-              <span className="text-[var(--color-accent)]">—</span>
+              <span className="text-[var(--color-accent)]">-</span>
               <span className="text-neutral-900">Agents</span>
             </h3>
             <div className="flex flex-wrap gap-2 pl-6">
@@ -459,7 +406,7 @@ function AgentContent({
       <div className="space-y-[calc(var(--baseline)*1.5)]">
         <section>
           <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-            <span className="text-[var(--color-accent)]">—</span>
+            <span className="text-[var(--color-accent)]">-</span>
             <span className="text-neutral-900">What it does</span>
           </h3>
           <p className="pl-6 text-neutral-600 text-sm leading-relaxed">
@@ -469,7 +416,7 @@ function AgentContent({
 
         <section>
           <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-            <span className="text-[var(--color-accent)]">—</span>
+            <span className="text-[var(--color-accent)]">-</span>
             <span className="text-neutral-900">Why it exists</span>
           </h3>
           <p className="pl-6 text-neutral-600 text-sm leading-relaxed">
@@ -480,7 +427,7 @@ function AgentContent({
         {agent.usedBy && agent.usedBy.length > 0 && (
           <section>
             <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
-              <span className="text-[var(--color-accent)]">—</span>
+              <span className="text-[var(--color-accent)]">-</span>
               <span className="text-neutral-900">Spawned by</span>
             </h3>
             <div className="flex flex-wrap gap-2 pl-6">
@@ -530,3 +477,5 @@ function RuleContent({
     </>
   );
 }
+
+export type { DrawerContent };

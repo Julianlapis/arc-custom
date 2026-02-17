@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import type { Agent, Rule, Skill } from "@/lib/types";
 import { ContentBrowser } from "./content-browser";
-import { UnifiedDrawer } from "./unified-drawer";
-
-type DrawerContent =
-  | { type: "skill"; data: Skill }
-  | { type: "agent"; data: Agent }
-  | { type: "rule"; data: Rule };
+import {
+  ArcSheetsProvider,
+  type DrawerContent,
+  getContentId,
+  useArcSheets,
+} from "./unified-drawer";
 
 interface PageContentProps {
   skills: Skill[];
@@ -16,52 +16,41 @@ interface PageContentProps {
   rules: Rule[];
 }
 
-export function PageContent({ skills, agents, rules }: PageContentProps) {
-  const [drawerContent, setDrawerContent] = useState<DrawerContent | null>(
-    null
+function PageContentInner({ skills, agents, rules }: PageContentProps) {
+  const { open } = useArcSheets();
+
+  const skillsByName = useMemo(
+    () => Object.fromEntries(skills.map((skill) => [skill.name, skill])),
+    [skills]
   );
-  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const agentsByName = useMemo(
+    () => Object.fromEntries(agents.map((agent) => [agent.name, agent])),
+    [agents]
+  );
+
+  const openContent = (content: DrawerContent) => {
+    open("detail", getContentId(content), {
+      agentsByName,
+      content,
+      skillsByName,
+    });
+  };
 
   const openSkill = (skill: Skill) => {
-    setDrawerContent({ type: "skill", data: skill });
-    setDrawerOpen(true);
+    openContent({ type: "skill", data: skill });
   };
 
   const openAgent = (agent: Agent) => {
-    setDrawerContent({ type: "agent", data: agent });
-    setDrawerOpen(true);
-  };
-
-  const openAgentByName = (name: string) => {
-    const agent = agents.find((a) => a.name === name);
-    if (agent) {
-      setDrawerContent({ type: "agent", data: agent });
-      setDrawerOpen(true);
-    }
-  };
-
-  const openSkillByName = (name: string) => {
-    const skill = skills.find((s) => s.name === name);
-    if (skill) {
-      setDrawerContent({ type: "skill", data: skill });
-    }
+    openContent({ type: "agent", data: agent });
   };
 
   const openRule = (rule: Rule) => {
-    setDrawerContent({ type: "rule", data: rule });
-    setDrawerOpen(true);
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    setDrawerOpen(open);
-    if (!open) {
-      setTimeout(() => setDrawerContent(null), 300);
-    }
+    openContent({ type: "rule", data: rule });
   };
 
   return (
-    <>
-      {/* Content Browser */}
+    <div className="mb-[calc(var(--baseline)*1.5)]">
       <ContentBrowser
         agents={agents}
         onAgentClick={openAgent}
@@ -70,15 +59,14 @@ export function PageContent({ skills, agents, rules }: PageContentProps) {
         rules={rules}
         skills={skills}
       />
+    </div>
+  );
+}
 
-      {/* Shared Drawer */}
-      <UnifiedDrawer
-        content={drawerContent}
-        onAgentClick={openAgentByName}
-        onOpenChange={handleOpenChange}
-        onSkillClick={openSkillByName}
-        open={drawerOpen}
-      />
-    </>
+export function PageContent({ skills, agents, rules }: PageContentProps) {
+  return (
+    <ArcSheetsProvider>
+      <PageContentInner agents={agents} rules={rules} skills={skills} />
+    </ArcSheetsProvider>
   );
 }

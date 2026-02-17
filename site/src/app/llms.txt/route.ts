@@ -9,7 +9,7 @@ export function GET() {
   const lines = [
     "# Arc",
     "",
-    `> The full arc from idea to shipped code. A Claude Code plugin with ${skills.length} skills, ${agents.length} agents, and ${rules.length} rules.${version ? ` v${version}.` : ""}`,
+    `> The full arc from idea to shipped code. For Claude Code and Codex, with ${skills.length} skills, ${agents.length} agents, and ${rules.length} rules.${version ? ` v${version}.` : ""}`,
     "",
     "## Skills",
     "",
@@ -34,7 +34,8 @@ export function GET() {
     "",
     "## Links",
     "",
-    "- Install: claude plugins install arc@howells",
+    "- Install (Claude): claude plugins install arc@howells",
+    "- Install (Codex): bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)",
     "- GitHub: https://github.com/howells/arc",
     "- Docs: https://usearc.dev",
     "",

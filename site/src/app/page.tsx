@@ -8,7 +8,7 @@ import { PageContent } from "./page-content";
 export const metadata: Metadata = {
   title: "Arc – The full arc from idea to shipped code",
   description:
-    "A full development workflow for Claude Code. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
+    "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
   alternates: { canonical: "/" },
 };
 
@@ -52,7 +52,7 @@ export default function ArcPage() {
             The full arc from idea to shipped code.
           </p>
           <p className="mt-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
-            A{" "}
+            A workflow toolkit for{" "}
             <Link
               className="prose-link"
               href="https://docs.anthropic.com/en/docs/claude-code"
@@ -61,11 +61,11 @@ export default function ArcPage() {
             >
               Claude Code
             </Link>{" "}
-            plugin with {skills.length} skills and {agents.length} specialized
-            agents. Skills orchestrate workflows: exploring your codebase,
-            asking clarifying questions, spawning agents for parallel review.
-            Agents are specialists: security auditors, performance analysts,
-            architecture reviewers, each with deep domain expertise.
+            and Codex with {skills.length} skills and {agents.length}{" "}
+            specialized agents. Skills orchestrate workflows: exploring your
+            codebase, asking clarifying questions, spawning agents for parallel
+            review. Agents are specialists: security auditors, performance
+            analysts, architecture reviewers, each with deep domain expertise.
           </p>
           <p className="mt-[calc(var(--baseline)*1)] text-neutral-500 text-sm">
             Made by{" "}
@@ -82,36 +82,82 @@ export default function ArcPage() {
 
         {/* Install */}
         <section className="mb-[calc(var(--baseline)*4)]">
-          <div className="group max-w-md">
-            <div className="flex items-center justify-between rounded bg-neutral-800 px-4 py-3 font-mono text-neutral-100 text-sm">
-              <span className="flex items-center gap-2">
-                <span className="text-neutral-500">$</span>
-                <span>claude plugins install arc@howells</span>
-              </span>
-              <CopyButton light text="claude plugins install arc@howells" />
+          <div className="max-w-lg space-y-[calc(var(--baseline)*1)]">
+            <div className="group">
+              <div className="relative rounded bg-neutral-800">
+                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
+                    <span className="shrink-0 text-neutral-500">$</span>
+                    <span className="truncate">
+                      claude plugins install arc@howells
+                    </span>
+                  </span>
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
+                />
+                <div className="absolute inset-y-0 right-4 flex items-center">
+                  <CopyButton light text="claude plugins install arc@howells" />
+                </div>
+              </div>
+              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
+                Install from the{" "}
+                <Link
+                  className="prose-link"
+                  href="https://docs.anthropic.com/en/docs/claude-code/plugins#plugin-marketplace"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Claude Code plugin marketplace
+                </Link>
+                . Requires{" "}
+                <Link
+                  className="prose-link"
+                  href="https://docs.anthropic.com/en/docs/claude-code"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Claude Code
+                </Link>{" "}
+                2.1.16+ (uses Tasks, not Todos)
+              </p>
+            </div>
+
+            <div className="group">
+              <div className="relative rounded bg-neutral-800">
+                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
+                    <span className="shrink-0 text-neutral-500">$</span>
+                    <span className="truncate">
+                      bash &lt;(curl -fsSL
+                      https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
+                    </span>
+                  </span>
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
+                />
+                <div className="absolute inset-y-0 right-4 flex items-center">
+                  <CopyButton
+                    light
+                    text="bash <(curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)"
+                  />
+                </div>
+              </div>
+              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
+                Codex install (uses <code>~/.agents/skills</code>). Optional
+                auto-update:{" "}
+                <code>
+                  bash &lt;(curl -fsSL
+                  https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh)
+                  --auto-update --interval-hours 6
+                </code>
+                .
+              </p>
             </div>
           </div>
-          <p className="mt-[calc(var(--baseline)*0.5)] max-w-md text-pretty text-neutral-500 text-xs leading-relaxed">
-            Install from the{" "}
-            <Link
-              className="prose-link"
-              href="https://docs.anthropic.com/en/docs/claude-code/plugins#plugin-marketplace"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Claude Code plugin marketplace
-            </Link>
-            . Requires{" "}
-            <Link
-              className="prose-link"
-              href="https://docs.anthropic.com/en/docs/claude-code"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Claude Code
-            </Link>{" "}
-            2.1.16+ (uses Tasks, not Todos)
-          </p>
         </section>
 
         {/* Primary command */}

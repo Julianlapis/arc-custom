@@ -2,6 +2,7 @@
 
 /* Tailwind v4 source scanning */
 @source "../**/*.{ts,tsx,mdx}";
+@source "../../node_modules/@howells/stacksheet/dist/**/*.js";
 
 @layer base {
 	:root {
@@ -33,6 +34,10 @@
 }
 
 @layer base {
+	html {
+		font-size: 15px;
+	}
+
 	body {
 		font-family: var(--font-sans);
 		font-feature-settings: "liga" 1, "calt" 1, "cv11" 1;
