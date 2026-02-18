@@ -4,22 +4,11 @@ Rules for HTTP APIs, tRPC routers, and server actions.
 
 ## Design Principles
 
-- MUST: Design APIs as contracts — consumers depend on stability.
 - MUST: Consistent error format across all endpoints (see Error Shape below).
 - SHOULD: Version via URL prefix (`/v1/`) only when introducing breaking changes.
 - SHOULD: Prefer cursor-based pagination over offset-based.
-- NEVER: Sensitive data in query parameters (tokens, passwords, PII).
-- NEVER: Expose internal IDs or database structure in responses.
 
 ## HTTP Conventions
-
-| Method | Use | Idempotent |
-|--------|-----|------------|
-| GET | Read resources, queries | Yes |
-| POST | Create resources, mutations, RPC actions | No |
-| PUT | Full replacement of a resource | Yes |
-| PATCH | Partial update | No |
-| DELETE | Remove a resource | Yes |
 
 - MUST: Use appropriate status codes — `201` for creation, `204` for deletion, `409` for conflicts, `422` for semantic errors.
 - MUST: `401` for missing/invalid auth, `403` for insufficient permissions. Never conflate them.

@@ -12,7 +12,6 @@
 - NEVER: Cast to `any` (`as any`, `as unknown as`). Fix types at the source.
 - NEVER: Use unsafe `as` casts to bypass errors. Wrong types = wrong code.
 - NEVER: Use non-null assertions (`!`). Fix types at source.
-- NEVER: Shadow variables from outer scope.
 
 ## Error Handling
 - NEVER: Add unnecessary `try`/`catch`. Let errors propagate.
@@ -22,5 +21,3 @@
 - SHOULD: Only create abstractions when actually needed. Inline is fine.
 - SHOULD: Avoid helper functions when a simple inline expression suffices.
 
-## Style
-- SHOULD: Use numeric separators in large number literals (e.g., `1_000_000`).

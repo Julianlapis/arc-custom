@@ -7,10 +7,8 @@
 - MUST: All anchors must be valid and navigable
 - MUST: Accurate names (`aria-label`), decorative elements `aria-hidden`, verify in the Accessibility Tree
 - MUST: Icon-only buttons have descriptive `aria-label`
-- MUST: Prefer native semantics (`button`, `a`, `label`, `table`) before ARIA
 - NEVER: Add tooltips to disabled buttons (inaccessible to keyboard users)
 - MUST: Tooltips shouldn't contain interactive content
-- MUST: Always render images with `<img>` tags for screen readers (not CSS backgrounds)
 - MUST: HTML illustrations need explicit `aria-label` (raw DOM is announced otherwise)
 
 ## Focus

@@ -64,9 +64,6 @@ Tests that hit real external APIs MUST run — don't skip them because "no live 
 
 ## Test Quality
 
-- MUST: Test behavior, not implementation. Tests survive refactors.
-- MUST: Each test has a single clear assertion. No "test everything" blocks.
-- NEVER: Use `sleep`/`setTimeout` in tests. Wait for specific conditions.
 - SHOULD: Use MSW for API mocking in integration tests, not manual fetch stubs.
 
 ## Mocking Boundaries

@@ -12,27 +12,6 @@ MUST start with more whitespace than you think you need. Remove space only when 
 
 "It feels empty" is not a reason. "These items need to appear grouped" is.
 
-### Spacing Creates Grouping
-
-Elements MUST be obviously closer to related content than to unrelated content. Ambiguous spacing forces users to think.
-
-```
-Bad:
-  [Header]
-         ← 20px
-  [Related Content]
-         ← 20px (same!)
-  [Unrelated Footer]
-
-Good:
-  [Header]
-         ← 8px
-  [Related Content]
-
-         ← 32px (clearly different)
-  [Unrelated Footer]
-```
-
 ---
 
 ## Base Unit
@@ -161,7 +140,6 @@ When a content group meets a different functional group (e.g., copy → action b
 
 NEVER:
 - Use the same spacing between all elements (creates ambiguous grouping)
-- Let content touch its container edges (always have padding)
 - Scale spacing proportionally with screen size (larger screens need more absolute space, not proportionally more)
 - Fill space just because it's available
 

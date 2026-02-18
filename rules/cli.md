@@ -11,9 +11,6 @@ Rules for project CLIs that expose the API for local development and coding agen
 
 ## Scripted Mode
 
-- MUST: Non-interactive when args are provided — never prompt for input.
-- MUST: `--json` flag for machine-readable JSON output on stdout.
-- MUST: Exit codes: `0` success, `1` error, `2` usage/validation.
 - SHOULD: `--quiet` flag to suppress non-essential output.
 - SHOULD: Short aliases for common flags (`-m` for `--model`, `-o` for `--output`).
 

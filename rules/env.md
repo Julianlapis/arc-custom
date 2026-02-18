@@ -21,7 +21,6 @@ Scope: All apps and packages.
 
 ## Client vs Server
 - MUST: Client-available vars MUST be prefixed `NEXT_PUBLIC_`.
-- MUST: Do not expose secrets (API keys, DB URLs) to the client.
 - SHOULD: Narrow exposure: only export what the client needs.
 
 ## Adding Variables

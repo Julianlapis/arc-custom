@@ -2,14 +2,12 @@
 
 ## Principles
 
-- MUST: Profile with CPU/network throttling
 - MUST: Measure reliably (disable extensions that skew runtime)
 - MUST: Track re-renders (React DevTools/React Scan)
 - MUST: Batch layout reads/writes — avoid reflows/repaints
 - MUST: Mutations (`POST/PATCH/DELETE`) < 500ms
 - MUST: Virtualize large lists (`@tanstack/react-virtual` or `virtua`)
 - MUST: Preload above-fold images; lazy-load rest
-- MUST: Prevent CLS (explicit image dimensions)
 - SHOULD: Test iOS Low Power Mode and macOS Safari
 - SHOULD: Prefer uncontrolled inputs; make controlled loops cheap
 
@@ -19,20 +17,6 @@
 - SHOULD: Replace blurred rectangles with radial gradients
 - SHOULD: `transform: translateZ(0)` sparingly for GPU layer promotion
 - SHOULD: Toggle `will-change` only during scroll, then remove
-
-### Transitions
-
-- NEVER: `transition: all` — causes accidental animations
-
-```css
-/* Bad */
-.button { transition: all 200ms ease; }
-
-/* Good */
-.button { transition: background-color 200ms ease, transform 200ms ease; }
-```
-
-Or Tailwind: `transition-colors duration-200` instead of `transition-all`
 
 ### CSS Variables
 

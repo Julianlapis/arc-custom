@@ -71,11 +71,7 @@ LLMs default to creating new components instead of finding existing ones. This r
 
 ## JSX
 - NEVER: Pass children as props. Nest children between opening and closing tags.
-- NEVER: Define components inside other components.
 - NEVER: Reassign props in components.
-- NEVER: Add children to void elements (`<img>`, `<br>`, `<input>`).
-- MUST: Add `key` prop to elements in iterables.
-- NEVER: Use array indices as keys (use stable IDs).
 
 ## React 19
 - MUST: Use ref-as-prop instead of legacy `forwardRef`.
@@ -84,9 +80,6 @@ LLMs default to creating new components instead of finding existing ones. This r
 - SHOULD: Use `useActionState` for form handling with server actions.
 - NEVER: Use `cloneElement` — it silently injects props and breaks with wrappers/fragments. Use context, render props, or explicit composition.
 - NEVER: Use `Children.map`/`forEach`/`toArray`/`count`/`only` — child traversal is fragile. Use explicit props or context.
-- NEVER: Use class components, `defaultProps`, or `propTypes` — use function components, JS defaults, and TypeScript.
-- NEVER: Use `createRef` in function components — use `useRef`.
-- NEVER: Use string refs — removed in React 19.
 
 ```tsx
 // ref-as-prop (no forwardRef needed)

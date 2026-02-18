@@ -1,14 +1,5 @@
 # Interface: Forms
 
-## Labels
-
-- MUST: Label click focuses input
-
-```html
-<label for="email">Email</label>
-<input id="email" type="email" />
-```
-
 ## Input Types
 
 - MUST: Correct `type` for keyboard/validation: `email`, `tel`, `url`, `number`, `search`, `password`
@@ -66,7 +57,6 @@
 
 ## Buttons
 
-- MUST: Use `<button>` element (never `<div onClick>`)
 - MUST: Disable after submission to prevent duplicates
 - SHOULD: Show keyboard shortcut in tooltip: `Save (⌘S)`
 - SHOULD: `active:scale-[0.97]` for press feedback
@@ -88,8 +78,6 @@
 
 ## Validation
 
-- MUST: Errors inline next to field
-- MUST: On submit, focus first error field
 - MUST: Use `aria-invalid` on invalid inputs
 
 ```jsx

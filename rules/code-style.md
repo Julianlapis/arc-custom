@@ -5,10 +5,6 @@
 - MUST: Use double quotes for strings and include semicolons.
 - MUST: Include trailing commas (ES5: objects, arrays, function params).
 - SHOULD: Wrap all arrow function parameters in parentheses.
-- SHOULD: Prefer `for...of` over `Array.forEach` and index-based `for` loops.
-- SHOULD: Prefer object spread (`{...obj}`) over `Object.assign()`.
-- SHOULD: Prefer template literals over string concatenation.
-- MUST: Use strict equality: `===` and `!==` exclusively.
 - MUST: Use kebab-case ASCII filenames. Components: `component-name.tsx`; utilities: `util-name.ts`.
 - SHOULD: Order imports external → internal → relative, and MUST use `node:` for Node builtins (Biome organizes imports).
 

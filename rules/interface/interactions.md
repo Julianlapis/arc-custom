@@ -1,11 +1,5 @@
 # Interface: Interactions
 
-## Keyboard
-
-- MUST: Full keyboard support per [WAI-ARIA APG patterns](https://www.w3.org/WAI/ARIA/apg/patterns/)
-- MUST: Visible focus rings via `focus-visible:ring-2`
-- MUST: Focus trap in modals; return focus on close
-
 ## Touch Targets
 
 - MUST: Minimum `min-h-6 min-w-6` (24px), mobile `min-h-11 min-w-11` (44px)
@@ -56,7 +50,6 @@ Or define custom variant in Tailwind config:
 
 - MUST: URL reflects state (filters, tabs, pagination). Use [nuqs](https://nuqs.dev)
 - MUST: Back/Forward restores scroll position
-- MUST: Use `<a>/<Link>` for navigation (supports Cmd-click)
 
 ## Feedback
 
