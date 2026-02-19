@@ -8,10 +8,11 @@ description: |
 
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
+  Use --diff to scope audit to files changed vs main branch (or specify base: --diff develop).
   Use --docs for a focused JSDoc/documentation coverage audit.
   Use --copy for a focused UX writing/copy quality audit.
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy]
+argument-hint: <path-or-focus> [--parallel] [--diff [base]] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy]
 metadata:
   author: howells
 website:
@@ -95,17 +96,17 @@ Pass relevant rules to each reviewer agent.
 
 | Reviewer | Core Rules to Pass |
 |----------|-------------------|
-| security-engineer | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS) |
+| security-engineer | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS), react-correctness.md (security section) |
 | architecture-engineer | stack.md, turborepo.md |
-| lee-nextjs-engineer | nextjs.md, api.md |
+| lee-nextjs-engineer | nextjs.md, api.md, react-correctness.md (Next.js-specific rules) |
 | senior-engineer | code-style.md, typescript.md, react.md, ai-sdk.md (if AI SDK) |
 | data-engineer | testing.md, api.md |
 | organization-engineer | turborepo.md, code-style.md |
 | hygiene-engineer | stack.md, code-style.md, ai-sdk.md (if AI SDK) |
 | documentation-engineer | typescript.md, code-style.md |
 | ux-writing-engineer | code-style.md |
-| daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK) |
-| performance-engineer | (no core rules — uses own heuristics) |
+| daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK), react-performance.md, react-correctness.md |
+| performance-engineer | react-performance.md |
 | seo-engineer | seo.md |
 
 **For UI/frontend audits, also load interface rules:**
@@ -146,8 +147,27 @@ In addition to their domain-specific rules, both UI reviewers should verify:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
   - A focus flag (e.g., `--security`, `--performance`, `--architecture`, `--design`)
   - `--parallel` flag to run all reviewers simultaneously (resource-intensive)
+  - `--diff` or `--diff [base]` flag to scope audit to only changed files vs a base branch
   - A stage override (e.g., `--stage=production`, `--stage=prototype`)
-  - Combinations (e.g., `apps/web --security`, `src/ --parallel`, `--design`)
+  - Combinations (e.g., `apps/web --security`, `src/ --parallel`, `--design`, `--diff develop`)
+
+**If `--diff` flag is set:**
+
+Determine changed files:
+```bash
+# Default base is main, user can override with --diff develop
+git diff --name-only --diff-filter=ACMR ${base:-main}...HEAD | grep -E '\.(tsx?|jsx?|py|go|rs)$'
+```
+
+Store the file list. Pass it to every reviewer agent as a scope constraint:
+```
+IMPORTANT: Only review these files (changed in current branch):
+[file list]
+
+Do not flag issues in files not on this list.
+```
+
+If `--diff` produces 0 files, report "No changed files found vs [base]" and exit.
 
 **If no scope provided:**
 
@@ -194,6 +214,28 @@ pip-audit --format json 2>/dev/null | jq '[.[] | select(.vulns[].fix_versions)] 
 ```
 
 Only surface **critical** and **high** severity vulnerabilities. Ignore moderate/low — they create noise without actionable urgency.
+
+**Run dead code detection (JS/TS projects only):**
+
+```bash
+npx -y knip --no-progress --reporter compact 2>/dev/null | head -40
+```
+
+If knip is already a project dependency, use `npx knip` instead. Knip detects:
+- Unused files (not imported anywhere)
+- Unused exports (exported but never imported)
+- Unused types (exported types never referenced)
+- Unused dependencies (in package.json but not imported)
+- Duplicate exports (same thing exported multiple ways)
+
+Include dead code count in the detection summary. Pass findings to relevant reviewers:
+- `organization-engineer` — unused files and structural dead weight
+- `architecture-engineer` — unused exports indicating poor module boundaries
+- `senior-engineer` — general dead code cleanup
+
+If knip finds >20 unused exports, flag as a separate task cluster rather than distributing across reviewers.
+
+If `--diff` flag is set, cross-reference knip results with the changed file list (knip does not support diff mode natively, so run on full project but only surface findings that touch changed files).
 
 **Detect project scale:**
 
@@ -253,13 +295,14 @@ If the user corrects it, use their override.
 
 **Summarize detection:**
 ```
-Scope: [path or "full codebase"]
+Scope: [path or "full codebase"] [diff vs [base] if --diff]
 Project type: [Next.js / React / Python / etc.]
 Project scale: [small / medium / large]
 Project stage: [prototype / development / pre-launch / production]
 Has database: [yes/no]
 Has AI SDK: [yes/no + deprecated API count if any]
 Has tests: [yes/no]
+Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
 Execution mode: [batched (default) / parallel / team]

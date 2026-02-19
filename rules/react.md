@@ -116,3 +116,6 @@ function Input({ ref, ...props }: Props & { ref?: React.Ref<HTMLInputElement> })
 ## Further Reading
 
 For 57 detailed React/Next.js performance rules with code examples, agents can reference the `vercel-react-best-practices` skill. For advanced composition patterns (compound components, dependency injection via providers), reference the `vercel-composition-patterns` skill.
+
+For React-specific performance anti-patterns, agents can reference `react-performance.md`.
+For React correctness rules and common bugs, agents can reference `react-correctness.md`.
