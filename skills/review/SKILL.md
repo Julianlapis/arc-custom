@@ -98,6 +98,8 @@ Check for context on what led to the plan being reviewed.
 - `security-engineer` — Vulnerabilities, OWASP
 - `data-engineer` — Migrations, transactions
 - `designer` — Visual design quality, UX fundamentals, AI slop detection
+- `codex-reviewer` — Independent second opinion via OpenAI Codex CLI (different AI model)
+- `gemini-reviewer` — Independent second opinion via Google Gemini CLI (different AI model)
 
 ## Phase 1: Find the Plan
 
