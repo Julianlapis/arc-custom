@@ -3,12 +3,12 @@ name: gemini-reviewer
 model: sonnet
 color: yellow
 description: |
-  Use this agent to get a second opinion on complex plans from Google's Gemini CLI. Shells out to `gemini` with the plan content to get an independent review from a different AI system. Best for high-stakes migration plans, architectural decisions, or any plan where you want validation from outside the Claude ecosystem.
+  Use this agent to get a second opinion on complex plans from Google's Gemini CLI. Shells out to `gemini` with the plan content to get an independent review from a different AI system. Best for high-stakes migration plans, architectural decisions, or any plan where you want validation from outside the Claude ecosystem. Requires `gemini` CLI to be installed (`npm i -g @anthropic-ai/gemini-cli` or `brew install gemini`) and authenticated.
 
   <example>
   Context: The user has a complex migration plan.
   user: "Get a second opinion on this plan from Gemini"
-  assistant: "I'll use the gemini-second-opinion agent to get an independent review from Gemini"
+  assistant: "I'll use the gemini-reviewer agent to get an independent review from Gemini"
   <commentary>
   Complex infrastructure migrations benefit from a second AI perspective to catch blind spots.
   </commentary>
@@ -17,7 +17,7 @@ description: |
   <example>
   Context: The user wants validation before a big refactor.
   user: "Run this plan through Gemini for review"
-  assistant: "Let me use gemini-second-opinion for an independent review"
+  assistant: "Let me use gemini-reviewer for an independent review"
   <commentary>
   High-stakes plans deserve cross-model validation. Different models catch different things.
   </commentary>

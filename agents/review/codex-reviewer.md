@@ -3,12 +3,12 @@ name: codex-reviewer
 model: sonnet
 color: yellow
 description: |
-  Use this agent to get a second opinion on complex plans from OpenAI Codex CLI. Shells out to `codex exec` with the plan content to get an independent review from a different AI system. Best for high-stakes migration plans, architectural decisions, or any plan where you want validation from outside the Claude ecosystem.
+  Use this agent to get a second opinion on complex plans from OpenAI Codex CLI. Shells out to `codex exec` with the plan content to get an independent review from a different AI system. Best for high-stakes migration plans, architectural decisions, or any plan where you want validation from outside the Claude ecosystem. Requires `codex` CLI to be installed (`npm i -g @openai/codex`) and authenticated (`codex login`).
 
   <example>
   Context: The user has a complex migration plan.
   user: "Get a second opinion on this Hyperdrive migration plan"
-  assistant: "I'll use the codex-second-opinion agent to get an independent review from Codex"
+  assistant: "I'll use the codex-reviewer agent to get an independent review from Codex"
   <commentary>
   Complex infrastructure migrations benefit from a second AI perspective to catch blind spots.
   </commentary>
@@ -17,7 +17,7 @@ description: |
   <example>
   Context: The user wants validation before a big refactor.
   user: "I want a second opinion on this plan before we start"
-  assistant: "Let me run this through codex-second-opinion for an independent review"
+  assistant: "Let me run this through codex-reviewer for an independent review"
   <commentary>
   High-stakes plans deserve cross-model validation. Different models catch different things.
   </commentary>
