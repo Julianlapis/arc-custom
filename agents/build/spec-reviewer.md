@@ -53,6 +53,15 @@ Get the task specification from:
 - [ ] Any edge cases mentioned but not handled?
 - [ ] Any implicit requirements missed?
 
+### 2.5. Check for Stubs
+
+Use patterns from `${CLAUDE_PLUGIN_ROOT}/references/verification-patterns.md` to verify implementations are substantive:
+
+- No placeholder text or TODO comments in new code
+- Event handlers have real logic (not empty or log-only)
+- API calls are made AND responses are used
+- State is rendered, not hardcoded
+
 ### 3. Report Findings
 
 **If compliant:**

@@ -105,6 +105,17 @@ Skip any step = lying, not verifying
 ❌ Trust agent report
 ```
 
+## Detecting Stubs and Placeholders
+
+Running tests isn't enough — code can pass linting and tests while being hollow.
+
+See: `${CLAUDE_PLUGIN_ROOT}/references/verification-patterns.md` for systematic patterns to detect:
+- Placeholder implementations (TODO, empty handlers, hardcoded values)
+- Unwired code (components that don't call APIs, APIs that don't query DB)
+- Missing functionality hidden behind passing tests
+
+**The 4-level check:** Exists → Substantive → Wired → Functional
+
 ## Why This Matters
 
 From 24 failure memories:
