@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 24 skills for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 25 skills for the complete development lifecycle.
 
 ## Structure
 
@@ -30,12 +30,14 @@ arc/
 │   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
+│   ├── hooks/SKILL.md      # Cross-cutting: auto-format + context hooks
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized reviewers
 │   ├── review/
 │   ├── research/
 │   ├── design/
 │   └── workflow/
+├── hooks/                   # Claude Code hooks (statusline, context monitor)
 ├── disciplines/             # Implementation methodologies
 ├── references/              # Domain knowledge
 ├── templates/               # Output templates
@@ -71,6 +73,7 @@ CROSS-CUTTING (available anytime):
               /arc:tidy       → Clean up completed plans
               /arc:rules      → Apply coding standards
               /arc:deps       → Dependency audit with batch upgrades
+              /arc:hooks      → Auto-format, lint, and context monitor hooks
               /arc:ai         → AI SDK 6 patterns and guidance
 ```
 

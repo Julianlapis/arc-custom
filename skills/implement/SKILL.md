@@ -42,10 +42,11 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
 3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 4. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
-5. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-6. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
-7. ${CLAUDE_PLUGIN_ROOT}/disciplines/subagent-driven-development.md
-8. ${CLAUDE_PLUGIN_ROOT}/disciplines/verification-before-completion.md
+5. ${CLAUDE_PLUGIN_ROOT}/references/checkpoint-patterns.md
+6. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+7. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
+8. ${CLAUDE_PLUGIN_ROOT}/disciplines/subagent-driven-development.md
+9. ${CLAUDE_PLUGIN_ROOT}/disciplines/verification-before-completion.md
 </required_reading>
 
 <build_agents>
@@ -467,6 +468,32 @@ Ready for feedback before continuing?
 ```
 
 Wait for user confirmation or adjustments.
+
+### Step 8b: Handle Checkpoint Tasks
+
+If the current task is a checkpoint type (`[CHECKPOINT:VERIFY]`, `[CHECKPOINT:DECIDE]`, `[CHECKPOINT:ACTION]`):
+
+**For VERIFY:**
+1. Ensure verification environment is running (dev server started, etc.)
+2. Present what was built and verification steps
+3. Wait for user: "approved" or issue description
+4. If issues -> fix -> re-present checkpoint
+5. If approved -> continue to next task
+
+**For DECIDE:**
+1. Present options with pros/cons from the plan
+2. Wait for user selection
+3. Record decision in progress journal
+4. Continue implementation using selected option
+
+**For ACTION:**
+1. Explain what was attempted and what blocked (auth gate, etc.)
+2. Provide exact steps for the manual action
+3. Wait for user: "done"
+4. Verify the action succeeded (e.g., `vercel whoami`)
+5. Retry the blocked operation and continue
+
+See `${CLAUDE_PLUGIN_ROOT}/references/checkpoint-patterns.md` for full protocol.
 
 ## Phase 4: Quality Checkpoints
 

@@ -143,6 +143,36 @@ Step 5: Commit
 [exact commit command with message]
 ```
 
+### Checkpoint Tasks
+
+When a task requires human judgment (visual verification, decisions, manual actions), mark it as a checkpoint:
+
+```
+Task N: [CHECKPOINT:VERIFY] Verify dashboard layout
+  After: Tasks 1-3 (agent starts dev server automatically)
+
+  Verify at http://localhost:3000/dashboard:
+  1. Desktop (>1024px): Sidebar visible, content fills remaining
+  2. Tablet (768px): Sidebar collapses
+  3. Mobile (375px): Single column layout
+
+  -> "approved" or describe issues
+
+Task N: [CHECKPOINT:DECIDE] Select authentication provider
+  Options:
+  1. Clerk -- Best DX, pre-built UI, paid after 10k MAU
+  2. NextAuth -- Free, self-hosted, maximum control
+  3. Supabase Auth -- Built-in with our DB
+
+  -> Select: clerk, nextauth, or supabase
+```
+
+**Rules:**
+- Automate everything possible before a checkpoint (start servers, deploy, etc.)
+- Never ask user to run CLI commands -- agent does it
+- Max 1 checkpoint per logical milestone
+- See `${CLAUDE_PLUGIN_ROOT}/references/checkpoint-patterns.md`
+
 **Task ordering:**
 1. Data/types first (foundation)
 2. Core logic (business rules)
