@@ -67,6 +67,7 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 | `e2e-runner` | opus | Playwright tests — iterate until green or report blockers |
 | `spec-reviewer` | sonnet | Spec compliance check — nothing missing, nothing extra |
 | `code-reviewer` | haiku | Quick code quality gate — no `any`, proper error handling, tests exist |
+| `plan-completion-reviewer` | sonnet | Whole-plan gate — all tasks built, nothing skipped, no scope creep |
 
 **Before spawning a build agent:**
 1. Read the agent file: `${CLAUDE_PLUGIN_ROOT}/agents/build/[agent-name].md`
@@ -619,6 +620,41 @@ pnpm test
 
 If tests fail, spawn debugger to investigate.
 
+## Phase 5.5: Plan Completion Verification
+
+**This is the whole-plan gate. Per-task spec reviews catch issues within tasks — this catches tasks that were skipped, partially implemented, or scope that crept in.**
+
+1. **Re-read the original implementation plan** (the file from Phase 2)
+2. **Get the list of all files changed:**
+```bash
+git diff --name-only main...HEAD
+```
+3. **Spawn plan-completion-reviewer:**
+```
+Task [plan-completion-reviewer] model: sonnet: "Verify the entire implementation matches the original plan.
+
+ORIGINAL PLAN:
+[paste full plan text]
+
+FILES CHANGED:
+[paste git diff file list]
+
+TEST RESULTS:
+[paste test summary — N passing, N failing]
+
+Read each file referenced in the plan. Verify every task was implemented substantively.
+Check for skipped tasks, partial implementations, and scope creep.
+See ${CLAUDE_PLUGIN_ROOT}/agents/build/plan-completion-reviewer.md"
+```
+
+**If plan-completion-reviewer finds issues:**
+- Skipped tasks → implement them now
+- Partial implementations → complete them
+- Scope creep → ask user if extras should stay or be removed
+- Re-run plan-completion-reviewer after fixes
+
+**Do NOT proceed to Phase 6 until plan-completion-reviewer passes.**
+
 ## Phase 5b: E2E Tests (If Created)
 
 If e2e tests were created as part of this implementation:
@@ -786,6 +822,7 @@ Execution is complete when:
 - [ ] All tasks marked completed in TodoWrite
 - [ ] All tests passing
 - [ ] Linting passes
+- [ ] Plan completion verification passed (plan-completion-reviewer)
 - [ ] PR created
 - [ ] User informed of completion
 - [ ] Progress journal updated

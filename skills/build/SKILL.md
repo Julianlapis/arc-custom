@@ -55,6 +55,7 @@ website:
 | `test-runner` | haiku | Run vitest, analyze results |
 | `spec-reviewer` | sonnet | Verify matches spec |
 | `code-reviewer` | haiku | Code quality gate |
+| `plan-completion-reviewer` | sonnet | Whole-plan gate (if >3 tasks) |
 </agents>
 
 <rules_context>
@@ -292,6 +293,28 @@ pnpm biome check .     # No lint errors
 mcp__claude-in-chrome__computer action=screenshot
 ```
 
+### Phase 5.5: Plan Completion Check
+
+**Re-read the build plan from Phase 2.** For each item in the plan:
+- Is it implemented? (read the actual file, don't trust memory)
+- Is it substantive? (not a stub or placeholder)
+- Is it wired up? (imported where needed, rendered, called)
+
+**If >3 tasks in the build plan**, spawn plan-completion-reviewer:
+```
+Task [plan-completion-reviewer] model: sonnet: "Verify implementation matches build plan.
+
+BUILD PLAN:
+[paste build plan from Phase 2]
+
+FILES CHANGED:
+[list files created/modified]
+
+Check every item was built. Nothing skipped, nothing extra."
+```
+
+**Do NOT proceed to Phase 6 until every item in the build plan is verified.**
+
 ### Phase 6: Complete
 
 **Commit:**
@@ -350,5 +373,6 @@ Build is complete when:
 - [ ] Code review passed
 - [ ] All tests passing
 - [ ] TS/lint clean
+- [ ] Build plan completion verified (every item checked against code)
 - [ ] Progress journal updated
 </success_criteria>

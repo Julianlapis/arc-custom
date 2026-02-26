@@ -58,6 +58,9 @@ digraph process {
 
     "Read plan, extract all tasks with full text, note context, create TaskCreate/TaskUpdate" [shape=box];
     "More tasks remain?" [shape=diamond];
+    "Dispatch plan-completion-reviewer subagent" [shape=box];
+    "All plan requirements verified?" [shape=diamond];
+    "Fix gaps with implementer subagent" [shape=box];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
     "Use /arc:commit to finalize branch" [shape=box style=filled fillcolor=lightgreen];
 
@@ -77,7 +80,11 @@ digraph process {
     "Code quality reviewer subagent approves?" -> "Mark task complete in TaskCreate/TaskUpdate" [label="yes"];
     "Mark task complete in TaskCreate/TaskUpdate" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
-    "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
+    "More tasks remain?" -> "Dispatch plan-completion-reviewer subagent" [label="no"];
+    "Dispatch plan-completion-reviewer subagent" -> "All plan requirements verified?";
+    "All plan requirements verified?" -> "Fix gaps with implementer subagent" [label="no"];
+    "Fix gaps with implementer subagent" -> "Dispatch plan-completion-reviewer subagent" [label="re-verify"];
+    "All plan requirements verified?" -> "Dispatch final code reviewer subagent for entire implementation" [label="yes"];
     "Dispatch final code reviewer subagent for entire implementation" -> "Use /arc:commit to finalize branch";
 }
 ```

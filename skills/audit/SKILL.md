@@ -60,6 +60,7 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+2. ${CLAUDE_PLUGIN_ROOT}/references/audit-stage-calibration.md
 </required_reading>
 
 <progress_context>
@@ -426,65 +427,17 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 
 **Include project stage in every reviewer prompt.**
 
-Each reviewer must receive the stage context so they can calibrate their severity ratings appropriately. Include the following stage calibration block in every reviewer prompt:
+Each reviewer must receive the stage context so they can calibrate their severity ratings. Read the matching stage calibration block from:
+```
+${CLAUDE_PLUGIN_ROOT}/references/audit-stage-calibration.md
+```
 
+Include in every reviewer prompt:
 ```
 Project stage: [prototype / development / pre-launch / production]
 
 SEVERITY CALIBRATION FOR THIS STAGE:
-
-[Include the matching block below]
-```
-
-**Stage calibration blocks (include the one matching the detected stage):**
-
-**Prototype stage:**
-```
-This project is in PROTOTYPE stage — exploring ideas and validating concepts.
-
-Severity calibration:
-- Only flag issues that could cause data loss, credential leaks, or make the prototype non-functional
-- Do NOT flag: missing rate limiting, incomplete error handling, lack of input validation on non-auth flows, missing tests, architectural purity, performance optimization, accessibility, code organization
-- Compress what would normally be High/Medium findings down to Low/Suggestion
-- Focus: "Does this work?" and "Could this leak secrets?" — nothing else matters yet
-- Respect the experiment. The project may be exploring an unconventional idea. Don't penalize it for being impractical — just flag genuine dangers.
-```
-
-**Development stage:**
-```
-This project is in DEVELOPMENT stage — actively building features, not yet shipped.
-
-Severity calibration:
-- Critical: Only actual security vulnerabilities (SQL injection, XSS, credential exposure, auth bypass)
-- High: Data integrity issues, bugs that would corrupt state
-- Medium: Performance issues that would block usability, missing error boundaries
-- Low: Everything else (architecture suggestions, missing tests, rate limiting, caching, monitoring)
-- Do NOT flag as High/Critical: missing rate limiting, incomplete logging, lack of monitoring, missing CI checks, production hardening concerns — these are premature for this stage
-- If the project is conceptual or experimental, use advisory language ("worth considering") rather than prescriptive ("must fix") for anything that isn't a security or data integrity issue
-```
-
-**Pre-launch stage:**
-```
-This project is in PRE-LAUNCH stage — feature-complete, preparing to ship.
-
-Severity calibration:
-- Apply standard severity ratings for most issues
-- Production hardening concerns (rate limiting, error handling, input validation) are now relevant but should be Medium, not Critical
-- Missing monitoring/observability is Medium (should be set up, but not blocking)
-- Architecture and performance issues at full severity
-- Flag any missing error states in user-facing flows as High
-```
-
-**Production stage:**
-```
-This project is in PRODUCTION stage — live and serving real users.
-
-Severity calibration:
-- Apply full severity ratings — all concerns are relevant
-- Missing rate limiting, monitoring, error handling are legitimate High/Critical concerns
-- Security issues at maximum severity
-- Performance regressions are High
-- No downgrading — if it affects real users, it matters
+[Paste the matching stage block from audit-stage-calibration.md]
 ```
 
 **For each batch, spawn 2 agents in parallel:**
@@ -615,22 +568,12 @@ Skip the deduplication and conflict resolution steps below and proceed directly 
 
 **Validate severity against project stage:**
 
-Reviewers should already have calibrated their findings based on the stage context they received. During consolidation, apply a final sanity check:
+Use the severity validation table and conflict resolution rules from:
+```
+${CLAUDE_PLUGIN_ROOT}/references/audit-stage-calibration.md
+```
 
-| Finding Type | Prototype | Development | Pre-launch | Production |
-|-------------|-----------|-------------|------------|------------|
-| Missing rate limiting | Drop | Low | Medium | High |
-| Missing monitoring | Drop | Drop | Medium | High |
-| Missing input validation (non-auth) | Drop | Low | High | Critical |
-| Missing error boundaries | Low | Medium | High | High |
-| Missing tests | Drop | Low | Medium | High |
-| Credential exposure | Critical | Critical | Critical | Critical |
-| SQL injection / XSS | Critical | Critical | Critical | Critical |
-| Architecture concerns | Drop | Low | Medium | High |
-| Performance optimization | Drop | Low | Medium | High |
-| Accessibility gaps | Drop | Low | Medium | High |
-
-If a reviewer rated something higher than the stage warrants, **downgrade it** during consolidation. Add a note: `[Severity adjusted for [stage] stage — would be [original] in production]`
+Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`
 
 **Categorize by severity (after stage adjustment):**
 1. **Critical** — Security vulnerabilities, data loss risks, breaking issues
@@ -638,34 +581,9 @@ If a reviewer rated something higher than the stage warrants, **downgrade it** d
 3. **Medium** — Technical debt, code quality issues
 4. **Low** — Suggestions, minor improvements
 
-**Advisory tone — reviewers advise, user decides:**
+**Advisory tone and conflict resolution:** Follow the advisory tone guidelines and conflict resolution rules in `audit-stage-calibration.md`. Key principle: reviewers advise, user decides. Use "must fix" sparingly (security/data loss only), "should consider" for real problems, "worth noting" for suggestions.
 
-Not every project is trying to be production software. Some projects are conceptual, experimental, or exist to prove an idea that may not even be practical. The audit must respect that.
-
-Tone calibration:
-- **Most findings should be advisory.** Frame as "you may want to consider X" or "this could cause Y if Z", not "you must do X". The user knows their project's goals better than the reviewers do.
-- **Don't fight the user's intent.** If the project is clearly exploring an unconventional approach, don't penalize it for being unconventional. Flag genuine risks, but don't try to steer the project toward a "normal" architecture.
-- **Push hard only when it's genuinely dangerous.** Reserve forceful language ("this will cause data loss", "this is a security vulnerability that must be fixed") for things that are objectively harmful — credential exposure, data corruption, injection attacks. If you wouldn't lose sleep over it shipping as-is, it's advisory.
-- **YAGNI still applies.** Don't recommend adding infrastructure, abstractions, or patterns the project doesn't need yet. But also don't tell the user to remove something experimental just because it's not strictly necessary — they may be exploring whether it's useful.
-
-In the report, use this language hierarchy:
-- **"Must fix"** — Only for genuinely dangerous issues (security holes, data loss). Used sparingly.
-- **"Should consider"** — For issues that will cause real problems if the project progresses (performance cliffs, missing error handling on critical paths).
-- **"Worth noting"** — For suggestions and improvements. No pressure.
-
-**Resolve conflicts between reviewers:**
-
-Different reviewers may give contradictory advice. This is expected — they each optimize for their own domain. Resolve conflicts during consolidation, don't pass them through to the user as separate findings:
-
-| Conflict Pattern | Resolution |
-|-----------------|------------|
-| security-engineer says "add validation layer" vs simplicity-engineer says "remove unnecessary abstraction" | Security wins at pre-launch/production. At prototype/development, note as Low and let user decide. |
-| performance-engineer says "cache aggressively" vs architecture-engineer says "keep stateless" | Context-dependent. If the code is a hot path, performance wins. If it's rarely called, architecture wins. |
-| lee-nextjs-engineer says "move to Server Component" vs daniel-product-engineer says "needs client interactivity" | Check if the component actually uses client APIs (useState, onClick, etc.). If yes, daniel wins. If no, lee wins. |
-| Two reviewers flag same area with different fixes | Pick the simpler fix. Note the alternative in the finding description. |
-| Reviewer flags something the project's own coding rules (`.ruler/`) explicitly allow | Dismiss the finding entirely. Project rules override reviewer opinion. |
-
-When dismissing a conflicting or irrelevant finding, don't silently drop it. Include it in a collapsed "Dismissed" section of the report with a one-line reason, so the user can see what was considered and why it was excluded.
+When dismissing conflicting or irrelevant findings, include them in a collapsed "Dismissed" section with a one-line reason.
 
 **Cluster findings into task groups:**
 
