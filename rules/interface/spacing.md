@@ -136,12 +136,93 @@ When a content group meets a different functional group (e.g., copy → action b
 
 ---
 
+## Container Queries
+
+Viewport queries are for page layouts. **Container queries are for components**:
+
+```html
+<!-- Tailwind v4 container queries -->
+<div class="@container">
+  <div class="grid gap-4 @md:grid-cols-[120px_1fr]">
+    <!-- Card adapts to its container, not the viewport -->
+  </div>
+</div>
+```
+
+A card in a narrow sidebar stays compact; the same card in main content expands — automatically, without viewport hacks.
+
+SHOULD: Prefer `@container` over viewport breakpoints for reusable components.
+
+---
+
+## Optical Alignment
+
+### Text Alignment
+
+Text at `margin-left: 0` often looks indented due to letterform whitespace. Use negative margin to optically align:
+
+```html
+<h1 class="-ml-[0.05em] text-5xl font-bold">Headline</h1>
+```
+
+### Icon Centering
+
+Geometrically centered icons often look off-center:
+- Play icons need to shift right (`translate-x-px`)
+- Arrows shift toward their direction
+- Circular icons in square containers may need visual nudging
+
+### Touch Targets vs Visual Size
+
+Buttons can look small but need large touch targets (44px minimum). Expand with padding or pseudo-elements:
+
+```html
+<button class="relative size-6">
+  <span class="absolute -inset-2.5" /> <!-- Expands tap target to 44px -->
+  <Icon class="size-4" />
+</button>
+```
+
+---
+
+## The Squint Test
+
+Blur your eyes (or screenshot and blur). Can you still identify:
+- The most important element?
+- The second most important?
+- Clear groupings?
+
+If everything looks the same weight blurred, you have a hierarchy problem. Combine multiple dimensions for strong hierarchy:
+
+| Tool | Strong | Weak |
+|------|--------|------|
+| Size | 3:1+ ratio | <2:1 ratio |
+| Weight | Bold vs Regular | Medium vs Regular |
+| Color | High contrast | Similar tones |
+| Space | Surrounded by whitespace | Crowded |
+
+The best hierarchy uses 2-3 dimensions at once.
+
+---
+
+## Cards Are Not Required
+
+Cards are overused. Spacing and alignment create visual grouping naturally. Use cards only when:
+- Content is truly distinct and actionable
+- Items need visual comparison in a grid
+- Content needs clear interaction boundaries
+
+NEVER nest cards inside cards — use spacing, typography, and subtle dividers for hierarchy within a card.
+
+---
+
 ## Anti-Patterns
 
 NEVER:
 - Use the same spacing between all elements (creates ambiguous grouping)
 - Scale spacing proportionally with screen size (larger screens need more absolute space, not proportionally more)
 - Fill space just because it's available
+- Use arbitrary Tailwind values (`p-[13px]`) — stick to the scale
 
 ---
 

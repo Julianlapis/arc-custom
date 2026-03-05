@@ -1,5 +1,22 @@
 # Interface: Interactions
 
+## The Eight Interactive States
+
+Every interactive element needs these states designed:
+
+| State | When | Tailwind Treatment |
+|-------|------|-------------------|
+| **Default** | At rest | Base styling |
+| **Hover** | Pointer over (not touch) | `hover-hover:hover:bg-gray-100` |
+| **Focus** | Keyboard/programmatic focus | `focus-visible:ring-2 focus-visible:ring-offset-2` |
+| **Active** | Being pressed | `active:scale-[0.97]` |
+| **Disabled** | Not interactive | `disabled:opacity-50 disabled:pointer-events-none` |
+| **Loading** | Processing | Spinner, skeleton, `aria-busy="true"` |
+| **Error** | Invalid state | `aria-invalid:border-red-500` |
+| **Success** | Completed | Green check, confirmation |
+
+Common miss: Designing hover without focus, or vice versa. Keyboard users never see hover states.
+
 ## Touch Targets
 
 - MUST: Minimum `min-h-6 min-w-6` (24px), mobile `min-h-11 min-w-11` (44px)
@@ -119,6 +136,68 @@ Prevents menu from closing when moving diagonally to submenu:
 ```
 
 For dynamic positioning, calculate clip-path in JS based on submenu position.
+
+## Focus Rings
+
+NEVER `outline: none` without replacement. Use `:focus-visible` to show focus only for keyboard:
+
+```jsx
+<button className="outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-900">
+```
+
+Focus ring requirements:
+- High contrast (3:1 minimum against adjacent colors)
+- 2-3px thick
+- Offset from element (not inside it)
+- Consistent across all interactive elements
+
+## Native Popover API
+
+For tooltips, dropdowns, and non-modal overlays, prefer native popovers:
+
+```html
+<button popovertarget="menu">Open menu</button>
+<div id="menu" popover class="p-4 rounded-lg shadow-lg">
+  <button>Option 1</button>
+  <button>Option 2</button>
+</div>
+```
+
+Benefits: Light-dismiss (click outside closes), proper stacking, no z-index wars, accessible by default.
+
+## Roving Tabindex
+
+For component groups (tabs, menu items, radio groups), one item is tabbable; arrow keys move within:
+
+```html
+<div role="tablist">
+  <button role="tab" tabindex="0">Tab 1</button>
+  <button role="tab" tabindex="-1">Tab 2</button>
+  <button role="tab" tabindex="-1">Tab 3</button>
+</div>
+```
+
+Arrow keys move `tabindex="0"` between items. Tab moves to the next component entirely.
+
+## Destructive Actions: Undo > Confirm
+
+SHOULD prefer undo over confirmation dialogs — users click through confirmations mindlessly:
+
+1. Remove from UI immediately
+2. Show undo toast
+3. Actually delete after toast expires
+
+Use confirmation only for truly irreversible actions (account deletion), high-cost actions, or batch operations.
+
+## Gesture Discoverability
+
+Swipe-to-delete and similar gestures are invisible. Hint at their existence:
+
+- **Partially reveal**: Show delete button peeking from edge
+- **Onboarding**: Coach marks on first use
+- **Alternative**: Always provide a visible fallback (menu with "Delete")
+
+NEVER rely on gestures as the only way to perform actions.
 
 ## Interactive Elements
 

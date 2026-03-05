@@ -55,10 +55,51 @@ h1 { font-size: clamp(2rem, 5vw, 4.5rem); }
 p { font-size: clamp(1rem, 2.5vw, 1.25rem); }
 ```
 
-## Numeric Content
+## OpenType Features
 
-- MUST: `tabular-nums` (Tailwind) for aligned numbers in tables, timers, prices
+Most developers don't know these exist. Use them for polish:
+
+```html
+<!-- Tailwind classes for OpenType features -->
+<table class="tabular-nums">...</table>           <!-- Aligned columns in data -->
+<span class="lining-nums">2024</span>              <!-- Uniform height numbers -->
+<span class="oldstyle-nums">Chapter 3</span>       <!-- Blends with body text -->
+<span class="diagonal-fractions">1/2 cup</span>    <!-- Proper fractions -->
+<span class="ordinal">1st 2nd 3rd</span>           <!-- Superscript ordinals -->
+```
+
+```css
+/* Features without Tailwind classes — use arbitrary values */
+abbr { font-variant-caps: all-small-caps; }        /* Abbreviations */
+code { font-variant-ligatures: none; }             /* Disable ligatures in code */
+body { font-kerning: normal; }                     /* Enable kerning (be explicit) */
+```
+
+Check what features your font supports at [Wakamai Fondue](https://wakamaifondue.com/).
+
+- MUST: `tabular-nums` for aligned numbers in tables, timers, prices
+- SHOULD: `lining-nums` for numbers in headings, `oldstyle-nums` for numbers in body text
 - SHOULD: Monospace font (Geist Mono) for numeric comparisons
+
+## Font Pairing
+
+**You often don't need a second font.** One well-chosen font family in multiple weights creates cleaner hierarchy than two competing typefaces. Only add a second font when you need genuine contrast (e.g., display headlines + body serif).
+
+When pairing, contrast on multiple axes:
+- Serif + Sans (structure contrast)
+- Geometric + Humanist (personality contrast)
+- Condensed display + Wide body (proportion contrast)
+
+NEVER pair fonts that are similar but not identical (e.g., two geometric sans-serifs). They create visual tension without clear hierarchy.
+
+### Better Google Fonts Alternatives
+
+| Instead of | Try |
+|---|---|
+| Inter | Instrument Sans, Plus Jakarta Sans, Outfit |
+| Roboto | Onest, Figtree, Urbanist |
+| Open Sans | Source Sans 3, Nunito Sans, DM Sans |
+| Editorial/premium | Fraunces, Newsreader, Lora |
 
 ## Font Loading
 
@@ -69,6 +110,32 @@ p { font-size: clamp(1rem, 2.5vw, 1.25rem); }
 ```html
 <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 ```
+
+### Minimizing Layout Shift
+
+Match fallback font metrics to your web font to prevent text reflow:
+
+```css
+@font-face {
+  font-family: 'CustomFont-Fallback';
+  src: local('Arial');
+  size-adjust: 105%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  line-gap-override: 10%;
+}
+
+body {
+  font-family: 'CustomFont', 'CustomFont-Fallback', sans-serif;
+}
+```
+
+Tools like [Fontaine](https://github.com/unjs/fontaine) or Next.js `next/font` calculate these overrides automatically.
+
+## Dark Mode Typography
+
+- SHOULD: Increase `line-height` by 0.05-0.1 for light text on dark backgrounds (perceived weight is lighter, needs more breathing room)
+- SHOULD: Reduce font weight slightly in dark mode (e.g., 350 instead of 400 for body)
 
 ## Selection
 

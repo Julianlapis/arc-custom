@@ -118,22 +118,105 @@ Use numerical scale (1-12) so variables flip cleanly:
 .button { @apply bg-gray-900 dark:bg-gray-100; }
 ```
 
-## Tailwind Integration
+## OKLCH-First Color Definition
+
+MUST define colors in OKLCH. It's perceptually uniform — equal steps in lightness *look* equal, unlike HSL where 50% lightness in yellow looks bright while 50% in blue looks dark.
 
 ```css
-/* Tailwind v4 */
+/* OKLCH: lightness (0-1), chroma (0-0.4+), hue (0-360) */
+--color-primary: oklch(0.60 0.15 250);       /* Blue */
+--color-primary-light: oklch(0.85 0.08 250);  /* Same hue, lighter — reduce chroma */
+--color-primary-dark: oklch(0.35 0.12 250);   /* Same hue, darker */
+```
+
+Key insight: As lightness approaches 0% or 100%, **reduce chroma**. High chroma at extreme lightness looks garish.
+
+### Tinted Neutrals
+
+Pure grey is dead. Add a subtle hint of your brand hue to all neutrals:
+
+```css
+/* Tailwind v4 @theme */
 @theme {
-  --color-brand-50: oklch(0.97 0.02 250);
-  --color-brand-500: oklch(0.55 0.15 250);
-  --color-brand-900: oklch(0.25 0.08 250);
+  /* Warm-tinted greys (friendly, inviting) */
+  --color-gray-50: oklch(0.95 0.01 60);
+  --color-gray-100: oklch(0.90 0.01 60);
+  --color-gray-200: oklch(0.82 0.01 60);
+  --color-gray-300: oklch(0.70 0.01 60);
+  --color-gray-400: oklch(0.58 0.01 60);
+  --color-gray-500: oklch(0.48 0.01 60);
+  --color-gray-600: oklch(0.38 0.01 60);
+  --color-gray-700: oklch(0.30 0.01 60);
+  --color-gray-800: oklch(0.22 0.01 60);
+  --color-gray-900: oklch(0.15 0.01 60);
+  --color-gray-950: oklch(0.10 0.01 60);
+
+  /* Cool-tinted greys (professional, tech) — change hue to 250 */
 }
 ```
 
+Chroma of 0.01 is tiny but perceptible. It creates subconscious cohesion between brand and UI.
+
+## The 60-30-10 Rule
+
+This rule is about **visual weight**, not pixel count:
+
+- **60%**: Neutral backgrounds, white space, base surfaces
+- **30%**: Secondary — text, borders, inactive states
+- **10%**: Accent — CTAs, highlights, focus states
+
+The common mistake: using accent color everywhere because it's "the brand color." Accent colors work *because* they're rare. Overuse kills their power.
+
+## Dangerous Combinations
+
+These commonly fail contrast or cause readability issues:
+
+- Light grey text on white (the #1 accessibility fail)
+- **Grey text on any colored background** — grey looks washed out on color. Use a darker shade of the background's hue, or transparency
+- Red text on green background (8% of men can't distinguish)
+- Blue text on red background (vibrates visually)
+- Yellow text on white (almost always fails)
+- Thin light text on images (unpredictable contrast)
+- **Placeholder text** still needs 4.5:1 — that light grey placeholder usually fails WCAG
+
+## Alpha Is A Design Smell
+
+Heavy use of transparency (`rgba`, `hsla`, `/ 0.5`) usually means an incomplete palette. Alpha creates:
+- Unpredictable contrast on different backgrounds
+- Performance overhead from compositing
+- Inconsistency across contexts
+
+SHOULD: Define explicit overlay colors for each context instead.
+
+Exception: Focus rings and interactive states where see-through is genuinely needed.
+
+## Tailwind Integration
+
+```css
+/* Tailwind v4 — OKLCH-first */
+@theme {
+  --color-brand-50: oklch(0.97 0.02 250);
+  --color-brand-100: oklch(0.93 0.04 250);
+  --color-brand-200: oklch(0.86 0.07 250);
+  --color-brand-300: oklch(0.76 0.10 250);
+  --color-brand-400: oklch(0.66 0.13 250);
+  --color-brand-500: oklch(0.55 0.15 250);
+  --color-brand-600: oklch(0.47 0.14 250);
+  --color-brand-700: oklch(0.39 0.12 250);
+  --color-brand-800: oklch(0.31 0.09 250);
+  --color-brand-900: oklch(0.25 0.08 250);
+  --color-brand-950: oklch(0.18 0.06 250);
+}
+```
+
+Note chroma curve: peaks at 500 (0.15), reduces toward both extremes. This keeps light tints from looking garish and dark shades from looking muddy.
+
 ## Anti-Patterns
 
-- NEVER: Pure black (#000) for text — too harsh
-- NEVER: Pure white (#FFF) for large backgrounds — too stark
-- NEVER: Define hex without HSL/OKLCH equivalent
-- NEVER: Create shades by adjusting only lightness (also saturation/hue)
+- NEVER: Pure black (#000) for text — too harsh. Use `oklch(0.15 0.01 hue)`
+- NEVER: Pure white (#FFF) for large backgrounds — too stark. Use `oklch(0.98 0.005 hue)`
+- NEVER: Define colors in hex without OKLCH equivalent
+- NEVER: Create shades by adjusting only lightness (also adjust chroma and hue)
 - NEVER: Multiple primary colors (dilutes hierarchy)
 - NEVER: Invent colors on the fly — use defined palette
+- NEVER: Heavy alpha/transparency as a substitute for proper palette shades

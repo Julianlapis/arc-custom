@@ -17,6 +17,7 @@ UI/UX guidelines for building polished, accessible interfaces.
 | [performance.md](performance.md) | UI performance optimization |
 | [marketing.md](marketing.md) | Marketing page guidelines |
 | [app-ui.md](app-ui.md) | App UI guidelines (dashboards, SaaS, data tools) |
+| [responsive.md](responsive.md) | Responsive design, input detection, safe areas |
 | [content-accessibility.md](content-accessibility.md) | Accessible content |
 
 ## Related References

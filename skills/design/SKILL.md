@@ -12,7 +12,7 @@ website:
   desc: Visual design direction
   summary: Establish the visual identity for your UI—colors, typography, spacing, tone. Comes with opinionated references to avoid generic AI aesthetics.
   what: |
-    Design walks you through visual decisions: What's the tone? What makes this memorable? It can research real-world examples from Siteinspire (websites) and Mobbin (UI patterns) to inform your direction. From there it produces a design direction document—color palette, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can screenshot via Chrome to verify implementation matches intent.
+    Design walks you through visual decisions: What's the tone? What makes this memorable? It checks for persistent design context (docs/design-context.md) so brand decisions carry across sessions. It can research real-world examples from Siteinspire and Mobbin to inform your direction. From there it produces a design direction document—color palette in OKLCH, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can screenshot via Chrome to verify implementation matches intent.
   why: |
     AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
   decisions:
@@ -69,7 +69,7 @@ ui-builder or figma-builder (builds it)
 designer (reviews for AI slop)
 ```
 
-## Phase 0: Load References (MANDATORY)
+## Phase 0: Load References & Design Context (MANDATORY)
 
 **You MUST read these files before proceeding. Do not skip this step.**
 
@@ -85,16 +85,78 @@ designer (reviews for AI slop)
 
 **And relevant domain rules based on what you're designing:**
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Typography rules
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes, OKLCH, tinted neutrals
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system, container queries
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Typography rules, OpenType features
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` — Layout patterns, z-index
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/responsive.md` — Responsive design, input detection
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — If motion is involved
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — If designing forms
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Interactive states, popover API
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/app-ui.md` — If designing app UI (dashboards, settings, data views)
 </required_reading>
+
+### Persistent Design Context
+
+**Check for `docs/design-context.md` using the Read tool.**
+
+If it exists, load it — this file contains project-wide aesthetic decisions (brand colors, chosen fonts, spacing scale, tone) that all design work should inherit. **Do not re-ask questions that are already answered in design-context.md.** Skip to Phase 1 for any established decisions.
+
+If it does NOT exist, offer to create one:
+
+**Use AskUserQuestion:**
+```
+Question: "No project-wide design context found. Want to establish one? This saves brand decisions (colors, fonts, tone) so every future design session inherits them."
+Header: "Design context"
+Options:
+  1. "Yes, establish context" (Recommended) — Create docs/design-context.md with persistent aesthetic decisions
+  2. "No, one-off design" — Proceed without persistent context
+```
+
+**If creating context, gather and save to `docs/design-context.md`:**
+
+```markdown
+# Design Context
+
+Persistent aesthetic decisions for this project. All design work inherits these choices.
+
+## Brand
+- **Name**: [project name]
+- **Personality**: [e.g., confident and technical, warm and approachable]
+- **Tone**: [chosen from tone options]
+
+## Typography
+- **Display font**: [specific font]
+- **Body font**: [specific font]
+- **Mono font**: [specific font, if applicable]
+
+## Color Palette (Tailwind @theme)
+```css
+@theme {
+  --color-brand-500: oklch(... ... ...);
+  /* Full shade scale */
+  --color-gray-500: oklch(... ... ...);
+  /* Tinted neutral scale */
+}
+```
+
+## Spacing
+- **Base unit**: 4px
+- **Scale**: Tailwind default (p-1=4px through p-16=64px)
+
+## Motion Philosophy
+- **Style**: [e.g., snappy and confident, smooth and refined]
+- **Library**: [CSS transitions / motion/react]
+
+## Memorable Element
+- [What makes this project's UI distinctive]
+
+## Anti-Patterns (Project-Specific)
+- [Anything specifically to avoid for this project]
+```
+
+After creating, proceed to Phase 1.
 
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
@@ -614,8 +676,16 @@ Design is complete when:
 ## Interop
 
 - Produces design doc consumed by **/arc:implement**
+- Reads/creates **docs/design-context.md** for persistent project-wide aesthetic decisions
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
 - Can invoke **vercel-composition-patterns** skill for component architecture review (if available)
 - Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual capture throughout
 - Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin
 - References feed into implementation to maintain design fidelity
+
+### Related Refinement Skills
+After implementation, suggest these for the final mile:
+- **/arc:polish** — Pre-ship visual refinement (spacing, states, contrast)
+- **/arc:distill** — Strip unnecessary complexity
+- **/arc:animate** — Add purposeful motion
+- **/arc:harden** — Production resilience (errors, overflow, i18n)

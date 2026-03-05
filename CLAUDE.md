@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 25 skills for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 29 skills for the complete development lifecycle.
 
 ## Structure
 
@@ -31,6 +31,10 @@ arc/
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
 │   ├── hooks/SKILL.md      # Cross-cutting: auto-format + context hooks
+│   ├── polish/SKILL.md     # Cross-cutting: pre-ship visual refinement
+│   ├── distill/SKILL.md    # Cross-cutting: strip UI to essentials
+│   ├── animate/SKILL.md    # Cross-cutting: strategic motion addition
+│   ├── harden/SKILL.md     # Cross-cutting: production resilience
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized reviewers
 │   ├── review/
@@ -59,7 +63,11 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
               /arc:design     → Create distinctive UI
               /arc:build      → Quick builds for smaller scope
 6. TEST       /arc:testing    → Test strategy and execution
-7. SHIP       /arc:letsgo     → Production readiness checklist
+7. REFINE     /arc:polish     → Pre-ship visual refinement
+              /arc:distill    → Strip UI to essentials
+              /arc:animate    → Add purposeful motion
+              /arc:harden     → Production resilience
+8. SHIP       /arc:letsgo     → Production readiness checklist
               /arc:legal      → Privacy policy, Terms of Service
 
 CROSS-CUTTING (available anytime):
@@ -75,6 +83,10 @@ CROSS-CUTTING (available anytime):
               /arc:deps       → Dependency audit with batch upgrades
               /arc:hooks      → Auto-format, lint, and context monitor hooks
               /arc:ai         → AI SDK 6 patterns and guidance
+              /arc:polish     → Pre-ship visual refinement pass
+              /arc:distill    → Strip UI to essentials
+              /arc:animate    → Strategic motion addition
+              /arc:harden     → Production resilience (errors, overflow, i18n)
 ```
 
 ## Development
