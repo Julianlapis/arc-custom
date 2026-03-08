@@ -161,6 +161,70 @@ export default function ArcPage() {
           </div>
         </section>
 
+        {/* Updating */}
+        <section className="mb-[calc(var(--baseline)*4)]">
+          <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
+            Updating
+          </h2>
+          <div className="max-w-lg space-y-[calc(var(--baseline)*1)]">
+            <div className="group">
+              <div className="relative rounded bg-neutral-800">
+                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
+                    <span className="shrink-0 text-neutral-500">$</span>
+                    <span className="truncate">
+                      claude plugins update arc@howells
+                    </span>
+                  </span>
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
+                />
+                <div className="absolute inset-y-0 right-4 flex items-center">
+                  <CopyButton
+                    light
+                    text="claude plugins update arc@howells"
+                  />
+                </div>
+              </div>
+              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
+                Claude Code auto-updates plugins, but you can trigger it
+                manually. In Cursor, use this command — it doesn&apos;t
+                auto-update.
+              </p>
+            </div>
+
+            <div className="group">
+              <div className="relative rounded bg-neutral-800">
+                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
+                    <span className="shrink-0 text-neutral-500">$</span>
+                    <span className="truncate">
+                      ~/.codex/arc/.codex/update.sh
+                    </span>
+                  </span>
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
+                />
+                <div className="absolute inset-y-0 right-4 flex items-center">
+                  <CopyButton
+                    light
+                    text="~/.codex/arc/.codex/update.sh"
+                  />
+                </div>
+              </div>
+              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
+                Codex manual update. If you installed with{" "}
+                <code>--auto-update</code>, this runs automatically on a
+                schedule.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Primary command */}
         <section className="mb-[calc(var(--baseline)*4)]">
           <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
