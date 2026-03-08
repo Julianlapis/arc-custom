@@ -37,6 +37,8 @@ Task Explore model: haiku: "Quick overview of this codebase:
 - What is this project? (framework, language, purpose)
 - Key directories and their purposes
 - Any obvious patterns or conventions
+- Is this an empty/minimal project with no framework set up?
+  (e.g. just a package.json with no src/, no app framework, no pages)
 
 Keep it brief — 5-10 bullet points max."
 ```
@@ -76,7 +78,13 @@ Present options based on context:
 1. Continue that work
 2. Start something different
 
-**If fresh codebase:**
+**If empty/minimal codebase (no framework detected):**
+"This project doesn't have a framework set up yet. Want to:"
+1. Set up a new project (Next.js, etc.) — I'll help you scaffold it
+2. Define a vision first (/arc:vision)
+3. I already know what I want to build — describe it
+
+**If fresh codebase (has framework but no Arc artifacts):**
 "What would you like to work on?"
 - Describe a feature or change
 - Fix a bug
@@ -88,6 +96,7 @@ Based on their answer:
 
 | Intent | Route to |
 |--------|----------|
+| "Set up a new project" | /arc:build with scaffolding context |
 | "I want to build [feature]" | /arc:ideate |
 | "Quick fix/small change" | /arc:build |
 | "Continue [existing plan]" | /arc:implement |

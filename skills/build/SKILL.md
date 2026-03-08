@@ -63,23 +63,54 @@ website:
 
 **Use Glob tool:** `.ruler/*.md`
 
-**If `.ruler/` exists, read relevant rules:**
-- Always: `code-style.md`
-- TypeScript: `typescript.md`
-- React: `react.md`
-- Next.js: `nextjs.md`
-- Tailwind: `tailwind.md`
-- Testing: `testing.md`
-- Always: `error-handling.md`, `security.md`
+**If `.ruler/` exists, read relevant rules by detection:**
+
+*Always load:*
+- `code-style.md` — formatting, naming, file organization
+- `typescript.md` — type definitions, strict mode
+- `error-handling.md` — error boundaries, Result patterns
+- `security.md` — OWASP, input validation, secrets
+- `env.md` — environment variable handling
+- `git.md` — commit conventions, branching
+- `testing.md` — test strategy, coverage requirements
+- `versions.md` — minimum version requirements
+- `stack.md` — approved technologies
+
+*Load by detection:*
+- React (`react`/`next`): `react.md`, `react-correctness.md`, `react-performance.md`
+- Next.js (`next`): `nextjs.md`
+- Tailwind (`tailwindcss`): `tailwind.md`
 - Drizzle/Prisma: `database.md`
 - wrangler.toml: `cloudflare-workers.md`
-- AI SDK: `ai-sdk.md`
+- AI SDK (`ai`): `ai-sdk.md`
 - Clerk/WorkOS: `auth.md`
+- API routes or tRPC: `api.md`
+- CLI tools: `cli.md`
+- External services: `integrations.md`
+- Turborepo (turbo.json): `turborepo.md`
+- Tooling (biome, eslint): `tooling.md`
+- SEO-relevant pages: `seo.md`
 
-**For UI work, load interface rules:**
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md`
+**If `.ruler/` does NOT exist, suggest running `/arc:rules` first.**
+
+**For UI work, load interface rules from `${CLAUDE_PLUGIN_ROOT}/rules/interface/`:**
+
+*Always for UI:*
+- `design.md` — visual design principles
+- `colors.md` — color system and palette
+- `spacing.md` — spacing scale and consistency
+- `typography.md` — type scale, font choices
+- `layout.md` — layout patterns, grid systems
+
+*By detection:*
+- Forms: `forms.md` — form design, validation UX
+- Animations/transitions: `animation.md` — motion principles
+- Interactive components: `interactions.md` — hover, focus, click patterns
+- App UI (authenticated): `app-ui.md` — dashboard, settings patterns
+- Marketing pages: `marketing.md` — landing page patterns
+- Responsive work: `responsive.md` — breakpoints, mobile-first
+- Accessibility: `content-accessibility.md` — WCAG, screen readers
+- Performance: `performance.md` — rendering, loading optimization
 </rules_context>
 
 ## When to Use Build vs Ideate
