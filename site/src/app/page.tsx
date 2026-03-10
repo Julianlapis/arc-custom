@@ -182,10 +182,7 @@ export default function ArcPage() {
                   className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
                 />
                 <div className="absolute inset-y-0 right-4 flex items-center">
-                  <CopyButton
-                    light
-                    text="claude plugins update arc@howells"
-                  />
+                  <CopyButton light text="claude plugins update arc@howells" />
                 </div>
               </div>
               <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
@@ -210,10 +207,7 @@ export default function ArcPage() {
                   className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
                 />
                 <div className="absolute inset-y-0 right-4 flex items-center">
-                  <CopyButton
-                    light
-                    text="~/.codex/arc/.codex/update.sh"
-                  />
+                  <CopyButton light text="~/.codex/arc/.codex/update.sh" />
                 </div>
               </div>
               <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
