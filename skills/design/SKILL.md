@@ -1,7 +1,7 @@
 ---
 name: design
 description: |
-  Create distinctive, non-generic UI designs with aesthetic direction and ASCII wireframes.
+  Create distinctive, non-generic UI designs with aesthetic direction and wireframes.
   Use when asked to "design the UI", "create a layout", "wireframe this", or when building
   UI that should be memorable rather than generic. Avoids AI slop patterns.
 license: MIT
@@ -12,12 +12,12 @@ website:
   desc: Visual design direction
   summary: Establish the visual identity for your UI—colors, typography, spacing, tone. Comes with opinionated references to avoid generic AI aesthetics.
   what: |
-    Design walks you through visual decisions: What's the tone? What makes this memorable? It checks for persistent design context (docs/design-context.md) so brand decisions carry across sessions. It can research real-world examples from Siteinspire and Mobbin to inform your direction. From there it produces a design direction document—color palette in OKLCH, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can screenshot via Chrome to verify implementation matches intent.
+    Design walks you through visual decisions: What's the tone? What makes this memorable? It checks for persistent design context (docs/design-context.md) so brand decisions carry across sessions. It can research real-world examples from Siteinspire and Mobbin to inform your direction. From there it produces a design direction document—color palette in OKLCH, typography scale, spacing system, and wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can verify the rendered UI against intent with browser screenshots.
   why: |
     AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
   decisions:
     - Opinionated references built in. Font choices, spacing scales, animation patterns—not starting from scratch.
-    - ASCII wireframes over mockups. Version-controllable, forces focus on structure.
+    - WireText when available, ASCII when not. Focus on structure before fidelity.
     - Visual verification via screenshots. Catches when implementation drifts from intent.
   workflow:
     position: branch
@@ -79,9 +79,10 @@ designer (reviews for AI slop)
 1. `references/frontend-design.md` — Fonts, anti-patterns, design review checklist. **Critical.**
 2. `references/design-philosophy.md` — Timeless principles from Refactoring UI
 3. `references/ascii-ui-patterns.md` — Wireframe syntax and patterns
+4. `references/wiretext.md` — When to use WireText vs ASCII vs browser review
 
 **Then load interface rules:**
-4. `rules/interface/index.md` — Interface rules index
+5. `rules/interface/index.md` — Interface rules index
 
 **And relevant domain rules based on what you're designing:**
 - `rules/interface/design.md` — Visual principles
@@ -172,7 +173,7 @@ Check for related prior design work and aesthetic decisions.
 
 ### If Redesigning Existing UI:
 
-**Use Chrome MCP to capture current state:**
+**Prefer Chrome MCP to capture current state. If unavailable, use `agent-browser`. If neither is available, ask for screenshots or review the code directly.**
 
 ```
 1. mcp__claude-in-chrome__tabs_context_mcp (get available tabs)
@@ -425,9 +426,16 @@ Beyond basic layout, make deliberate choices about:
 
 ---
 
-## Phase 5: ASCII Wireframe
+## Phase 5: Wireframe
 
-**Create ASCII wireframes before any code.** Use patterns from `ascii-ui-patterns.md`.
+**Create a structural wireframe before any code.**
+
+Prefer WireText MCP when available for low-fidelity wireframes. If WireText is unavailable, create ASCII wireframes using patterns from `ascii-ui-patterns.md`.
+
+If WireText is used:
+- save the editable URL in the design doc
+- capture the exported wireframe text or a short structural summary
+- treat it as the source of layout structure, not visual fidelity
 
 ```
 ┌─────────────────────────────────────┐
@@ -447,7 +455,7 @@ Beyond basic layout, make deliberate choices about:
 
 **If App UI mode:** You MUST include at least one state variant beyond the populated state (empty, loading, or error). App UI without state design is incomplete.
 
-**Ask:** "Does this layout feel right before I continue?"
+**Ask:** "Does this structure feel right before I continue?"
 
 ---
 
@@ -609,7 +617,7 @@ Options:
 
 ## During Implementation (Reference for /arc:implement)
 
-When implementing this design (via /arc:implement), use Chrome MCP continuously:
+When implementing this design (via /arc:implement), use Chrome MCP continuously when available. Outside Claude Code, prefer `agent-browser`, then Playwright.
 
 ### After Every Significant Change
 ```
@@ -667,7 +675,7 @@ Design is complete when:
 - [ ] Typography selected from recommended fonts
 - [ ] Color palette defined with hex values
 - [ ] Spacing system documented
-- [ ] ASCII wireframes created and approved
+- [ ] Wireframes created and approved
 - [ ] Design document saved to docs/arc/specs/
 - [ ] Red flag checklist passed (zero red flags)
 - [ ] Progress journal updated
@@ -679,7 +687,9 @@ Design is complete when:
 - Reads/creates **docs/design-context.md** for persistent project-wide aesthetic decisions
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
 - Can invoke **vercel-composition-patterns** skill for component architecture review (if available)
-- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual capture throughout
+- Uses **WireText MCP** for low-fidelity wireframes when available
+- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) as the preferred rendered-page capture path in Claude Code
+- Uses **agent-browser** as the preferred browser fallback outside Claude Code
 - Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin
 - References feed into implementation to maintain design fidelity
 

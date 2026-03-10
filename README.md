@@ -115,17 +115,20 @@ without preloading the whole system.
 - These skills are stored in `skills/<name>/SKILL.md` for Claude Code; `.agents/skills/<name>` is a symlink to the same folder so Codex can discover them.
 - Some skills reference Claude-specific tooling (e.g. `TaskList`, `mcp__claude-in-chrome__*`). In Codex, use the closest equivalent:
   - terminal exploration instead of `Task` blocks
-  - Playwright (or user-provided screenshots) instead of Claude-in-Chrome MCP
+  - `agent-browser` first, then Playwright, instead of Claude-in-Chrome MCP
+  - WireText MCP for wireframes when available; otherwise inline ASCII wireframes
 
 ## Claude Code Dependencies (Optional)
 
-Arc uses these plugins for enhanced functionality:
+Arc uses these plugins and MCP integrations for enhanced functionality:
 
-| Plugin | Used by |
-|--------|---------|
+| Integration | Used by |
+|-------------|---------|
 | **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
-| **Context7** | `/arc:implement` |
-| **Chrome** | `figma-implement` agent |
+| **Context7** | research and implementation workflows |
+| **Claude in Chrome** | `/arc:design`, `/arc:responsive`, `/arc:polish`, `designer` review |
+| **WireText MCP** | `/arc:design`, `/arc:ideate` wireframing |
+| **agent-browser** | browser automation fallback outside Claude Code |
 
 ```
 # Official plugins
@@ -135,7 +138,7 @@ Arc uses these plugins for enhanced functionality:
 # Chrome extension: https://chromewebstore.google.com/detail/claude-in-chrome/
 ```
 
-Arc works without these, but relevant features will be limited.
+Chrome remains the preferred rendered-browser verification path in Claude Code. Arc works without these integrations, but relevant features will fall back to `agent-browser`, Playwright, user screenshots, or inline wireframes depending on the workflow.
 
 **Note:** Arc maintains an activity log (`.arc/log.md`, gitignored) for knowledge persistence across sessions. Every skill auto-appends a brief entry on completion.
 
@@ -265,7 +268,7 @@ Arc includes specialized agents across research, review, build, design, and work
 | **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
 | **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, hygiene-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
-| **Design** | figma-implement |
+| **Design** | figma-builder |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |
 
 ## Disciplines

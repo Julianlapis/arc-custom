@@ -118,8 +118,14 @@ Arc focuses on the development lifecycle. For specialized domains, consider thes
 |-------------|-------------------|----------|
 | `/arc:design` | `web-design-guidelines`, `vercel-composition-patterns` | UI compliance, component architecture |
 | `/arc:implement` | All agent-skills + `web-design-guidelines` | Quality checkpoints |
-| `/arc:letsgo` | `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel:deploy` | Production readiness |
+| `/arc:letsgo` | `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-deploy` | Production readiness |
 | `/arc:responsive` | `web-design-guidelines`, `vercel-react-native-skills` | Mobile audit |
+
+## Browser And Wireframe Tools
+
+- In Claude Code, prefer `mcp__claude-in-chrome__*` for rendered-page verification.
+- Outside Claude Code, prefer `agent-browser` for browser automation before dropping to Playwright.
+- Use WireText MCP for low-fidelity wireframes only. It does not replace Chrome-based rendered review.
 
 ## Publishing
 

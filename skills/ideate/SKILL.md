@@ -170,7 +170,7 @@ If yes: spawn 2-3 reviewers (architecture-engineer, simplicity-engineer, securit
 Sections to cover (skip what's irrelevant):
 - Problem statement / user story
 - High-level approach
-- UI wireframes (ASCII) — if UI involved, see `<ui_design>` below
+- UI wireframes — if UI involved, see `<ui_design>` below
 - Data model
 - Component/module structure
 - API surface
@@ -266,7 +266,9 @@ Options via AskUserQuestion:
 - **Motion**: [where it matters most]
 ```
 
-**Then create ASCII wireframes** (see `references/ascii-ui-patterns.md`):
+**Then create wireframes**:
+- Prefer WireText MCP when available for low-fidelity structural wireframes (see `references/wiretext.md`)
+- Otherwise create ASCII wireframes (see `references/ascii-ui-patterns.md`)
 - Key screens/states
 - Component hierarchy
 - Interactive elements
@@ -277,6 +279,7 @@ Ask: "Does this layout and direction feel right?"
 **Reference files** (load when doing UI work):
 - `references/frontend-design.md`
 - `references/design-philosophy.md`
+- `references/wiretext.md`
 - `rules/interface/design.md`
 - `rules/interface/colors.md`
 - `rules/interface/spacing.md`
@@ -341,7 +344,7 @@ This step is optional — skip if the user declines or wants to move straight to
 Design is complete when:
 - [ ] User's idea is fully understood through dialogue (not assumed)
 - [ ] 2-3 approaches were considered, trade-offs explained
-- [ ] ASCII UI wireframes created (if UI involved)
+- [ ] UI wireframes created (if UI involved)
 - [ ] Design presented in sections, each validated by user
 - [ ] Expert review completed, findings discussed as questions
 - [ ] Design document written and committed

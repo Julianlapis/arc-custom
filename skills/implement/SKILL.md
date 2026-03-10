@@ -324,7 +324,7 @@ Determine which build agent(s) may be needed:
 
 **Agent selection flow:**
 1. Is this general code (no UI)? → implementer
-2. Is this UI with Figma? → figma-implement
+2. Is this UI with Figma? → figma-builder
 3. Is this UI with design spec? → ui-builder
 4. Is this UI with no spec? → design-specifier first, then ui-builder
 5. Did something break? → debugger or fixer

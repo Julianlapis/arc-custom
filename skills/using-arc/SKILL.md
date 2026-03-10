@@ -41,6 +41,14 @@ Arc skills may mention Claude Code tool names. For platform mappings and equival
 `references/platform-tools.md`
 </required_reading>
 
+For UI work, keep these roles separate:
+
+- WireText -> low-fidelity wireframes and layout exploration
+- Chrome MCP -> preferred rendered-page verification in Claude Code
+- `agent-browser` -> preferred browser automation fallback outside Claude Code
+- Playwright -> scripted browser fallback when needed
+- Figma MCP -> implementation from real design files
+
 ## Progressive Disclosure
 
 Do not preload large Arc workflows.

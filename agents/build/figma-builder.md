@@ -7,7 +7,7 @@ description: |
   - <example>
     Context: User shares a Figma link for a new component.
     user: "Implement this card component: [Figma URL]"
-    assistant: "I'll use the figma-implement agent to build this component."
+    assistant: "I'll use the figma-builder agent to build this component."
     </example>
   - <example>
     Context: User wants to add a new section matching a design.

@@ -3,11 +3,25 @@
 Arc skills are written primarily for Claude Code naming, but the workflows should adapt to
 the current harness instead of assuming one toolset.
 
+## Capability Priority
+
+Treat these as distinct capabilities, not interchangeable tools:
+
+| Capability | Preferred | Fallbacks | Notes |
+|-----------|-----------|-----------|-------|
+| Rendered browser verification | Claude Chrome MCP | `agent-browser`, Playwright, user screenshots | Use for reviewing the real UI after implementation |
+| Browser automation | `agent-browser` | Playwright | Prefer `agent-browser` outside Claude Code |
+| Design-source implementation | Figma MCP | Screenshot/manual translation | Use when a Figma design exists |
+| Low-fidelity wireframing | WireText MCP | ASCII wireframes in docs | Use for planning structure, not fidelity review |
+| Task tracking | Platform-native task/todo tool | Plain progress notes | Do not make this a hard dependency |
+
 ## Claude Code
 
 - `Skill` -> load the named skill
 - `Task` -> dispatch a focused subagent
 - `AskUserQuestion` -> structured one-question prompt
+- `mcp__claude-in-chrome__*` -> preferred rendered browser capture and verification
+- WireText MCP -> preferred wireframing tool when available
 
 ## Codex
 
@@ -15,9 +29,14 @@ the current harness instead of assuming one toolset.
 - Terminal exploration replaces most `Read` / `Glob` / `Grep` examples
 - Use commentary updates for progress instead of Claude-specific question primitives
 - Use the built-in plan/todo tools only when a workflow explicitly benefits from them
+- Prefer `agent-browser` for browser automation and page capture
+- Use Playwright when browser automation must be scripted directly
+- Use WireText MCP for low-fidelity wireframes when available; otherwise write ASCII wireframes inline
 
 ## General Guidance
 
 - Prefer the platform's native tool when a skill names an equivalent Claude tool
 - Keep the workflow behavior the same even if tool names differ
 - When a platform lacks a feature, degrade gracefully rather than inventing ceremony
+- Keep Chrome MCP as the preferred path for rendered UI verification in Claude Code
+- Do not use WireText as a substitute for rendered browser QA; it is for structural wireframes

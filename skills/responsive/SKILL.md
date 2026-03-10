@@ -1,7 +1,7 @@
 ---
 name: responsive
 description: |
-  Audit and fix responsive/mobile issues across every page of a project, using Chrome MCP
+  Audit and fix responsive/mobile issues across every page of a project, using browser
   screenshots at two breakpoints (375px mobile, 1440px desktop). Design-aware: reads existing
   design docs to preserve aesthetic intent, not just "make it fit."
   Use when asked to "make it responsive", "fix mobile", "responsive audit", or after building
@@ -20,7 +20,7 @@ website:
   decisions:
     - Two breakpoints only. 375px mobile and 1440px desktop catches 95% of issues. Tablet deferred to v2.
     - Design-aware. Reads your design doc first to preserve aesthetic intent, not just fix layout.
-    - Chrome MCP required. No fallback path—single code path, already the Arc standard.
+    - Chrome MCP preferred in Claude Code. `agent-browser` is the main fallback outside Claude.
     - Container queries for components. Reusable components adapt to their container, not the viewport.
   workflow:
     position: utility
@@ -41,7 +41,7 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 # Responsive Audit & Fix
 
-Systematically audit and fix every page for mobile responsiveness, with visual verification via Chrome MCP screenshots.
+Systematically audit and fix every page for mobile responsiveness, with visual verification via browser screenshots.
 
 **Announce at start:** "I'm using the responsive skill to audit and fix mobile responsiveness across your project."
 
@@ -51,13 +51,14 @@ Systematically audit and fix every page for mobile responsiveness, with visual v
 
 ## Phase 1: Setup & Discovery
 
-### Step 1: Check Chrome MCP
+### Step 1: Select Browser Tool
 
-Attempt to use `mcp__claude-in-chrome__tabs_context_mcp` to verify Chrome MCP is available.
+Prefer Chrome MCP in Claude Code.
 
-**If Chrome MCP is unavailable:**
-Tell the user: "This skill requires the Claude in Chrome extension for screenshot-based verification. Please install it and try again."
-**Stop.**
+If Chrome MCP is unavailable:
+- prefer `agent-browser` for navigation, resizing, and screenshots
+- fall back to Playwright if browser automation must be scripted directly
+- only stop if no browser-capable path is available
 
 ### Step 2: Confirm Dev Server
 
@@ -74,7 +75,7 @@ AskUserQuestion:
       description: "Default Astro dev server"
 ```
 
-Then verify the server is running:
+Then verify the server is running with the selected browser tool:
 ```
 mcp__claude-in-chrome__tabs_context_mcp (get or create tab)
 mcp__claude-in-chrome__navigate to the dev server URL
@@ -374,7 +375,7 @@ Navigate to each page and take a quick screenshot. If anything looks off, fix an
 
 <success_criteria>
 Responsive audit is complete when:
-- [ ] Chrome MCP connected and dev server verified
+- [ ] Browser tool connected and dev server verified
 - [ ] Design doc read (if exists) for aesthetic context
 - [ ] Interface rules loaded (layout, interactions, spacing)
 - [ ] Routes discovered and confirmed with user
@@ -392,7 +393,9 @@ Responsive audit is complete when:
 - Invoked after `/arc:implement` — the natural post-build polish step
 - Reads design docs from `/arc:design` for aesthetic context
 - References `rules/interface/layout.md`, `interactions.md`, `spacing.md` for implementation patterns
-- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for all browser interaction
+- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) as the preferred browser path in Claude Code
+- Uses **agent-browser** as the preferred browser fallback outside Claude Code
+- Uses Playwright when direct browser scripting is needed
 - Follows `/arc:commit` discipline for commits
 - Can invoke `web-design-guidelines` skill for compliance review (if available)
 

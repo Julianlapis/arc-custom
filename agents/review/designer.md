@@ -129,7 +129,7 @@ If one exists, **review against the documented decisions** — the implementatio
 
 ### 3. Visual Inspection
 
-Use Chrome MCP to screenshot the implementation:
+Prefer Chrome MCP to screenshot the implementation. Outside Claude Code, prefer `agent-browser`, then Playwright if needed:
 ```
 mcp__claude-in-chrome__computer action=screenshot
 ```
@@ -141,6 +141,8 @@ mcp__claude-in-chrome__computer action=screenshot
 mcp__claude-in-chrome__resize_window width=1440 height=900 # Desktop
 mcp__claude-in-chrome__computer action=screenshot
 ```
+
+If no browser automation is available, ask for screenshots and review the code plus any provided images.
 
 ### 4. Apply the Design Review Checklist
 

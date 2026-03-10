@@ -18,7 +18,7 @@ website:
     The gap between "it works" and "it's polished" is where most AI-generated UI falls short. Polish catches the things you stop noticing after staring at code—inconsistent spacing, missing focus states, cramped padding, contrast failures. It's the last step before shipping, not the first.
   decisions:
     - User-interactive, not agent-delegated. You see every finding and approve every fix.
-    - Uses Chrome MCP for visual verification — screenshots before and after.
+    - Uses browser screenshots for visual verification, with Chrome MCP preferred in Claude Code.
     - All fixes expressed in Tailwind classes.
   workflow:
     position: branch
@@ -64,7 +64,7 @@ Polish requires visual inspection and judgment — it's collaborative, not deleg
 
 ## Phase 1: Visual Capture
 
-**Screenshot current state using Chrome MCP:**
+**Screenshot current state. Prefer Chrome MCP in Claude Code. Outside Claude, prefer `agent-browser`, then Playwright if needed:**
 
 ```
 1. mcp__claude-in-chrome__tabs_context_mcp
@@ -75,7 +75,7 @@ Polish requires visual inspection and judgment — it's collaborative, not deleg
 6. mcp__claude-in-chrome__resize_window width=1440 height=900
 ```
 
-If Chrome MCP is not available, ask user to provide the component/page path and review code directly.
+If no browser tool is available, ask the user to provide the component/page path or screenshots and review code directly.
 
 ---
 

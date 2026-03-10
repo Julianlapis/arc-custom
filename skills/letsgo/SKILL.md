@@ -586,9 +586,9 @@ vercel --prod
 git push origin main
 ```
 
-**If `vercel:deploy` skill is available:**
+**If `vercel-deploy` skill is available:**
 ```
-Invoke skill: vercel:deploy
+Invoke skill: vercel-deploy
 ```
 This handles the deployment workflow with proper verification.
 
@@ -625,4 +625,4 @@ Letsgo is complete when:
 - Invokes **/arc:legal** to generate missing legal documents
 - Can invoke **vercel-react-best-practices** skill for performance review (if available)
 - Can invoke **vercel-react-native-skills** skill for React Native performance review (if available)
-- Can invoke **vercel:deploy** skill for deployment (if available)
+- Can invoke **vercel-deploy** skill for deployment (if available)
