@@ -1,7 +1,7 @@
 ---
 name: progress
 description: |
-  Internal skill for progress journal management. Other skills append to docs/progress.md
+  Internal skill for progress journal management. Other skills append to docs/arc/progress.md
   for cross-session context. Not invoked directly by users.
 internal: true
 license: MIT
@@ -11,11 +11,11 @@ metadata:
 
 # Progress Journal
 
-Internal patterns for maintaining cross-session context via `docs/progress.md`.
+Internal patterns for maintaining cross-session context via `docs/arc/progress.md`.
 
 ## Journal Format
 
-**Location:** `docs/progress.md`
+**Location:** `docs/arc/progress.md`
 
 ```markdown
 # Progress Journal
@@ -61,7 +61,7 @@ After completing the skill's main work, append to the progress journal:
 
 ```markdown
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Look for:
 - Recent work on related features

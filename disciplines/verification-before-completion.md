@@ -109,7 +109,7 @@ Skip any step = lying, not verifying
 
 Running tests isn't enough — code can pass linting and tests while being hollow.
 
-See: `${CLAUDE_PLUGIN_ROOT}/references/verification-patterns.md` for systematic patterns to detect:
+See: `references/verification-patterns.md` for systematic patterns to detect:
 - Placeholder implementations (TODO, empty handlers, hardcoded values)
 - Unwired code (components that don't call APIs, APIs that don't query DB)
 - Missing functionality hidden behind passing tests

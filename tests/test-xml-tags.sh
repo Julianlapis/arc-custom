@@ -2,7 +2,7 @@
 # Test that XML tags are used consistently across skills and agents
 #
 # Verifies:
-# - All agents with CLAUDE_PLUGIN_ROOT file references have them inside <required_reading> or <rules_context>
+# - All agents with Arc doc references keep them inside <required_reading> or <rules_context>
 # - No files use retired tags (<mandatory_references>, <arc_log_context>)
 # - All review agents have <advisory> tag
 
@@ -40,9 +40,9 @@ for agent_file in "$PLUGIN_ROOT"/agents/review/*.md; do
     fi
 done
 
-# --- Test 3: CLAUDE_PLUGIN_ROOT refs in agents are inside proper tags ---
+# --- Test 3: Arc doc refs in agents are inside proper tags ---
 echo ""
-echo "Checking agent file references are inside <required_reading> or <rules_context>..."
+echo "Checking agent doc references are inside <required_reading> or <rules_context>..."
 echo ""
 
 tag_errors=0
@@ -52,17 +52,18 @@ for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
     agent_name=$(basename "$agent_file" .md)
     category=$(basename "$(dirname "$agent_file")")
 
-    # Check if this agent references CLAUDE_PLUGIN_ROOT at all
-    if ! grep -q 'CLAUDE_PLUGIN_ROOT' "$agent_file"; then
+    body=$(body_without_frontmatter "$agent_file")
+
+    # Only enforce tags for doc-loading references, not incidental mentions in frontmatter.
+    if ! echo "$body" | grep -qE '(references|rules|disciplines)/[A-Za-z0-9][A-Za-z0-9/_.-]*'; then
         continue
     fi
 
     ((tag_checked++))
 
     # Check if it has <required_reading> or <rules_context>
-    if grep -q '<required_reading>\|<rules_context>' "$agent_file"; then
-        # Now verify ALL CLAUDE_PLUGIN_ROOT refs are inside these tags, not floating loose
-        # Extract lines with CLAUDE_PLUGIN_ROOT that are NOT between tag pairs
+    if echo "$body" | grep -q '<required_reading>\|<rules_context>'; then
+        # Verify doc-loading references live inside the structured loading tags.
         in_tag=false
         has_loose_ref=false
         while IFS= read -r line; do
@@ -70,19 +71,19 @@ for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
                 in_tag=true
             elif echo "$line" | grep -q '</required_reading>\|</rules_context>'; then
                 in_tag=false
-            elif [ "$in_tag" = false ] && echo "$line" | grep -q 'CLAUDE_PLUGIN_ROOT'; then
+            elif [ "$in_tag" = false ] && echo "$line" | grep -qE '(references|rules|disciplines)/[A-Za-z0-9][A-Za-z0-9/_.-]*'; then
                 has_loose_ref=true
             fi
-        done < "$agent_file"
+        done <<< "$body"
 
         if [ "$has_loose_ref" = true ]; then
-            fail "$category/$agent_name has CLAUDE_PLUGIN_ROOT refs outside <required_reading>/<rules_context>"
+            fail "$category/$agent_name has doc refs outside <required_reading>/<rules_context>"
             ((tag_errors++))
         else
             pass "$category/$agent_name file refs properly wrapped"
         fi
     else
-        fail "$category/$agent_name has CLAUDE_PLUGIN_ROOT refs but no <required_reading> or <rules_context>"
+        fail "$category/$agent_name has doc refs but no <required_reading> or <rules_context>"
         ((tag_errors++))
     fi
 done
@@ -105,14 +106,17 @@ skill_tag_checked=0
 
 for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
     skill_name=$(basename "$(dirname "$skill_file")")
+    body=$(body_without_frontmatter "$skill_file")
 
     # Only check skills that reference specific .md files in references/ or rules/ for loading.
     # Exclude: arc-log.md (belongs in <arc_log>), cp commands (file copying),
     # bare directory paths like rules/ (not doc loading), and > Reference: inline tips.
-    refs_to_check=$(grep 'CLAUDE_PLUGIN_ROOT}/\(references\|rules\)/[a-zA-Z]' "$skill_file" \
+    refs_to_check=$(echo "$body" \
+        | grep -E '(references|rules)/[a-zA-Z]' \
         | grep '\.md' \
         | grep -v 'arc-log\.md' \
         | grep -v 'cp -r' \
+        | grep -v '\${ARC_ROOT}/rules/' \
         | grep -v '> Reference:' \
         2>/dev/null)
     if [ -z "$refs_to_check" ]; then
@@ -121,7 +125,7 @@ for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
 
     ((skill_tag_checked++))
 
-    if grep -q '<required_reading>\|<rules_context>' "$skill_file"; then
+    if echo "$body" | grep -q '<required_reading>\|<rules_context>'; then
         pass "skill/$skill_name has required_reading/rules_context for loaded docs"
     else
         fail "skill/$skill_name loads references/rules but has no <required_reading> or <rules_context>"

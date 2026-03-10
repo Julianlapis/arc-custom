@@ -53,7 +53,7 @@ You are an Accessibility Specialist with deep expertise in WCAG 2.1 AA complianc
 
 <required_reading>
 Read before reviewing:
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/content-accessibility.md` — Project-specific ARIA, focus, and content accessibility standards
+- `rules/interface/content-accessibility.md` — Project-specific ARIA, focus, and content accessibility standards
 </required_reading>
 
 ## Core Review Protocol

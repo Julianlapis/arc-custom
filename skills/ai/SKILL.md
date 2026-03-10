@@ -40,8 +40,8 @@ AI SDK 6 guidance for building AI-powered features.
 
 <required_reading>
 **Read after detecting AI SDK (Step 1):**
-1. ${CLAUDE_PLUGIN_ROOT}/references/ai-sdk.md — Patterns and code examples
-2. ${CLAUDE_PLUGIN_ROOT}/rules/ai-sdk.md — MUST/NEVER constraints
+1. references/ai-sdk.md — Patterns and code examples
+2. rules/ai-sdk.md — MUST/NEVER constraints
 </required_reading>
 
 <process>
@@ -84,12 +84,12 @@ Continue with v6 patterns? (recommended even for planning a migration)
 
 **Read the patterns reference:**
 ```
-Read: ${CLAUDE_PLUGIN_ROOT}/references/ai-sdk.md
+Read: references/ai-sdk.md
 ```
 
 **Read the rules (MUST/NEVER constraints):**
 ```
-Read: ${CLAUDE_PLUGIN_ROOT}/rules/ai-sdk.md
+Read: rules/ai-sdk.md
 ```
 
 ## Step 3: Understand What the User Is Building

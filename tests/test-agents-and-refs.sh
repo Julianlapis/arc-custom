@@ -53,6 +53,8 @@ BUILD_AGENTS=(
 WORKFLOW_AGENTS=(
     "docs-writer"
     "e2e-test-runner"
+    "plan-document-reviewer"
+    "spec-document-reviewer"
     "spec-flow-analyzer"
 )
 
@@ -133,7 +135,7 @@ done
 # Verify skills reference existing files
 section "Skill Reference Tests"
 
-echo "Checking CLAUDE_PLUGIN_ROOT references in skills..."
+echo "Checking Arc references in skills..."
 echo ""
 
 ref_errors=0
@@ -142,13 +144,11 @@ ref_checked=0
 for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
     skill_name=$(basename "$(dirname "$skill_file")")
 
-    # Extract all ${CLAUDE_PLUGIN_ROOT}/path references
-    refs=$(grep -oE '\$\{CLAUDE_PLUGIN_ROOT\}/[a-zA-Z0-9/_.-]+' "$skill_file" 2>/dev/null)
+    refs=$(extract_arc_refs "$skill_file")
 
     if [ -n "$refs" ]; then
         while IFS= read -r ref; do
-            # Convert ${CLAUDE_PLUGIN_ROOT}/path to actual path
-            rel_path="${ref#\$\{CLAUDE_PLUGIN_ROOT\}/}"
+            rel_path="$(normalize_arc_ref "$ref")"
             full_path="$PLUGIN_ROOT/$rel_path"
 
             ((ref_checked++))
@@ -165,13 +165,13 @@ for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
 done
 
 if [ $ref_errors -eq 0 ] && [ $ref_checked -gt 0 ]; then
-    pass "All $ref_checked CLAUDE_PLUGIN_ROOT references are valid in skills"
+    pass "All $ref_checked Arc references are valid in skills"
 elif [ $ref_checked -eq 0 ]; then
-    skip "No CLAUDE_PLUGIN_ROOT references found in skills"
+    skip "No Arc references found in skills"
 fi
 
 echo ""
-echo "Checking CLAUDE_PLUGIN_ROOT references in agents..."
+echo "Checking Arc references in agents..."
 echo ""
 
 agent_ref_errors=0
@@ -180,11 +180,11 @@ agent_ref_checked=0
 for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
     agent_name="$(basename "$(dirname "$agent_file")")/$(basename "$agent_file" .md)"
 
-    refs=$(grep -oE '\$\{CLAUDE_PLUGIN_ROOT\}/[a-zA-Z0-9/_.-]+' "$agent_file" 2>/dev/null)
+    refs=$(extract_arc_refs "$agent_file")
 
     if [ -n "$refs" ]; then
         while IFS= read -r ref; do
-            rel_path="${ref#\$\{CLAUDE_PLUGIN_ROOT\}/}"
+            rel_path="$(normalize_arc_ref "$ref")"
             full_path="$PLUGIN_ROOT/$rel_path"
 
             ((agent_ref_checked++))
@@ -200,9 +200,9 @@ for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
 done
 
 if [ $agent_ref_errors -eq 0 ] && [ $agent_ref_checked -gt 0 ]; then
-    pass "All $agent_ref_checked CLAUDE_PLUGIN_ROOT references are valid in agents"
+    pass "All $agent_ref_checked Arc references are valid in agents"
 elif [ $agent_ref_checked -eq 0 ]; then
-    skip "No CLAUDE_PLUGIN_ROOT references found in agents"
+    skip "No Arc references found in agents"
 fi
 
 # Verify no unexpected agents

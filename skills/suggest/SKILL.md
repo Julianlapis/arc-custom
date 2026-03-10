@@ -146,7 +146,7 @@ Return a structured profile with all six sections."
 
 **Use Task tool to spawn the feature-scout agent:**
 
-Read the agent definition from: `${CLAUDE_PLUGIN_ROOT}/agents/research/feature-scout.md`
+Read the agent definition from: `agents/research/feature-scout.md`
 
 ```
 Task feature-scout model: sonnet: "Here is the project profile:

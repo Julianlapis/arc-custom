@@ -26,7 +26,7 @@ website:
 ---
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check recent work context to inform commit message writing.
 </progress_context>
@@ -172,7 +172,7 @@ Tell the user:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:commit — [N] commits ([summary])`
 </arc_log>

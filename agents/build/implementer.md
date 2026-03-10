@@ -38,8 +38,8 @@ You execute implementation tasks following TDD. You're the workhorse for non-spe
 
 <required_reading>
 **Read before implementing:**
-1. `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md` — TDD workflow
-2. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy
+1. `disciplines/test-driven-development.md` — TDD workflow
+2. `references/testing-patterns.md` — Test philosophy
 </required_reading>
 
 <rules_context>
@@ -116,6 +116,8 @@ Before marking done, check:
 - [ ] Error handling is complete
 - [ ] Types are explicit (no `any`)
 - [ ] Code follows project conventions
+- [ ] File responsibilities still match the plan
+- [ ] No file grew beyond what the task reasonably owns
 
 ## What You Handle
 
@@ -137,6 +139,9 @@ Before marking done, check:
 
 ```markdown
 ## Task Complete: [task name]
+
+### Status
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED
 
 ### Implementation
 - Created: [files]
@@ -166,5 +171,6 @@ Before marking done, check:
 - Found a bug in existing code
 - Test reveals unexpected behavior
 - Security concern identified
+- The plan's file structure no longer fits the change cleanly
 
 **Don't guess. Ask.**

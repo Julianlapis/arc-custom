@@ -176,3 +176,29 @@ section() {
     echo "═══════════════════════════════════════════════════════════"
     echo ""
 }
+
+# Extract Arc-internal path references from markdown/instruction files.
+# Supports repo-relative refs plus the few runtime-specific variables still used.
+extract_arc_refs() {
+    local file="$1"
+    grep -oE '(\$\{CLAUDE_PLUGIN_ROOT\}/|\$\{ARC_ROOT\}/|\./)?(references|rules|agents|disciplines|templates|scripts|skills)/[A-Za-z0-9][A-Za-z0-9/_.-]*' "$file" 2>/dev/null | sort -u
+}
+
+# Normalize an Arc reference to a repo-relative path for existence checks.
+normalize_arc_ref() {
+    local ref="$1"
+    ref="${ref#\$\{CLAUDE_PLUGIN_ROOT\}/}"
+    ref="${ref#\$\{ARC_ROOT\}/}"
+    ref="${ref#./}"
+    echo "$ref"
+}
+
+# Return file body with YAML frontmatter stripped so structural tests only inspect instructions.
+body_without_frontmatter() {
+    local file="$1"
+    awk '
+        NR == 1 && $0 == "---" { in_frontmatter = 1; next }
+        in_frontmatter && $0 == "---" { in_frontmatter = 0; next }
+        !in_frontmatter { print }
+    ' "$file"
+}

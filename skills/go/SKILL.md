@@ -45,7 +45,7 @@ Keep it brief — 5-10 bullet points max."
 
 **Check for existing Arc artifacts:**
 ```bash
-ls docs/vision.md docs/plans/*.md 2>/dev/null | head -10
+ls docs/vision.md docs/arc/specs/*.md docs/arc/plans/*.md docs/plans/*.md 2>/dev/null | head -10
 ```
 
 **Check Linear (if MCP available):**
@@ -53,7 +53,7 @@ If `mcp__linear__*` tools exist, check for active issues.
 
 **Read progress journal for recent work:**
 ```bash
-head -50 docs/progress.md 2>/dev/null
+head -50 docs/arc/progress.md 2>/dev/null
 ```
 
 ### Step 2: Present Context

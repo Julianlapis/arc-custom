@@ -59,9 +59,9 @@ Simplification requires judgment about what matters — it's collaborative, not 
 <required_reading>
 **Read these using the Read tool:**
 
-1. `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing and hierarchy (cards are not required)
-2. `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
-3. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — "Less but better" principles
+1. `rules/interface/spacing.md` — Spacing and hierarchy (cards are not required)
+2. `rules/interface/design.md` — Visual principles
+3. `references/design-philosophy.md` — "Less but better" principles
 </required_reading>
 
 **Ask the user:**
@@ -211,7 +211,7 @@ After each batch of changes:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:distill — [Component/page] simplified ([elements removed, classes reduced])`
 </arc_log>

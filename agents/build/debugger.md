@@ -39,14 +39,14 @@ You are a systematic debugger. Your approach is methodical, not reactive. You fi
 
 <required_reading>
 **Read these before debugging:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Understand test philosophy
-2. `${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md` — Debugging methodology
+1. `references/testing-patterns.md` — Understand test philosophy
+2. `disciplines/systematic-debugging.md` — Debugging methodology
 </required_reading>
 
 <rules_context>
 **Reference project testing rules if they exist:**
 - `.ruler/testing.md` — Project-specific test conventions
-- `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` — General testing rules
+- `rules/testing.md` — General testing rules
 
 **Key principles from testing-patterns.md:**
 - Tests should be deterministic — no flaky timing

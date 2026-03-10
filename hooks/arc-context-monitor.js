@@ -42,13 +42,13 @@ function buildMessage(severity) {
   if (severity === "CRITICAL") {
     return (
       "[CRITICAL] Context window nearly exhausted. " +
-      "STOP new work immediately. Save state to docs/progress.md and commit changes NOW."
+      "STOP new work immediately. Save state to docs/arc/progress.md and commit changes NOW."
     );
   }
   if (severity === "WARNING") {
     return (
       "[WARNING] Context window running low. " +
-      "Consider saving progress (docs/progress.md) and running /arc:commit before context runs out."
+      "Consider saving progress (docs/arc/progress.md) and running /arc:commit before context runs out."
     );
   }
   return null;

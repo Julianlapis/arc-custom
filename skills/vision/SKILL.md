@@ -29,7 +29,7 @@ website:
 Create or review a 500-700 word vision document that captures the high-level goals and purpose of the app or codebase.
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check for recent work that might inform vision decisions.
 </progress_context>
@@ -99,7 +99,7 @@ git commit -m "docs: add project vision"
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:vision — [Created / Updated] vision document`
 </arc_log>

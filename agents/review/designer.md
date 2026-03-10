@@ -65,9 +65,9 @@ You review UI implementations for **visual design quality** and **UX fundamental
 <required_reading>
 Read ALL of these before reviewing. Same references as `/arc:design` — single source of truth.
 
-1. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Anti-patterns, Design Review Checklist (Red/Yellow/Green flags), typography recommendations, color and spatial composition
-2. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles from Refactoring UI: hierarchy, spacing, color theory, depth, finishing touches
-3. `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md` — Interface rules index (read this, then read relevant rules below based on what you're reviewing)
+1. `references/frontend-design.md` — Anti-patterns, Design Review Checklist (Red/Yellow/Green flags), typography recommendations, color and spatial composition
+2. `references/design-philosophy.md` — Timeless principles from Refactoring UI: hierarchy, spacing, color theory, depth, finishing touches
+3. `rules/interface/index.md` — Interface rules index (read this, then read relevant rules below based on what you're reviewing)
 </required_reading>
 
 <rules_context>
@@ -75,15 +75,15 @@ Load rules relevant to the implementation:
 
 | Rule | When to Load |
 |------|-------------|
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` | Always — visual principles |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` | When reviewing color usage |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` | When reviewing layout/spacing |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` | When reviewing text styling |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` | When reviewing layout structure |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` | When reviewing motion/transitions |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` | When reviewing forms |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` | When reviewing interactive elements |
-| `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` | When reviewing marketing pages |
+| `rules/interface/design.md` | Always — visual principles |
+| `rules/interface/colors.md` | When reviewing color usage |
+| `rules/interface/spacing.md` | When reviewing layout/spacing |
+| `rules/interface/typography.md` | When reviewing text styling |
+| `rules/interface/layout.md` | When reviewing layout structure |
+| `rules/interface/animation.md` | When reviewing motion/transitions |
+| `rules/interface/forms.md` | When reviewing forms |
+| `rules/interface/interactions.md` | When reviewing interactive elements |
+| `rules/interface/marketing.md` | When reviewing marketing pages |
 </rules_context>
 
 ## Your Focus
@@ -123,7 +123,7 @@ Read the core references and relevant interface rules listed above. This is non-
 ### 2. Check for Design Doc
 
 Search for an existing design direction document:
-- `docs/plans/design-*.md`
+- `docs/arc/specs/design-*.md`
 
 If one exists, **review against the documented decisions** — the implementation should match the design intent. Flag drift between the doc and the implementation.
 

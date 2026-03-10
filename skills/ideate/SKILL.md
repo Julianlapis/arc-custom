@@ -90,7 +90,7 @@ There are three acts: **Understand**, **Explore**, **Design**. But they're a con
 
 **Before your first question**, do quick background work (30 seconds, not 5 minutes):
 - Check `docs/vision.md` if it exists — anchor to project goals
-- Glance at `docs/progress.md` (first 50 lines) — know what's been done
+- Glance at `docs/arc/progress.md` (first 50 lines) — know what's been done
 - Note the project type (TS/Python/Go) and obvious constraints
 
 Then **ask questions one at a time** to understand:
@@ -196,7 +196,7 @@ After the design is mostly shaped, run parallel expert review:
 
 ### Writing the Design Doc
 
-Location: `docs/plans/YYYY-MM-DD-<topic>-design.md`
+Location: `docs/arc/specs/YYYY-MM-DD-<topic>-design.md`
 
 ```markdown
 # [Feature Name] Design
@@ -222,7 +222,15 @@ Location: `docs/plans/YYYY-MM-DD-<topic>-design.md`
 - ...
 ```
 
-Commit: `git add docs/plans/ && git commit -m "docs: add <topic> design plan"`
+Commit: `git add docs/arc/specs/ && git commit -m "docs: add <topic> design plan"`
+
+### Spec Review Loop
+
+After writing the design doc:
+
+1. Dispatch `agents/workflow/spec-document-reviewer.md`
+2. If issues are found, revise the spec and review again
+3. Repeat until approved or after 5 review passes escalate to the user
 
 ### What's Next
 
@@ -234,7 +242,7 @@ Present the full arc:
 ```
 
 Options via AskUserQuestion:
-1. **Set up worktree → implement** (Recommended) — follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
+1. **Set up worktree → implement** (Recommended) — follow `disciplines/using-git-worktrees.md`
 2. **Implement on current branch**
 3. **Done for now** — just the design
 </process>
@@ -258,7 +266,7 @@ Options via AskUserQuestion:
 - **Motion**: [where it matters most]
 ```
 
-**Then create ASCII wireframes** (see `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md`):
+**Then create ASCII wireframes** (see `references/ascii-ui-patterns.md`):
 - Key screens/states
 - Component hierarchy
 - Interactive elements
@@ -267,14 +275,14 @@ Options via AskUserQuestion:
 Ask: "Does this layout and direction feel right?"
 
 **Reference files** (load when doing UI work):
-- `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md`
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` (if motion involved)
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` (if marketing pages)
+- `references/frontend-design.md`
+- `references/design-philosophy.md`
+- `rules/interface/design.md`
+- `rules/interface/colors.md`
+- `rules/interface/spacing.md`
+- `rules/interface/layout.md`
+- `rules/interface/animation.md` (if motion involved)
+- `rules/interface/marketing.md` (if marketing pages)
 </ui_design>
 
 <reference_capture>
@@ -282,8 +290,8 @@ Ask: "Does this layout and direction feel right?"
 
 When user shares links, images, or Figma during the conversation — capture immediately. Links shared in conversation are lost when the session ends.
 
-**Figma links:** Extract fileKey/nodeId, fetch via MCP if available, save screenshots to `docs/plans/assets/`
-**Images:** Describe in design doc, ask user to save to `docs/plans/assets/` manually
+**Figma links:** Extract fileKey/nodeId, fetch via MCP if available, save screenshots to `docs/arc/specs/assets/`
+**Images:** Describe in design doc, ask user to save to `docs/arc/specs/assets/` manually
 **External links:** Capture URL + description in design doc under "Reference Materials"
 </reference_capture>
 
@@ -291,9 +299,9 @@ When user shares links, images, or Figma during the conversation — capture imm
 # Reference Files
 
 Read these when relevant (not all at once — load what the conversation needs):
-1. `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md` — How to transform reviewer findings into questions
-2. `${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md` — Which models for which agents
-3. `${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md` — Agent orchestration
+1. `references/review-patterns.md` — How to transform reviewer findings into questions
+2. `references/model-strategy.md` — Which models for which agents
+3. `disciplines/dispatching-parallel-agents.md` — Agent orchestration
 </required_reading>
 
 <progress_append>
@@ -303,7 +311,7 @@ After completing the design, append to progress journal:
 ## YYYY-MM-DD HH:MM — /arc:ideate
 **Task:** [Feature name/description]
 **Outcome:** Complete
-**Files:** docs/plans/YYYY-MM-DD-[topic]-design.md
+**Files:** docs/arc/specs/YYYY-MM-DD-[topic]-design.md
 **Decisions:**
 - Approach: [chosen approach]
 - [Key decision 1]
@@ -324,7 +332,7 @@ If the user accepts:
 2. Present the gaps found
 3. Offer to update the design doc with any missing flows
 
-Agent: `${CLAUDE_PLUGIN_ROOT}/agents/workflow/spec-flow-analyzer.md`
+Agent: `agents/workflow/spec-flow-analyzer.md`
 
 This step is optional — skip if the user declines or wants to move straight to implementation.
 </spec_flow_analysis>

@@ -44,9 +44,9 @@ website:
 
 <required_reading>
 **Read these reference files NOW:**
-1. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
-2. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-3. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
+1. references/review-patterns.md
+2. disciplines/dispatching-parallel-agents.md
+3. disciplines/receiving-code-review.md
 </required_reading>
 
 <rules_context>
@@ -56,7 +56,7 @@ website:
 
 **Determine rules source:**
 - **If `.ruler/` exists:** Read rules from `.ruler/`
-- **If `.ruler/` doesn't exist:** Read rules from `${CLAUDE_PLUGIN_ROOT}/rules/`
+- **If `.ruler/` doesn't exist:** Read rules from `rules/`
 
 **Pass relevant core rules to each reviewer:**
 
@@ -75,7 +75,7 @@ website:
 </rules_context>
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check for context on what led to the plan being reviewed.
 </progress_context>
@@ -84,9 +84,9 @@ Check for context on what led to the plan being reviewed.
 ## Phase 0: Check for Specific Reviewer
 
 **If argument provided** (e.g., `daniel-product-engineer`):
-- Look for `${CLAUDE_PLUGIN_ROOT}/agents/review/{argument}.md`
+- Look for `agents/review/{argument}.md`
 - If found → use only this reviewer, skip Phase 2 detection
-- If not found → list available reviewers from `${CLAUDE_PLUGIN_ROOT}/agents/review/` and ask user to pick
+- If not found → list available reviewers from `agents/review/` and ask user to pick
 
 **Available reviewers:**
 - `daniel-product-engineer` — Type safety, UI completeness, React patterns
@@ -118,9 +118,10 @@ Check for context on what led to the plan being reviewed.
      - Step-by-step procedures
    - If found → extract the plan content and proceed to Phase 2
 
-2. **Search docs/plans/ folder** — Look for plan files
+2. **Search Arc plan folders** — Look for plan files
 
-   **Use Glob tool:** `docs/plans/*.md`
+   **Use Glob tool:** `docs/arc/plans/*.md`
+   **Fallback:** `docs/plans/*.md`
 
    - Sort results by modification time (newest first)
    - Show all plan files (design, implementation, etc.)
@@ -131,7 +132,7 @@ Check for context on what led to the plan being reviewed.
    - Ask user: "Which plan should I review?"
 
 4. **If no plans found:**
-   - "I couldn't find any plans in the conversation or in `docs/plans/`.
+   - "I couldn't find any plans in the conversation or in `docs/arc/plans/` (or legacy `docs/plans/`).
    - Can you point me to a plan file, or paste the plan you'd like me to review?"
 
 **Once plan located:**
@@ -155,30 +156,30 @@ Check for context on what led to the plan being reviewed.
 **Select reviewers based on project type:**
 
 **TypeScript/React:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
+- agents/review/daniel-product-engineer.md
+- agents/review/senior-engineer.md
+- agents/review/simplicity-engineer.md
+- agents/review/architecture-engineer.md
 
 **Next.js:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/lee-nextjs-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
+- agents/review/lee-nextjs-engineer.md
+- agents/review/daniel-product-engineer.md
+- agents/review/senior-engineer.md
+- agents/review/simplicity-engineer.md
 
 **Python:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/performance-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
+- agents/review/senior-engineer.md
+- agents/review/performance-engineer.md
+- agents/review/architecture-engineer.md
 
 **General/Unknown:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
+- agents/review/senior-engineer.md
+- agents/review/architecture-engineer.md
+- agents/review/simplicity-engineer.md
 
 **Conditional addition (all UI project types):**
-- If plan involves UI components, forms, or user-facing features → add `${CLAUDE_PLUGIN_ROOT}/agents/review/accessibility-engineer.md`
-- If plan involves UI components, pages, or visual design → add `${CLAUDE_PLUGIN_ROOT}/agents/review/designer.md`
+- If plan involves UI components, forms, or user-facing features → add `agents/review/accessibility-engineer.md`
+- If plan involves UI components, pages, or visual design → add `agents/review/designer.md`
 
 ## Phase 2.5: Team Mode Check
 
@@ -203,7 +204,7 @@ Use AskUserQuestion with:
 
 **If team mode selected**, read the team reference:
 ```
-${CLAUDE_PLUGIN_ROOT}/references/agent-teams.md
+references/agent-teams.md
 ```
 </team_mode_check>
 
@@ -276,7 +277,7 @@ Each reviewer reads the others' findings and responds:
 
 **Transform findings into Socratic questions:**
 
-See `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md` for approach.
+See `references/review-patterns.md` for approach.
 
 Instead of presenting critiques:
 - Turn findings into exploratory questions
@@ -351,14 +352,14 @@ If reviewed an **implementation plan**:
 After spawning reviewer agents, some may not exit cleanly. Run cleanup:
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+scripts/cleanup-orphaned-agents.sh
 ```
 
 </process>
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:review — [Plan name] reviewed`
 </arc_log>

@@ -40,23 +40,13 @@ mkdir -p ~/.agents/skills
 ln -s ~/.codex/arc/skills ~/.agents/skills/arc
 ```
 
-## Windows Manual Install (PowerShell)
-
-Use a junction instead of a symlink (works without Developer Mode):
-
-```powershell
-git clone https://github.com/howells/arc.git "$env:USERPROFILE\.codex\arc"
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\arc" "$env:USERPROFILE\.codex\arc\skills"
-```
-
 ## Verify
 
 ```bash
 ls -la ~/.agents/skills/arc
 ```
 
-You should see a symlink/junction pointing to Arc `skills/`.
+You should see a symlink pointing to Arc `skills/`.
 
 ## Usage
 
@@ -64,6 +54,10 @@ Skills are discovered automatically. You can:
 
 - Explicit invocation (recommended): `$start`, `$ideate`, `$implement`, etc.
 - Implicit invocation: ask for a task that matches a skill description.
+
+Arc also includes a lightweight bootstrap skill, `using-arc`, which is intended to be the
+always-on control plane. It keeps startup context small and routes into the heavier Arc
+skills only when they clearly apply.
 
 ## Updating
 

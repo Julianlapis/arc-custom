@@ -76,25 +76,25 @@ designer (reviews for AI slop)
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, anti-patterns, design review checklist. **Critical.**
-2. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles from Refactoring UI
-3. `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md` — Wireframe syntax and patterns
+1. `references/frontend-design.md` — Fonts, anti-patterns, design review checklist. **Critical.**
+2. `references/design-philosophy.md` — Timeless principles from Refactoring UI
+3. `references/ascii-ui-patterns.md` — Wireframe syntax and patterns
 
 **Then load interface rules:**
-4. `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md` — Interface rules index
+4. `rules/interface/index.md` — Interface rules index
 
 **And relevant domain rules based on what you're designing:**
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes, OKLCH, tinted neutrals
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system, container queries
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Typography rules, OpenType features
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` — Layout patterns, z-index
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/responsive.md` — Responsive design, input detection
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — If motion is involved
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — If designing forms
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Interactive states, popover API
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/app-ui.md` — If designing app UI (dashboards, settings, data views)
+- `rules/interface/design.md` — Visual principles
+- `rules/interface/colors.md` — Color palettes, OKLCH, tinted neutrals
+- `rules/interface/spacing.md` — Spacing system, container queries
+- `rules/interface/typography.md` — Typography rules, OpenType features
+- `rules/interface/layout.md` — Layout patterns, z-index
+- `rules/interface/responsive.md` — Responsive design, input detection
+- `rules/interface/animation.md` — If motion is involved
+- `rules/interface/forms.md` — If designing forms
+- `rules/interface/interactions.md` — Interactive states, popover API
+- `rules/interface/marketing.md` — If designing marketing pages
+- `rules/interface/app-ui.md` — If designing app UI (dashboards, settings, data views)
 </required_reading>
 
 ### Persistent Design Context
@@ -159,7 +159,7 @@ Persistent aesthetic decisions for this project. All design work inherits these 
 After creating, proceed to Phase 1.
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check for related prior design work and aesthetic decisions.
 </progress_context>
@@ -210,8 +210,8 @@ Options:
 ```
 
 **After selection:**
-- **Marketing** → Load `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` as mandatory reference
-- **App UI** → Load `${CLAUDE_PLUGIN_ROOT}/rules/interface/app-ui.md` as mandatory reference
+- **Marketing** → Load `rules/interface/marketing.md` as mandatory reference
+- **App UI** → Load `rules/interface/app-ui.md` as mandatory reference
 
 This mode context informs all subsequent phases — questions, research sources, wireframe patterns, and checklist items adapt accordingly.
 
@@ -503,7 +503,7 @@ Beyond basic layout, make deliberate choices about:
 
 ## Phase 6: Produce Design Document
 
-**Create the design direction document at `docs/plans/design-[component-name].md`:**
+**Create the design direction document at `docs/arc/specs/design-[component-name].md`:**
 
 ```markdown
 # Design Direction: [Component/Page Name]
@@ -603,7 +603,7 @@ Options:
 **IMPORTANT: Do NOT automatically invoke other skills.**
 
 - **If option 1:** Tell user: "Design saved. Run `/arc:detail` to create implementation tasks."
-- **If option 2:** Tell user: "Design saved to `docs/plans/design-[name].md`. Return anytime."
+- **If option 2:** Tell user: "Design saved to `docs/arc/specs/design-[name].md`. Return anytime."
 
 ---
 
@@ -653,7 +653,7 @@ From `frontend-design.md`:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:design — [Component/page] design ([aesthetic direction])`
 </arc_log>
@@ -668,7 +668,7 @@ Design is complete when:
 - [ ] Color palette defined with hex values
 - [ ] Spacing system documented
 - [ ] ASCII wireframes created and approved
-- [ ] Design document saved to docs/plans/
+- [ ] Design document saved to docs/arc/specs/
 - [ ] Red flag checklist passed (zero red flags)
 - [ ] Progress journal updated
 </success_criteria>

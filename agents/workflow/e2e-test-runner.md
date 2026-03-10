@@ -190,7 +190,7 @@ Repeat Steps 3-4 until all tests pass.
 
 <required_reading>
 For LLM API failures, read:
-- `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md` — Payload size is the most common culprit
+- `references/llm-api-testing.md` — Payload size is the most common culprit
 </required_reading>
 
 ## Selector Strategy

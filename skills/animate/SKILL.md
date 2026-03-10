@@ -56,9 +56,9 @@ Animation choices are subjective — the user must see and approve each addition
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — Easing, duration, spring presets, performance tiers
-2. `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` — Deep animation patterns
-3. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Anti-patterns (bounce/elastic = dated)
+1. `rules/interface/animation.md` — Easing, duration, spring presets, performance tiers
+2. `references/animation-patterns.md` — Deep animation patterns
+3. `references/frontend-design.md` — Anti-patterns (bounce/elastic = dated)
 </required_reading>
 
 ---
@@ -267,7 +267,7 @@ After implementing:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:animate — [Component/page] animated ([hero moment, # micro-interactions])`
 </arc_log>

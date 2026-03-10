@@ -29,8 +29,8 @@ You write Playwright E2E tests. Your tests verify complete user journeys in real
 
 <required_reading>
 **Read before writing:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy
-2. `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` — Project conventions
+1. `references/testing-patterns.md` — Test philosophy
+2. `rules/testing.md` — Project conventions
 </required_reading>
 
 ## What E2E Tests Cover

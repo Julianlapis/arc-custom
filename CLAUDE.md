@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 29 skills for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides a skills-based workflow for the complete development lifecycle.
 
 ## Structure
 
@@ -10,6 +10,7 @@ arc/
 │   └── plugin.json         # Plugin metadata
 ├── skills/                  # Each skill = one /arc:* command
 │   ├── go/SKILL.md         # 1. Entry point
+│   ├── using-arc/SKILL.md  # Bootstrap control plane
 │   ├── vision/SKILL.md     # 2. Foundation: project goals
 │   ├── ideate/SKILL.md     # 3. Design: idea → validated design
 │   ├── detail/SKILL.md     # 4. Plan (internal, invoked by implement)
@@ -103,6 +104,7 @@ To test changes locally:
 - **TDD mandatory** — Tests first, implementation second
 - **Continuous quality** — TS/lint after every task
 - **Knowledge compounds** — Solved problems documented for future sessions
+- **Small control plane** — `using-arc` handles startup routing; richer workflows load on demand
 
 ## Complementary Plugins
 

@@ -35,13 +35,13 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 <rules_context>
 **Read SEO rules NOW:**
 
-**Use Read tool:** `${CLAUDE_PLUGIN_ROOT}/rules/seo.md`
+**Use Read tool:** `rules/seo.md`
 
 This defines page classification (marketing vs app), all required vitals, and configuration requirements. The skill goes deeper than these rules, but they are the shared baseline.
 </rules_context>
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check for recent changes that might affect SEO (new pages, redesigns, migrations).
 </progress_context>
@@ -409,7 +409,7 @@ SEO audit is complete when:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:seo — [scope] audit ([N] issues)`
 </arc_log>

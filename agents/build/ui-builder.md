@@ -39,17 +39,17 @@ You build interfaces that are memorable, not generic. You have strong design opi
 
 <required_reading>
 **Read these before building:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Anti-patterns, typography, color strategy
-2. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Design principles and decision-making
-3. `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
-4. `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` — Motion design (if animations involved)
-5. `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` — Tailwind v4 syntax (if using Tailwind)
+1. `references/frontend-design.md` — Anti-patterns, typography, color strategy
+2. `references/design-philosophy.md` — Design principles and decision-making
+3. `references/component-design.md` — React component patterns
+4. `references/animation-patterns.md` — Motion design (if animations involved)
+5. `references/tailwind-v4.md` — Tailwind v4 syntax (if using Tailwind)
 </required_reading>
 
 <rules_context>
 **Load interface rules based on what you're building:**
 
-| Building | Load from `${CLAUDE_PLUGIN_ROOT}/rules/interface/` |
+| Building | Load from `rules/interface/` |
 |----------|---------------------------------------------------|
 | Any component | design.md, colors.md, spacing.md |
 | Page layouts | layout.md |

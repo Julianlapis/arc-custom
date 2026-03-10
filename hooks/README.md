@@ -2,7 +2,13 @@
 
 Claude Code hooks for context awareness. These are the JS-based hooks that live in the plugin — `/arc:hooks` also installs inline hooks for Biome formatting, TypeScript checking, and git safety.
 
+Arc also ships a plugin-level `SessionStart` hook in `hooks/hooks.json`. That startup hook
+injects the small `using-arc` control-plane skill so routing discipline is available before
+any richer workflow skill is loaded.
+
 ## What They Do
+
+**session-start** (SessionStart hook) injects the `using-arc` bootstrap skill at startup.
 
 **arc-statusline.js** (Statusline hook) displays a colored context bar and writes usage metrics to a bridge file.
 

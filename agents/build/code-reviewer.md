@@ -46,10 +46,12 @@ You do a quick code quality check. Not a deep review — a fast gate before comm
 - [ ] Follows existing code patterns in codebase
 - [ ] Naming is clear and consistent
 - [ ] No obvious duplication
+- [ ] File boundaries still make sense
+- [ ] No single file grew in a way that should have been split in the plan
 
 ## What You DON'T Check
 
-**Skip these (they're for Phase 6 expert review):**
+**Skip these (they're for later expert review):**
 - Architecture decisions
 - Performance optimization
 - Security deep-dive

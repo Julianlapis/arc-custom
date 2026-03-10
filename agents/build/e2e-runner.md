@@ -38,7 +38,7 @@ You run Playwright E2E tests, diagnose failures, and fix them systematically. Yo
 
 <required_reading>
 **Read these before running:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — General testing philosophy
+1. `references/testing-patterns.md` — General testing philosophy
 </required_reading>
 
 <rules_context>

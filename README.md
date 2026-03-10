@@ -14,7 +14,7 @@ The full arc from idea to shipped code.
 
 ## What It Does
 
-Arc provides 22 skills covering the complete development lifecycle:
+Arc provides skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:go       - Main entry point, routes to right workflow
@@ -45,6 +45,10 @@ CROSS-CUTTING
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
         /arc:rules      - Apply coding standards to project
 ```
+
+Arc also ships a small bootstrap skill, `using-arc`, which acts as the control plane for
+session start. It keeps startup context small and routes into the richer workflows only
+when they clearly apply.
 
 ## Key Principles
 
@@ -102,7 +106,9 @@ $start
 $ideate add user authentication with magic links
 ```
 
-Codex loads the selected skill’s `SKILL.md` and follows its workflow.
+Codex loads the selected skill’s `SKILL.md` and follows its workflow. On supported
+platforms, Arc also injects `using-arc` at session start so skill routing is consistent
+without preloading the whole system.
 
 ### Codex Notes
 
@@ -210,7 +216,7 @@ You can also jump in at any point if you already have docs.
 - **One question at a time** — Arc asks focused questions, not overwhelming lists
 - **You're in control** — Suggestions are questions, not mandates. Say no if you disagree.
 - **TDD by default** — Implementation writes tests first, then code
-- **Documents are created** — Plans go in `docs/plans/`, features in `docs/features/`
+- **Documents are created** — Arc specs and plans go in `docs/arc/`, features in `docs/features/`
 
 ## Primary Flow
 
@@ -230,7 +236,7 @@ Each step asks if you want to continue. You can also enter at any point:
 |---------|-------------|--------|
 | `/arc:go` | Main entry point, routes to workflow | Context-aware guidance |
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
-| `/arc:ideate` | From idea to design doc | `docs/plans/YYYY-MM-DD-<feature>-design.md` |
+| `/arc:ideate` | From idea to design doc | `docs/arc/specs/YYYY-MM-DD-<feature>-design.md` |
 | `/arc:implement` | Plan + execute with TDD | Code changes |
 | `/arc:design` | UI/UX work | Wireframes + code |
 | `/arc:build` | Quick implementation | Code changes |
@@ -252,7 +258,7 @@ Each step asks if you want to continue. You can also enter at any point:
 
 ## Agents
 
-Arc includes 22 specialized agents:
+Arc includes specialized agents across research, review, build, design, and workflow roles:
 
 | Category | Agents |
 |----------|--------|
@@ -260,7 +266,7 @@ Arc includes 22 specialized agents:
 | **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, hygiene-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
 | **Design** | figma-implement |
-| **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer |
+| **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |
 
 ## Disciplines
 

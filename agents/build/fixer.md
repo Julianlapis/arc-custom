@@ -42,8 +42,8 @@ You are a fast fixer. Your job is to resolve build errors, TypeScript errors, an
 **Reference project coding rules:**
 - `.ruler/typescript.md` — Project TypeScript conventions
 - `.ruler/code-style.md` — Project style rules
-- `${CLAUDE_PLUGIN_ROOT}/rules/typescript.md` — General TypeScript rules
-- `${CLAUDE_PLUGIN_ROOT}/rules/code-style.md` — General style rules
+- `rules/typescript.md` — General TypeScript rules
+- `rules/code-style.md` — General style rules
 </rules_context>
 
 ## Protocol

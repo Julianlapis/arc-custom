@@ -51,9 +51,9 @@ Hardening decisions need context — what's likely vs. paranoid, what's worth th
 <required_reading>
 **Read these using the Read tool:**
 
-1. `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — Form behavior and validation
-2. `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Interactive states, destructive actions
-3. `${CLAUDE_PLUGIN_ROOT}/rules/interface/content-accessibility.md` — Accessible content
+1. `rules/interface/forms.md` — Form behavior and validation
+2. `rules/interface/interactions.md` — Interactive states, destructive actions
+3. `rules/interface/content-accessibility.md` — Accessible content
 </required_reading>
 
 ---
@@ -291,7 +291,7 @@ After fixes:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:harden — [Component/page] hardened ([# issues found, # fixed])`
 </arc_log>

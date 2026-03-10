@@ -59,12 +59,12 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 
 <required_reading>
 **Read these reference files NOW:**
-1. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-2. ${CLAUDE_PLUGIN_ROOT}/references/audit-stage-calibration.md
+1. disciplines/dispatching-parallel-agents.md
+2. references/audit-stage-calibration.md
 </required_reading>
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check for recent changes that should be included in audit scope.
 </progress_context>
@@ -76,7 +76,7 @@ Check for recent changes that should be included in audit scope.
 
 **Determine rules source:**
 - **If `.ruler/` exists:** Read rules from `.ruler/`
-- **If `.ruler/` doesn't exist:** Read rules from `${CLAUDE_PLUGIN_ROOT}/rules/`
+- **If `.ruler/` doesn't exist:** Read rules from `rules/`
 
 **Detect stack and read relevant rules from the rules source:**
 
@@ -119,7 +119,7 @@ Pass relevant rules to each reviewer agent.
 | lee-nextjs-engineer | layout.md, performance.md |
 | ux-writing-engineer | content-accessibility.md, marketing.md |
 
-Interface rules location: `${CLAUDE_PLUGIN_ROOT}/rules/interface/`
+Interface rules location: `rules/interface/`
 
 Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
 
@@ -200,7 +200,7 @@ If detected, run a quick deprecated API scan:
 grep -rn --include='*.ts' --include='*.tsx' -E 'generateObject|maxTokens[^A-Z]|toDataStreamResponse|addToolResult|maxSteps[^A-Z]|part\.args|part\.result[^s]' src/ app/ 2>/dev/null | head -20
 ```
 
-If deprecated APIs found, include count in the detection summary and flag for reviewers. These are mechanical fixes — load `${CLAUDE_PLUGIN_ROOT}/rules/ai-sdk.md` and pass the migration table to the implementing agent.
+If deprecated APIs found, include count in the detection summary and flag for reviewers. These are mechanical fixes — load `rules/ai-sdk.md` and pass the migration table to the implementing agent.
 
 **Run dependency vulnerability scan (critical/high only):**
 
@@ -376,7 +376,7 @@ Use AskUserQuestion with:
 
 **If team mode selected**, read the team reference:
 ```
-${CLAUDE_PLUGIN_ROOT}/references/agent-teams.md
+references/agent-teams.md
 ```
 </team_mode_check>
 
@@ -385,7 +385,7 @@ ${CLAUDE_PLUGIN_ROOT}/references/agent-teams.md
 **Read agent prompts:**
 For each selected reviewer, read:
 ```
-${CLAUDE_PLUGIN_ROOT}/agents/review/[reviewer-name].md
+agents/review/[reviewer-name].md
 ```
 
 **Execution strategy:**
@@ -429,7 +429,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 
 Each reviewer must receive the stage context so they can calibrate their severity ratings. Read the matching stage calibration block from:
 ```
-${CLAUDE_PLUGIN_ROOT}/references/audit-stage-calibration.md
+references/audit-stage-calibration.md
 ```
 
 Include in every reviewer prompt:
@@ -570,7 +570,7 @@ Skip the deduplication and conflict resolution steps below and proceed directly 
 
 Use the severity validation table and conflict resolution rules from:
 ```
-${CLAUDE_PLUGIN_ROOT}/references/audit-stage-calibration.md
+references/audit-stage-calibration.md
 ```
 
 Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`
@@ -742,7 +742,7 @@ Present these options (include all that apply):
 
 1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:detail` scoped to the files and issues in that cluster.
 
-2. **Write full task plan** → Write all clusters as a structured plan to `docs/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list. Commit the plan file.
+2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list. Commit the plan file.
 
 3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
@@ -759,7 +759,7 @@ Present these options (include all that apply):
 
 **If user selects "Write full task plan":**
 
-Create `docs/plans/YYYY-MM-DD-audit-tasks.md`:
+Create `docs/arc/plans/YYYY-MM-DD-audit-tasks.md`:
 
 ```markdown
 # Audit Task Plan
@@ -794,7 +794,7 @@ Create `docs/plans/YYYY-MM-DD-audit-tasks.md`:
 
 Commit the plan:
 ```bash
-git add docs/plans/
+git add docs/arc/plans/
 git commit -m "docs: add audit task plan"
 ```
 
@@ -816,7 +816,7 @@ git commit -m "docs: add audit task plan"
 After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup to prevent memory accumulation:
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+scripts/cleanup-orphaned-agents.sh
 ```
 
 This is especially important after `--parallel` runs or when auditing large codebases.
@@ -825,7 +825,7 @@ This is especially important after `--parallel` runs or when auditing large code
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 </arc_log>

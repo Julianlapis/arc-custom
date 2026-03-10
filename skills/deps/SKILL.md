@@ -35,7 +35,7 @@ website:
 
 <required_reading>
 Read during Phase 2 (Alternative Discovery):
-- `${CLAUDE_PLUGIN_ROOT}/references/dependency-alternatives.md` — Curated table of known package replacements with migration effort ratings
+- `references/dependency-alternatives.md` — Curated table of known package replacements with migration effort ratings
 </required_reading>
 
 <process>
@@ -447,7 +447,7 @@ Report: docs/audits/YYYY-MM-DD-deps-audit.md
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:deps — Dependency audit ([N] CVEs, [N] outdated)`
 </arc_log>

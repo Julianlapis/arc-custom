@@ -21,21 +21,24 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 <required_reading>
 **Read these reference files NOW:**
-1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
-2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
-3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
-4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
-5. ${CLAUDE_PLUGIN_ROOT}/references/ai-sdk.md (if `ai` in package.json)
+1. references/testing-patterns.md
+2. references/task-granularity.md
+3. references/arc-paths.md
+
+**Load these only if relevant:**
+- references/model-strategy.md — if dispatching build agents
+- references/frontend-design.md — if UI work involved
+- references/ai-sdk.md — if `ai` in package.json
 
 **For UI work, also load interface rules:**
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md — Layout patterns
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md — Motion rules
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md — If forms involved
-- ${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md — Interaction patterns
-- ${CLAUDE_PLUGIN_ROOT}/references/component-design.md — React component patterns
+- rules/interface/design.md — Visual principles
+- rules/interface/colors.md — Color methodology
+- rules/interface/spacing.md — Spacing system
+- rules/interface/layout.md — Layout patterns
+- rules/interface/animation.md — Motion rules
+- rules/interface/forms.md — If forms involved
+- rules/interface/interactions.md — Interaction patterns
+- references/component-design.md — React component patterns
 </required_reading>
 
 <process>
@@ -62,14 +65,27 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 **Find the design doc:**
 ```
-Glob: docs/plans/*-design.md
+Glob: docs/arc/specs/*-design.md
+Fallback: docs/plans/*-design.md
 ```
 
 Pick the most recent one (highest date prefix). Read it. This is the source of truth for what to build.
 
 **Derive implementation plan filename:** Replace `-design.md` with `-implementation.md`.
-- Design: `docs/plans/2025-06-15-user-dashboard-design.md`
-- Implementation: `docs/plans/2025-06-15-user-dashboard-implementation.md`
+- Design: `docs/arc/specs/2025-06-15-user-dashboard-design.md`
+- Implementation: `docs/arc/plans/2025-06-15-user-dashboard-implementation.md`
+
+## Step 2.2: Lock File Structure Before Tasks
+
+Before defining tasks, write a short file map:
+
+- Which files will be created or modified
+- What responsibility each file owns
+- Where boundaries or interfaces matter
+- Whether any file is already too large or too tangled for a clean change
+
+If the design implies multiple independent subsystems, stop and split the work into
+separate plans instead of forcing everything into one implementation plan.
 
 **Extract from the design doc:**
 - User stories / acceptance criteria
@@ -171,7 +187,7 @@ Task N: [CHECKPOINT:DECIDE] Select authentication provider
 - Automate everything possible before a checkpoint (start servers, deploy, etc.)
 - Never ask user to run CLI commands -- agent does it
 - Max 1 checkpoint per logical milestone
-- See `${CLAUDE_PLUGIN_ROOT}/references/checkpoint-patterns.md`
+- See `references/checkpoint-patterns.md`
 
 **Task ordering:**
 1. Data/types first (foundation)
@@ -235,7 +251,7 @@ Aesthetic Direction (from design doc):
 
 Figma Reference:
 - URL: https://figma.com/design/xxx/yyy?node-id=123-456
-- Screenshot: docs/plans/assets/YYYY-MM-DD-topic/figma-123-456.png
+- Screenshot: docs/arc/specs/assets/YYYY-MM-DD-topic/figma-123-456.png
 - To fetch fresh context during implementation:
   mcp__figma__get_design_context: fileKey="xxx", nodeId="123:456"
 
@@ -270,9 +286,9 @@ Files:
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For Claude:** Use /arc:implement to implement this plan task-by-task.
+> **For Arc:** Use /arc:implement to execute this plan. Subagents should report DONE, DONE_WITH_CONCERNS, NEEDS_CONTEXT, or BLOCKED.
 
-**Design:** `docs/plans/YYYY-MM-DD-<topic>-design.md` (the actual filename from Step 2)
+**Design:** `docs/arc/specs/YYYY-MM-DD-<topic>-design.md` (or legacy fallback path)
 **Goal:** [One sentence from design doc's problem statement]
 **Stack:** [Framework] + [Test runner] + [Package manager]
 
@@ -282,12 +298,20 @@ Files:
 **Tasks section:**
 Write all tasks following the template from Step 3.
 
-**Save to:** The filename derived in Step 2 (e.g., `docs/plans/2025-06-15-user-dashboard-implementation.md`)
+**Save to:** The filename derived in Step 2 (e.g., `docs/arc/plans/2025-06-15-user-dashboard-implementation.md`)
+
+## Step 6.5: Review The Plan Document
+
+After writing the plan:
+
+1. Dispatch `agents/workflow/plan-document-reviewer.md`
+2. Fix issues in the plan
+3. Re-review until approved or after 5 loops escalate to the user
 
 ## Step 7: Commit and Offer Next Steps
 
 ```bash
-git add docs/plans/
+git add docs/arc/plans/
 git commit -m "docs: add <topic> implementation plan"
 ```
 

@@ -35,7 +35,7 @@ website:
 </tool_restrictions>
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check for recent feature work that might affect data collection scope.
 </progress_context>
@@ -379,9 +379,9 @@ The templates below show the **structure**. When generating, replace ALL bracket
 
 The template structures for each document are maintained in separate files. **Read these templates at runtime** to use as the structure reference when generating personalized documents:
 
-- **Privacy Policy:** `${CLAUDE_PLUGIN_ROOT}/templates/privacy-policy.md`
-- **Terms of Service:** `${CLAUDE_PLUGIN_ROOT}/templates/terms-of-service.md`
-- **Cookie Policy:** `${CLAUDE_PLUGIN_ROOT}/templates/cookie-policy.md`
+- **Privacy Policy:** `templates/privacy-policy.md`
+- **Terms of Service:** `templates/terms-of-service.md`
+- **Cookie Policy:** `templates/cookie-policy.md`
 
 **Use Read tool** to load each template before generating. The templates show the **structure** — when generating, replace ALL bracketed items with real values from detection and user answers. If a section doesn't apply to this project, omit it entirely.
 
@@ -466,7 +466,7 @@ Present to user after generation:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:legal — Generated Privacy Policy, Terms, Cookie Policy`
 </arc_log>

@@ -32,6 +32,7 @@ EXPECTED_SKILLS=(
     "suggest"
     "testing"
     "tidy"
+    "using-arc"
     "vision"
 )
 

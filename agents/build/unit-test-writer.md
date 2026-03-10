@@ -29,8 +29,8 @@ You write unit tests with vitest. Your tests are fast, isolated, and test behavi
 
 <required_reading>
 **Read before writing:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy
-2. `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` — Project conventions
+1. `references/testing-patterns.md` — Test philosophy
+2. `rules/testing.md` — Project conventions
 </required_reading>
 
 ## What Unit Tests Cover

@@ -38,19 +38,23 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 <required_reading>
 **Read these reference files NOW:**
-1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
-2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
-3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
-4. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
-5. ${CLAUDE_PLUGIN_ROOT}/references/checkpoint-patterns.md
-6. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
-7. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
-8. ${CLAUDE_PLUGIN_ROOT}/disciplines/subagent-driven-development.md
-9. ${CLAUDE_PLUGIN_ROOT}/disciplines/verification-before-completion.md
+1. references/testing-patterns.md
+2. references/task-granularity.md
+3. references/checkpoint-patterns.md
+4. references/subagent-statuses.md
+5. references/arc-paths.md
+
+**Load these only when relevant:**
+- references/frontend-design.md — if UI work is involved
+- references/model-strategy.md — when choosing build models
+- disciplines/dispatching-parallel-agents.md — when parallel reviewers/build agents are needed
+- disciplines/finishing-a-development-branch.md — before finalizing the branch
+- disciplines/subagent-driven-development.md — when executing through build agents
+- disciplines/verification-before-completion.md — before closing the work
 </required_reading>
 
 <build_agents>
-**Available build agents in `${CLAUDE_PLUGIN_ROOT}/agents/build/`:**
+**Available build agents in `agents/build/`:**
 
 | Agent | Model | Use For |
 |-------|-------|---------|
@@ -70,7 +74,7 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 | `plan-completion-reviewer` | sonnet | Whole-plan gate — all tasks built, nothing skipped, no scope creep |
 
 **Before spawning a build agent:**
-1. Read the agent file: `${CLAUDE_PLUGIN_ROOT}/agents/build/[agent-name].md`
+1. Read the agent file: `agents/build/[agent-name].md`
 2. Use the model specified in the agent's frontmatter
 3. Include relevant context from the task
 
@@ -113,7 +117,7 @@ Rules are optional — proceed without them if the user prefers.
 
 **For UI/frontend work, also load interface rules:**
 
-| Check | Read from `${CLAUDE_PLUGIN_ROOT}/rules/interface/` |
+| Check | Read from `rules/interface/` |
 |-------|---------------------------------------------------|
 | Building components/pages | design.md, colors.md, spacing.md, layout.md |
 | Typography changes | typography.md |
@@ -123,12 +127,12 @@ Rules are optional — proceed without them if the user prefers.
 | Marketing pages | marketing.md |
 
 **Additional references (load as needed):**
-- `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
-- `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` — Motion design
-- `${CLAUDE_PLUGIN_ROOT}/references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
-- `${CLAUDE_PLUGIN_ROOT}/references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
-- `${CLAUDE_PLUGIN_ROOT}/references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
-- `${CLAUDE_PLUGIN_ROOT}/references/ai-sdk.md` — AI SDK 6 patterns (if `ai` in package.json)
+- `references/component-design.md` — React component patterns
+- `references/animation-patterns.md` — Motion design
+- `references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
+- `references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
+- `references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
+- `references/ai-sdk.md` — AI SDK 6 patterns (if `ai` in package.json)
 </rules_context>
 
 <process>
@@ -146,7 +150,7 @@ Rules are optional — proceed without them if the user prefers.
 
 **Check for existing implementation plan:**
 ```bash
-ls docs/plans/*-implementation.md 2>/dev/null | tail -1
+ls docs/arc/plans/*-implementation.md docs/plans/*-implementation.md 2>/dev/null | tail -1
 ```
 
 **If plan exists:** Skip to Phase 1.
@@ -154,7 +158,7 @@ ls docs/plans/*-implementation.md 2>/dev/null | tail -1
 **If no plan exists:** Follow the detail skill to create one:
 
 ```
-Read: ${CLAUDE_PLUGIN_ROOT}/skills/detail/SKILL.md
+Read: skills/detail/SKILL.md
 ```
 
 The detail skill will:
@@ -215,10 +219,17 @@ If tests fail before you start → stop and ask user.
 ## Phase 2: Load Plan and Create Todos
 
 **Read implementation plan** (created in Phase 0 or pre-existing):
-`docs/plans/YYYY-MM-DD-<topic>-implementation.md`
+`docs/arc/plans/YYYY-MM-DD-<topic>-implementation.md` (fallback: `docs/plans/...`)
 
 **Create TodoWrite tasks:**
 One todo per task in the plan. Mark first as `in_progress`.
+
+**Before implementation starts, confirm the plan includes:**
+- a file structure section
+- focused task boundaries
+- checkpoint tasks only where human judgment is required
+
+If any of those are missing, fix the plan before dispatching build agents.
 
 ## Phase 2b: Plan Test Coverage
 
@@ -250,6 +261,23 @@ One todo per task in the plan. Mark first as `in_progress`.
 - Has protected routes? → e2e-test-writer with auth.setup.ts
 
 This plan guides which test agent to spawn for each task.
+
+## Phase 2c: Handle Build-Agent Statuses
+
+Build agents must report one of:
+
+- `DONE`
+- `DONE_WITH_CONCERNS`
+- `NEEDS_CONTEXT`
+- `BLOCKED`
+
+Controller behavior:
+- `DONE` → continue to review
+- `DONE_WITH_CONCERNS` → read concerns, then decide whether to clarify or review
+- `NEEDS_CONTEXT` → provide the missing context and re-dispatch
+- `BLOCKED` → split the task, upgrade model capability, or escalate to the user
+
+Never silently retry a blocked task without changing the conditions.
 
 ## Phase 3: Execute in Batches
 
@@ -410,7 +438,7 @@ Test name: [name]
 Error: [paste full error]
 Implementation file: [path]
 
-Investigate root cause and fix. See ${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md"
+Investigate root cause and fix. See disciplines/systematic-debugging.md"
 ```
 
 If debugger can't resolve after one attempt → stop and ask user.
@@ -494,7 +522,7 @@ If the current task is a checkpoint type (`[CHECKPOINT:VERIFY]`, `[CHECKPOINT:DE
 4. Verify the action succeeded (e.g., `vercel whoami`)
 5. Retry the blocked operation and continue
 
-See `${CLAUDE_PLUGIN_ROOT}/references/checkpoint-patterns.md` for full protocol.
+See `references/checkpoint-patterns.md` for full protocol.
 
 ## Phase 4: Quality Checkpoints
 
@@ -518,7 +546,7 @@ If duplicates found → reuse existing code. Skip creating the new function.
 
 **If design spec exists** — spawn ui-builder:
 ```
-Read: ${CLAUDE_PLUGIN_ROOT}/agents/build/ui-builder.md
+Read: agents/build/ui-builder.md
 ```
 
 **If no design spec** (empty states, undefined visuals) — spawn design-specifier first:
@@ -536,7 +564,7 @@ Then spawn ui-builder with the design-specifier's output.
 
 **If Figma URL provided** — spawn figma-builder:
 ```
-Read: ${CLAUDE_PLUGIN_ROOT}/agents/build/figma-builder.md
+Read: agents/build/figma-builder.md
 Task [figma-builder] model: opus: "Implement from Figma: [URL]"
 ```
 
@@ -554,7 +582,7 @@ Aesthetic Direction (from design doc):
 Figma: [URL if available]
 Files to create: [list from implementation plan]
 
-Interface rules: ${CLAUDE_PLUGIN_ROOT}/rules/interface/
+Interface rules: rules/interface/
 Project rules: .ruler/react.md, .ruler/tailwind.md
 
 Apply the aesthetic direction to every decision. Make it memorable, not generic."
@@ -644,7 +672,7 @@ TEST RESULTS:
 
 Read each file referenced in the plan. Verify every task was implemented substantively.
 Check for skipped tasks, partial implementations, and scope creep.
-See ${CLAUDE_PLUGIN_ROOT}/agents/build/plan-completion-reviewer.md"
+See agents/build/plan-completion-reviewer.md"
 ```
 
 **If plan-completion-reviewer finds issues:**
@@ -667,7 +695,7 @@ Test files: [list e2e test files]
 Feature: [brief description]
 
 Run tests, fix any failures, and iterate until all pass or report blockers.
-See ${CLAUDE_PLUGIN_ROOT}/agents/build/e2e-runner.md for protocol."
+See agents/build/e2e-runner.md for protocol."
 ```
 
 **Why a separate agent?**
@@ -688,11 +716,11 @@ If yes, spawn review agents in parallel (all use sonnet):
 ```
 Task [simplicity-engineer] model: sonnet: "Review implementation for unnecessary complexity.
 Files: [list of new/modified files]
-See ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md"
+See agents/review/simplicity-engineer.md"
 
 Task [architecture-engineer] model: sonnet: "Review implementation for architectural concerns.
 Files: [list of new/modified files]
-See ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md"
+See agents/review/architecture-engineer.md"
 ```
 
 **Add a conditional third reviewer based on what was built:**
@@ -703,7 +731,7 @@ See ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md"
 | Significant UI (components, pages) | senior-engineer |
 | Database migrations, data models | data-engineer |
 
-Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
+Present findings as Socratic questions (see `references/review-patterns.md`).
 Blockers → fix → re-verify (max 2 cycles). Should-fix → fix if quick, otherwise note as follow-up.
 
 ## Post-Completion: Doc Staleness Check
@@ -768,7 +796,7 @@ git worktree remove .worktrees/<feature-name>
 After spawning multiple build agents, some may not exit cleanly. Run cleanup:
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+scripts/cleanup-orphaned-agents.sh
 ```
 
 This is especially important after parallel agent runs.
@@ -788,7 +816,7 @@ This is especially important after parallel agent runs.
 </when_to_stop>
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Look for related ideate sessions and any prior implementation attempts.
 </progress_context>
@@ -812,7 +840,7 @@ After completing implementation (or pausing), append to progress journal:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:implement — [Feature name] ([X/Y] tasks complete)`
 </arc_log>

@@ -100,7 +100,7 @@ digraph process {
 ```
 You: I'm using Subagent-Driven Development to execute this plan.
 
-[Read plan file once: docs/plans/feature-plan.md]
+[Read plan file once: docs/arc/plans/feature-plan.md]
 [Extract all 5 tasks with full text and context]
 [Create TaskCreate/TaskUpdate with all tasks]
 
@@ -115,6 +115,7 @@ You: "User level (~/.config/claude/hooks/)"
 
 Implementer: "Got it. Implementing now..."
 [Later] Implementer:
+  - Status: DONE
   - Implemented install-hook command
   - Added tests, 5/5 passing
   - Self-review: Found I missed --force flag, added it
@@ -135,6 +136,7 @@ Task 2: Recovery modes
 
 Implementer: [No questions, proceeds]
 Implementer:
+  - Status: DONE
   - Added verify/repair modes
   - 8/8 tests passing
   - Self-review: All good
@@ -232,6 +234,11 @@ Done!
 **If subagent fails task:**
 - Dispatch fix subagent with specific instructions
 - Don't try to fix manually (context pollution)
+
+**If subagent reports `DONE_WITH_CONCERNS`, `NEEDS_CONTEXT`, or `BLOCKED`:**
+- Read the concern or blocker before continuing
+- Change the task context, task size, or model capability before retrying
+- Escalate to the user when the plan itself looks wrong
 
 ## Integration
 

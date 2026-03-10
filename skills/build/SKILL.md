@@ -34,9 +34,9 @@ website:
 
 <required_reading>
 **Read these before building:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy
-2. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — If UI work
-3. `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — If React components
+1. `references/testing-patterns.md` — Test philosophy
+2. `references/frontend-design.md` — If UI work
+3. `references/component-design.md` — If React components
 </required_reading>
 
 <agents>
@@ -93,7 +93,7 @@ website:
 
 **If `.ruler/` does NOT exist, suggest running `/arc:rules` first.**
 
-**For UI work, load interface rules from `${CLAUDE_PLUGIN_ROOT}/rules/interface/`:**
+**For UI work, load interface rules from `rules/interface/`:**
 
 *Always for UI:*
 - `design.md` — visual design principles

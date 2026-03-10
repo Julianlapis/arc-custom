@@ -33,9 +33,9 @@ You are a Codebase Organization Expert specializing in file structure, naming co
 
 <required_reading>
 Read before reviewing:
-- `${CLAUDE_PLUGIN_ROOT}/references/architecture-patterns.md` — Import depth rules, dependency flow, package boundaries
-- `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — Component file structure patterns
-- `${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md` — Ordering and build-from-foundation principles
+- `references/architecture-patterns.md` — Import depth rules, dependency flow, package boundaries
+- `references/component-design.md` — Component file structure patterns
+- `references/task-granularity.md` — Ordering and build-from-foundation principles
 </required_reading>
 
 ## Core Principles

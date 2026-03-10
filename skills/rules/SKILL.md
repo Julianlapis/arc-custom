@@ -51,10 +51,12 @@ Apply Arc's coding standards to the current project.
 
 ## Step 2: Fresh Install
 
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}` for the rest of this workflow.
+
 Copy all rules from Arc to the project:
 
 ```bash
-cp -r ${CLAUDE_PLUGIN_ROOT}/rules/ .ruler/
+cp -r "${ARC_ROOT}/rules/" .ruler/
 ```
 
 Tell the user:
@@ -93,7 +95,7 @@ cp -r .ruler/ ".ruler.backup-$(date +%Y%m%d-%H%M%S)/"
 
 # Copy fresh rules
 rm -rf .ruler/
-cp -r ${CLAUDE_PLUGIN_ROOT}/rules/ .ruler/
+cp -r "${ARC_ROOT}/rules/" .ruler/
 ```
 
 Tell the user:
@@ -108,7 +110,7 @@ Go to Step 4 (Offer Ruler)
 **If no:**
 ```
 Keeping existing rules. You can manually compare with Arc's rules at:
-${CLAUDE_PLUGIN_ROOT}/rules/
+${ARC_ROOT}/rules/
 ```
 
 Done.

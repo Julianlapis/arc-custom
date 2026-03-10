@@ -26,7 +26,7 @@ website:
 ---
 
 <progress_context>
-**Use Read tool:** `docs/progress.md` (first 50 lines)
+**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
 Check what's been done recently — ensures nothing is missed before shipping.
 </progress_context>
@@ -160,7 +160,7 @@ Checklist:
 
 ### C. SEO & Meta (Always for public sites)
 
-> Reference: `${CLAUDE_PLUGIN_ROOT}/rules/seo.md` for full SEO rules.
+> Reference: `rules/seo.md` for full SEO rules.
 
 - [ ] `<html lang="...">` attribute set
 - [ ] `<meta name="viewport">` present
@@ -547,7 +547,7 @@ Then grep the codebase for variations and fix any inconsistencies.
 - [ ] No flash on refresh for interactive state (tabs, theme, toggles)
 - [ ] Destructive actions require confirmation (`AlertDialog`, not `confirm()`)
 
-> Reference: `${CLAUDE_PLUGIN_ROOT}/rules/interface/` for detailed rules on each item.
+> Reference: `rules/interface/` for detailed rules on each item.
 
 ---
 
@@ -601,7 +601,7 @@ If follow-up work is identified, use **TaskCreate**:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:letsgo — [Deployed to URL / Checklist complete]`
 </arc_log>

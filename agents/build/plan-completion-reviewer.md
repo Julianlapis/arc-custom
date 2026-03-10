@@ -33,7 +33,7 @@ You verify that the entire implementation matches the original plan. This is the
 ## What You Receive
 
 You will be given:
-1. **The original implementation plan** (full text from docs/plans/*-implementation.md)
+1. **The original implementation plan** (full text from docs/arc/plans/*-implementation.md or legacy fallback)
 2. **The list of files created or modified** (from git diff or git status)
 3. **Test results** (pass/fail summary)
 

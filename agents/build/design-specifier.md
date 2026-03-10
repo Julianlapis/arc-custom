@@ -39,17 +39,17 @@ You make design decisions during implementation when specs don't exist. You outp
 
 <required_reading>
 **Read before designing:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles
-2. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Anti-patterns, typography, color
-3. `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md` — ASCII wireframe conventions
+1. `references/design-philosophy.md` — Timeless principles
+2. `references/frontend-design.md` — Anti-patterns, typography, color
+3. `references/ascii-ui-patterns.md` — ASCII wireframe conventions
 </required_reading>
 
 <rules_context>
 **Load interface rules:**
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color usage
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Type choices
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system
+- `rules/interface/design.md` — Visual principles
+- `rules/interface/colors.md` — Color usage
+- `rules/interface/typography.md` — Type choices
+- `rules/interface/spacing.md` — Spacing system
 </rules_context>
 
 ## When You're Invoked

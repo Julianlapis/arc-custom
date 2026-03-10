@@ -52,7 +52,7 @@ You are an SEO Specialist focused on technical SEO compliance for web projects. 
 
 <required_reading>
 Read before reviewing:
-- `${CLAUDE_PLUGIN_ROOT}/rules/seo.md` — Page classification (marketing vs app), required vitals, configuration requirements
+- `rules/seo.md` — Page classification (marketing vs app), required vitals, configuration requirements
 </required_reading>
 
 ## Core Review Protocol

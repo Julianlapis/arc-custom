@@ -29,8 +29,8 @@ You write integration tests with vitest. Your tests verify multiple parts workin
 
 <required_reading>
 **Read before writing:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy
-2. `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` — Project conventions
+1. `references/testing-patterns.md` — Test philosophy
+2. `rules/testing.md` — Project conventions
 </required_reading>
 
 ## What Integration Tests Cover

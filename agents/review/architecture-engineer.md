@@ -34,7 +34,7 @@ You are a System Architecture Expert specializing in analyzing code changes and 
 
 <required_reading>
 Read before reviewing:
-- `${CLAUDE_PLUGIN_ROOT}/references/architecture-patterns.md` — Import depth, dependency flow, package boundaries
+- `references/architecture-patterns.md` — Import depth, dependency flow, package boundaries
 </required_reading>
 
 Key rules:

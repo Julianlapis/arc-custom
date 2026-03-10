@@ -166,9 +166,9 @@ This hook blocks destructive git operations before they execute. Always install 
 
 **Context monitor hook (PostToolUse, all tools):**
 
-Determine the path to the Arc plugin's hooks directory. Use `${CLAUDE_PLUGIN_ROOT}/hooks/` — this resolves to wherever Arc is installed.
+Determine the absolute path to Arc's `hooks/` directory by resolving the Arc install root from this skill's location. Use that resolved path as `${ARC_HOOKS_PATH}`.
 
-Read `${CLAUDE_PLUGIN_ROOT}/hooks/arc-context-monitor.js` to confirm it exists.
+Read `hooks/arc-context-monitor.js` from the resolved Arc install root to confirm it exists.
 
 ```json
 {

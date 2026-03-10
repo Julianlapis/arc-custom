@@ -47,20 +47,23 @@ Get the task specification from:
 - [ ] Any features added that weren't requested?
 - [ ] Any abstractions beyond what the spec calls for?
 - [ ] Any "improvements" that weren't asked for?
+- [ ] Any new files or boundaries that drift from the plan's file structure?
 
 **Check for under-building:**
 - [ ] Any requirements skipped?
 - [ ] Any edge cases mentioned but not handled?
 - [ ] Any implicit requirements missed?
 
+<required_reading>
 ### 2.5. Check for Stubs
 
-Use patterns from `${CLAUDE_PLUGIN_ROOT}/references/verification-patterns.md` to verify implementations are substantive:
+Use patterns from `references/verification-patterns.md` to verify implementations are substantive:
 
 - No placeholder text or TODO comments in new code
 - Event handlers have real logic (not empty or log-only)
 - API calls are made AND responses are used
 - State is rendered, not hardcoded
+</required_reading>
 
 ### 3. Report Findings
 

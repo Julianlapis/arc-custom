@@ -87,7 +87,8 @@ If the page doesn't load, tell the user to start their dev server and try again.
 
 **Read design doc (if exists):**
 ```
-Glob: docs/plans/design-*.md
+Glob: docs/arc/specs/design-*.md
+Fallback: docs/plans/design-*.md
 ```
 
 If found, read the design doc and note:
@@ -100,9 +101,9 @@ This context guides every fix decision. If there's no design doc, that's fine �
 
 <required_reading>
 Read before auditing:
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` — Layout patterns, z-index, viewport units
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
-- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system and scale
+- `rules/interface/layout.md` — Layout patterns, z-index, viewport units
+- `rules/interface/interactions.md` — Touch, keyboard, hover patterns
+- `rules/interface/spacing.md` — Spacing system and scale
 </required_reading>
 
 ### Step 4: Discover Routes
@@ -397,7 +398,7 @@ Responsive audit is complete when:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:responsive — [N] pages audited, [N] issues fixed`
 </arc_log>

@@ -52,12 +52,12 @@ Polish requires visual inspection and judgment — it's collaborative, not deleg
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing scale and philosophy
-2. `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color rules, contrast, OKLCH
-3. `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Type hierarchy and OpenType
-4. `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Eight interactive states
-5. `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — Motion rules
-6. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Design review checklist
+1. `rules/interface/spacing.md` — Spacing scale and philosophy
+2. `rules/interface/colors.md` — Color rules, contrast, OKLCH
+3. `rules/interface/typography.md` — Type hierarchy and OpenType
+4. `rules/interface/interactions.md` — Eight interactive states
+5. `rules/interface/animation.md` — Motion rules
+6. `references/frontend-design.md` — Design review checklist
 </required_reading>
 
 ---
@@ -212,7 +212,7 @@ Run the Design Review Checklist from `frontend-design.md`:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${CLAUDE_PLUGIN_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:polish — [Component/page] polished ([key changes])`
 </arc_log>

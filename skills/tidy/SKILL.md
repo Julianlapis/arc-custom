@@ -2,7 +2,7 @@
 name: tidy
 disable-model-invocation: true
 description: |
-  Clean up completed plans in docs/plans/. Archives or deletes finished plans.
+  Clean up completed plans in docs/arc/plans/. Archives or deletes finished plans.
   Use when asked to "clean up plans", "tidy the docs", "archive old plans",
   or after completing implementation to remove stale planning documents.
 license: MIT
@@ -11,22 +11,22 @@ metadata:
 website:
   order: 19
   desc: Plan cleanup
-  summary: Clean up completed plans in docs/plans/. Archives or deletes finished plans.
+  summary: Clean up completed plans in docs/arc/plans/. Archives or deletes finished plans.
   what: |
-    Tidy analyzes your docs/plans/ folder, checks which plans have been implemented (by looking for the files they describe), and offers to archive or delete completed ones. One plan at a time, always with confirmation.
+    Tidy analyzes your docs/arc/plans/ folder, checks which plans have been implemented (by looking for the files they describe), and offers to archive or delete completed ones. One plan at a time, always with confirmation.
   why: |
     Planning documents accumulate. After implementation, they become clutter that obscures current work. Tidy keeps your plans folder relevant by archiving what's done.
   decisions:
     - One at a time presentation. Never bulk-deletes without review.
     - Evidence-based status detection. Checks if planned files exist and have commits.
-    - Archive over delete. Completed plans move to docs/plans/archive/ by default.
+    - Archive over delete. Completed plans move to docs/arc/archive/ by default.
   workflow:
     position: utility
 ---
 
 # Tidy Workflow
 
-Clean up the docs/plans/ folder by analyzing which plans have been implemented. Archive what's done, keep what matters.
+Clean up the docs/arc/plans/ folder by analyzing which plans have been implemented. Archive what's done, keep what matters.
 
 ## Modes
 
@@ -37,17 +37,18 @@ Clean up the docs/plans/ folder by analyzing which plans have been implemented. 
 
 ### Step 1: Discover Plans
 
-**Use Glob tool:** `docs/plans/*.md`
+**Use Glob tool:** `docs/arc/plans/*.md`
+Fallback: `docs/plans/*.md`
 
 **Handle empty states:**
-- No `docs/plans/`: "No plans folder found. Nothing to tidy!"
+- No `docs/arc/plans/`: "No plans folder found. Nothing to tidy!"
 - Empty folder: "Your plans folder is already spotless!"
 
 **Preview:**
 ```
 Let me tidy up your plans folder...
 
-Found [N] plans in docs/plans/
+Found [N] plans in docs/arc/plans/
 ```
 
 ### Step 2: Analyze Each Plan
@@ -102,7 +103,7 @@ git log --after="YYYY-MM-DD" --oneline -- [file-paths]
 ---
 
 What should I do?
-1. Archive (move to docs/plans/archive/)
+1. Archive (move to docs/arc/archive/)
 2. Delete (remove file and assets)
 3. Keep (leave in place)
 4. Skip (decide later)
@@ -114,16 +115,16 @@ Wait for user response before proceeding to next plan.
 
 **Archive:**
 ```bash
-mkdir -p docs/plans/archive/
-mv docs/plans/[plan].md docs/plans/archive/
+mkdir -p docs/arc/archive/
+mv docs/arc/plans/[plan].md docs/arc/archive/
 # Move associated assets if they exist
-mv docs/plans/assets/[topic]/ docs/plans/archive/assets/ 2>/dev/null
+mv docs/arc/specs/assets/[topic]/ docs/arc/archive/assets/ 2>/dev/null
 ```
 
 **Delete:**
 ```bash
-rm docs/plans/[plan].md
-rm -rf docs/plans/assets/[topic]/ 2>/dev/null
+rm docs/arc/plans/[plan].md
+rm -rf docs/arc/specs/assets/[topic]/ 2>/dev/null
 ```
 
 **Keep/Skip:** No action, continue to next plan.
@@ -152,7 +153,7 @@ Want me to commit these changes?
 
 If yes:
 ```bash
-git add docs/plans/
+git add docs/arc/plans/ docs/arc/archive/
 git commit -m "docs: tidy up completed plans"
 ```
 
@@ -163,7 +164,7 @@ git commit -m "docs: tidy up completed plans"
 - Offer to archive/delete both together
 
 **Plans with assets:**
-- Check `docs/plans/assets/YYYY-MM-DD-topic/`
+- Check `docs/arc/specs/assets/YYYY-MM-DD-topic/`
 - Include in archive/delete actions
 
 **Very old plans (>60 days, no activity):**
@@ -186,7 +187,7 @@ NOT: overly cute, emoji-heavy, or verbose.
 
 - Modify plan contents
 - Create new plans
-- Touch anything outside `docs/plans/`
+- Touch anything outside `docs/arc/plans/`
 - Make decisions without asking
 - Auto-delete without confirmation
 

@@ -44,10 +44,10 @@ Create comprehensive test strategies covering the full test pyramid. Execute wit
 
 <required_reading>
 **Read before planning:**
-1. `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
-2. `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` — Project conventions
-3. `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md` — If testing LLM integrations
-4. `${CLAUDE_PLUGIN_ROOT}/disciplines/change-impact-testing.md` — Blast radius analysis for code changes
+1. `references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
+2. `rules/testing.md` — Project conventions
+3. `references/llm-api-testing.md` — If testing LLM integrations
+4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
 </required_reading>
 
 ## Agents

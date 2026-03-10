@@ -80,8 +80,10 @@ You will systematically execute these security scans:
    - Check `WORKOS_COOKIE_PASSWORD` is 32+ characters.
    - Verify client-side env vars use correct prefix (`NEXT_PUBLIC_`, `VITE_`, `REACT_APP_`).
 
+   <rules_context>
    **Required reading when auth packages detected:**
-   Load `${CLAUDE_PLUGIN_ROOT}/rules/auth.md` for MUST/NEVER/SHOULD constraints.
+   Load `rules/auth.md` for MUST/NEVER/SHOULD constraints.
+   </rules_context>
 
 5. **Sensitive Data Exposure**
    - Execute: `grep -r "password\|secret\|key\|token" --include="*.js"`
