@@ -29,6 +29,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these, do not skip:
+- **`AskUserQuestion`** — REQUIRED for all user decisions (motion tone, plan approval). Never ask questions as plain text. Keep context before the question to 2-3 sentences max.
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -65,15 +68,20 @@ Animation choices are subjective — the user must see and approve each addition
 
 ## Phase 1: Context
 
-**Ask the user:**
-```
-Question: "What's the personality of this feature?"
-Header: "Motion tone"
-Options:
-  1. "Snappy and confident" — Quick, decisive transitions. Enterprise, developer tools.
-  2. "Smooth and refined" — Gentle, polished. Premium, editorial.
-  3. "Playful and energetic" — Slightly exaggerated, delightful. Consumer, creative tools.
-  4. "Minimal and functional" — Almost invisible. Utility-focused, data-heavy.
+**Ask the user using AskUserQuestion:**
+```yaml
+AskUserQuestion:
+  question: "What's the personality of this feature?"
+  header: "Motion tone"
+  options:
+    - label: "Snappy and confident"
+      description: "Quick, decisive transitions. Enterprise, developer tools."
+    - label: "Smooth and refined"
+      description: "Gentle, polished. Premium, editorial."
+    - label: "Playful and energetic"
+      description: "Slightly exaggerated, delightful. Consumer, creative tools."
+    - label: "Minimal and functional"
+      description: "Almost invisible. Utility-focused, data-heavy."
 ```
 
 Also determine:
@@ -145,7 +153,21 @@ Present a focused plan. **Less is more.**
 | Staggered entrance | Simultaneous fade |
 ```
 
-**Ask:** "Does this animation plan feel right?"
+**Ask using AskUserQuestion:**
+```yaml
+AskUserQuestion:
+  question: "Does this animation plan feel right?"
+  header: "Animation plan"
+  options:
+    - label: "Looks good"
+      description: "Proceed with implementation"
+    - label: "Adjust"
+      description: "I have changes to suggest"
+    - label: "Too much"
+      description: "Scale it back — fewer animations"
+    - label: "Too little"
+      description: "Add more — I want more motion"
+```
 
 ---
 

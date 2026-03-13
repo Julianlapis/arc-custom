@@ -33,6 +33,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these, do not skip:
+- **`AskUserQuestion`** — REQUIRED for all user choices (Biome install options).
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -60,17 +63,20 @@ grep -q '"@biomejs/biome"' package.json 2>/dev/null
 
 **If Biome is NOT found:**
 
+```yaml
+AskUserQuestion:
+  question: "Biome not found in package.json. Arc hooks require Biome for auto-formatting and linting. How would you like to proceed?"
+  header: "Biome Required"
+  options:
+    - label: "Install Biome and continue"
+      description: "Add @biomejs/biome as a dev dependency and set up all hooks"
+    - label: "Skip formatting hooks"
+      description: "Install context monitor and git guard only, skip Biome-dependent hooks"
+    - label: "Cancel"
+      description: "Exit without installing any hooks"
 ```
-Biome not found in package.json.
 
-Arc hooks require Biome for auto-formatting and linting.
-
-1. Install Biome and continue
-2. Skip formatting hooks, install context monitor only
-3. Cancel
-```
-
-**If user picks 1:**
+**If user picks "Install Biome and continue":**
 ```bash
 # Detect package manager from lockfile
 if [ -f pnpm-lock.yaml ]; then
@@ -87,7 +93,9 @@ Then check for `biome.json` / `biome.jsonc`. If missing:
 npx @biomejs/biome init
 ```
 
-**If user picks 2:** Set `SKIP_BIOME=true`, continue to Step 3.
+**If user picks "Skip formatting hooks":** Set `SKIP_BIOME=true`, continue to Step 3.
+
+**If user picks "Cancel":** Stop. Do not install any hooks.
 
 ## Step 2: Verify Biome works
 
