@@ -23,6 +23,13 @@ website:
     position: spine
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## REQUIRED TOOLS — use these when indicated:
+- **`AskUserQuestion`** — REQUIRED for all user-facing questions. Use structured options instead of plain text.
+</tool_restrictions>
+
 # /arc:go
 
 The front door to Arc. Understands context, asks what you want to do, routes to the right workflow.
@@ -65,30 +72,61 @@ Briefly share what you found:
 
 ### Step 3: Ask What They Want to Do
 
-Present options based on context:
+Present options based on context using AskUserQuestion:
 
 **If Linear has active issues:**
-"You have [N] active issues in Linear. Want to:"
-1. Work on one of those
-2. Start something new
-3. See suggestions (/arc:suggest)
+```
+AskUserQuestion:
+  question: "You have [N] active issues in Linear. What would you like to do?"
+  header: "Active Issues Found"
+  options:
+    - label: "Work on an issue"
+      description: "Pick one of the active Linear issues to work on"
+    - label: "Start something new"
+      description: "Ignore existing issues and start fresh"
+    - label: "See suggestions"
+      description: "Run /arc:suggest for ideas on what to work on"
+```
 
 **If recent plans exist:**
-"I found a plan for [topic]. Want to:"
-1. Continue that work
-2. Start something different
+```
+AskUserQuestion:
+  question: "I found a plan for [topic]. What would you like to do?"
+  header: "Existing Plan Found"
+  options:
+    - label: "Continue that work"
+      description: "Pick up where you left off on [topic]"
+    - label: "Start something different"
+      description: "Set the existing plan aside and work on something new"
+```
 
 **If empty/minimal codebase (no framework detected):**
-"This project doesn't have a framework set up yet. Want to:"
-1. Set up a new project (Next.js, etc.) — I'll help you scaffold it
-2. Define a vision first (/arc:vision)
-3. I already know what I want to build — describe it
+```
+AskUserQuestion:
+  question: "This project doesn't have a framework set up yet. What would you like to do?"
+  header: "Empty Project"
+  options:
+    - label: "Set up a new project"
+      description: "Scaffold a framework (Next.js, etc.) and get started"
+    - label: "Define a vision first"
+      description: "Run /arc:vision to clarify project goals before building"
+    - label: "I know what I want to build"
+      description: "Describe the feature and jump straight in"
+```
 
 **If fresh codebase (has framework but no Arc artifacts):**
-"What would you like to work on?"
-- Describe a feature or change
-- Fix a bug
-- Explore what needs work (/arc:suggest)
+```
+AskUserQuestion:
+  question: "What would you like to work on?"
+  header: "Ready to Go"
+  options:
+    - label: "Build a feature"
+      description: "Describe a feature or change you want to make"
+    - label: "Fix a bug"
+      description: "Describe the bug you want to fix"
+    - label: "Explore what needs work"
+      description: "Run /arc:suggest to discover what could be improved"
+```
 
 ### Step 3.5: Scope Posture (feature work only)
 
@@ -96,10 +134,18 @@ Present options based on context:
 
 Ask one question:
 
-"How should I approach this?"
-1. **Expand** — Find the bigger product hiding inside this. Push the ambition up.
-2. **Reduce** — Find the minimum viable version. Strip everything else.
-3. **Just build what I described** — *(default if user skips or seems impatient)*
+```
+AskUserQuestion:
+  question: "How should I approach this?"
+  header: "Scope Posture"
+  options:
+    - label: "Expand"
+      description: "Find the bigger product hiding inside this. Push the ambition up."
+    - label: "Reduce"
+      description: "Find the minimum viable version. Strip everything else."
+    - label: "Just build what I described"
+      description: "Take the request as-is, no scope change. (Default if you skip this.)"
+```
 
 Pass the chosen posture as context when invoking the downstream skill:
 ```

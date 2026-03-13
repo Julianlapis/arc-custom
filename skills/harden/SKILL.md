@@ -28,6 +28,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these, do not skip:
+- **`AskUserQuestion`** — REQUIRED for all user decisions (approval to apply fixes, keep/remove choices).
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -274,7 +277,22 @@ Present findings grouped by impact:
 - Edge case handling
 - Keyboard accessibility gaps
 
-For each finding: describe the issue, show the fix with Tailwind classes, apply after approval.
+For each finding: describe the issue, show the fix with Tailwind classes, then ask for approval before applying:
+
+```yaml
+AskUserQuestion:
+  question: "Apply this fix?"
+  header: "Hardening Fix"
+  options:
+    - label: "Apply"
+      description: "Apply this fix now"
+    - label: "Skip"
+      description: "Skip this fix and move to the next finding"
+    - label: "Apply all"
+      description: "Apply this and all remaining fixes without asking"
+```
+
+If the user selects "Apply all", apply all remaining fixes without further prompts.
 
 ---
 
