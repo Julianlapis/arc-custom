@@ -36,6 +36,7 @@ arc/
 │   ├── distill/SKILL.md    # Cross-cutting: strip UI to essentials
 │   ├── animate/SKILL.md    # Cross-cutting: strategic motion addition
 │   ├── harden/SKILL.md     # Cross-cutting: production resilience
+│   ├── flow/SKILL.md       # Cross-cutting: user flow discovery & verification
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized reviewers
 │   ├── review/
@@ -88,6 +89,7 @@ CROSS-CUTTING (available anytime):
               /arc:distill    → Strip UI to essentials
               /arc:animate    → Strategic motion addition
               /arc:harden     → Production resilience (errors, overflow, i18n)
+              /arc:flow       → User flow discovery, walking, and drift detection
 ```
 
 ## Development
