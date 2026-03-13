@@ -28,6 +28,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these, do not skip:
+- **`AskUserQuestion`** — REQUIRED for all user decisions (approval to apply fixes). Never ask questions as plain text. Keep context before the question to 2-3 sentences max.
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -172,11 +175,22 @@ Present findings grouped by severity:
 - Spacing fine-tuning
 - Dark mode adjustments
 
-**For each finding:**
-1. State what's wrong
-2. Show the current Tailwind classes
-3. Show the fix (new Tailwind classes)
-4. Apply the fix after user approval
+**For each finding:** state what's wrong, show the current Tailwind classes, show the fix (new Tailwind classes), then ask for approval before applying:
+
+```yaml
+AskUserQuestion:
+  question: "Apply this fix?"
+  header: "Polish Fix"
+  options:
+    - label: "Apply"
+      description: "Apply this fix now"
+    - label: "Skip"
+      description: "Skip this fix and move to the next finding"
+    - label: "Apply all"
+      description: "Apply this and all remaining fixes without asking"
+```
+
+If the user selects "Apply all", apply all remaining fixes without further prompts.
 
 ---
 

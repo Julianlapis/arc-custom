@@ -27,6 +27,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these when indicated:
+- **`AskUserQuestion`** — REQUIRED for all user-facing questions. Use structured options instead of plain text.
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own lightweight planning process. Execute it directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -137,8 +140,14 @@ website:
 
 **If scope is large (>5 files, new patterns):**
 ```
-"This looks substantial — multiple features and new patterns.
-Would benefit from /arc:ideate for proper design. Want me to switch?"
+AskUserQuestion:
+  question: "This looks substantial — multiple features and new patterns. Would benefit from /arc:ideate for proper design."
+  header: "Scope Check"
+  options:
+    - label: "Switch to /arc:ideate"
+      description: "Start a full design process for this larger scope"
+    - label: "Continue with /arc:build"
+      description: "Keep going with lightweight planning despite the scope"
 ```
 
 **If scope is appropriate:** Proceed.
@@ -183,7 +192,17 @@ Would benefit from /arc:ideate for proper design. Want me to switch?"
 - [ ] Has existing patterns to follow? [reference]
 ```
 
-**Share with user:** "Here's my build plan. Look right?"
+**Share the plan with the user, then confirm:**
+```
+AskUserQuestion:
+  question: "Here's my build plan. Look right?"
+  header: "Confirm Build Plan"
+  options:
+    - label: "Looks good"
+      description: "Proceed with the plan as written"
+    - label: "Needs changes"
+      description: "I want to adjust the plan before you start building"
+```
 
 Wait for confirmation before proceeding.
 
@@ -373,10 +392,20 @@ git commit -m "feat([scope]): [description]"
 ```
 
 **Offer next steps:**
-1. Merge to main
-2. Create PR
-3. Add more features
-4. Done
+```
+AskUserQuestion:
+  question: "Build complete. What would you like to do next?"
+  header: "Next Steps"
+  options:
+    - label: "Merge to main"
+      description: "Merge the feature branch into main"
+    - label: "Create PR"
+      description: "Push the branch and open a pull request"
+    - label: "Add more features"
+      description: "Continue building on this branch"
+    - label: "Done"
+      description: "Nothing else needed right now"
+```
 
 <progress_append>
 After completing the build:
