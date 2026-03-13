@@ -27,6 +27,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these, do not skip:
+- **`AskUserQuestion`** — REQUIRED for all user decisions (update confirmation, Ruler offer).
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -76,19 +79,18 @@ Go to Step 4 (Offer Ruler)
 
 Existing `.ruler/` found. Ask the user:
 
+```yaml
+AskUserQuestion:
+  question: "Found existing .ruler/ in this project. Update with Arc's latest rules? This will backup current rules and overwrite with Arc's latest. You can review changes with `git diff .ruler/` after."
+  header: "Update Rules"
+  options:
+    - label: "Update rules"
+      description: "Backup current rules to .ruler.backup-TIMESTAMP/ and overwrite with Arc's latest"
+    - label: "Keep existing"
+      description: "Keep your current rules unchanged"
 ```
-Found existing .ruler/ in this project.
 
-Update with Arc's latest rules? This will:
-1. Backup current rules to .ruler.backup-TIMESTAMP/
-2. Overwrite with Arc's rules
-
-You can review changes with `git diff .ruler/` after.
-
-Update rules? (y/n)
-```
-
-**If yes:**
+**If user picks "Update rules":**
 ```bash
 # Create backup
 cp -r .ruler/ ".ruler.backup-$(date +%Y%m%d-%H%M%S)/"
@@ -107,7 +109,7 @@ Review changes with: git diff .ruler/
 
 Go to Step 4 (Offer Ruler)
 
-**If no:**
+**If user picks "Keep existing":**
 ```
 Keeping existing rules. You can manually compare with Arc's rules at:
 ${ARC_ROOT}/rules/
@@ -119,11 +121,18 @@ Done.
 
 Ask the user:
 
-```
-Want me to run `npx ruler apply` to distribute rules to other AI agents (Copilot, Cursor, etc.)?
+```yaml
+AskUserQuestion:
+  question: "Want to distribute rules to other AI agents (Copilot, Cursor, etc.) via Ruler?"
+  header: "Distribute Rules"
+  options:
+    - label: "Run ruler apply"
+      description: "Run npx ruler apply to distribute rules to other AI tools"
+    - label: "Skip"
+      description: "Keep rules in .ruler/ only, distribute later if needed"
 ```
 
-**If yes:**
+**If user picks "Run ruler apply":**
 ```bash
 npx ruler apply
 ```
@@ -139,7 +148,7 @@ Then run:
   npx ruler apply
 ```
 
-**If no:**
+**If user picks "Skip":**
 ```
 Rules are ready in .ruler/. Run `npx ruler apply` later if you want to distribute to other agents.
 ```
