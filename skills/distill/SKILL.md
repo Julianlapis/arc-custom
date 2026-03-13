@@ -28,6 +28,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these, do not skip:
+- **`AskUserQuestion`** — REQUIRED for all user decisions (core purpose, plan approval). Never ask questions as plain text. Keep context before the question to 2-3 sentences max.
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -64,13 +67,16 @@ Simplification requires judgment about what matters — it's collaborative, not 
 3. `references/design-philosophy.md` — "Less but better" principles
 </required_reading>
 
-**Ask the user:**
-```
-Question: "What is the ONE thing this component/page should accomplish?"
-Header: "Core purpose"
-Options:
-  1. "Let me explain" — User describes the core purpose
-  2. "Infer from code" — You analyze and propose the core purpose
+**Ask the user using AskUserQuestion:**
+```yaml
+AskUserQuestion:
+  question: "What is the ONE thing this component/page should accomplish?"
+  header: "Core purpose"
+  options:
+    - label: "Let me explain"
+      description: "I'll describe the core purpose"
+    - label: "Infer from code"
+      description: "You analyze and propose the core purpose"
 ```
 
 ---
@@ -138,7 +144,19 @@ Read all files for the target component/page. Look for:
 2. [Extra div required for animation transform-origin]
 ```
 
-**Ask:** "Does this distillation plan look right? Anything I should preserve?"
+**Ask using AskUserQuestion:**
+```yaml
+AskUserQuestion:
+  question: "Does this distillation plan look right? Anything I should preserve?"
+  header: "Distillation plan"
+  options:
+    - label: "Looks good"
+      description: "Proceed with simplification"
+    - label: "Adjust"
+      description: "I have changes or things to preserve"
+    - label: "Too aggressive"
+      description: "Keep more of the current structure"
+```
 
 ---
 
