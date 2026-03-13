@@ -24,6 +24,13 @@ website:
     after: go
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## REQUIRED TOOLS:
+- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every question in this skill — gathering context, validating drafts — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+</tool_restrictions>
+
 # Vision Workflow
 
 Create or review a 500-700 word vision document that captures the high-level goals and purpose of the app or codebase.
@@ -41,22 +48,76 @@ Check for recent work that might inform vision decisions.
 **Use Read tool:** `docs/vision.md`
 
 **If file exists:** Read it, then ask:
-"I found an existing vision document. Would you like to:"
-1. Review and discuss it
-2. Update it based on new direction
-3. Start fresh
+```
+AskUserQuestion:
+  question: "I found an existing vision document. What would you like to do?"
+  header: "Existing Vision"
+  options:
+    - label: "Review and discuss"
+      description: "Walk through the current vision and talk through it"
+    - label: "Update"
+      description: "Revise the vision based on a new direction"
+    - label: "Start fresh"
+      description: "Discard the current vision and write a new one"
+```
 
 **If not exists:** Proceed to Step 2.
 
 ### Step 2: Gather Context
 
-Ask one question at a time:
+Ask one question at a time. Wait for the user's response before asking the next question.
 
-1. "What is this project? (one sentence)"
-2. "Who is it for?"
-3. "What problem does it solve?"
-4. "What does success look like?"
-5. "Any constraints or non-goals?"
+**Question 1:**
+```
+AskUserQuestion:
+  question: "What is this project? (one sentence)"
+  header: "Project Identity"
+  options:
+    - label: "I'll describe it"
+      description: "Type a one-sentence description of what you're building"
+```
+
+**Question 2:**
+```
+AskUserQuestion:
+  question: "Who is it for?"
+  header: "Target Audience"
+  options:
+    - label: "I'll describe them"
+      description: "Type who the target users or audience are"
+```
+
+**Question 3:**
+```
+AskUserQuestion:
+  question: "What problem does it solve?"
+  header: "Core Problem"
+  options:
+    - label: "I'll explain"
+      description: "Type the problem this project addresses"
+```
+
+**Question 4:**
+```
+AskUserQuestion:
+  question: "What does success look like?"
+  header: "Success Criteria"
+  options:
+    - label: "I'll define it"
+      description: "Type what success means for this project"
+```
+
+**Question 5:**
+```
+AskUserQuestion:
+  question: "Any constraints or non-goals?"
+  header: "Constraints"
+  options:
+    - label: "Yes, I have some"
+      description: "Type constraints or things you're explicitly not building"
+    - label: "None right now"
+      description: "Skip this and move on to drafting"
+```
 
 ### Step 3: Draft Vision
 
@@ -86,7 +147,19 @@ Write a 500-700 word vision document covering:
 
 ### Step 4: Validate
 
-Present the draft in sections. After each: "Does this capture it?"
+Present the draft in sections. After each section, ask:
+```
+AskUserQuestion:
+  question: "Does this capture it?"
+  header: "Section Review"
+  options:
+    - label: "Yes, looks good"
+      description: "Move on to the next section"
+    - label: "Needs changes"
+      description: "I'll tell you what to adjust"
+    - label: "Start this section over"
+      description: "Rewrite this section from scratch"
+```
 
 ### Step 5: Save
 

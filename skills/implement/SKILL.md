@@ -29,6 +29,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these when specified in the process:
+- **`AskUserQuestion`** — Use at every decision point marked with `AskUserQuestion:` in the process below. Do NOT substitute with plain text questions.
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process — planning (via detail skill) and execution (via build agents). Claude's built-in plan mode would bypass this entire orchestration. Follow the phases below instead.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
@@ -171,16 +174,17 @@ The detail skill will:
 After plan is created, strongly recommend review:
 
 ```
-"Implementation plan ready.
-
-I strongly recommend reviewing the plan before building — it's much cheaper to
-catch issues now than after writing code.
-
-1. Review first (/arc:review) — recommended
-2. Skip review and start implementing"
+AskUserQuestion:
+  question: "Implementation plan ready. I strongly recommend reviewing the plan before building — it's much cheaper to catch issues now than after writing code."
+  header: "Review Before Building?"
+  options:
+    - label: "Review first"
+      description: "Run /arc:review on the plan before implementing (recommended)"
+    - label: "Skip review"
+      description: "Start implementing immediately"
 ```
 
-If review requested → invoke `/arc:review`, then return here.
+If "Review first" → invoke `/arc:review`, then return here.
 
 ---
 
@@ -505,22 +509,52 @@ If the current task is a checkpoint type (`[CHECKPOINT:VERIFY]`, `[CHECKPOINT:DE
 **For VERIFY:**
 1. Ensure verification environment is running (dev server started, etc.)
 2. Present what was built and verification steps
-3. Wait for user: "approved" or issue description
-4. If issues -> fix -> re-present checkpoint
-5. If approved -> continue to next task
+3. Ask for approval:
+```
+AskUserQuestion:
+  question: "[Summary of what was built and how to verify it]"
+  header: "Verify Implementation"
+  options:
+    - label: "Approved"
+      description: "Implementation looks correct, continue to next task"
+    - label: "Has issues"
+      description: "There are problems that need fixing before continuing"
+```
+4. If "Has issues" → ask for description, fix, then re-present checkpoint
+5. If "Approved" → continue to next task
 
 **For DECIDE:**
-1. Present options with pros/cons from the plan
-2. Wait for user selection
-3. Record decision in progress journal
-4. Continue implementation using selected option
+1. Present options with pros/cons from the plan using AskUserQuestion:
+```
+AskUserQuestion:
+  question: "[Context and trade-offs for this decision]"
+  header: "Decision Required"
+  options:
+    - label: "[Option A name]"
+      description: "[Pros/cons summary for option A]"
+    - label: "[Option B name]"
+      description: "[Pros/cons summary for option B]"
+```
+2. Record decision in progress journal
+3. Continue implementation using selected option
 
 **For ACTION:**
 1. Explain what was attempted and what blocked (auth gate, etc.)
 2. Provide exact steps for the manual action
-3. Wait for user: "done"
-4. Verify the action succeeded (e.g., `vercel whoami`)
-5. Retry the blocked operation and continue
+3. Wait for confirmation:
+```
+AskUserQuestion:
+  question: "[What manual action is needed and the exact steps to perform it]"
+  header: "Manual Action Required"
+  options:
+    - label: "Done"
+      description: "I've completed the manual action"
+    - label: "Need help"
+      description: "I need more guidance on this step"
+```
+4. If "Done" → verify the action succeeded (e.g., `vercel whoami`)
+5. If "Need help" → provide additional guidance, then re-present checkpoint
+6. Retry the blocked operation and continue
 
 See `references/checkpoint-patterns.md` for full protocol.
 
