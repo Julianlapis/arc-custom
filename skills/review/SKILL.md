@@ -1,11 +1,11 @@
 ---
 name: review
 description: |
-  Run expert review on a plan with parallel reviewer agents. Presents findings as Socratic questions.
+  Run expert review on a plan or branch diff with parallel reviewer agents. Presents findings as Socratic questions.
   Use when asked to "review the plan", "get feedback on the design", "check this approach",
-  or before implementation to validate architectural decisions.
+  "review my changes", "review the diff", or before implementation to validate architectural decisions.
 
-  Optional argument: reviewer name (e.g., `/arc:review daniel-product-engineer` to use a specific reviewer)
+  Optional argument: reviewer name (e.g., `/arc:review daniel-product-engineer`) or `--diff` to review branch changes
 license: MIT
 metadata:
   author: howells
@@ -80,8 +80,23 @@ website:
 Check for context on what led to the plan being reviewed.
 </progress_context>
 
+<scope_discipline>
+## Scope Discipline
+
+Reviewers must respect the plan's scope. This is non-negotiable:
+
+- **Do not silently argue for less work.** If you think the plan is overbuilt, raise it once in a "Scope Check" early in the review. After the user responds, commit to their decision.
+- **Do not sneak in additional scope.** Don't suggest features, enhancements, or "while you're at it" additions beyond what the plan covers.
+- **Your job is to make this plan succeed, not to lobby for a different plan.** Once scope is agreed, optimize within it — find bugs, catch edge cases, improve the architecture — but don't re-litigate what gets built.
+- **Include this principle in every reviewer prompt:** "Respect the plan's scope. Flag scope concerns once, then commit to making the plan succeed."
+</scope_discipline>
+
 <process>
-## Phase 0: Check for Specific Reviewer
+## Phase 0: Check for Specific Reviewer or Diff Mode
+
+**If `--diff` argument provided:**
+- Switch to **diff review mode** — skip Phase 1 (plan search) entirely
+- Jump to Phase 1D (Diff Review) below
 
 **If argument provided** (e.g., `daniel-product-engineer`):
 - Look for `agents/review/{argument}.md`
@@ -132,13 +147,53 @@ Check for context on what led to the plan being reviewed.
    - Ask user: "Which plan should I review?"
 
 4. **If no plans found:**
-   - "I couldn't find any plans in the conversation or in `docs/arc/plans/` (or legacy `docs/plans/`).
-   - Can you point me to a plan file, or paste the plan you'd like me to review?"
+   - Check if the current branch has changes vs main:
+     ```bash
+     git fetch origin main --quiet && git diff origin/main --stat
+     ```
+   - **If branch has changes:** Offer to review the diff instead:
+     "No plans found, but this branch has changes against main. Want me to review the diff?"
+     - If yes → switch to Phase 1D (Diff Review)
+     - If no → "Can you point me to a plan file, or paste the plan you'd like me to review?"
+   - **If no changes:** "I couldn't find any plans or branch changes to review."
 
 **Once plan located:**
 - Store the plan content
 - Note the source (conversation, file path, or user-provided)
 - Proceed to Phase 2
+
+## Phase 1D: Diff Review
+
+**This phase runs instead of plan review** when `--diff` is passed or the user opts into diff review from Phase 1.
+
+1. **Check branch state:**
+   ```bash
+   git branch --show-current
+   ```
+   If on `main` with no changes: "Nothing to review — you're on main with no changes." Stop.
+
+2. **Read the checklist:**
+   ```
+   Read: references/diff-review-checklist.md
+   ```
+
+3. **Get the diff:**
+   ```bash
+   git fetch origin main --quiet
+   git diff origin/main
+   ```
+
+4. **Run two-pass review** applying the checklist against the diff:
+   - **Pass 1 (CRITICAL):** Race conditions, trust boundaries, data safety
+   - **Pass 2 (INFORMATIONAL):** Conditional side effects, stale references, test gaps, dead code, performance
+
+5. **Present findings** using the checklist's output format.
+
+6. **If CRITICAL issues found:** For each critical issue, present as a Socratic question:
+   - "This pattern reads then writes without a transaction — what happens if two requests hit this simultaneously?"
+   - Wait for user to decide: fix now, acknowledge, or mark as false positive
+
+7. **Skip to Phase 6** (Summary and Next Steps) — diff review doesn't need the full plan review pipeline.
 
 ## Phase 2: Detect Project Type
 
@@ -365,7 +420,7 @@ Entry: `/arc:review — [Plan name] reviewed`
 </arc_log>
 
 <success_criteria>
-Review is complete when:
+**Plan review** is complete when:
 - [ ] Plan located (conversation, file, or user-provided)
 - [ ] Project type detected and reviewers selected
 - [ ] Parallel expert review completed (3 agents)
@@ -377,4 +432,13 @@ Review is complete when:
 - [ ] User chose next step (detail/implement or done)
 - [ ] Progress journal updated
 - [ ] Orphaned agents cleaned up
+
+**Diff review** is complete when:
+- [ ] Branch has changes vs main
+- [ ] Checklist loaded from references/diff-review-checklist.md
+- [ ] Full diff read before flagging anything
+- [ ] Two-pass review applied (critical then informational)
+- [ ] Findings presented (critical as Socratic questions)
+- [ ] User decided on each critical finding
+- [ ] Summary presented
 </success_criteria>

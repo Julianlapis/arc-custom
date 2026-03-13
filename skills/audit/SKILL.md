@@ -545,6 +545,32 @@ Responses: confirm (with evidence), challenge (with code citations), or reconcil
 
 **Wait for team to complete.**
 
+### Structural Diff Checklist (--diff mode only)
+
+**Skip this section if `--diff` is not active.**
+
+After all reviewer agents complete, run an additional structural pass using the diff checklist. This catches mechanical issues (race conditions, trust boundary violations, dead code) that domain-specific reviewers may not focus on.
+
+1. **Read the checklist:**
+   ```
+   Read: references/diff-review-checklist.md
+   ```
+
+2. **Get the full diff:**
+   ```bash
+   git diff origin/${base:-main}
+   ```
+
+3. **Apply the two-pass review** from the checklist against the diff:
+   - Pass 1 (CRITICAL): Race conditions, trust boundaries, data safety
+   - Pass 2 (INFORMATIONAL): Conditional side effects, stale references, test gaps, dead code, performance
+
+4. **Merge findings** into the reviewer agent results before consolidation:
+   - Checklist CRITICAL findings → treated as Critical severity
+   - Checklist INFORMATIONAL findings → treated as Medium severity
+   - Attribute these as "structural-checklist" in the flagged-by column
+   - Deduplicate against reviewer findings (if a reviewer already flagged the same file:line, keep the reviewer's finding)
+
 ## Phase 4: Consolidate Findings
 
 **Collect all agent outputs.**
