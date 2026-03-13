@@ -25,6 +25,13 @@ website:
     after: testing
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## REQUIRED TOOLS — use these when specified in the process:
+- **`AskUserQuestion`** — Use at every decision point marked with `AskUserQuestion:` in the process below. Do NOT substitute with plain text questions.
+</tool_restrictions>
+
 <progress_context>
 **Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
@@ -76,40 +83,87 @@ Report findings:
 
 ### Step 2: Scope Questions
 
-Ask the user to fill gaps detection can't cover:
+Ask the user to fill gaps detection can't cover. Ask each question one at a time:
 
-```markdown
-**Questions to scope your checklist:**
+```
+AskUserQuestion:
+  question: "Which platforms do you want to verify your site with?"
+  header: "Site Verification Platforms"
+  options:
+    - label: "Google Search Console"
+      description: "Essential for SEO monitoring and indexing"
+    - label: "Bing Webmaster Tools"
+      description: "Bing and Yahoo search visibility"
+    - label: "Pinterest"
+      description: "Enable Rich Pins and site analytics"
+    - label: "Twitter/X"
+      description: "Twitter analytics and card validation"
+    - label: "Facebook/Meta"
+      description: "Domain verification for ads and insights"
+    - label: "Yandex"
+      description: "Russian search engine visibility"
+    - label: "None of these"
+      description: "Skip site verification setup"
+```
 
-1. **Target platforms for site verification?**
-   - [ ] Google Search Console
-   - [ ] Bing Webmaster Tools
-   - [ ] Pinterest
-   - [ ] Twitter/X
-   - [ ] Facebook/Meta
-   - [ ] Yandex
-   - [ ] Other: ___
+```
+AskUserQuestion:
+  question: "What social sharing features do you need?"
+  header: "Social Sharing"
+  options:
+    - label: "OG images for all pages"
+      description: "Dynamic or static Open Graph images for every page"
+    - label: "Twitter Cards"
+      description: "Summary or large image cards for Twitter/X"
+    - label: "LinkedIn sharing"
+      description: "Optimized previews for LinkedIn posts"
+    - label: "Pinterest Rich Pins"
+      description: "Enhanced pins with metadata from your site"
+    - label: "None"
+      description: "Skip social sharing setup"
+```
 
-2. **Social sharing requirements?**
-   - [ ] Need OG images for all pages
-   - [ ] Twitter Cards (summary vs large image)
-   - [ ] LinkedIn sharing
-   - [ ] Pinterest Rich Pins
+```
+AskUserQuestion:
+  question: "Will you send email from a custom domain (e.g., hello@yourdomain.com)?"
+  header: "Email Domain"
+  options:
+    - label: "Yes, custom domain"
+      description: "Need SPF/DKIM/DMARC DNS records for deliverability"
+    - label: "No, provider domain"
+      description: "Using the email provider's default sending domain"
+    - label: "Not sending email"
+      description: "No transactional or marketing email"
+```
 
-3. **Email sending from custom domain?**
-   - [ ] Yes (need SPF/DKIM/DMARC DNS records)
-   - [ ] No (using provider's domain)
+```
+AskUserQuestion:
+  question: "What compliance requirements apply to your project?"
+  header: "Compliance"
+  options:
+    - label: "GDPR"
+      description: "Required if you have EU users — consent, data rights, DPA"
+    - label: "CCPA"
+      description: "Required for California users — opt-out, disclosure"
+    - label: "Cookie consent banner"
+      description: "Banner with accept/reject before setting non-essential cookies"
+    - label: "Accessibility (WCAG 2.1)"
+      description: "Web accessibility compliance — audit and statement"
+    - label: "None"
+      description: "No specific compliance requirements"
+```
 
-4. **Compliance requirements?**
-   - [ ] GDPR (EU users)
-   - [ ] CCPA (California)
-   - [ ] Cookie consent banner
-   - [ ] Accessibility (WCAG 2.1)
-
-5. **Launch type?**
-   - [ ] Soft launch (limited audience)
-   - [ ] Public launch (SEO, marketing)
-   - [ ] Migration (redirects needed)
+```
+AskUserQuestion:
+  question: "What type of launch is this?"
+  header: "Launch Type"
+  options:
+    - label: "Soft launch"
+      description: "Limited audience, no SEO push, testing in production"
+    - label: "Public launch"
+      description: "Full SEO, marketing, and social sharing"
+    - label: "Migration"
+      description: "Replacing an existing site — redirects and DNS cutover needed"
 ```
 
 ### Step 3: Generate Tailored Checklist
@@ -515,7 +569,24 @@ grep -ri "github\|javascript\|typescript\|nextjs\|nodejs" --include="*.tsx" --in
 - [ ] Product descriptions match (homepage, meta, social)
 - [ ] CTA button text consistent ("Get Started" vs "Start Now" vs "Sign Up")
 
-**Ask user:** "What is the exact casing for your product name? (e.g., 'MyApp', 'myApp', 'MYAPP')"
+**Ask user for product name casing:**
+
+```
+AskUserQuestion:
+  question: "What is the exact casing for your product name? This will be used to find and fix inconsistencies across the codebase."
+  header: "Brand Name Casing"
+  options:
+    - label: "PascalCase (e.g., MyApp)"
+      description: "Each word capitalized, no spaces"
+    - label: "camelCase (e.g., myApp)"
+      description: "First word lowercase, rest capitalized"
+    - label: "ALL CAPS (e.g., MYAPP)"
+      description: "Every letter uppercase"
+    - label: "lowercase (e.g., myapp)"
+      description: "Every letter lowercase"
+    - label: "Custom casing"
+      description: "Something else — I'll type it out"
+```
 
 Then grep the codebase for variations and fix any inconsistencies.
 
@@ -555,8 +626,24 @@ Then grep the codebase for variations and fix any inconsistencies.
 
 For each unchecked item relevant to this project:
 1. Explain what's needed and why
-2. Offer to implement or provide step-by-step instructions
-3. Provide code snippets where helpful
+2. Ask the user how to proceed:
+
+```
+AskUserQuestion:
+  question: "[Explanation of what's missing and why it matters]"
+  header: "Gap: [Item Name]"
+  options:
+    - label: "Implement it"
+      description: "I'll build this now"
+    - label: "Show me steps"
+      description: "Provide step-by-step instructions for me to do manually"
+    - label: "Skip for now"
+      description: "Defer this to a follow-up task"
+```
+
+3. If "Implement it" → write the code and verify
+4. If "Show me steps" → provide detailed instructions with code snippets
+5. If "Skip for now" → add to tasklist as follow-up work
 
 ### Step 5: Final Verification
 
