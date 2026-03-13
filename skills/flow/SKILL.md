@@ -59,25 +59,90 @@ Parse the first argument to determine mode:
 | `discover` | Discover | Scan codebase, generate flow artifacts |
 | `walk` | Walk | Execute stored flows in browser |
 | `check` | Check | Detect drift via file checksums |
-| *(none)* | Status | Show flow summary |
+| *(none)* | Smart routing | Assess state, ask what to do |
 
 ---
 
-## Mode: Status (no arguments)
+## Mode: Smart Routing (no arguments)
 
-1. Check if `docs/arc/flows/` exists
-2. If not:
-   ```
-   "No flows discovered yet. Run /arc:flow discover to scan your codebase."
-   ```
-3. If yes, read all `.md` files in the directory and count by status:
-   ```
-   User Flows: X total
-   - Passed: Y
-   - Failed: Z
-   - Stale: W
-   - Discovered (not yet walked): V
-   ```
+When invoked without a mode argument, assess the current state and route intelligently.
+
+### Step 1: Check State
+
+Check if `docs/arc/flows/` exists and read any `.md` files. Count flows by status.
+
+### Step 2: Route Based on State
+
+**No flows exist** (directory missing or empty):
+```
+"No user flows discovered yet. I'll scan your codebase for routes and generate walkable flows."
+```
+→ Proceed directly to Discover mode. No question needed — discovery is the only useful action.
+
+**Flows exist, some are stale:**
+Show a brief status summary, then ask:
+```
+AskUserQuestion:
+  question: "[X] flows found ([Y] stale). What would you like to do?"
+  header: "User Flows"
+  options:
+    - label: "Check for drift"
+      description: "[Y] flows may be out of date — check which source files changed"
+    - label: "Walk all flows"
+      description: "Execute all [X] flows in Chrome to verify they work"
+    - label: "Re-discover"
+      description: "Regenerate stale flows from current code"
+    - label: "Discover new routes"
+      description: "Scan for routes not yet covered by flows"
+```
+
+**Flows exist, none stale, some not yet walked:**
+```
+AskUserQuestion:
+  question: "[X] flows found ([V] not yet walked). What would you like to do?"
+  header: "User Flows"
+  options:
+    - label: "Walk all flows"
+      description: "Execute flows in Chrome to verify they work"
+    - label: "Walk unwalked only"
+      description: "Just the [V] flows that haven't been tested yet"
+    - label: "Check for drift"
+      description: "See if source files have changed since discovery"
+    - label: "Discover new routes"
+      description: "Scan for routes not yet covered"
+```
+
+**Flows exist, all current and passed:**
+```
+AskUserQuestion:
+  question: "All [X] flows are current and passing. What would you like to do?"
+  header: "User Flows"
+  options:
+    - label: "Walk all flows"
+      description: "Re-run all flows to verify they still pass"
+    - label: "Check for drift"
+      description: "See if any source files have changed"
+    - label: "Discover new routes"
+      description: "Scan for routes not yet covered"
+```
+
+**Flows exist, some failed:**
+```
+AskUserQuestion:
+  question: "[X] flows found ([Z] failing). What would you like to do?"
+  header: "User Flows"
+  options:
+    - label: "Walk failed flows"
+      description: "Re-run the [Z] failing flows to see if they pass now"
+    - label: "Walk all flows"
+      description: "Execute all [X] flows"
+    - label: "Check for drift"
+      description: "See if source files have changed"
+    - label: "Re-discover failed"
+      description: "Regenerate the failing flows from current code"
+```
+
+After the user selects, proceed to the corresponding mode.
 
 ---
 
