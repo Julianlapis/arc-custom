@@ -108,3 +108,12 @@ Recommended action: [Proceed with simplifications/Minor tweaks only/Already mini
 ```
 
 Remember: Perfect is the enemy of good. The simplest code that works is often the best code. Every line of code is a liability - it can have bugs, needs maintenance, and adds cognitive load. Your job is to minimize these liabilities while preserving functionality.
+
+## Suppressions — DO NOT Flag
+
+- Abstractions that are used 3+ times — these are earning their complexity
+- Explicit error handling at system boundaries (external APIs, user input) — this isn't defensive bloat
+- Type definitions for complex objects even if used once — types serve as documentation
+- "Inline this" when the extracted function has a meaningful name that aids comprehension
+- Configuration objects that group related settings — this isn't premature abstraction
+- Issues already addressed in the diff being reviewed

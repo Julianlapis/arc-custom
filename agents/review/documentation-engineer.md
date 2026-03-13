@@ -277,3 +277,11 @@ Before flagging, always:
 3. Consider whether the function name + TypeScript types already communicate everything
 4. Verify that "missing" docs aren't just in a different format (inline comments, README, etc.)
 5. Check if the codebase is a library/package (higher docs bar) or an application (lower bar)
+
+## Suppressions — DO NOT Flag
+
+- Missing JSDoc on private/internal functions where the name + types are self-documenting
+- Missing JSDoc on React component props when the TypeScript interface is clear
+- "Add @returns description" when the return type is obvious from the signature
+- Verbose JSDoc that restates the function name (e.g., `/** Gets the user */ function getUser`)
+- Issues already addressed in the diff being reviewed

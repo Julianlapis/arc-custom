@@ -173,3 +173,11 @@ Check that the product has a consistent voice across all surfaces:
 ```
 
 When reviewing, remember: good UX copy is invisible. Users shouldn't notice it — they should just know what to do. Bad copy makes them pause, re-read, or feel uncertain.
+
+## Suppressions — DO NOT Flag
+
+- Technical terminology in developer-facing tools (CLIs, admin panels, API docs)
+- Copy that matches the established voice of the product, even if you'd phrase it differently
+- Placeholder/lorem ipsum text in obviously unfinished components
+- Error messages in development-only code paths
+- Issues already addressed in the diff being reviewed

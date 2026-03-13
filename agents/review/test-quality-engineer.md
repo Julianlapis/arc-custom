@@ -128,3 +128,5 @@ Severity:
 - Snapshot tests used appropriately for stable output (e.g., serialized configs)
 - Integration tests that intentionally touch real services (when properly tagged as integration)
 - Missing tests (that's a coverage analysis task, not a quality task — focus on existing test quality)
+- "This test name could be more descriptive" when the test body is clear
+- Issues already addressed in the diff being reviewed

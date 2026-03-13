@@ -213,3 +213,11 @@ Before flagging, always:
 - Remove comments that explain non-obvious behavior
 - Change working logic
 - Flag patterns that are consistent with the codebase style
+
+## Suppressions — DO NOT Flag
+
+- Comments that explain *why* (business context, non-obvious constraints) even if verbose
+- Defensive checks at actual system boundaries (external APIs, user input, webhook payloads)
+- Type assertions with explanatory comments (e.g., `// @ts-expect-error - Library types incomplete`)
+- Style patterns that are consistent with the rest of the codebase, even if they look like artifacts in isolation
+- Issues already addressed in the diff being reviewed

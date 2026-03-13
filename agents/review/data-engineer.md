@@ -145,3 +145,11 @@ Always prioritize:
 5. Performance impact on production databases
 
 Remember: In production, data integrity issues can be catastrophic. Be thorough, be cautious, and always consider the worst-case scenario.
+
+## Suppressions — DO NOT Flag
+
+- Missing transactions in serverless/edge environments where transactions aren't supported — suggest idempotency patterns instead
+- `varchar(255)` as a general string column if consistent with the existing schema
+- "Add an index" on columns only queried in admin/reporting contexts with low traffic
+- Schema type choices that match the existing codebase conventions even if not ideal (e.g., `int` IDs in a codebase that already uses `int` everywhere)
+- Issues already addressed in the diff being reviewed

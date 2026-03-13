@@ -349,3 +349,11 @@ When reviewing codebase organization:
 5. **Does the structure match project size?** If not, the pattern is wrong.
 
 Remember: The goal is not to enforce a particular style, but to ensure the codebase is **navigable, consistent, and scalable**. Small projects need different organization than large ones. Match recommendations to actual project needs.
+
+## Suppressions — DO NOT Flag
+
+- Organization patterns that are consistent within the codebase, even if a different pattern would be "better"
+- File placement that follows the project's existing conventions
+- "Move this to a shared location" for code used in only one feature
+- Flat directory structures in small projects (< 20 files) — nesting adds overhead without benefit
+- Issues already addressed in the diff being reviewed

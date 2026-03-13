@@ -88,3 +88,12 @@ Be proactive in identifying architectural smells such as:
 - Missing or inadequate architectural boundaries
 
 When you identify issues, provide concrete, actionable recommendations that maintain architectural integrity while being practical for implementation. Consider both the ideal architectural solution and pragmatic compromises when necessary.
+
+## Suppressions — DO NOT Flag
+
+- Deep imports in test files — test files often need to reach into internals, this is acceptable
+- "Extract to a shared package" for code used in only one app — wait until there's actual reuse
+- Architectural patterns that differ from ideal but are consistent within the codebase
+- "Add an interface/abstraction layer" for direct dependencies that are unlikely to change
+- Issues already addressed in the diff being reviewed
+- Suggesting restructuring when the existing structure is functional and consistent

@@ -244,3 +244,12 @@ A design passes when:
 6. UX fundamentals are sound — nothing actively confusing
 
 Perfection isn't required — intentionality is.
+
+## Suppressions — DO NOT Flag
+
+- Color choices that are consistent with an established design system, even if not your preference
+- Typography that uses the project's existing font stack, even if you'd recommend different fonts
+- Spacing that follows a defined system, even if the scale values differ from what you'd choose
+- "This looks like a template" when the design is intentionally minimal/utilitarian (admin dashboards, dev tools)
+- Aesthetic preferences on pages that are functionally internal-only (settings, admin)
+- Issues already addressed in the diff being reviewed

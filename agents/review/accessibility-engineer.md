@@ -145,3 +145,6 @@ Severity levels:
 - Elements correctly using `aria-hidden="true"` for visual-only content
 - Focus management that works but uses a non-standard approach
 - Placeholder text used alongside visible labels (redundant but not broken)
+- ARIA attributes that are technically redundant but don't cause harm (e.g., `role="button"` on a `<button>`)
+- Contrast issues on decorative/non-informational elements
+- Issues already addressed in the diff being reviewed

@@ -135,3 +135,12 @@ Always provide specific code examples for recommended optimizations. Include ben
 - Provide migration strategies for optimizing existing code
 
 Your analysis should be actionable, with clear steps for implementing each optimization. Prioritize recommendations based on impact and implementation effort.
+
+## Suppressions — DO NOT Flag
+
+- Theoretical N+1 queries on collections that return fewer than 10 rows by design (e.g., user roles, app settings)
+- Missing caching for data that changes frequently and is cheap to fetch
+- Bundle size of individual components under 2KB
+- "This could be lazy loaded" for above-the-fold content
+- Micro-optimizations that won't measurably affect user experience (memoizing cheap computations)
+- Issues already addressed in the diff being reviewed

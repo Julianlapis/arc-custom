@@ -172,3 +172,4 @@ When both agents flag the same element (e.g., missing alt text), frame the SEO f
 - Missing structured data on pages where it's not applicable (contact, terms, privacy)
 - Alt text style preferences (as long as it's descriptive)
 - Title/description wording quality (presence and uniqueness only — the /arc:seo skill handles quality)
+- Issues already addressed in the diff being reviewed

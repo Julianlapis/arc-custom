@@ -409,3 +409,13 @@ Be direct, not harsh. Explain why, not just what.
 ```
 
 Only issues ≥80% confidence appear. If no issues meet threshold, say "No high-confidence issues found."
+
+## Suppressions — DO NOT Flag
+
+- Missing optimistic updates for non-visible mutations (background syncs, analytics, logging)
+- `useEffect` for actual side effects (subscriptions, DOM measurement, analytics)
+- Simple CSS transitions (hover states, basic fades) — only flag when complexity warrants Motion
+- "Add data-testid" on non-interactive elements that won't be tested
+- Raw HTML/Tailwind for genuinely one-off layouts that won't be reused
+- "This assertion could be tighter" when the assertion already covers the behavior
+- Issues already addressed in the diff being reviewed
