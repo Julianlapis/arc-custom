@@ -23,6 +23,13 @@ website:
     position: utility
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## REQUIRED TOOLS:
+- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every follow-up question — exploring names, checking TLDs, choosing strategies — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+</tool_restrictions>
+
 # Naming Workflow
 
 Generate and validate project/product name candidates using the naming agent.
@@ -57,12 +64,21 @@ The agent returns a structured report. Present it to the user as-is.
 
 ### Step 3: Explore Further
 
-If the user likes a name, offer:
-- "Want me to check more TLDs for [name]?"
-- "Want me to generate more names in the [strategy] style?"
-
-If the user wants to buy:
-- "You can register [domain] via `vercel domains buy [domain]`"
+If the user likes a name, ask:
+```
+AskUserQuestion:
+  question: "What would you like to do with [name]?"
+  header: "Next Steps"
+  options:
+    - label: "Check more TLDs"
+      description: "Search additional TLDs for [name] availability"
+    - label: "Generate similar names"
+      description: "Create more names using the [strategy] style"
+    - label: "Register domain"
+      description: "Get the command to register [best available domain]"
+    - label: "Done"
+      description: "I've picked my name"
+```
 
 ## Usage
 
