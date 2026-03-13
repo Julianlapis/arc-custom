@@ -24,6 +24,13 @@ website:
     position: utility
 ---
 
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## REQUIRED TOOLS:
+- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every question — plan disposition, commit confirmation — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+</tool_restrictions>
+
 # Tidy Workflow
 
 Clean up the docs/arc/plans/ folder by analyzing which plans have been implemented. Archive what's done, keep what matters.
@@ -87,6 +94,8 @@ git log --after="YYYY-MM-DD" --oneline -- [file-paths]
 
 ### Step 3: Present to User (One at a Time)
 
+Present the plan summary as context, then ask:
+
 ```markdown
 ## Plan: [Topic] ([YYYY-MM-DD])
 
@@ -99,14 +108,21 @@ git log --after="YYYY-MM-DD" --oneline -- [file-paths]
 - [file] modified after plan date
 - [N] commits after plan date
 - OR: No activity found on planned files
+```
 
----
-
-What should I do?
-1. Archive (move to docs/arc/archive/)
-2. Delete (remove file and assets)
-3. Keep (leave in place)
-4. Skip (decide later)
+```
+AskUserQuestion:
+  question: "What should I do with this plan?"
+  header: "[Topic]"
+  options:
+    - label: "Archive"
+      description: "Move to docs/arc/archive/"
+    - label: "Delete"
+      description: "Remove the file and associated assets"
+    - label: "Keep"
+      description: "Leave in place"
+    - label: "Skip"
+      description: "Decide later"
 ```
 
 Wait for user response before proceeding to next plan.
@@ -148,7 +164,14 @@ Your plans folder is now tidy!
 
 **Offer to commit:**
 ```
-Want me to commit these changes?
+AskUserQuestion:
+  question: "Want me to commit these changes?"
+  header: "Commit"
+  options:
+    - label: "Yes, commit"
+      description: "Stage and commit the tidy changes"
+    - label: "No, not yet"
+      description: "Leave changes uncommitted"
 ```
 
 If yes:

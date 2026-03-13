@@ -33,6 +33,9 @@ website:
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
+## REQUIRED TOOLS — use these when indicated:
+- **`AskUserQuestion`** — REQUIRED for all user-facing questions. Use structured options instead of plain text.
+
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured testing workflow. Execute it directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
@@ -95,14 +98,20 @@ If exists, read for MUST/SHOULD/NEVER constraints.
 
 ### Step 1: Determine Intent
 
-"What would you like to do?"
-
-| Intent | Action |
-|--------|--------|
-| Create test strategy | Full test plan → dispatch agents |
-| Run tests | Execute with appropriate runner |
-| Fix failing tests | Dispatch debugger or e2e-runner |
-| Review coverage | Analyze gaps and recommend |
+```
+AskUserQuestion:
+  question: "What would you like to do?"
+  header: "Testing Intent"
+  options:
+    - label: "Create test strategy"
+      description: "Full test plan across unit, integration, and E2E — then dispatch agents"
+    - label: "Run tests"
+      description: "Execute existing tests with the appropriate runner"
+    - label: "Fix failing tests"
+      description: "Dispatch debugger or e2e-runner to fix broken tests"
+    - label: "Review coverage"
+      description: "Analyze gaps in test coverage and recommend improvements"
+```
 
 ### Step 2: Understand What's Being Tested
 
