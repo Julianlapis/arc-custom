@@ -90,6 +90,26 @@ Present options based on context:
 - Fix a bug
 - Explore what needs work (/arc:suggest)
 
+### Step 3.5: Scope Posture (feature work only)
+
+**Skip this step** if the user's intent is a quick fix, continuing an existing plan, running tests, shipping, or reviewing code. Only ask when routing to `/arc:ideate` or `/arc:build` for a new feature.
+
+Ask one question:
+
+"How should I approach this?"
+1. **Expand** — Find the bigger product hiding inside this. Push the ambition up.
+2. **Reduce** — Find the minimum viable version. Strip everything else.
+3. **Just build what I described** — *(default if user skips or seems impatient)*
+
+Pass the chosen posture as context when invoking the downstream skill:
+```
+Skill arc:[chosen]: "[user's description] [Posture: expand|reduce|as-described]"
+```
+
+**Rules:**
+- If the user doesn't engage with the question or says something like "just do it", default to **as-described** and move on. Don't slow them down.
+- Never ask this for small changes, bug fixes, or continuation of existing work.
+
 ### Step 4: Route to Workflow
 
 Based on their answer:
@@ -97,7 +117,7 @@ Based on their answer:
 | Intent | Route to |
 |--------|----------|
 | "Set up a new project" | /arc:build with scaffolding context |
-| "I want to build [feature]" | /arc:ideate |
+| "I want to build [feature]" | /arc:ideate (with posture from Step 3.5) |
 | "Quick fix/small change" | /arc:build |
 | "Continue [existing plan]" | /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
