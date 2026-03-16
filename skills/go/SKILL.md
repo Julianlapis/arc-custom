@@ -63,6 +63,16 @@ If `mcp__linear__*` tools exist, check for active issues.
 head -50 docs/arc/progress.md 2>/dev/null
 ```
 
+**Check repo staleness:**
+```bash
+# Last commit date (ISO format)
+git log -1 --format=%ci 2>/dev/null
+# Stale branches (merged or no commits in 30+ days)
+git branch --list --format='%(refname:short) %(committerdate:relative)' | head -10
+```
+
+A repo is considered **stale** if the last commit was more than 2 weeks ago.
+
 ### Step 2: Present Context
 
 Briefly share what you found:
@@ -72,7 +82,21 @@ Briefly share what you found:
 
 ### Step 3: Ask What They Want to Do
 
-Present options based on context using AskUserQuestion:
+Present options based on context using AskUserQuestion. Evaluate conditions in order — use the **first** that matches.
+
+**If repo is stale (last commit > 2 weeks ago):**
+```
+AskUserQuestion:
+  question: "This repo hasn't been touched in a while (last commit: [date]). What would you like to do?"
+  header: "Returning to [project name]"
+  options:
+    - label: "Run a health check"
+      description: "Check if it builds, review outdated deps, and surface what needs attention"
+    - label: "I know what I want to work on"
+      description: "Skip the checkup and jump straight in"
+    - label: "See suggestions"
+      description: "Run /arc:suggest for ideas on what to work on"
+```
 
 **If Linear has active issues:**
 ```
@@ -162,6 +186,7 @@ Based on their answer:
 
 | Intent | Route to |
 |--------|----------|
+| "Run a health check" | Health check flow (see below) |
 | "Set up a new project" | /arc:build with scaffolding context |
 | "I want to build [feature]" | /arc:ideate (with posture from Step 3.5) |
 | "Quick fix/small change" | /arc:build |
@@ -177,14 +202,55 @@ Based on their answer:
 Skill arc:[chosen]: "[user's description]"
 ```
 
+#### Health Check Flow
+
+When the user picks "Run a health check", run these sequentially — stop and report if anything critical fails:
+
+1. **Verify the build** — `Skill arc:verify: "quick"`
+   - Does it build? Typecheck? Lint? Tests pass?
+   - If critical failures, report them and ask if the user wants to fix before continuing.
+
+2. **Check dependencies** — `Skill arc:deps`
+   - Outdated packages, known CVEs, major version bumps available.
+   - Present the deps report but don't auto-apply upgrades.
+
+3. **Surface what needs attention** — `Skill arc:suggest`
+   - TODOs, technical debt, stale plans, vision gaps.
+   - Gives the user a prioritized list of what to tackle.
+
+After all three, summarize:
+
+```markdown
+## Health Check Summary
+
+**Build:** [passing / failing — brief detail if failing]
+**Dependencies:** [N outdated, N with CVEs — or "all current"]
+**What needs attention:** [top 2-3 items from suggest]
+```
+
+Then ask:
+
+```
+AskUserQuestion:
+  question: "What would you like to tackle?"
+  header: "Health Check Complete"
+  options:
+    - label: "[Top suggestion from results]"
+      description: "[Brief rationale]"
+    - label: "[Second suggestion]"
+      description: "[Brief rationale]"
+    - label: "Something else"
+      description: "Tell me what you want to work on"
+```
+
 ## What /arc:go is NOT
 
 - Not a replacement for specific commands — it routes TO them
 - Not for when you already know what command to use
-- Not a status dashboard (use /arc:suggest for that)
 
 ## Interop
 
 - Routes to all other /arc:* commands
 - Reads Linear issues (if MCP available), /arc:vision, progress for context
 - Uses /arc:suggest when user is unsure
+- Chains /arc:verify → /arc:deps → /arc:suggest for stale repo health checks
