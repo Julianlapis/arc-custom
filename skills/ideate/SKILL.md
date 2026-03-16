@@ -47,8 +47,22 @@ If you catch yourself writing "Here's what I'd suggest..." or "Let me propose...
 - `EnterPlanMode` — BANNED. This conversation IS the design process. There is nothing to plan.
 - `ExitPlanMode` — BANNED. You are never in plan mode.
 
-**REQUIRED:**
-- `AskUserQuestion` — ALWAYS use this for questions. Never ask questions as plain text. Every question — clarifying scope, choosing approaches, validating design — MUST use `AskUserQuestion`. This enforces one question at a time and prevents walls of text. Keep any context before the question to 2-3 sentences max.
+**REQUIRED — AskUserQuestion (CRITICAL):**
+
+Every single question you ask the user MUST use the `AskUserQuestion` tool. This is not optional. This is not a suggestion. This is the single most important rule in this skill.
+
+**What this means concretely:**
+- NEVER write a question as plain text in your response
+- NEVER write a list of questions ("1. What about X? 2. How should Y work? 3. What if Z?")
+- NEVER write a paragraph ending with "?" unless it's inside AskUserQuestion
+- ONE question per message — if you need to ask 3 things, that's 3 separate turns
+- Keep context before the question to 2-3 sentences MAX — then call AskUserQuestion
+
+**Why this matters:** Plain-text question lists dump cognitive load on the user. They get a wall of 5 questions and either answer superficially or ignore half. AskUserQuestion forces ONE focused question with structured options, creating a real back-and-forth conversation.
+
+**Self-check before sending any message:** Does your response contain a "?" outside of AskUserQuestion? If yes, rewrite it. Move the question into AskUserQuestion with concrete options.
+
+**The one exception:** Rhetorical transitions like "Ready to look at approaches?" are fine as text when immediately followed by an AskUserQuestion call in the same message. But questions seeking information or decisions MUST use the tool.
 </tool_restrictions>
 
 <behavioral_mode>

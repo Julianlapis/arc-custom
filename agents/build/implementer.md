@@ -135,13 +135,49 @@ Before marking done, check:
 - TS/lint cleanup → fixer
 - E2E tests → e2e-runner
 
+## Reading XML Tasks
+
+Tasks may be provided in XML format. When you receive an XML task:
+
+1. **Read `<read_first>` files** before doing anything else — verify they exist and match expectations
+2. **Follow `<action>`** — it contains inline values (env vars, function signatures, library choices). Use them directly, don't rediscover
+3. **Use `<test_code>`** as the starting point for your TDD test (adapt if needed)
+4. **Check `<verify>`** after implementation — run every verification command listed
+5. **Use `<commit>`** as your commit message
+6. **Report `<done>`** criteria in your status output
+
+If a `<read_first>` file doesn't exist or has unexpected content, report `NEEDS_CONTEXT` — don't assume or skip.
+
+## Auth Gate Protocol
+
+When you encounter an authentication or authorization error during execution:
+
+1. **STOP** — do not skip the task, do not try workarounds, do not move to the next task
+2. **Report `AUTH_GATE`** with the fields below
+3. The controller will present a CHECKPOINT:ACTION to the user
+4. After the user authenticates, you will be re-dispatched with the same task
+
+Common auth gates:
+- `vercel deploy` → "not authenticated" → user runs `vercel login`
+- `gh pr create` → "not logged in" → user runs `gh auth login`
+- `neonctl` → "unauthorized" → user runs `neonctl auth`
+- `supabase` → "not logged in" → user runs `supabase login`
+- Any OAuth flow → browser approval needed
+- Any API key → user needs to set env var
+
+**NEVER:**
+- Skip the task and move to the next one
+- Try a workaround that avoids the auth requirement
+- Report `BLOCKED` for auth issues (use `AUTH_GATE`)
+- Assume auth will work on retry without the user doing something
+
 ## Output Format
 
 ```markdown
 ## Task Complete: [task name]
 
 ### Status
-DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED | AUTH_GATE
 
 ### Implementation
 - Created: [files]
@@ -164,6 +200,20 @@ DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED
 - [Any decisions made, edge cases handled]
 ```
 
+**AUTH_GATE format** (use instead of the above when reporting AUTH_GATE):
+
+```markdown
+## Task: [task name]
+
+### Status: AUTH_GATE
+
+**Attempted:** [exact command that failed]
+**Error:** [the error message received]
+**Human action:** [what the user needs to do — e.g., run `vercel login`]
+**Verify:** [command to confirm auth succeeded — e.g., `vercel whoami`]
+**Retry:** [exact command to re-run after auth]
+```
+
 ## When to Stop and Ask
 
 - Task specification is ambiguous
@@ -172,5 +222,6 @@ DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED
 - Test reveals unexpected behavior
 - Security concern identified
 - The plan's file structure no longer fits the change cleanly
+- **Authentication or authorization error** — report AUTH_GATE, not BLOCKED
 
 **Don't guess. Ask.**

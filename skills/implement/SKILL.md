@@ -225,12 +225,19 @@ If tests fail before you start → stop and ask user.
 **Read implementation plan** (created in Phase 0 or pre-existing):
 `docs/arc/plans/YYYY-MM-DD-<topic>-implementation.md` (fallback: `docs/plans/...`)
 
+**Parse XML tasks:**
+The plan contains `<task>` elements with structured fields. For each task:
+- Extract `id`, `depends`, `type` attributes
+- Note `<read_first>` files, `<action>` instructions, `<verify>` criteria
+- Build a dependency graph from `depends` attributes
+
 **Create TodoWrite tasks:**
-One todo per task in the plan. Mark first as `in_progress`.
+One todo per `<task>` in the plan. Mark first as `in_progress`.
 
 **Before implementation starts, confirm the plan includes:**
 - a file structure section
-- focused task boundaries
+- XML tasks with all required elements (`<name>`, `<files>`, `<read_first>`, `<action>`, `<verify>`, `<done>`, `<commit>`)
+- `<verify>` criteria that are concrete (no "works correctly", "looks good")
 - checkpoint tasks only where human judgment is required
 
 If any of those are missing, fix the plan before dispatching build agents.
@@ -274,14 +281,38 @@ Build agents must report one of:
 - `DONE_WITH_CONCERNS`
 - `NEEDS_CONTEXT`
 - `BLOCKED`
+- `AUTH_GATE`
 
 Controller behavior:
 - `DONE` → continue to review
 - `DONE_WITH_CONCERNS` → read concerns, then decide whether to clarify or review
 - `NEEDS_CONTEXT` → provide the missing context and re-dispatch
 - `BLOCKED` → split the task, upgrade model capability, or escalate to the user
+- `AUTH_GATE` → present dynamic CHECKPOINT:ACTION, verify auth, re-dispatch same task
 
 Never silently retry a blocked task without changing the conditions.
+
+### AUTH_GATE Handling
+
+When an agent reports `AUTH_GATE`, the task is NOT skipped. Follow this protocol:
+
+1. **Read the agent's report** — it includes: attempted command, error, human action, verify command, retry command
+2. **Present CHECKPOINT:ACTION to user:**
+```
+AskUserQuestion:
+  question: "The agent tried `[attempted command]` but hit an auth wall: [error]. Please [human action], then confirm."
+  header: "Authentication Required"
+  options:
+    - label: "Done"
+      description: "I've completed the authentication step"
+    - label: "Need help"
+      description: "I need more guidance"
+```
+3. **After user confirms "Done"** — run the verify command (e.g., `vercel whoami`) to confirm auth succeeded
+4. **If verify passes** — re-dispatch the SAME task to the agent (not the next task)
+5. **If verify fails** — tell the user what went wrong, ask them to try again
+
+**CRITICAL:** Never skip a task because of an auth error. Never move to the next task. The whole point of AUTH_GATE is that the task is viable — it just needs a human to unlock a door.
 
 ## Phase 3: Execute in Batches
 
@@ -453,10 +484,12 @@ After implementation, spawn spec-reviewer:
 ```
 Task [spec-reviewer] model: sonnet: "Verify implementation matches spec.
 
-Task spec: [paste task specification]
+Task spec:
+[paste full <task> XML element]
+
 Files created/modified: [list]
 
-Check: nothing missing, nothing extra."
+Check against <verify> and <done> criteria: nothing missing, nothing extra."
 ```
 
 If spec-reviewer finds issues → fix with implementer/fixer → re-run spec-reviewer.

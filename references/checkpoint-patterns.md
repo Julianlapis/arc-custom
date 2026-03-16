@@ -68,7 +68,7 @@ Task 3: [CHECKPOINT:DECIDE] Select authentication provider
 
 ### 3. `checkpoint:action` (~1% of checkpoints)
 
-An action has NO CLI/API alternative and requires human-only interaction. These are rare and usually emerge dynamically during execution rather than being pre-planned.
+An action has NO CLI/API alternative and requires human-only interaction. These are rare and **always emerge dynamically during execution** — never pre-planned.
 
 **Use for:**
 - Email verification clicks
@@ -76,12 +76,37 @@ An action has NO CLI/API alternative and requires human-only interaction. These 
 - OAuth browser approval flows
 - Credit card 3DS challenges
 - Physical device pairing
+- **CLI tool authentication** (vercel login, gh auth login, neonctl auth, supabase login, etc.)
 
 **Rules:**
 - NEVER use for things the agent can automate
-- Created when the agent hits an auth gate, not pre-planned
+- NEVER pre-plan these in the implementation plan — they're created dynamically when an agent reports `AUTH_GATE`
 - Provide exact steps for the manual action
 - Agent verifies the action succeeded before continuing
+- After verification, the SAME task is re-dispatched — the task is NOT skipped
+
+**Auth Gate Flow:**
+```
+Agent attempts: vercel deploy
+         ↓
+Agent receives: "Error: not authenticated"
+         ↓
+Agent reports: AUTH_GATE (not BLOCKED)
+         ↓
+Controller creates: dynamic CHECKPOINT:ACTION
+         ↓
+User runs: vercel login
+         ↓
+Controller verifies: vercel whoami → success
+         ↓
+Controller re-dispatches: same task to agent
+```
+
+**CRITICAL:** The difference between AUTH_GATE and BLOCKED:
+- `AUTH_GATE` = "the task works, a human just needs to unlock a door" → retry after auth
+- `BLOCKED` = "the task itself can't be done this way" → change the approach
+
+If an agent skips a task because of an auth error, that's a bug in the agent. Auth errors should always produce AUTH_GATE, never BLOCKED, and AUTH_GATE always retries.
 
 **Example:**
 ```
@@ -167,3 +192,5 @@ Do not checkpoint for things verifiable programmatically:
 | Checkpoint for code review | Agent has code-reviewer | Use code-reviewer agent, checkpoint only for subjective UI |
 | Pre-planning action checkpoints | Can't predict auth gates | Create action checkpoints dynamically when blocked |
 | Checkpoint without setup | Human has to set up context | Agent prepares everything, human only judges |
+| Skipping task on auth error | Task is viable, just needs auth | Report AUTH_GATE, user authenticates, retry same task |
+| Reporting BLOCKED for auth errors | BLOCKED means "change approach" | AUTH_GATE means "unlock door, then retry same thing" |

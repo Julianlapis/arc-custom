@@ -133,60 +133,83 @@ Task general-purpose model: haiku: "Gather documentation and best practices for
 
 ## Step 3: Break Down Into Tasks
 
-**Each task = one TDD cycle (2-5 minutes):**
+**Each task = one TDD cycle (2-5 minutes), written as XML:**
 
+Tasks are executable prompts, not documentation. A fresh-context agent should be able to execute any task from the XML alone. See `references/task-granularity.md` for the full XML schema.
+
+```xml
+<task id="1" depends="" type="auto">
+  <name>Create user authentication types</name>
+  <files>
+    <create>src/types/auth.ts</create>
+    <test>src/types/auth.test.ts</test>
+  </files>
+  <read_first>
+    src/types/user.ts
+  </read_first>
+  <action>
+    Define LoginCredentials, AuthSession, and AuthError types.
+    Use zod schemas for runtime validation.
+    Import User type from src/types/user.ts.
+  </action>
+  <test_code>
+    // exact test code
+  </test_code>
+  <verify>
+    pnpm vitest run src/types/auth.test.ts — all pass
+    pnpm tsc --noEmit — no type errors
+  </verify>
+  <done>Auth types exported, zod schemas validate, tests pass</done>
+  <commit>feat(auth): add authentication types with zod validation</commit>
+</task>
 ```
-Task N: [Descriptive Name]
 
-Files:
-- Create: `exact/path/to/file.tsx`
-- Modify: `exact/path/to/existing.tsx:42-58`
-- Test: `exact/path/to/file.test.tsx`
+**Required elements per task:** `<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`. See `references/task-granularity.md` for details.
 
-Step 1: Write failing test
-[exact test code]
-
-Step 2: Run test, verify it fails
-[exact command with expected output]
-
-Step 3: Implement minimal code
-[exact implementation code]
-
-Step 4: Run test, verify it passes
-[exact command with expected output]
-
-Step 5: Commit
-[exact commit command with message]
-```
+**Key rules for task content:**
+- `<action>` must contain inline values (env vars, function signatures, library choices with rationale) — never "look it up"
+- `<verify>` must be concrete commands or observable states — never "works correctly" or "looks good"
+- `<read_first>` lists files the agent must verify before acting — prevents assumptions about file state
 
 ### Checkpoint Tasks
 
-When a task requires human judgment (visual verification, decisions, manual actions), mark it as a checkpoint:
+When a task requires human judgment, use the appropriate `type` attribute:
 
-```
-Task N: [CHECKPOINT:VERIFY] Verify dashboard layout
-  After: Tasks 1-3 (agent starts dev server automatically)
+```xml
+<task id="5" depends="1,2,3,4" type="checkpoint:verify">
+  <name>Verify dashboard layout</name>
+  <action>
+    Agent starts dev server automatically before presenting checkpoint.
 
-  Verify at http://localhost:3000/dashboard:
-  1. Desktop (>1024px): Sidebar visible, content fills remaining
-  2. Tablet (768px): Sidebar collapses
-  3. Mobile (375px): Single column layout
+    Verify at http://localhost:3000/dashboard:
+    1. Desktop (>1024px): Sidebar visible, content fills remaining
+    2. Tablet (768px): Sidebar collapses
+    3. Mobile (375px): Single column layout
+  </action>
+  <verify>User approves or describes issues</verify>
+  <done>Dashboard layout approved at all breakpoints</done>
+</task>
 
-  -> "approved" or describe issues
+<task id="3" depends="" type="checkpoint:decide">
+  <name>Select authentication provider</name>
+  <action>
+    Options:
+    1. Clerk — Best DX, pre-built UI, paid after 10k MAU
+    2. NextAuth — Free, self-hosted, maximum control
+    3. Supabase Auth — Built-in with our DB
 
-Task N: [CHECKPOINT:DECIDE] Select authentication provider
-  Options:
-  1. Clerk -- Best DX, pre-built UI, paid after 10k MAU
-  2. NextAuth -- Free, self-hosted, maximum control
-  3. Supabase Auth -- Built-in with our DB
-
-  -> Select: clerk, nextauth, or supabase
+    Recommendation: Clerk (fastest to ship)
+  </action>
+  <verify>User selects provider</verify>
+  <done>Auth provider selected, decision recorded</done>
+</task>
 ```
 
 **Rules:**
 - Automate everything possible before a checkpoint (start servers, deploy, etc.)
-- Never ask user to run CLI commands -- agent does it
+- Never ask user to run CLI commands — agent does it
 - Max 1 checkpoint per logical milestone
+- `checkpoint:action` tasks are created DYNAMICALLY during execution (auth gates), not pre-planned
 - See `references/checkpoint-patterns.md`
 
 **Task ordering:**
@@ -237,41 +260,53 @@ pnpm jest src/path/to/file.test.tsx -t "test name"
 
 ## Step 5: Include UI References
 
-For each UI task, include all relevant visual + aesthetic references:
+For each UI task, embed aesthetic direction and references directly in the `<action>`:
 
-```
-Task N: Create ProductCard Component
+```xml
+<task id="7" depends="5,6" type="auto">
+  <name>Create ProductCard component</name>
+  <files>
+    <create>src/components/product-card.tsx</create>
+    <test>src/components/product-card.test.tsx</test>
+  </files>
+  <read_first>
+    src/components/ui/card.tsx
+    src/lib/utils.ts
+  </read_first>
+  <action>
+    Aesthetic Direction (from design doc):
+    - Tone: luxury/refined
+    - Memorable: hover lift with shadow bloom
+    - Typography: GT Sectra display + IBM Plex Sans body
+    - Color: warm neutrals, gold accent
+    - Motion: subtle hover states, no page transitions
 
-Aesthetic Direction (from design doc):
-- Tone: [e.g., "luxury/refined"]
-- Memorable: [e.g., "hover lift with shadow bloom"]
-- Typography: [e.g., "GT Sectra display + IBM Plex Sans body"]
-- Color: [e.g., "warm neutrals, gold accent"]
-- Motion: [e.g., "subtle hover states, no page transitions"]
+    Figma: https://figma.com/design/xxx/yyy?node-id=123-456
+    Screenshot: docs/arc/specs/assets/YYYY-MM-DD-topic/figma-123-456.png
+    Fetch fresh context: mcp__figma__get_design_context fileKey="xxx" nodeId="123:456"
 
-Figma Reference:
-- URL: https://figma.com/design/xxx/yyy?node-id=123-456
-- Screenshot: docs/arc/specs/assets/YYYY-MM-DD-topic/figma-123-456.png
-- To fetch fresh context during implementation:
-  mcp__figma__get_design_context: fileKey="xxx", nodeId="123:456"
+    ASCII Wireframe:
+    ┌─────────────────┐
+    │   [image]       │
+    ├─────────────────┤
+    │ Product Name    │
+    │ $99.00          │
+    │ [Add to Cart]   │  ← hover lift + shadow bloom
+    └─────────────────┘
 
-ASCII Wireframe (from design):
-┌─────────────────┐
-│   [image]       │
-├─────────────────┤
-│ Product Name    │
-│ $99.00          │
-│ [Add to Cart]   │  ← hover lift + shadow bloom
-└─────────────────┘
-
-Implementation Notes:
-- AVOID: Roboto/Arial/system-ui, purple gradients, generic shadows
-- ENSURE: The hover effect is the memorable moment
-
-Files:
-- Create: `src/components/product-card.tsx`
-- Test: `src/components/product-card.test.tsx`
-...
+    AVOID: Roboto/Arial/system-ui, purple gradients, generic shadows
+    ENSURE: The hover effect is the memorable moment
+  </action>
+  <test_code>
+    // component rendering and interaction tests
+  </test_code>
+  <verify>
+    pnpm vitest run src/components/product-card.test.tsx — all pass
+    Visual: hover effect produces distinct shadow bloom, not generic box-shadow
+  </verify>
+  <done>ProductCard renders with luxury aesthetic, hover lift works, tests pass</done>
+  <commit>feat(ui): add ProductCard with hover shadow bloom</commit>
+</task>
 ```
 
 **Why all three (aesthetic + Figma + ASCII):**
@@ -322,11 +357,13 @@ Plan is ready. Tell the user the plan is saved and offer next steps as plain tex
 Implementation plan is complete when:
 - [ ] Test framework detected
 - [ ] Design document loaded
-- [ ] Tasks broken into TDD cycles (2-5 min each)
-- [ ] Each task has exact file paths
-- [ ] Each task has test code + implementation code
-- [ ] Each task has exact test commands
-- [ ] ASCII UI references included for UI tasks
+- [ ] Tasks written as XML with all required elements (`<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`)
+- [ ] Each task has exact file paths in `<files>`
+- [ ] Each `<action>` contains inline values (no "look it up" references)
+- [ ] Each `<verify>` has concrete, observable criteria (no "works correctly")
+- [ ] Each `<read_first>` lists files the agent must check before acting
+- [ ] UI tasks include aesthetic direction, wireframes, and Figma refs in `<action>`
+- [ ] Plan-document-reviewer passes all 7 validation dimensions
 - [ ] Plan committed to git
 </success_criteria>
 

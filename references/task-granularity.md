@@ -1,60 +1,104 @@
 <overview>
 Each task is one TDD cycle: 2-5 minutes of focused work. Small enough to complete confidently, large enough to be meaningful.
+
+Tasks are **executable prompts, not documentation**. A fresh-context agent with zero prior knowledge should be able to execute a task from its XML alone.
 </overview>
 
 <task_structure>
-**Every task follows this template:**
+**Every task uses this XML structure:**
 
-```markdown
-### Task N: [Descriptive Name]
+```xml
+<task id="1" depends="" type="auto">
+  <name>Create user authentication types</name>
+  <files>
+    <create>src/types/auth.ts</create>
+    <test>src/types/auth.test.ts</test>
+  </files>
+  <read_first>
+    src/lib/db.ts
+    src/types/user.ts
+  </read_first>
+  <action>
+    Define LoginCredentials, AuthSession, and AuthError types.
+    LoginCredentials: { email: string; password: string }
+    AuthSession: { userId: string; token: string; expiresAt: Date }
+    AuthError: { code: "INVALID_CREDENTIALS" | "EXPIRED_SESSION" | "RATE_LIMITED"; message: string }
 
-**Files:**
-- Create: `exact/path/to/file.tsx`
-- Modify: `exact/path/to/existing.tsx:42-58`
-- Test: `exact/path/to/file.test.tsx`
+    Export all types. Use zod schemas for runtime validation.
+    Import User type from src/types/user.ts.
+  </action>
+  <test_code>
+    import { describe, it, expect } from "vitest";
+    import { LoginCredentialsSchema } from "./auth";
 
-**Step 1: Write failing test**
+    describe("LoginCredentialsSchema", () => {
+      it("validates correct credentials", () => {
+        const result = LoginCredentialsSchema.safeParse({
+          email: "test@example.com",
+          password: "securepass123",
+        });
+        expect(result.success).toBe(true);
+      });
 
-```typescript
-// exact test code
+      it("rejects invalid email", () => {
+        const result = LoginCredentialsSchema.safeParse({
+          email: "not-an-email",
+          password: "securepass123",
+        });
+        expect(result.success).toBe(false);
+      });
+    });
+  </test_code>
+  <verify>
+    pnpm vitest run src/types/auth.test.ts — all pass
+    pnpm tsc --noEmit — no type errors
+  </verify>
+  <done>Auth types exported, zod schemas validate at runtime, tests pass</done>
+  <commit>feat(auth): add authentication types with zod validation</commit>
+</task>
 ```
 
-**Step 2: Run test, verify it fails**
+### Required XML elements
 
-```bash
-pnpm vitest run src/path/to/file.test.tsx -t "test name"
-```
+| Element | Required | Purpose |
+|---------|----------|---------|
+| `<name>` | Yes | Descriptive task name |
+| `<files>` | Yes | `<create>`, `<modify>`, and/or `<test>` children |
+| `<read_first>` | Yes* | Files to verify before acting. *Can be empty for pure-creation tasks |
+| `<action>` | Yes | What to do — with **inline values** (env vars, signatures, library choices) |
+| `<test_code>` | Yes** | Exact test code. **Omit only for checkpoint tasks |
+| `<verify>` | Yes | Concrete, observable acceptance criteria — commands to run, states to check |
+| `<done>` | Yes | Grep-verifiable completion marker |
+| `<commit>` | Yes | Exact commit message |
 
-Expected: FAIL with "[specific error message]"
+### Task attributes
 
-**Step 3: Implement minimal code**
+| Attribute | Values | Purpose |
+|-----------|--------|---------|
+| `id` | Integer | Unique task identifier |
+| `depends` | Comma-separated IDs | Tasks that must complete first (empty = no dependencies) |
+| `type` | `auto`, `checkpoint:verify`, `checkpoint:decide`, `checkpoint:action` | Execution type |
 
-```typescript
-// exact implementation code
-```
+### Key principles for task content
 
-**Step 4: TypeScript + Lint**
+**`<read_first>` — verify before acting:**
+- List every file the agent needs to read before implementing
+- The agent MUST check these files exist and match expectations
+- If a file doesn't exist or has unexpected content → `NEEDS_CONTEXT`, don't assume
 
-```bash
-pnpm tsc --noEmit
-pnpm biome check --write .
-```
+**`<action>` — self-contained with inline values:**
+- Include exact env var names, function signatures, library choices with rationale
+- Never write "look up the config" or "check the existing implementation" — put the value inline
+- If a choice was made during design (e.g., "use jose not jsonwebtoken"), state it and why
 
-**Step 5: Run test, verify it passes**
+**`<verify>` — concrete and observable:**
+- Every criterion must be a command that produces output or a state that can be checked
+- Bad: "works correctly", "looks good", "as expected"
+- Good: `curl -X POST localhost:3000/api/auth returns 200`, `pnpm vitest run path/file.test.ts — all pass`
 
-```bash
-pnpm vitest run src/path/to/file.test.tsx -t "test name"
-```
-
-Expected: PASS
-
-**Step 6: Commit**
-
-```bash
-git add src/path/
-git commit -m "feat(scope): add specific feature"
-```
-```
+**`<done>` — grep-verifiable:**
+- Should be checkable without running the code
+- Describes the observable outcome, not the process
 </task_structure>
 
 <granularity_examples>
