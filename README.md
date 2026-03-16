@@ -61,11 +61,21 @@ when they clearly apply.
 
 ## Install
 
-### Claude Code
+### Claude Code (recommended)
 
 ```
 claude plugins install arc@howells
 ```
+
+Installs the full plugin: skills, agents, hooks, commands, references, and disciplines. This is the complete Arc experience — skills can dispatch specialized subagents, use worktrees, track tasks, and chain workflows together.
+
+### Any agent (via skills.sh)
+
+```bash
+npx skills add howells/arc
+```
+
+Installs skill prompts to Claude Code, Codex, Cursor, Gemini CLI, Windsurf, Cline, and [40+ agents](https://github.com/vercel-labs/skills#supported-agents). This only copies `SKILL.md` files — you get the skill instructions but not the supporting agents, hooks, or orchestration that power the full workflow.
 
 ### Codex
 
