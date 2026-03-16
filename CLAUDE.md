@@ -8,6 +8,7 @@ The full arc from idea to shipped code. This plugin provides a skills-based work
 arc/
 ├── .claude-plugin/
 │   └── plugin.json         # Plugin metadata
+├── commands/               # Slash command routers (invoke skills)
 ├── skills/                  # Each skill = one /arc:* command
 │   ├── go/SKILL.md         # 1. Entry point
 │   ├── using-arc/SKILL.md  # Bootstrap control plane
@@ -18,9 +19,15 @@ arc/
 │   ├── implement/SKILL.md  # 6. Execute: plan + TDD implementation
 │   ├── design/SKILL.md     # 6. Execute: distinctive UI
 │   ├── build/SKILL.md      # 6. Execute: quick builds
+│   ├── ai/SKILL.md         # 6. Execute: AI SDK patterns
 │   ├── testing/SKILL.md    # 7. Test: strategy & execution
+│   ├── verify/SKILL.md     # 7. Test: build + typecheck + lint runner
 │   ├── letsgo/SKILL.md     # 8. Ship: production readiness
 │   ├── legal/SKILL.md      # 8. Ship: privacy policy, ToS
+│   ├── polish/SKILL.md     # Refine: pre-ship visual refinement
+│   ├── distill/SKILL.md    # Refine: strip UI to essentials
+│   ├── animate/SKILL.md    # Refine: strategic motion addition
+│   ├── harden/SKILL.md     # Refine: production resilience
 │   ├── naming/SKILL.md     # Cross-cutting: project naming
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
 │   ├── seo/SKILL.md        # Cross-cutting: SEO audit
@@ -32,16 +39,13 @@ arc/
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
 │   ├── hooks/SKILL.md      # Cross-cutting: auto-format + context hooks
-│   ├── polish/SKILL.md     # Cross-cutting: pre-ship visual refinement
-│   ├── distill/SKILL.md    # Cross-cutting: strip UI to essentials
-│   ├── animate/SKILL.md    # Cross-cutting: strategic motion addition
-│   ├── harden/SKILL.md     # Cross-cutting: production resilience
 │   ├── flow/SKILL.md       # Cross-cutting: user flow discovery & verification
+│   ├── prune-agents/SKILL.md # Utility: kill orphaned subagents
 │   └── progress/SKILL.md   # internal (progress journal)
-├── agents/                  # Specialized reviewers
+├── agents/                  # Specialized subagents
+│   ├── build/
 │   ├── review/
 │   ├── research/
-│   ├── design/
 │   └── workflow/
 ├── hooks/                   # Claude Code hooks (statusline, context monitor)
 ├── disciplines/             # Implementation methodologies
@@ -64,7 +68,9 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 5. EXECUTE    /arc:implement  → Plan + TDD implementation
               /arc:design     → Create distinctive UI
               /arc:build      → Quick builds for smaller scope
+              /arc:ai         → AI SDK patterns and guidance
 6. TEST       /arc:testing    → Test strategy and execution
+              /arc:verify     → Run build, typecheck, lint, and tests
 7. REFINE     /arc:polish     → Pre-ship visual refinement
               /arc:distill    → Strip UI to essentials
               /arc:animate    → Add purposeful motion
@@ -84,12 +90,8 @@ CROSS-CUTTING (available anytime):
               /arc:rules      → Apply coding standards
               /arc:deps       → Dependency audit with batch upgrades
               /arc:hooks      → Auto-format, lint, and context monitor hooks
-              /arc:ai         → AI SDK 6 patterns and guidance
-              /arc:polish     → Pre-ship visual refinement pass
-              /arc:distill    → Strip UI to essentials
-              /arc:animate    → Strategic motion addition
-              /arc:harden     → Production resilience (errors, overflow, i18n)
               /arc:flow       → User flow discovery, walking, and drift detection
+              /arc:prune-agents → Kill orphaned subagent processes
 ```
 
 ## Development
