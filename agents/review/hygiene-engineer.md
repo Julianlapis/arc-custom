@@ -148,7 +148,65 @@ Compare new code to surrounding code:
 | Imports | Organization, aliases, default vs named |
 | Formatting | Spacing, line breaks, bracket style |
 
-### 6. Unnecessary Abstractions
+### 6. Silent Fallbacks & Bug-Hiding Defaults
+
+This is the most damaging LLM artifact pattern. Code that "always works" by silently degrading instead of surfacing bugs. These hide real problems behind defensive fallbacks that make debugging nearly impossible.
+
+**Flag — fallback values hiding failures:**
+```typescript
+// Returns empty array instead of crashing when API shape changes
+const users = response.data?.users ?? [];
+
+// Catches everything and returns a default — bug in loadConfig is now invisible
+try {
+  const config = await loadConfig();
+} catch {
+  return DEFAULT_CONFIG;
+}
+
+// Optional chaining through values that should never be null at this point
+const title = post?.metadata?.title ?? "Untitled";
+```
+
+**Flag — try/catch around trusted internal code:**
+```typescript
+// formatUserName is internal — if it throws, that's a bug to fix, not hide
+try {
+  const result = formatUserName(user);
+} catch {
+  return "Unknown User";
+}
+```
+
+**Flag — defensive returns that mask broken logic:**
+```typescript
+// If items is undefined here, the bug is in the caller — don't hide it
+function calculateTotal(items?: CartItem[]) {
+  if (!items || items.length === 0) return 0; // Is this genuinely optional or bug-hiding?
+  // ...
+}
+```
+
+**Legitimate fallbacks (ignore):**
+```typescript
+// System boundary — external API can return anything
+const users = apiResponse.data?.users ?? [];
+
+// Documented optionality — user profile picture is genuinely optional
+const avatar = user.avatarUrl ?? DEFAULT_AVATAR;
+
+// Feature flag / progressive enhancement
+const newFeature = flags.enableNewCheckout ?? false;
+```
+
+**The test:** Ask "If I remove this fallback and the code crashes, is that a bug or expected behavior?" If it's a bug, the fallback is hiding it. If it's expected (genuinely optional data, system boundary), the fallback is correct.
+
+**Severity guidance:**
+- Fallbacks hiding failures in **data mutation paths** (checkout, payments, writes) → High
+- Fallbacks hiding failures in **data display paths** (rendering, formatting) → Medium
+- Fallbacks on genuinely optional UI elements (avatar, subtitle) → ignore
+
+### 7. Unnecessary Abstractions
 
 **Flag:**
 ```typescript
@@ -192,6 +250,7 @@ Minor style inconsistencies.
 Found [N] files with code artifacts.
 - Unnecessary comments: [X]
 - Defensive checks in trusted codepaths: [Y]
+- Silent fallbacks hiding bugs: [A]
 - Type escapes: [Z]
 - Style inconsistencies: [W]
 

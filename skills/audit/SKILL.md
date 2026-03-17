@@ -100,10 +100,10 @@ Pass relevant rules to each reviewer agent.
 | security-engineer | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS), react-correctness.md (security section) |
 | architecture-engineer | stack.md, turborepo.md |
 | lee-nextjs-engineer | nextjs.md, api.md, react-correctness.md (Next.js-specific rules) |
-| senior-engineer | code-style.md, typescript.md, react.md, ai-sdk.md (if AI SDK) |
+| senior-engineer | code-style.md, typescript.md, react.md, error-handling.md, ai-sdk.md (if AI SDK) |
 | data-engineer | testing.md, api.md |
 | organization-engineer | turborepo.md, code-style.md |
-| hygiene-engineer | stack.md, code-style.md, ai-sdk.md (if AI SDK) |
+| hygiene-engineer | stack.md, code-style.md, error-handling.md, ai-sdk.md (if AI SDK) |
 | documentation-engineer | typescript.md, code-style.md |
 | ux-writing-engineer | code-style.md |
 | daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK), react-performance.md, react-correctness.md |

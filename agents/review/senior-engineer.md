@@ -120,9 +120,13 @@ Consider extracting to a new file/module when you see multiple of these:
 - Duplication looks harmless today but becomes inconsistency tomorrow — extract shared patterns early
 - Exception: Don't create a premature abstraction for code that only *looks* similar but serves genuinely different purposes
 
-**Fail Fast**
+**Fail Fast — No Silent Fallbacks**
 - Errors should surface immediately, not hide behind fallbacks
 - Silent failures create debugging nightmares
+- Flag `?? []`, `?? null`, `|| 'default'` patterns that mask broken data flow
+- Flag try/catch blocks around trusted internal code that return default values instead of propagating
+- Flag optional chaining (`?.`) through values that should never be null at that point in the code
+- The question: "If I remove this fallback and the code crashes, is that a bug?" If yes, the fallback is hiding a bug.
 
 **Performance Awareness**
 - Consider "What happens at scale?" — but don't optimize prematurely
