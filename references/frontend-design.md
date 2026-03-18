@@ -33,25 +33,43 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 
 ## Typography
 
-**Never use:** Roboto, Arial, system-ui defaults, Instrument Serif (becoming AI slop)
+### UI Fonts vs Brand Fonts
 
-**Recommended fonts:**
+**UI fonts** (Inter, Geist, DM Sans, system-ui) are designed to disappear — they serve the content without drawing attention. These are excellent for body text, form labels, navigation, and data. Don't overthink UI font selection.
+
+**Brand fonts** (display, headlines, wordmarks, hero text) must carry personality. This is where generic choices kill distinctiveness. A brand font should say something about who you are.
+
+### Never Use for Brand Identity
+
+Roboto, Arial, system-ui defaults, Instrument Serif, Playfair Display, Poppins, Montserrat
+
+These are either default/generic or so overused in AI-generated work that they signal "no one made a choice here." Instrument Serif in particular has become the default AI serif — avoid it entirely.
+
+### Recommended Fonts
+
+**For UI (body text, navigation, forms):**
 
 | Category | Options |
 |----------|---------|
-| Sans | Inter, DM Sans, Sohne, Scto Grotesk, Instrument Sans, Space Grotesk, Bricolage Grotesque, Outfit |
+| Sans | Inter, Geist, DM Sans, Instrument Sans, Outfit |
+| Mono | Geist Mono, IBM Plex Mono, JetBrains Mono, Fira Code |
+
+**For brand identity (display, headlines, hero text, wordmarks):**
+
+| Category | Options |
+|----------|---------|
+| Sans (distinctive) | Sohne, Scto Grotesk, Space Grotesk, Bricolage Grotesque, General Sans, Rethink Sans |
 | Serif | Newsreader, Fraunces, Cormorant, Crimson Pro, Libre Baskerville |
 | Display | Novarese, Editorial New |
 | Condensed | Items (when you need a condensed font) |
-| Mono | Geist Mono, IBM Plex Mono, JetBrains Mono, Fira Code |
 
-**Commercial foundries (require license):**
-- **Grilli Type**: GT America, GT Walsheim, GT Sectra, GT Flexa
-- **Commercial Type**: Graphik, Canela, Dala Floda, Austin
-- **Klim**: Söhne, Untitled Sans, Tiempos
-- **Colophon**: Apercu, Reader, Basis Grotesque
-- **Dinamo**: ABC Favorit, ABC Diatype, ABC Arizona
-- **Sharp Type**: Sharp Grotesk, Sharp Sans
+**Commercial foundries (require license, worth it for serious brand work):**
+- **Klim**: Söhne, Untitled Sans, Tiempos — refined, quiet authority
+- **Grilli Type**: GT America, GT Walsheim, GT Sectra, GT Flexa — versatile, well-engineered
+- **Commercial Type**: Graphik, Canela, Dala Floda, Austin — editorial, distinctive
+- **Colophon**: Apercu, Reader, Basis Grotesque — contemporary, characterful
+- **Dinamo**: ABC Favorit, ABC Diatype, ABC Arizona — bold, modern
+- **Sharp Type**: Sharp Grotesk, Sharp Sans — precise, confident
 
 **If user has a fonts folder**, check it for available licensed fonts before selecting. Pair a display font with a refined body font.
 

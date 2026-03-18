@@ -478,7 +478,9 @@ Consult `references/typography-opentype.md` for:
 - Font loading strategy decisions
 - OpenType features that add typographic polish
 
-**The brand typography principle:** A font that's excellent for UI (Inter, system-ui) may be wrong for brand identity. UI fonts are designed to disappear — brand fonts are designed to express. When a user picks a UI font for their brand identity, present alternatives from the same category in `frontend-design.md` that carry more personality. Don't block the choice — explain the distinction and offer options.
+**The brand typography principle:** `frontend-design.md` separates UI fonts from brand fonts. UI fonts (Inter, Geist, DM Sans) are designed to disappear — they're excellent for body text and navigation. Brand fonts (display, headlines, wordmarks) must express personality. When a user picks a UI font for their brand identity, present alternatives from the "brand identity" table in `frontend-design.md`. Don't block the choice — explain the distinction and offer refined alternatives.
+
+**Hard rule:** Never recommend Instrument Serif, Playfair Display, Poppins, or Montserrat for brand identity. These are either overused in AI-generated work or too generic to carry a brand.
 
 ### Color Taste
 
