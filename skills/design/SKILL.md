@@ -100,11 +100,13 @@ designer (reviews for AI slop)
 - `rules/interface/app-ui.md` — If designing app UI (dashboards, settings, data views)
 </required_reading>
 
-### Persistent Design Context
+### Brand System & Design Context
 
-**Check for `docs/design-context.md` using the Read tool.**
+**Check for `docs/brand-system.md` first, then `docs/design-context.md`.**
 
-If it exists, load it — this file contains project-wide aesthetic decisions (brand colors, chosen fonts, spacing scale, tone) that all design work should inherit. **Do not re-ask questions that are already answered in design-context.md.** Skip to Phase 1 for any established decisions.
+If `brand-system.md` exists (created by `/arc:brand`), load it — this is the canonical source for palette, typography, tone, and visual character. **Do not re-ask brand questions.** Inherit all identity decisions and focus this skill on feature-level UI design.
+
+If only `design-context.md` exists, load it — this file contains project-wide aesthetic decisions (brand colors, chosen fonts, spacing scale, tone) that all design work should inherit. **Do not re-ask questions that are already answered in design-context.md.** Skip to Phase 1 for any established decisions.
 
 If it does NOT exist, offer to create one:
 

@@ -13,6 +13,7 @@ arc/
 │   ├── go/SKILL.md         # 1. Entry point
 │   ├── using-arc/SKILL.md  # Bootstrap control plane
 │   ├── vision/SKILL.md     # 2. Foundation: project goals
+│   ├── brand/SKILL.md      # 3. Brand: visual identity system
 │   ├── ideate/SKILL.md     # 3. Design: idea → validated design
 │   ├── detail/SKILL.md     # 4. Plan (internal, invoked by implement)
 │   ├── review/SKILL.md     # 5. Review: validate before execution
@@ -65,7 +66,8 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 0. HELP       /arc:help       → Context-aware guide to all commands
 1. ENTRY      /arc:go         → Routes to right workflow based on context
 2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
-3. DESIGN     /arc:ideate     → Turn idea into validated design doc
+3. DESIGN     /arc:brand      → Visual identity system (palette, type, assets)
+              /arc:ideate     → Turn idea into validated design doc
 4. REVIEW     /arc:review     → Expert validation before execution
 5. EXECUTE    /arc:implement  → Plan + TDD implementation
               /arc:design     → Create distinctive UI
