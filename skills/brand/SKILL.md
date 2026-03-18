@@ -88,11 +88,19 @@ AskUserQuestion:
       description: "Audit the current brand for issues or inconsistencies"
 ```
 
-**Check for fonts in the project:**
+**Check for fonts in the project (local fonts are premium — prefer them over Google Fonts):**
 ```bash
-ls public/fonts/ src/fonts/ fonts/ 2>/dev/null | head -20
-grep -r "font-family\|@font-face\|next/font\|google.*font" src/ app/ --include='*.{ts,tsx,css}' -l 2>/dev/null | head -5
+# Check all common font locations — local fonts are a major asset
+ls public/fonts/ src/fonts/ fonts/ app/fonts/ 2>/dev/null | head -30
+# Also check nested font dirs (projects often organize by family)
+find . -path '*/fonts/*' -name '*.otf' -o -name '*.ttf' -o -name '*.woff2' 2>/dev/null | head -30
+# Check what's already loaded
+grep -r "font-family\|@font-face\|next/font\|localFont\|google.*font" src/ app/ --include='*.{ts,tsx,css}' -l 2>/dev/null | head -10
 ```
+
+If the project has local font files from premium foundries (Klim, Commercial Type, Grilli, etc.),
+these are a significant brand asset. **Use them in the 5 directions** rather than defaulting to
+Google Fonts. Document which fonts are available so you can reference them in the comparison page.
 
 ---
 
@@ -223,25 +231,51 @@ The 5 directions MUST vary across these axes:
 
 ### Generate Mood Images
 
-For each direction, run motif:
+For each direction, run motif to generate **atmospheric mood images** — NOT logos or marks.
+Mood images should evoke the *feeling* of the direction (a greenhouse, a letterpress studio, a material palette)
+without attempting to render wordmarks, monograms, or brand names. AI-generated text in logos is
+unusable and wastes the user's time.
+
 ```bash
-motif "[detailed prompt for direction mood]" --landscape
+# GOOD: atmospheric, no text
+motif "warm greenhouse interior, morning light through glass, terracotta pots, fern fronds, editorial photography" --landscape
+
+# BAD: attempts a logo — will produce garbled text
+motif "Acme Corp logo, botanical leaf mark, clean vector" --square
 ```
 
-### Present to User
+For each direction, run motif:
+```bash
+motif "[atmospheric scene evoking this direction's mood — NO brand names, NO text, NO logos]" --landscape
+```
 
-**If the project has Next.js or Vite:**
+### Present to User — COMPARISON PAGE IS MANDATORY
 
-Generate a comparison page that renders all 5 directions with:
-- Actual Google Fonts loaded via `<link>` tags
-- Color swatches rendered as divs
-- Type specimens at headline, body, and caption scales
-- The mood image for each direction
-- A clear "Pick this one" interaction
+<important>
+**You MUST build a live comparison page.** Do NOT present directions as markdown tables in the
+conversation. The user cannot evaluate typography and color from text descriptions — they need to
+SEE real fonts rendered at real sizes with real colors in the browser.
+</important>
 
-Create this as a temporary page (e.g., `app/brand-explore/page.tsx` or `brand-explore.html`).
+**If the project has Next.js or Vite (check for this — most projects do):**
 
-**Fallback:** Present in conversation with the mood images and detailed descriptions.
+Generate a comparison page at `app/brand-explore/page.tsx` (Next.js) or `brand-explore.html` (Vite/static). This page MUST:
+
+1. **Load actual project fonts** — check `app/fonts/`, `public/fonts/`, `src/fonts/` for local font files first.
+   Use `next/font/local` or `@font-face` to load them. Only fall back to Google Fonts if the project
+   has no local fonts. Premium local fonts (Canela, Schnyder, Lyon Display, etc.) are far more
+   distinctive than Google Fonts — use them.
+2. **Render color swatches** as filled divs with hex/oklch labels
+3. **Render type specimens** at three scales: display headline, body paragraph, and small caption/label.
+   Use the actual font proposed for each direction, not a placeholder.
+4. **Include the mood image** for each direction (from motif)
+5. **Show a mini component preview** — at minimum a button and a card in each direction's colors/type
+6. **Be self-contained** — all styles inline or in a `<style>` block, no external dependencies beyond fonts
+
+Tell the user to open the page in the browser before asking them to pick.
+
+**Fallback (no framework):** Present directions as an HTML file the user can open directly, or use
+Chrome MCP to render specimens and screenshot them. Markdown tables in conversation are a LAST resort.
 
 ```yaml
 AskUserQuestion:
@@ -338,28 +372,46 @@ which motif 2>/dev/null
 
 ### If motif is available:
 
+<important>
+**AI image generation CANNOT produce usable logos or wordmarks.** Generated text is garbled,
+letterforms are inconsistent, and the results look amateur. Do NOT attempt to generate logos,
+wordmarks, or monograms with motif.
+
+Instead, use motif for **atmospheric and textural assets** where AI excels:
+</important>
+
 ```bash
-# Logo/wordmark
-motif "[brand name] wordmark logo, [visual style], [brand colors], clean vector style, white background" --square
+# OG image — atmospheric, NO text
+motif "[brand mood scene], [brand colors], editorial photography, atmospheric" --og
 
-# Roundel/avatar
-motif "[brand mark/symbol], [visual style], [brand colors], minimal, works at small sizes" --square
+# Hero/mood image — NO text, NO logos
+motif "[brand world scene], [brand colors], [visual texture]" --landscape
 
-# OG image template
-motif "[brand mood], [brand colors], atmospheric, typographic, editorial" --og
-
-# Hero/mood image
-motif "[brand world description], [brand colors], [visual style]" --landscape
+# Texture/pattern — abstract, useful as backgrounds
+motif "abstract [brand texture], [brand colors], subtle, seamless feel" --square
 ```
+
+**For logos, wordmarks, and monograms** — build these as SVG components in code or as
+hand-crafted SVG files. Code-built SVGs are:
+- Infinitely scalable
+- Editable (colors, sizes via props)
+- Crisp at every resolution
+- Version-controllable
+
+If the brand needs a botanical mark, illustrative monogram, or symbolic icon, build it with
+SVG path commands. Simple, geometric marks are achievable in code. Complex illustrated marks
+should be flagged as needing a designer.
 
 ### If motif is NOT available:
 
-Provide the prompts above and instruct the user to run them manually, or use another image generation tool.
+Provide atmospheric prompts for the user to run manually. For logos/marks, build SVG in code.
 
-### Additional assets to generate:
+### Additional assets to create:
 
-- **Favicon:** Create from the roundel (resize to 32×32, 180×180)
-- **Color swatches:** Generate a swatch image showing the full palette
+- **Logo/mark:** SVG component (React) or standalone `.svg` file — built in code
+- **Favicon:** SVG favicon (scales perfectly, supports dark mode via `prefers-color-scheme`)
+- **OG image:** Use Satori (`@vercel/og`) to generate dynamic OG images from the brand tokens —
+  this produces crisp text using actual fonts, unlike motif
 
 ---
 
@@ -517,6 +569,11 @@ Push users past safe defaults with questions, not mandates:
 - Skip the reference gathering phase — images are the foundation
 - Generate assets without user approval of the direction
 - Produce a brand system that could belong to any company
+- **Present directions as markdown tables in the conversation** — build the comparison page
+- **Use motif to generate logos, wordmarks, or text-based marks** — AI text generation in images is unusable
+- **Dump direction specs into chat and ask the user to imagine the fonts** — render them live
+- **Ignore local/premium fonts** in favor of Google Fonts when the project has better options available
+- **Skip the comparison page** because it takes effort — it IS the deliverable of Phase 3
 
 ---
 
@@ -531,9 +588,10 @@ Entry: `/arc:brand — [Project] brand identity created ([chosen direction name]
 Brand is complete when:
 - [ ] References gathered (images or detailed descriptions)
 - [ ] Brand discovery completed (audience, world, tension, anti-references)
-- [ ] 5 genuinely different directions generated with mood images
-- [ ] Directions presented (comparison page or document)
-- [ ] User has chosen and refined a direction
+- [ ] Local/premium fonts inventoried (if project has them, they MUST be used)
+- [ ] 5 genuinely different directions generated with atmospheric mood images (NOT logo marks)
+- [ ] **Live comparison page built and viewable in browser** (NOT markdown in conversation)
+- [ ] User has chosen and refined a direction (after viewing the comparison page)
 - [ ] Full color system produced (shade scales, tinted neutrals, dark mode)
 - [ ] Typography system defined (display, body, mono with scale and weights)
 - [ ] Visual character established (radius, shadow, density, motion)
