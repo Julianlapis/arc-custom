@@ -3,10 +3,10 @@ name: flow
 description: |
   Discover, store, and walk user flows. Scans your codebase for routes and interactive elements,
   generates walkable flow artifacts, then executes them in Chrome to verify they work.
-  Three modes: discover (scan code → generate flows), walk (execute flows in browser),
-  check (detect drift via file checksums).
+  Four modes: discover (scan code → generate flows), walk (execute flows in browser),
+  check (detect drift via file checksums), gaps (identify missing journeys from app signals).
   Use when asked to "discover flows", "walk the app", "check for drift", "test user journeys",
-  or "generate user flows".
+  "generate user flows", "what flows am I missing", or "flow gap analysis".
 license: MIT
 metadata:
   author: howells
@@ -15,7 +15,7 @@ website:
   desc: User flow discovery & verification
   summary: Discover user flows from your codebase, store them as walkable artifacts, and execute them in Chrome to verify they work.
   what: |
-    Flow scans your codebase for routes and interactive elements, then generates structured user flow artifacts. Each flow is a sequence of steps — navigate, fill, click, expect — stored as markdown. Walk mode executes these flows in Chrome via browser automation, reporting which pass and which fail. Check mode detects when source files have changed, marking affected flows as stale so you know what to re-verify.
+    Flow scans your codebase for routes and interactive elements, then generates structured user flow artifacts. Each flow is a sequence of steps — navigate, fill, click, expect — stored as markdown. Walk mode executes these flows in Chrome via browser automation, reporting which pass and which fail. Check mode detects when source files have changed, marking affected flows as stale so you know what to re-verify. Gaps mode analyzes your app's dependencies and route structure to identify user journeys that should exist but don't — then offers to discover or plan them.
   why: |
     Routes and page structure are easy to discover. What users actually do on those pages — fill forms, click buttons, navigate between sections — is invisible without manual testing. This skill makes user journeys concrete, persistent, and re-walkable. When code changes, you know which flows might be broken before users find out.
   decisions:
@@ -59,6 +59,7 @@ Parse the first argument to determine mode:
 | `discover` | Discover | Scan codebase, generate flow artifacts |
 | `walk` | Walk | Execute stored flows in browser |
 | `check` | Check | Detect drift via file checksums |
+| `gaps` | Gaps | Identify missing journeys from app signals |
 | *(none)* | Smart routing | Assess state, ask what to do |
 
 ---
@@ -94,6 +95,8 @@ AskUserQuestion:
       description: "Regenerate stale flows from current code"
     - label: "Discover new routes"
       description: "Scan for routes not yet covered by flows"
+    - label: "Find missing journeys"
+      description: "Analyze app signals to find journeys that should exist but don't"
 ```
 
 **Flows exist, none stale, some not yet walked:**
@@ -110,6 +113,8 @@ AskUserQuestion:
       description: "See if source files have changed since discovery"
     - label: "Discover new routes"
       description: "Scan for routes not yet covered"
+    - label: "Find missing journeys"
+      description: "Analyze app signals to find journeys that should exist but don't"
 ```
 
 **Flows exist, all current and passed:**
@@ -124,6 +129,8 @@ AskUserQuestion:
       description: "See if any source files have changed"
     - label: "Discover new routes"
       description: "Scan for routes not yet covered"
+    - label: "Find missing journeys"
+      description: "Analyze app signals to find journeys that should exist but don't"
 ```
 
 **Flows exist, some failed:**
@@ -274,6 +281,7 @@ Flows written to docs/arc/flows/
 
 Next steps:
 - /arc:flow walk --all — Execute all flows in Chrome
+- /arc:flow gaps — Find journeys that should exist but don't
 - /arc:flow check — Check for drift later
 ```
 
@@ -516,6 +524,204 @@ If "Re-discover": Run the Discover mode for only the stale routes (re-read the r
 
 If "Walk anyway": Run the Walk mode with `--force` for the stale flows.
 
+---
+
+## Mode: Gaps
+
+Identify user journeys that **should** exist based on app signals but have no flow artifacts — or no routes at all.
+
+### Step 1: Scan App Signals
+
+Read `package.json` dependencies and scan the route/middleware structure.
+
+**Dependency signals → expected journeys:**
+
+| Signal | Detection | Expected Journeys |
+|--------|-----------|-------------------|
+| Auth (any) | Auth middleware detected | sign-up, sign-in, sign-out |
+| Clerk | `@clerk/nextjs` in deps | + org creation, org switcher, member invite, profile management |
+| WorkOS | `@workos-inc/authkit-nextjs` in deps | + SSO configuration |
+| Stripe | `stripe` in deps | checkout, subscription management, billing portal, plan change |
+| Resend | `resend` in deps | email verification, notification preferences |
+| File storage | `@vercel/blob` or S3/Cloudinary in deps | file upload, file management |
+| Search | `algoliasearch`, `@tanstack/react-table`, or search input components | search, filtered results |
+| i18n | `next-intl`, `i18next` in deps | language switching |
+
+**Route structure signals → expected journeys:**
+
+| Signal | Detection | Expected Journeys |
+|--------|-----------|-------------------|
+| Admin area | `/admin/*` routes exist | admin dashboard, user management |
+| Settings | `/settings/*` routes exist | profile edit, account settings, notification settings |
+| Onboarding | `/onboarding/*` routes or redirect-after-signup pattern | onboarding flow |
+| Dashboard | `/dashboard/*` routes exist | dashboard view, key dashboard actions |
+| Marketing pages | `/`, `/pricing`, `/about` routes exist | landing page, pricing comparison |
+
+### Step 2: Read Existing Flows
+
+Read all `.md` files from `docs/arc/flows/` (excluding `gaps-report.md`). Build a set of covered journeys by matching flow names and route paths against the expected journey list from Step 1.
+
+### Step 3: Identify Gaps
+
+For each expected journey:
+
+1. **Check if a flow exists** — match by route path or flow name pattern
+2. **Check if the route exists** — glob for the route file
+3. Classify:
+   - **Covered** — flow artifact exists → skip
+   - **Discoverable gap** — route exists in code but no flow artifact → can discover immediately
+   - **Feature gap** — no route exists → this is a missing feature, not a missing flow
+
+If zero gaps found:
+```
+"No gaps detected. Your flows cover the expected journeys for this app's capabilities.
+
+Signals detected: [auth provider], [payments], [email], etc.
+Existing flows: [X]"
+```
+Stop.
+
+### Step 4: Present Gaps by Domain
+
+Group gaps by domain. Present one AskUserQuestion per domain that has gaps:
+
+```
+AskUserQuestion:
+  question: "Auth: Your app uses [provider] but these journeys have no flows. Which should exist?"
+  header: "Auth Gaps"
+  options:
+    - label: "[journey name]"
+      description: "[route exists / no route found] — [brief reason]"
+    - label: "[journey name]"
+      description: "..."
+    - label: "All of these"
+    - label: "None — handled externally"
+```
+
+Example for Clerk:
+```
+AskUserQuestion:
+  question: "Auth: Your app uses Clerk but these journeys have no flows. Which should exist?"
+  header: "Auth Gaps"
+  options:
+    - label: "Password reset"
+      description: "No /forgot-password route — Clerk hosted UI may handle this"
+    - label: "Organization creation"
+      description: "Route /create-org exists but has no flow"
+    - label: "Sign out"
+      description: "No explicit sign-out flow found"
+    - label: "All of these"
+    - label: "None — Clerk hosted UI handles these"
+```
+
+Example for Stripe:
+```
+AskUserQuestion:
+  question: "Payments: Stripe detected but these journeys have no flows. Which should exist?"
+  header: "Payments Gaps"
+  options:
+    - label: "Checkout"
+      description: "No /checkout route — Stripe may use hosted checkout"
+    - label: "Billing portal"
+      description: "Route /settings/billing exists but has no flow"
+    - label: "Plan upgrade"
+      description: "No upgrade flow found"
+    - label: "All of these"
+    - label: "None — Stripe hosted pages handle these"
+```
+
+Skip domains with zero gaps. Proceed through each domain sequentially.
+
+### Step 5: Process Confirmed Gaps
+
+After all domains are reviewed, split confirmed gaps into two lists:
+
+**Discoverable gaps** (route exists, no flow):
+
+If any discoverable gaps were confirmed:
+```
+AskUserQuestion:
+  question: "[X] confirmed gaps have existing routes. Discover flows for them now?"
+  header: "Discover Missing Flows"
+  options:
+    - label: "Discover now"
+      description: "Run flow discovery on the [X] routes"
+    - label: "Add to report only"
+      description: "Note them in the gaps report for later"
+```
+
+If "Discover now": dispatch flow-discoverer agents for those routes using Discover mode Steps 5-7 (group routes, dispatch agents, write flow files).
+
+**Feature gaps** (no route): go directly to the report. These are feature suggestions, not actionable flows.
+
+### Step 6: Write Gaps Report
+
+Write `docs/arc/flows/gaps-report.md`:
+
+```markdown
+---
+generated: YYYY-MM-DD
+app_signals:
+  auth: [provider or none]
+  payments: [stripe or none]
+  email: [resend or none]
+  storage: [blob/s3 or none]
+  search: [provider or none]
+  i18n: [library or none]
+total_expected: [count]
+total_covered: [count]
+total_gaps: [count]
+---
+
+# Flow Gaps Report
+
+Generated by `/arc:flow gaps` on YYYY-MM-DD.
+
+## Discoverable Gaps (route exists, no flow)
+
+| Journey | Route | Status |
+|---------|-------|--------|
+| Billing settings | /settings/billing | Discovered ✓ |
+| Organization creation | /create-org | Added to report |
+
+## Feature Gaps (no route found)
+
+| Journey | Expected Route | Signal | Notes |
+|---------|---------------|--------|-------|
+| Password reset | /forgot-password | Clerk auth | May be handled by Clerk hosted UI |
+| Checkout | /checkout | Stripe | May use Stripe hosted checkout |
+
+## Already Covered
+
+| Journey | Flow | Signal |
+|---------|------|--------|
+| Sign up | signup-create-account | Clerk auth |
+| Dashboard | dashboard-view | /dashboard route |
+| Profile edit | settings-profile-edit | /settings route |
+```
+
+If the file already exists, overwrite it — it's a point-in-time snapshot, not an accumulating log.
+
+### Step 7: Report
+
+```
+Gap analysis complete:
+
+Signals detected: [list]
+Expected journeys: X
+Already covered: Y
+Discoverable gaps: Z (W discovered now)
+Feature gaps: V
+
+Feature gaps are journeys your app likely needs but doesn't have routes for yet.
+See docs/arc/flows/gaps-report.md for the full breakdown.
+
+Next steps:
+- /arc:flow walk — Walk newly discovered flows
+- /arc:flow gaps — Re-run after adding new routes
+- Review feature gaps when planning next sprint
+```
+
 </process>
 
 <required_reading>
@@ -533,7 +739,7 @@ After completing any mode, append to progress journal:
 **Task:** [Mode] user flows
 **Outcome:** [Complete / Partial]
 **Details:**
-- Mode: [discover/walk/check]
+- Mode: [discover/walk/check/gaps]
 - Flows: [count by status]
 - Auth: [detected provider]
 **Next:** [suggested next step]

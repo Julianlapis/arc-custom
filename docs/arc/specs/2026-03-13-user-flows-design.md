@@ -8,13 +8,14 @@ The gap: there's no persistent, re-walkable representation of user flows derived
 
 ## Approach
 
-A new `/arc:flow` skill with three modes:
+A new `/arc:flow` skill with four modes:
 
 | Mode | What it does |
 |------|-------------|
 | `discover` | Scan codebase → generate flow artifacts |
 | `walk` | Execute stored flows via Chrome MCP |
 | `check` | Detect drift between flows and current code |
+| `gaps` | Identify missing journeys from app signals |
 
 ### File Structure
 
@@ -44,6 +45,12 @@ The skill dispatches modes based on the first argument: `discover`, `walk`, or `
                     │ Detector     │
                     │ (checksums)  │
                     └──────────────┘
+                                               │
+┌─────────────┐     ┌──────────────┐           │
+│ Signal       │     │ Gap          │◀──────────┘
+│ Scanner      │────▶│ Analyzer     │────▶ Gaps Report
+│ (deps+routes)│     │ (comparison) │     (markdown)
+└─────────────┘     └──────────────┘
 ```
 
 **Route Scanner** — mechanical. Reuses existing framework-specific glob patterns from `/arc:responsive` and `/arc:seo`:
@@ -59,6 +66,10 @@ The skill dispatches modes based on the first argument: `discover`, `walk`, or `
 **Flow Walker** — Chrome MCP execution engine. Reads flow files, navigates to routes, executes steps, captures results.
 
 **Drift Detector** — checksums of source files. When files change, flows are marked stale.
+
+**Signal Scanner** — mechanical. Reads `package.json` dependencies and route structure to identify app capabilities (auth provider, payments, email, storage, etc.). Maps each signal to expected user journeys.
+
+**Gap Analyzer** — comparison engine. Cross-references expected journeys (from signals) against existing flows (from Flow Store). Classifies gaps as discoverable (route exists, no flow) or feature-level (no route exists). Writes a gaps report with planning recommendations.
 
 ## Flow Artifact Format
 
@@ -222,6 +233,9 @@ All auth levels beyond `none` require the same manual login for v1. The distinct
 | Fail-fast on step failure | When a step fails, mark the flow `failed` and move to the next flow. Don't attempt remaining steps — they likely depend on the failed step. |
 | Skip existing files on re-discover | Protects hand-edited flows. Use `--force` to overwrite. |
 | No tags in v1 | `--flow name` and `--all` cover the primary use cases. Tag filtering adds surface area without a forcing need until the flow count is high. |
+| Gaps report, not stub flow files | Flow files are executable artifacts — every one should be walkable. Feature gaps (no route) can't be walked, so they belong in a separate report. Mixing executable and aspirational artifacts pollutes the walk/check lifecycle. |
+| Signal-based gap detection, not hardcoded checklists | Gaps are inferred from dependency and route signals (Clerk → auth flows, Stripe → payment flows). Flexible enough to work across app types without maintaining a universal journey catalog. |
+| Gaps report is a snapshot, not a log | Overwritten on each run. It's a planning tool, not a history. Git tracks changes if needed. |
 
 ## Skill Design
 
@@ -296,6 +310,21 @@ All auth levels beyond `none` require the same manual login for v1. The distinct
    - "Walk anyway" — walk stale flows to see if they still pass
    - "Do nothing" — just the report
 
+### `/arc:flow gaps`
+
+1. Scan `package.json` dependencies and route structure for app signals (auth provider, payments, email, storage, search, i18n, admin/settings/onboarding routes)
+2. Map signals to expected user journeys (e.g., Clerk → sign-up, sign-in, sign-out, org creation, profile management)
+3. Read existing flows from `docs/arc/flows/` and build a set of covered journeys
+4. For each expected journey, classify as: covered (flow exists), discoverable gap (route exists but no flow), or feature gap (no route exists)
+5. Present gaps grouped by domain (auth, payments, settings, etc.) via `AskUserQuestion` — one question per domain
+6. For confirmed discoverable gaps: offer to run flow-discoverer immediately
+7. Write `docs/arc/flows/gaps-report.md` with three sections: discoverable gaps, feature gaps, and already-covered journeys
+8. Report summary with counts and next steps
+
+**Key distinction:** Flow files remain executable artifacts — every flow file is walkable. Feature gaps (no route exists) go into the gaps report as planning suggestions, not as stub flow files. This keeps the walk/check lifecycle clean.
+
+**Gap report format:** `docs/arc/flows/gaps-report.md` is a point-in-time snapshot, overwritten on each run. It has YAML frontmatter with `app_signals` and counts, plus three tables (discoverable gaps, feature gaps, covered journeys).
+
 ### Agent: `flow-discoverer`
 
 A new agent in `agents/workflow/flow-discoverer.md`. Given a list of route files and the project's auth classification:
@@ -339,6 +368,8 @@ All user-facing questions in this skill use `AskUserQuestion` with multiple-choi
 - Auth confirmation → yes/I'm logged in
 - Stale flow handling → re-discover / walk anyway / do nothing
 - Re-discover overwrite → skip existing / overwrite all
+- Gap confirmation → per-domain journey checklist with "all" / "none" options
+- Discoverable gap action → discover now / add to report only
 
 ## Open Questions (Deferred to v2)
 
