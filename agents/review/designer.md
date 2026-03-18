@@ -67,7 +67,8 @@ Read ALL of these before reviewing. Same references as `/arc:design` — single 
 
 1. `references/frontend-design.md` — Anti-patterns, Design Review Checklist (Red/Yellow/Green flags), typography recommendations, color and spatial composition
 2. `references/design-philosophy.md` — Timeless principles from Refactoring UI: hierarchy, spacing, color theory, depth, finishing touches
-3. `rules/interface/index.md` — Interface rules index (read this, then read relevant rules below based on what you're reviewing)
+3. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Progressive Disclosure
+4. `rules/interface/index.md` — Interface rules index (read this, then read relevant rules below based on what you're reviewing)
 </required_reading>
 
 <rules_context>
@@ -106,6 +107,14 @@ Load rules relevant to the implementation:
 - Is there too much visual weight competing for attention?
 - Are empty states designed, or just blank?
 - Are borders overused where spacing/shadows could work?
+
+**UX Laws (from `references/ux-laws.md`):**
+- **Fitts's Law** — Are primary actions large and prominent? Are destructive actions small and distant?
+- **Hick's Law** — Are there too many options presented at once? Should progressive disclosure be used?
+- **Gestalt Proximity** — Is spacing between related items obviously tighter than between unrelated items?
+- **Doherty Threshold** — Do interactions feel instant (<300ms)? Is there loading feedback for longer operations?
+- **Jakob's Law** — Are conventions being followed, or is the UI reinventing standard patterns without good reason?
+- **Von Restorff** — Does the primary CTA stand out, or is everything competing equally?
 
 ### You Do NOT Evaluate
 - Type safety (that's daniel-product-engineer)

@@ -61,7 +61,8 @@ Animation choices are subjective — the user must see and approve each addition
 
 1. `rules/interface/animation.md` — Easing, duration, spring presets, performance tiers
 2. `references/animation-patterns.md` — Deep animation patterns
-3. `references/frontend-design.md` — Anti-patterns (bounce/elastic = dated)
+3. `references/interaction-physics.md` — 300ms ceiling, spring vs easing decisions, exit patterns, container two-div pattern
+4. `references/frontend-design.md` — Anti-patterns (bounce/elastic = dated)
 </required_reading>
 
 ---
@@ -116,6 +117,7 @@ Analyze the code and identify static areas:
 - Empty states that could benefit from subtle motion
 - Success moments (form submit, task complete)
 - First-time user moments
+- Audio feedback for key moments (see `references/audio-feedback.md` — optional, user must opt in)
 
 ---
 

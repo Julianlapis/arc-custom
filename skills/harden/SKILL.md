@@ -57,6 +57,8 @@ Hardening decisions need context — what's likely vs. paranoid, what's worth th
 1. `rules/interface/forms.md` — Form behavior and validation
 2. `rules/interface/interactions.md` — Interactive states, destructive actions
 3. `rules/interface/content-accessibility.md` — Accessible content
+4. `references/touch-targets.md` — Hit target expansion, minimum sizes, pseudo-element technique
+5. `references/ux-laws.md` — Postel's Law (input tolerance), Hick's Law (option overload), Cognitive Load
 </required_reading>
 
 ---

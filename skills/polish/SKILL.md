@@ -61,6 +61,10 @@ Polish requires visual inspection and judgment — it's collaborative, not deleg
 4. `rules/interface/interactions.md` — Eight interactive states
 5. `rules/interface/animation.md` — Motion rules
 6. `references/frontend-design.md` — Design review checklist
+7. `references/typography-opentype.md` — OpenType features, tabular-nums, kerning, text-wrap
+8. `references/touch-targets.md` — Hit target expansion, pseudo-element technique, mobile targets
+9. `references/ux-laws.md` — Fitts's Law (target sizing), Gestalt (spacing/grouping), Doherty (timing)
+10. `references/prefetch-patterns.md` — Trajectory prefetching, hit slop zones (when reviewing navigation UX)
 </required_reading>
 
 ---

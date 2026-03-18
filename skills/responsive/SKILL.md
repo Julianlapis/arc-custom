@@ -39,6 +39,13 @@ website:
 If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` steps below. Execute them directly.
 </tool_restrictions>
 
+<required_reading>
+**Read these using the Read tool when relevant:**
+
+1. `references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns
+2. `references/ux-laws.md` — Fitts's Law (target sizing), Gestalt proximity (spacing decisions)
+</required_reading>
+
 # Responsive Audit & Fix
 
 Systematically audit and fix every page for mobile responsiveness, with visual verification via browser screenshots.
