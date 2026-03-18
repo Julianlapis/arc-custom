@@ -76,12 +76,13 @@ designer (reviews for AI slop)
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `references/frontend-design.md` — Fonts, anti-patterns, design review checklist. **Critical.**
-2. `references/design-philosophy.md` — Timeless principles from Refactoring UI
-3. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Doherty Threshold
-4. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
-5. `references/ascii-ui-patterns.md` — Wireframe syntax and patterns
-6. `references/wiretext.md` — When to use WireText vs ASCII vs browser review
+1. `references/frontend-design.md` — UI fonts, anti-patterns, design review checklist. **Critical.**
+2. `references/brand-identity.md` — Brand typography, color psychology, visual character (if no brand-system.md exists)
+3. `references/design-philosophy.md` — Timeless principles from Refactoring UI
+4. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Doherty Threshold
+5. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
+6. `references/ascii-ui-patterns.md` — Wireframe syntax and patterns
+7. `references/wiretext.md` — When to use WireText vs ASCII vs browser review
 
 **Then load interface rules:**
 5. `rules/interface/index.md` — Interface rules index

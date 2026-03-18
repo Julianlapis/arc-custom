@@ -62,11 +62,11 @@ The skill's job is to present excellent options and push against mediocrity — 
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `references/frontend-design.md` — Font recommendations, anti-patterns, tone options
+1. `references/brand-identity.md` — Brand typography, color psychology, visual character, distinctiveness criteria
 2. `references/design-philosophy.md` — Hierarchy, color theory, personality choices
 3. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
 4. `rules/interface/colors.md` — OKLCH palettes, tinted neutrals, 60-30-10 rule
-5. `rules/interface/typography.md` — Font pairing, loading, OpenType features
+5. `rules/interface/typography.md` — Font loading, OpenType features, type scale
 </required_reading>
 
 **Check for existing brand/design context:**
@@ -468,35 +468,34 @@ The taste engine is not a hardcoded list — it draws from the references loaded
 
 ### Typography Taste
 
-Consult `references/frontend-design.md` for:
-- The "Never use" list (fonts that signal generic or AI-generated work)
-- Recommended fonts by category (sans, serif, display, condensed, mono)
+Consult `references/brand-identity.md` for:
+- The "Never use for brand identity" list
+- Recommended brand fonts with character descriptions and use cases
 - Commercial foundries for premium projects
+- Font pairing principles
 
 Consult `references/typography-opentype.md` for:
 - Tracking adjustments per context (tighter for display, looser for all-caps)
 - Font loading strategy decisions
 - OpenType features that add typographic polish
 
-**The brand typography principle:** `frontend-design.md` separates UI fonts from brand fonts. UI fonts (Inter, Geist, DM Sans) are designed to disappear — they're excellent for body text and navigation. Brand fonts (display, headlines, wordmarks) must express personality. When a user picks a UI font for their brand identity, present alternatives from the "brand identity" table in `frontend-design.md`. Don't block the choice — explain the distinction and offer refined alternatives.
-
-**Hard rule:** Never recommend Instrument Serif, Playfair Display, Poppins, or Montserrat for brand identity. These are either overused in AI-generated work or too generic to carry a brand.
+**The brand typography principle:** `brand-identity.md` separates UI fonts from brand fonts. UI fonts (Inter, Geist, DM Sans) disappear — they're excellent for body text. Brand fonts (display, headlines, wordmarks) must express personality. When a user picks a UI font for brand identity, present alternatives from `brand-identity.md` with their character descriptions. Don't block the choice — explain the distinction and offer refined alternatives.
 
 ### Color Taste
 
+Consult `references/brand-identity.md` for:
+- Color psychology beyond basics (hue ranges, when they work, when they don't)
+- Generic palette patterns to avoid
+- How to build a brand palette (meaning → dominant → accent → derive → scale)
+- OKLCH for brand work
+
 Consult `rules/interface/colors.md` for:
-- OKLCH-first palette generation
+- OKLCH shade scale generation
 - Tinted neutrals (adding brand hue to grays)
 - The 60-30-10 rule for visual weight
 - Dangerous combinations to avoid
 
-**The brand color principle:** Avoid palettes that could belong to any company. If you can swap the logo and the palette still feels generic, push harder. Derive color meaning from the brand's domain, not from what's trending.
-
-Generic patterns to actively challenge:
-- Blue + white + gray (default tech startup)
-- Purple-to-blue gradient (AI slop cliché)
-- Teal + coral together (2020 SaaS template)
-- All neutrals + one accent (safe but forgettable)
+**The brand color principle:** If you can swap the logo and the palette still feels generic, push harder. Derive color meaning from the brand's domain, not from what's trending.
 
 ### Visual Character Taste
 
