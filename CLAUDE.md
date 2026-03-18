@@ -40,6 +40,7 @@ arc/
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
 │   ├── hooks/SKILL.md      # Cross-cutting: auto-format + context hooks
 │   ├── flow/SKILL.md       # Cross-cutting: user flow discovery & verification
+│   ├── help/SKILL.md       # Utility: context-aware command guide
 │   ├── prune-agents/SKILL.md # Utility: kill orphaned subagents
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized subagents
@@ -61,6 +62,7 @@ arc/
 All commands use the `/arc:` namespace prefix. The typical workflow:
 
 ```
+0. HELP       /arc:help       → Context-aware guide to all commands
 1. ENTRY      /arc:go         → Routes to right workflow based on context
 2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
 3. DESIGN     /arc:ideate     → Turn idea into validated design doc
@@ -91,6 +93,7 @@ CROSS-CUTTING (available anytime):
               /arc:deps       → Dependency audit with batch upgrades
               /arc:hooks      → Auto-format, lint, and context monitor hooks
               /arc:flow       → User flow discovery, walking, and drift detection
+              /arc:help        → Context-aware guide to all commands
               /arc:prune-agents → Kill orphaned subagent processes
 ```
 

@@ -1,0 +1,219 @@
+---
+name: help
+description: |
+  Show all Arc commands with context-aware relevance. Reads the codebase to understand
+  what's present (framework, tests, plans, design docs, etc.) and annotates each command
+  with whether it's relevant right now. Use when asked "what can arc do", "help",
+  "list commands", "what commands are available", or "how does arc work".
+license: MIT
+metadata:
+  author: howells
+website:
+  order: 0
+  desc: Context-aware command guide
+  summary: Lists every Arc command with relevance to your current project. Shows what each does, when to use it, and which ones matter right now.
+  what: |
+    Help gathers lightweight context about your project (framework, existing plans, design docs, test setup, etc.) and presents the full Arc command catalog annotated with relevance signals. Commands that don't apply to your current situation are dimmed with a reason why.
+  why: |
+    Arc has 30+ commands. Nobody memorizes them all. Help gives you the full picture with context so you can find the right command without trial and error.
+  decisions:
+    - Lightweight context gathering. Quick checks, not deep analysis.
+    - Shows ALL commands. Doesn't hide irrelevant ones — dims them with explanation.
+    - No routing. Unlike /arc:go, this doesn't launch other skills — it just informs.
+  workflow:
+    position: utility
+---
+
+<tool_restrictions>
+# MANDATORY Tool Restrictions
+
+## BANNED TOOLS — calling these is a skill violation:
+- **`EnterPlanMode`** — BANNED. This skill outputs information directly.
+- **`ExitPlanMode`** — BANNED. You are never in plan mode.
+- **`AskUserQuestion`** — BANNED. This is a read-only info dump, not interactive.
+</tool_restrictions>
+
+# /arc:help
+
+Show every Arc command with context-aware relevance annotations.
+
+---
+
+## Step 1: Gather Context (quick, parallel)
+
+Run these checks in parallel. Keep it fast — no deep exploration.
+
+```bash
+# What framework/stack?
+ls package.json next.config.* vite.config.* nuxt.config.* 2>/dev/null | head -5
+
+# Arc artifacts?
+ls docs/vision.md docs/arc/specs/*.md docs/arc/plans/*.md 2>/dev/null | head -10
+
+# Design docs?
+ls docs/design-context.md docs/arc/specs/design-*.md 2>/dev/null | head -5
+
+# Test setup?
+ls vitest.config.* jest.config.* playwright.config.* cypress.config.* 2>/dev/null | head -5
+
+# Has UI? (React/Vue/Svelte components)
+ls src/app/**/*.tsx app/**/*.tsx src/components/**/*.tsx components/**/*.tsx 2>/dev/null | head -3
+
+# Has AI features?
+grep -rl "from ['\"]ai['\"]" src/ app/ lib/ 2>/dev/null | head -3
+
+# Git state
+git log -1 --format=%ci 2>/dev/null
+git diff --name-only HEAD~5 2>/dev/null | head -20
+
+# CLAUDE.md or rules?
+ls CLAUDE.md .claude/rules/**/*.md rules/**/*.md 2>/dev/null | head -5
+
+# Progress journal?
+head -20 docs/arc/progress.md 2>/dev/null
+```
+
+From these checks, build a mental model of what's **present** and what's **missing**.
+
+---
+
+## Step 2: Output the Command Guide
+
+Present all commands in a single output. Use the context to annotate relevance.
+
+### Format
+
+For each command group, output:
+
+```markdown
+## [Group Name]
+
+| Command | What it does | Relevance |
+|---------|-------------|-----------|
+| `/arc:command` | One-line description | **Relevant** — [why] |
+| `/arc:command` | One-line description | *Low relevance* — [why] |
+```
+
+**Relevance rules:**
+- **Relevant** — the project has the prerequisites AND there's a reason to use it now
+- **Available** — the project has the prerequisites but no urgent reason
+- *Low relevance* — project is missing prerequisites (e.g., no UI = no `/arc:animate`)
+- *Not applicable* — fundamentally doesn't apply (e.g., no codebase at all)
+
+### The Catalog
+
+Output ALL of these in order:
+
+---
+
+**ENTRY POINTS**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:go` | Understands your codebase, asks what you want to do, routes to the right workflow | Starting a session, unsure where to begin |
+| `/arc:help` | This command — shows all commands with context | When you want to see what's available |
+
+**FOUNDATION**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:vision` | Define project goals, purpose, and success criteria | New projects, or when goals are unclear |
+
+**DESIGN**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:ideate` | Turn an idea into a validated design through collaborative dialogue | New features that need thinking before building |
+| `/arc:design` | Create distinctive, non-generic UI with aesthetic direction and wireframes | When building UI that should be memorable |
+| `/arc:naming` | Generate and validate project names with domain/GitHub checks | Naming a new project or product |
+
+**EXECUTE**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:implement` | Plan and execute feature implementation with TDD | After ideate, or for substantial features |
+| `/arc:build` | Quick builds for smaller scope — lightweight planning, full agent orchestration | Small-to-medium features, components, utilities |
+| `/arc:ai` | AI SDK guidance — correct patterns, deprecated API warnings | Before implementing any AI feature |
+
+**REVIEW**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:review` | Expert review with parallel specialized agents (security, design, performance, etc.) | Before merging, after implementation |
+| `/arc:audit` | Comprehensive codebase audit across all dimensions | Periodic quality check, before shipping |
+
+**TEST**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:testing` | Test strategy and execution — unit, integration, E2E with specialist agents | Creating test plans, running suites, fixing failures |
+| `/arc:verify` | Run build + typecheck + lint + tests in one command | Quick pre-commit or pre-PR check |
+
+**REFINE**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:polish` | Pre-ship visual refinement — spacing, states, contrast, typography | Last pass before shipping UI |
+| `/arc:distill` | Strip UI to essentials — remove unnecessary complexity | When UI feels bloated or over-engineered |
+| `/arc:animate` | Add purposeful motion — entrance choreography, micro-interactions, transitions | When UI is functional but static |
+| `/arc:harden` | Production resilience — error states, text overflow, edge cases, loading patterns | Before shipping to real users |
+
+**SHIP**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:letsgo` | Production readiness checklist | Final gate before production deployment |
+| `/arc:legal` | Generate Privacy Policy, Terms of Service, Cookie Policy | Before public launch |
+
+**CROSS-CUTTING**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:responsive` | Audit and fix mobile responsiveness with visual verification | After building desktop-first UI |
+| `/arc:seo` | Deep SEO audit — meta tags, structured data, crawlability | Before launching public-facing pages |
+| `/arc:commit` | Smart commit with auto-splitting across domains | When ready to commit changes |
+| `/arc:suggest` | What to work on next — analyzes codebase, issues, and debt | Starting a session, unsure what to tackle |
+| `/arc:document` | Capture solved problems as searchable documentation | After solving a non-obvious problem |
+| `/arc:tidy` | Clean up completed plans in docs/arc/plans/ | When plan files accumulate |
+| `/arc:rules` | Apply Arc's coding rules to the project | Setting up a new project with Arc conventions |
+| `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
+| `/arc:hooks` | Install Claude Code hooks for auto-formatting, linting, context | Setting up development environment |
+| `/arc:flow` | Discover, walk, and verify user flows from your codebase | Understanding user journeys, detecting drift |
+
+**UTILITY**
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `/arc:prune-agents` | Kill orphaned Claude subagent processes | When agents didn't exit cleanly |
+
+---
+
+## Step 3: Contextual Recommendations
+
+After the catalog, add a short section:
+
+```markdown
+## Recommended Right Now
+
+Based on what I found in your project:
+
+1. **[Command]** — [specific reason based on context]
+2. **[Command]** — [specific reason based on context]
+3. **[Command]** — [specific reason based on context]
+```
+
+Pick 2-4 commands that make the most sense given:
+- What's **missing** (no vision doc → suggest `/arc:vision`)
+- What's **stale** (old plans → suggest `/arc:tidy`)
+- What **just changed** (recent UI edits → suggest `/arc:polish`)
+- What **could be improved** (no tests → suggest `/arc:testing`)
+
+---
+
+## Rules
+
+- **Don't invoke any other skills.** This is information only.
+- **Don't ask questions.** Output the catalog and recommendations, then stop.
+- **Keep context gathering under 5 seconds.** Quick checks only, no deep exploration.
+- **Show ALL commands.** Don't hide irrelevant ones — annotate them so users learn they exist.
+- **Be specific about relevance.** "Low relevance — no UI components found" not just "Low relevance."
