@@ -464,39 +464,46 @@ AskUserQuestion:
 
 ## The Taste Engine
 
-### Fonts to Challenge
+The taste engine is not a hardcoded list — it draws from the references loaded in Phase 0. The key principle: **challenge generic choices with curated alternatives from the references.**
 
-When a user gravitates toward these, offer distinctive alternatives:
+### Typography Taste
 
-| Generic Choice | Challenge With | Why |
-|---------------|----------------|-----|
-| Inter | Instrument Sans, DM Sans, Outfit | Same clarity, more personality |
-| Roboto | Space Grotesk, Sohne | Less Android, more intention |
-| Poppins | Bricolage Grotesque, Rethink Sans | Geometric but not generic |
-| Montserrat | Scto Grotesk, General Sans | Less overexposed |
-| Playfair Display | Newsreader, Fraunces, Cormorant | More refined, less template |
-| Instrument Serif | Crimson Pro, Libre Baskerville | Instrument Serif is becoming AI slop |
+Consult `references/frontend-design.md` for:
+- The "Never use" list (fonts that signal generic or AI-generated work)
+- Recommended fonts by category (sans, serif, display, condensed, mono)
+- Commercial foundries for premium projects
 
-**Inter is fine for UI text.** It's invisible by design — that's its strength. But for *brand identity* (headlines, hero text, wordmarks), it says nothing. Push for something that carries personality.
+Consult `references/typography-opentype.md` for:
+- Tracking adjustments per context (tighter for display, looser for all-caps)
+- Font loading strategy decisions
+- OpenType features that add typographic polish
 
-### Palettes to Avoid
+**The brand typography principle:** A font that's excellent for UI (Inter, system-ui) may be wrong for brand identity. UI fonts are designed to disappear — brand fonts are designed to express. When a user picks a UI font for their brand identity, present alternatives from the same category in `frontend-design.md` that carry more personality. Don't block the choice — explain the distinction and offer options.
 
-| Generic Pattern | Why It's Generic | What To Do Instead |
-|----------------|-----------------|-------------------|
-| Blue + white + gray | Default tech startup | Find a hue with meaning for the domain |
-| Purple-to-blue gradient | AI slop cliché | Commit to a single confident color |
-| Teal + coral | 2020 SaaS template | Either one alone is fine; together they're dated |
-| Indigo + pink | Dribbble trend, now everywhere | Unexpected hue combinations from reference images |
-| All neutrals + one accent | Safe but forgettable | Two complementary hues for tension |
+### Color Taste
 
-### Visual Character to Question
+Consult `rules/interface/colors.md` for:
+- OKLCH-first palette generation
+- Tinted neutrals (adding brand hue to grays)
+- The 60-30-10 rule for visual weight
+- Dangerous combinations to avoid
 
-| Safe Choice | Push Toward |
-|-------------|-------------|
-| Rounded everything (rounded-xl) | What if only some things are rounded? Sharp cards, round buttons? |
-| Subtle shadows everywhere | What if no shadows? Or dramatic, layered shadows? |
-| Consistent border radius | What if borders are the character (thick, thin, dotted, none)? |
-| White background + gray cards | What if the surface has color? What if there's texture? |
+**The brand color principle:** Avoid palettes that could belong to any company. If you can swap the logo and the palette still feels generic, push harder. Derive color meaning from the brand's domain, not from what's trending.
+
+Generic patterns to actively challenge:
+- Blue + white + gray (default tech startup)
+- Purple-to-blue gradient (AI slop cliché)
+- Teal + coral together (2020 SaaS template)
+- All neutrals + one accent (safe but forgettable)
+
+### Visual Character Taste
+
+Push users past safe defaults with questions, not mandates:
+
+- "What if only *some* things are rounded? Sharp cards with round buttons creates tension."
+- "What if no shadows? Or dramatic, layered shadows instead of subtle everywhere?"
+- "What if the surface has color or texture instead of white + gray cards?"
+- "What if borders are the character — thick, thin, dotted, or absent entirely?"
 
 ---
 
