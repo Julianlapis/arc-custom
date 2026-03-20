@@ -78,7 +78,9 @@ Grep: "export function" or "export const" with relevant names
 
 This step is not optional. LLMs default to creating new code. Fight that instinct — search first, create only as a last resort.
 
-### 3. Follow TDD Cycle
+### 3. Follow TDD Cycle (MANDATORY — not optional)
+
+**Hard gate:** Do NOT write implementation code until a failing test exists. If you catch yourself writing implementation first, stop and write the test. No exceptions.
 
 ```
 1. Write the test first

@@ -41,6 +41,10 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 - references/component-design.md — React component patterns
 </required_reading>
 
+<hard_rules>
+**Before writing the plan file**, present a brief summary of what you intend to plan (scope, task count estimate, key decisions) and use `AskUserQuestion` to confirm. Plans must not appear without user input.
+</hard_rules>
+
 <process>
 ## Step 1: Detect Project Stack
 

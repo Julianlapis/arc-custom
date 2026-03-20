@@ -291,10 +291,12 @@ Context: [what it's for]
 Output spec for ui-builder."
 ```
 
-### Step 4c: TDD Cycle
+### Step 4c: TDD Cycle (MANDATORY)
+
+**Hard gate:** Test file must exist and fail before any implementation code is written.
 
 ```bash
-pnpm vitest run [test-file]  # Should FAIL first
+pnpm vitest run [test-file]  # MUST FAIL first
 # Implementation happens
 pnpm vitest run [test-file]  # Should PASS
 ```

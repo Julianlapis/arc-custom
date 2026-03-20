@@ -419,7 +419,9 @@ Auth setup: [Clerk/WorkOS/none]
 File to create: [tests/feature.spec.ts]"
 ```
 
-### Step 4: TDD Cycle
+### Step 4: TDD Cycle (MANDATORY)
+
+**Hard gate:** Do NOT dispatch implementer/ui-builder until a failing test exists for the task. Test file first, implementation second. No exceptions.
 
 ```
 1. Tests written (from Step 3)
