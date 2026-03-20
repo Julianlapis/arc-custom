@@ -26,13 +26,13 @@ import type {
 
 /** Accumulator passed between layout phases */
 interface LayoutState {
-  nodes: LayoutNode[];
-  branchEdges: BranchEdge[];
   agentLabels: AgentLabel[];
-  separators: SectionSeparator[];
-  knowledgeItems: KnowledgeItem[];
-  spinePositions: Map<string, number>;
+  branchEdges: BranchEdge[];
   currentY: number;
+  knowledgeItems: KnowledgeItem[];
+  nodes: LayoutNode[];
+  separators: SectionSeparator[];
+  spinePositions: Map<string, number>;
 }
 
 function buildAgentCategoryMap(agents: Agent[]): Map<string, AgentCategory> {

@@ -12,8 +12,8 @@ import {
 import type { AgentLabel, KnowledgeItem, LayoutNode } from "./types";
 
 interface GraphNodeProps {
-  node: LayoutNode;
   index: number;
+  node: LayoutNode;
   onClick: (skill: Skill) => void;
 }
 
@@ -167,8 +167,8 @@ export function GraphNode({ node, index, onClick }: GraphNodeProps) {
 }
 
 interface KnowledgeNodeProps {
-  item: KnowledgeItem;
   index: number;
+  item: KnowledgeItem;
 }
 
 export function KnowledgeNode({ item, index }: KnowledgeNodeProps) {

@@ -6,10 +6,10 @@ import { AgentCategoryDots, GraphNode, KnowledgeNode } from "./graph-node";
 import { useGraphLayout } from "./use-graph-layout";
 
 interface WorkflowGraphProps {
-  workflowData: WorkflowData;
   agents: Agent[];
   assetCounts: { references: number; disciplines: number };
   onSkillClick: (skill: Skill) => void;
+  workflowData: WorkflowData;
 }
 
 export function WorkflowGraph({

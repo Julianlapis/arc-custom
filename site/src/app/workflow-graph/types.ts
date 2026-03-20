@@ -1,23 +1,23 @@
 import type { Skill } from "@/lib/types";
 
 export interface LayoutNode {
+  agentCount: number;
   id: string;
+  nodeType: "spine" | "branch" | "utility";
   skill: Skill;
   x: number;
   y: number;
-  nodeType: "spine" | "branch" | "utility";
-  agentCount: number;
 }
 
 export interface BranchEdge {
-  source: string;
-  target: string;
   /** Branch node position */
   bx: number;
   by: number;
+  source: string;
   /** Spine target position */
   sx: number;
   sy: number;
+  target: string;
 }
 
 export interface AgentLabel {
@@ -25,21 +25,21 @@ export interface AgentLabel {
   category: string;
   /** Number of agents in this category for this node */
   count: number;
+  /** X position where dots start */
+  dotStartX: number;
   /** X position for the category text label */
   x: number;
   /** Y position (same as parent node) */
   y: number;
-  /** X position where dots start */
-  dotStartX: number;
 }
 
 export interface SectionSeparator {
   /** Label text (e.g., "available anytime", "knowledge") */
   label: string;
-  /** Y position */
-  y: number;
   /** Width of the separator line */
   width: number;
+  /** Y position */
+  y: number;
 }
 
 export interface KnowledgeItem {
@@ -52,21 +52,21 @@ export interface KnowledgeItem {
 }
 
 export interface SpineLine {
-  /** Y of the first spine node */
-  startY: number;
   /** Y of the last element in the spine/utility flow */
   endY: number;
+  /** Y of the first spine node */
+  startY: number;
   /** X position (SPINE_X) */
   x: number;
 }
 
 export interface GraphLayout {
-  nodes: LayoutNode[];
-  branchEdges: BranchEdge[];
-  spineLine: SpineLine;
   agentLabels: AgentLabel[];
-  separators: SectionSeparator[];
-  knowledgeItems: KnowledgeItem[];
-  width: number;
+  branchEdges: BranchEdge[];
   height: number;
+  knowledgeItems: KnowledgeItem[];
+  nodes: LayoutNode[];
+  separators: SectionSeparator[];
+  spineLine: SpineLine;
+  width: number;
 }

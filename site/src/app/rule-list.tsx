@@ -4,8 +4,8 @@ import { ChevronRight } from "lucide-react";
 import type { Rule, RuleCategory } from "@/lib/types";
 
 interface RuleListProps {
-  rules: Rule[];
   onRuleClick: (rule: Rule) => void;
+  rules: Rule[];
 }
 
 const categoryLabels: Record<RuleCategory, string> = {

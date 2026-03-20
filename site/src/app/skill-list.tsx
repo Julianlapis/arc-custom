@@ -3,8 +3,8 @@
 import type { Skill } from "@/lib/types";
 
 interface SkillListProps {
-  skills: Skill[];
   onSkillClick: (skill: Skill) => void;
+  skills: Skill[];
 }
 
 export function SkillList({ skills, onSkillClick }: SkillListProps) {

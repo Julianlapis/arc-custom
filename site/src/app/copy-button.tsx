@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 interface CopyButtonProps {
-  text: string;
   light?: boolean;
+  text: string;
 }
 
 export function CopyButton({ text, light }: CopyButtonProps) {
