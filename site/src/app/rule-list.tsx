@@ -1,6 +1,5 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
 import type { Rule, RuleCategory } from "@/lib/types";
 
 interface RuleListProps {
@@ -35,19 +34,18 @@ export function RuleList({ rules, onRuleClick }: RuleListProps) {
 
         return (
           <div key={category}>
-            <h3 className="mb-1 font-mono text-neutral-400 text-xs uppercase tracking-wider">
+            <h3 className="mb-2 font-mono text-neutral-400 text-xs uppercase tracking-wider">
               {categoryLabels[category]}
             </h3>
-            <div className="divide-y divide-neutral-100">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {categoryRules.map((rule) => (
                 <button
-                  className="group flex w-full items-center gap-2 py-2 text-left transition-colors hover:text-[var(--color-accent)]"
+                  className="group rounded-lg border border-neutral-200 px-4 py-3 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
                   key={rule.slug}
                   onClick={() => onRuleClick(rule)}
                   type="button"
                 >
-                  <ChevronRight className="size-3.5 shrink-0 text-neutral-300 transition-transform duration-200 group-hover:text-[var(--color-accent)]" />
-                  <span className="font-mono text-neutral-700 text-sm">
+                  <span className="block font-mono text-neutral-800 text-sm transition-colors group-hover:text-[var(--color-accent)]">
                     {rule.title}
                   </span>
                 </button>

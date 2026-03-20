@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 import { sanitizeContent } from "@/lib/sanitize";
 import type { Agent, Rule, Skill } from "@/lib/types";
 import { AGENT_CATEGORY_LABELS } from "@/lib/types";
+import { DocumentContent } from "./document-content";
 
 const remarkPlugins = [remarkGfm];
 const HEADING_REGEX = /^#\s+.+\n+/;
@@ -469,9 +470,7 @@ function RuleContent({
         <p className="mt-2 text-neutral-500 text-sm">Rule</p>
       </header>
 
-      <div className="prose">
-        <Markdown remarkPlugins={remarkPlugins}>{body}</Markdown>
-      </div>
+      <DocumentContent content={body} />
 
       <ViewSourceButton onClick={onViewSource} />
     </>
