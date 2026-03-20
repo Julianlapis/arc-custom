@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
 import type {
   Agent,
+  Discipline,
   Rule,
   RuleCategory,
   Skill,
@@ -370,6 +371,41 @@ export function getWorkflowData(skills?: Skill[]): WorkflowData {
 
 // biome-ignore lint/performance/noBarrelFile: re-export used by page components
 export { sanitizeContent } from "./sanitize";
+
+/**
+ * Auto-discover all disciplines from the filesystem.
+ * Scans disciplines/ for .md files with name and description frontmatter.
+ */
+export function getDisciplines(): Discipline[] {
+  const discsDir = resolve(ROOT, "disciplines");
+  if (!existsSync(discsDir)) {
+    return [];
+  }
+
+  const disciplines: Discipline[] = [];
+  const files = readdirSync(discsDir).filter((f) => f.endsWith(".md"));
+
+  for (const file of files) {
+    const raw = readLocalFile(`disciplines/${file}`);
+    if (!raw) {
+      continue;
+    }
+
+    try {
+      const { data } = matter(raw);
+      const slug = file.replace(MD_EXTENSION_REGEX, "");
+      disciplines.push({
+        slug,
+        name: String(data.name || slug),
+        description: String(data.description || ""),
+      });
+    } catch {
+      // Skip files with parsing errors
+    }
+  }
+
+  return disciplines;
+}
 
 export function getAssetCounts(): { references: number; disciplines: number } {
   const refsDir = resolve(ROOT, "references");

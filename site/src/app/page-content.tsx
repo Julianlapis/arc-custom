@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { Agent, Rule, Skill } from "@/lib/types";
+import type { Agent, Discipline, Rule, Skill } from "@/lib/types";
 import { ContentBrowser } from "./content-browser";
 import {
   ArcSheetsProvider,
@@ -11,12 +11,18 @@ import {
 } from "./unified-drawer";
 
 interface PageContentProps {
-  skills: Skill[];
   agents: Agent[];
+  disciplines: Discipline[];
   rules: Rule[];
+  skills: Skill[];
 }
 
-function PageContentInner({ skills, agents, rules }: PageContentProps) {
+function PageContentInner({
+  skills,
+  agents,
+  rules,
+  disciplines,
+}: PageContentProps) {
   const { open } = useArcSheets();
 
   const skillsByName = useMemo(
@@ -53,6 +59,7 @@ function PageContentInner({ skills, agents, rules }: PageContentProps) {
     <div className="mb-[calc(var(--baseline)*1.5)]">
       <ContentBrowser
         agents={agents}
+        disciplines={disciplines}
         onAgentClick={openAgent}
         onRuleClick={openRule}
         onSkillClick={openSkill}
@@ -63,10 +70,20 @@ function PageContentInner({ skills, agents, rules }: PageContentProps) {
   );
 }
 
-export function PageContent({ skills, agents, rules }: PageContentProps) {
+export function PageContent({
+  skills,
+  agents,
+  rules,
+  disciplines,
+}: PageContentProps) {
   return (
     <ArcSheetsProvider>
-      <PageContentInner agents={agents} rules={rules} skills={skills} />
+      <PageContentInner
+        agents={agents}
+        disciplines={disciplines}
+        rules={rules}
+        skills={skills}
+      />
     </ArcSheetsProvider>
   );
 }

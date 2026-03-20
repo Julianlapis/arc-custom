@@ -11,50 +11,50 @@ export const WORKFLOW_POSITIONS = ["spine", "branch", "utility"] as const;
 export type WorkflowPosition = (typeof WORKFLOW_POSITIONS)[number];
 
 export interface SkillWorkflow {
-  position: WorkflowPosition;
   after?: string; // spine only — preceding skill name
   joins?: string; // branch only — which spine skill to connect to
+  position: WorkflowPosition;
 }
 
 export interface Skill {
+  agents?: string[];
+  content: string;
+  decisions: string[];
+  desc: string;
+  invokable: boolean;
   name: string;
   order: number;
-  invokable: boolean;
-  desc: string;
   summary: string;
   what: string;
   why: string;
-  decisions: string[];
-  agents?: string[];
   workflow?: SkillWorkflow;
-  content: string;
 }
 
 export interface WorkflowData {
-  spine: Skill[]; // Ordered left-to-right
   branches: Record<string, Skill[]>; // spine skill name → branch skills
+  spine: Skill[]; // Ordered left-to-right
   utilities: Skill[]; // Unconnected skills
 }
 
 export interface Agent {
-  name: string;
   category: AgentCategory;
+  content: string;
   desc: string;
+  name: string;
   summary: string;
+  usedBy?: string[];
   what: string;
   why: string;
-  usedBy?: string[];
-  content: string;
 }
 
 export const RULE_CATEGORIES = ["core", "workflow", "interface"] as const;
 export type RuleCategory = (typeof RULE_CATEGORIES)[number];
 
 export interface Rule {
-  slug: string;
-  title: string;
   category: RuleCategory;
   content: string;
+  slug: string;
+  title: string;
 }
 
 export const AGENT_CATEGORY_LABELS: Record<AgentCategory, string> = {
@@ -63,3 +63,9 @@ export const AGENT_CATEGORY_LABELS: Record<AgentCategory, string> = {
   build: "Build Agent",
   workflow: "Workflow Agent",
 };
+
+export interface Discipline {
+  description: string;
+  name: string;
+  slug: string;
+}

@@ -2,24 +2,29 @@
 
 // biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
 import * as Tabs from "@radix-ui/react-tabs";
-import type { Agent, Rule, Skill } from "@/lib/types";
+import type { Agent, Discipline, Rule, Skill } from "@/lib/types";
 import { AgentList } from "./agent-list";
 import { RuleList } from "./rule-list";
 import { SkillList } from "./skill-list";
 
 interface ContentBrowserProps {
-  skills: Skill[];
   agents: Agent[];
-  rules: Rule[];
-  onSkillClick: (skill: Skill) => void;
+  disciplines: Discipline[];
   onAgentClick: (agent: Agent) => void;
   onRuleClick: (rule: Rule) => void;
+  onSkillClick: (skill: Skill) => void;
+  rules: Rule[];
+  skills: Skill[];
 }
+
+const TAB_CLASSES =
+  "border-transparent border-b-2 px-3 pb-2 font-mono text-neutral-400 text-xs uppercase tracking-wider transition-colors hover:text-neutral-600 data-[state=active]:border-[var(--color-accent)] data-[state=active]:text-neutral-900";
 
 export function ContentBrowser({
   skills,
   agents,
   rules,
+  disciplines,
   onSkillClick,
   onAgentClick,
   onRuleClick,
@@ -27,23 +32,17 @@ export function ContentBrowser({
   return (
     <Tabs.Root defaultValue="skills">
       <Tabs.List className="mb-[calc(var(--baseline)*1.5)] flex gap-1 border-neutral-200 border-b">
-        <Tabs.Trigger
-          className="border-transparent border-b-2 px-3 pb-2 font-mono text-neutral-400 text-xs uppercase tracking-wider transition-colors hover:text-neutral-600 data-[state=active]:border-[var(--color-accent)] data-[state=active]:text-neutral-900"
-          value="skills"
-        >
+        <Tabs.Trigger className={TAB_CLASSES} value="skills">
           {skills.length} Skills
         </Tabs.Trigger>
-        <Tabs.Trigger
-          className="border-transparent border-b-2 px-3 pb-2 font-mono text-neutral-400 text-xs uppercase tracking-wider transition-colors hover:text-neutral-600 data-[state=active]:border-[var(--color-accent)] data-[state=active]:text-neutral-900"
-          value="agents"
-        >
+        <Tabs.Trigger className={TAB_CLASSES} value="agents">
           {agents.length} Agents
         </Tabs.Trigger>
-        <Tabs.Trigger
-          className="border-transparent border-b-2 px-3 pb-2 font-mono text-neutral-400 text-xs uppercase tracking-wider transition-colors hover:text-neutral-600 data-[state=active]:border-[var(--color-accent)] data-[state=active]:text-neutral-900"
-          value="rules"
-        >
+        <Tabs.Trigger className={TAB_CLASSES} value="rules">
           {rules.length} Rules
+        </Tabs.Trigger>
+        <Tabs.Trigger className={TAB_CLASSES} value="disciplines">
+          {disciplines.length} Disciplines
         </Tabs.Trigger>
       </Tabs.List>
 
@@ -84,6 +83,25 @@ export function ContentBrowser({
           to distribute to any AI coding agent.
         </p>
         <RuleList onRuleClick={onRuleClick} rules={rules} />
+      </Tabs.Content>
+
+      <Tabs.Content value="disciplines">
+        <p className="mb-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
+          Implementation methodologies that skills follow. Not what to build,
+          but how to build it well.
+        </p>
+        <div className="grid gap-px sm:grid-cols-2">
+          {disciplines.map((d) => (
+            <div
+              className="border-neutral-200 border-b py-[calc(var(--baseline)*0.75)] pr-4"
+              key={d.slug}
+            >
+              <span className="font-mono text-neutral-900 text-sm">
+                {d.name}
+              </span>
+            </div>
+          ))}
+        </div>
       </Tabs.Content>
     </Tabs.Root>
   );

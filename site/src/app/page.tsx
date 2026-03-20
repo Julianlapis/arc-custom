@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAgents, getRules, getSkills, getVersion } from "@/lib/content";
+import {
+  getAgents,
+  getDisciplines,
+  getRules,
+  getSkills,
+  getVersion,
+} from "@/lib/content";
 import { AnimatedHero } from "./animated-hero";
 import { CopyButton } from "./copy-button";
+import { InstallTabs } from "./install-tabs";
 import { PageContent } from "./page-content";
 
 export const metadata: Metadata = {
@@ -16,6 +23,7 @@ export default function ArcPage() {
   const skills = getSkills();
   const agents = getAgents();
   const rules = getRules();
+  const disciplines = getDisciplines();
   const version = getVersion();
   const skillNames = skills.filter((s) => s.invokable).map((s) => s.name);
   return (
@@ -60,12 +68,21 @@ export default function ArcPage() {
               target="_blank"
             >
               Claude Code
+            </Link>
+            , Codex, and{" "}
+            <Link
+              className="prose-link"
+              href="https://github.com/vercel-labs/skills#supported-agents"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              40+ agents
             </Link>{" "}
-            and Codex with {skills.length} skills and {agents.length}{" "}
-            specialized agents. Skills orchestrate workflows: exploring your
-            codebase, asking clarifying questions, spawning agents for parallel
-            review. Agents are specialists: security auditors, performance
-            analysts, architecture reviewers, each with deep domain expertise.
+            with {skills.length} skills and {agents.length} specialized agents.
+            Skills orchestrate workflows: exploring your codebase, asking
+            clarifying questions, spawning agents for parallel review. Agents
+            are specialists: security auditors, performance analysts,
+            architecture reviewers, each with deep domain expertise.
           </p>
           <p className="mt-[calc(var(--baseline)*1)] text-neutral-500 text-sm">
             Made by{" "}
@@ -80,143 +97,9 @@ export default function ArcPage() {
           </p>
         </section>
 
-        {/* Install */}
+        {/* Install + Update (tabbed) */}
         <section className="mb-[calc(var(--baseline)*4)]">
-          <div className="max-w-lg space-y-[calc(var(--baseline)*1)]">
-            <div className="group">
-              <div className="relative rounded bg-neutral-800">
-                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
-                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
-                    <span className="shrink-0 text-neutral-500">$</span>
-                    <span className="truncate">
-                      claude plugins install arc@howells
-                    </span>
-                  </span>
-                </div>
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
-                />
-                <div className="absolute inset-y-0 right-4 flex items-center">
-                  <CopyButton light text="claude plugins install arc@howells" />
-                </div>
-              </div>
-              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
-                Install from the{" "}
-                <Link
-                  className="prose-link"
-                  href="https://docs.anthropic.com/en/docs/claude-code/plugins#plugin-marketplace"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Claude Code plugin marketplace
-                </Link>
-                . Requires{" "}
-                <Link
-                  className="prose-link"
-                  href="https://docs.anthropic.com/en/docs/claude-code"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Claude Code
-                </Link>{" "}
-                2.1.16+ (uses Tasks, not Todos)
-              </p>
-            </div>
-
-            <div className="group">
-              <div className="relative rounded bg-neutral-800">
-                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
-                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
-                    <span className="shrink-0 text-neutral-500">$</span>
-                    <span className="truncate">
-                      curl -fsSL
-                      https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh
-                      | bash -s -- --auto-update --interval-hours 6
-                    </span>
-                  </span>
-                </div>
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
-                />
-                <div className="absolute inset-y-0 right-4 flex items-center">
-                  <CopyButton
-                    light
-                    text="curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6"
-                  />
-                </div>
-              </div>
-              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
-                Codex install (uses <code>~/.agents/skills</code>) with
-                auto-update every 6 hours. One-time install without auto-update:{" "}
-                <code>
-                  curl -fsSL
-                  https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh
-                  | bash
-                </code>
-                .
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Updating */}
-        <section className="mb-[calc(var(--baseline)*4)]">
-          <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
-            Updating
-          </h2>
-          <div className="max-w-lg space-y-[calc(var(--baseline)*1)]">
-            <div className="group">
-              <div className="relative rounded bg-neutral-800">
-                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
-                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
-                    <span className="shrink-0 text-neutral-500">$</span>
-                    <span className="truncate">
-                      claude plugins update arc@howells
-                    </span>
-                  </span>
-                </div>
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
-                />
-                <div className="absolute inset-y-0 right-4 flex items-center">
-                  <CopyButton light text="claude plugins update arc@howells" />
-                </div>
-              </div>
-              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
-                Claude Code auto-updates plugins, but you can trigger it
-                manually. In Cursor, use this command — it doesn&apos;t
-                auto-update.
-              </p>
-            </div>
-
-            <div className="group">
-              <div className="relative rounded bg-neutral-800">
-                <div className="overflow-hidden px-4 py-3 pr-20 font-mono text-neutral-100 text-sm">
-                  <span className="flex min-w-0 items-center gap-2 whitespace-nowrap">
-                    <span className="shrink-0 text-neutral-500">$</span>
-                    <span className="truncate">
-                      ~/.codex/arc/.codex/update.sh
-                    </span>
-                  </span>
-                </div>
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-y-0 right-12 w-16 bg-gradient-to-l from-neutral-800 to-transparent"
-                />
-                <div className="absolute inset-y-0 right-4 flex items-center">
-                  <CopyButton light text="~/.codex/arc/.codex/update.sh" />
-                </div>
-              </div>
-              <p className="mt-[calc(var(--baseline)*0.5)] max-w-lg text-pretty text-neutral-500 text-xs leading-relaxed">
-                Codex manual update. If you installed with{" "}
-                <code>--auto-update</code>, this runs automatically on a
-                schedule.
-              </p>
-            </div>
-          </div>
+          <InstallTabs />
         </section>
 
         {/* Primary command */}
@@ -234,6 +117,61 @@ export default function ArcPage() {
             Understands your codebase. Asks what you want to build. Guides you
             through design → plan → implementation with TDD.
           </p>
+        </section>
+
+        {/* Getting started */}
+        <section className="mb-[calc(var(--baseline)*4)]">
+          <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
+            Getting started
+          </h2>
+          <div className="max-w-lg space-y-[calc(var(--baseline)*1)] text-neutral-600 text-sm leading-relaxed">
+            <p>
+              Open your project in Claude Code or Codex and run a command.
+              Commands chain together:{" "}
+              <span className="font-mono text-neutral-800">/arc:ideate</span>{" "}
+              creates a design doc, then asks if you want to continue to{" "}
+              <span className="font-mono text-neutral-800">/arc:implement</span>
+              . You can enter at any point — already have a design doc? Start at{" "}
+              <span className="font-mono text-neutral-800">/arc:implement</span>
+              .
+            </p>
+          </div>
+          <div className="mt-[calc(var(--baseline)*1)] max-w-lg space-y-[calc(var(--baseline)*0.75)]">
+            <div className="flex items-center gap-3 font-mono text-sm">
+              <span className="shrink-0 text-neutral-400">#</span>
+              <span className="text-neutral-500">Design a feature</span>
+            </div>
+            <div className="group">
+              <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
+                <span className="text-neutral-800">
+                  /arc:ideate add a notification system
+                </span>
+                <CopyButton text="/arc:ideate add a notification system" />
+              </div>
+            </div>
+            <div className="flex items-center gap-3 font-mono text-sm">
+              <span className="shrink-0 text-neutral-400">#</span>
+              <span className="text-neutral-500">
+                What should I build next?
+              </span>
+            </div>
+            <div className="group">
+              <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
+                <span className="text-neutral-800">/arc:suggest</span>
+                <CopyButton text="/arc:suggest" />
+              </div>
+            </div>
+            <div className="flex items-center gap-3 font-mono text-sm">
+              <span className="shrink-0 text-neutral-400">#</span>
+              <span className="text-neutral-500">Ship to production</span>
+            </div>
+            <div className="group">
+              <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
+                <span className="text-neutral-800">/arc:letsgo</span>
+                <CopyButton text="/arc:letsgo" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Philosophy */}
@@ -256,7 +194,7 @@ export default function ArcPage() {
         </section>
 
         {/* Principles */}
-        <section className="mb-[calc(var(--baseline)*2)]">
+        <section className="mb-[calc(var(--baseline)*4)]">
           <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
             Principles
           </h2>
@@ -291,7 +229,151 @@ export default function ArcPage() {
                 Agents advise, they don't dictate.
               </span>
             </li>
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">—</span>
+              <span>
+                <span className="text-neutral-900">
+                  Frontend-design integrated.
+                </span>{" "}
+                Bold aesthetic direction, not generic AI slop.
+              </span>
+            </li>
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">—</span>
+              <span>
+                <span className="text-neutral-900">
+                  YAGNI where appropriate.
+                </span>{" "}
+                Simplifications suggested, but you have final say.
+              </span>
+            </li>
           </ul>
+        </section>
+
+        {/* Interop */}
+        <section className="mb-[calc(var(--baseline)*4)]">
+          <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
+            How commands connect
+          </h2>
+          <ul className="max-w-lg space-y-[calc(var(--baseline)*0.75)]">
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">→</span>
+              <span>
+                <span className="font-mono text-neutral-800">/arc:ideate</span>{" "}
+                flows into{" "}
+                <span className="font-mono text-neutral-800">
+                  /arc:implement
+                </span>{" "}
+                — design, then build with TDD.
+              </span>
+            </li>
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">→</span>
+              <span>
+                <span className="font-mono text-neutral-800">/arc:build</span>{" "}
+                suggests{" "}
+                <span className="font-mono text-neutral-800">/arc:ideate</span>{" "}
+                if scope is too large.
+              </span>
+            </li>
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">→</span>
+              <span>
+                <span className="font-mono text-neutral-800">/arc:letsgo</span>{" "}
+                runs{" "}
+                <span className="font-mono text-neutral-800">/arc:testing</span>{" "}
+                and{" "}
+                <span className="font-mono text-neutral-800">/arc:audit</span>{" "}
+                as part of quality checks.
+              </span>
+            </li>
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">→</span>
+              <span>
+                <span className="font-mono text-neutral-800">/arc:suggest</span>{" "}
+                reads Linear issues (if configured), tasks, codebase, and
+                vision.
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        {/* Integrations */}
+        <section className="mb-[calc(var(--baseline)*2)]">
+          <h2 className="mb-[calc(var(--baseline)*1)] font-mono text-neutral-500 text-xs uppercase leading-[var(--baseline)] tracking-wider">
+            Optional integrations
+          </h2>
+          <p className="mb-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
+            Arc works standalone. These integrations unlock enhanced
+            functionality when available.
+          </p>
+          <div className="max-w-lg overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-neutral-200 border-b">
+                  <th className="py-2 pr-4 font-medium text-neutral-900">
+                    Integration
+                  </th>
+                  <th className="py-2 font-medium text-neutral-900">Used by</th>
+                </tr>
+              </thead>
+              <tbody className="text-neutral-600">
+                <tr className="border-neutral-100 border-b">
+                  <td className="py-2 pr-4 font-mono text-neutral-800">
+                    Figma
+                  </td>
+                  <td className="py-2">
+                    /arc:ideate, /arc:implement, /arc:design
+                  </td>
+                </tr>
+                <tr className="border-neutral-100 border-b">
+                  <td className="py-2 pr-4 font-mono text-neutral-800">
+                    Context7
+                  </td>
+                  <td className="py-2">
+                    Research and implementation workflows
+                  </td>
+                </tr>
+                <tr className="border-neutral-100 border-b">
+                  <td className="py-2 pr-4 font-mono text-neutral-800">
+                    Claude in Chrome
+                  </td>
+                  <td className="py-2">
+                    /arc:design, /arc:responsive, /arc:polish
+                  </td>
+                </tr>
+                <tr className="border-neutral-100 border-b">
+                  <td className="py-2 pr-4 font-mono text-neutral-800">
+                    WireText MCP
+                  </td>
+                  <td className="py-2">/arc:design, /arc:ideate wireframing</td>
+                </tr>
+                <tr className="border-neutral-100 border-b">
+                  <td className="py-2 pr-4 font-mono text-neutral-800">
+                    Linear MCP
+                  </td>
+                  <td className="py-2">
+                    /arc:suggest, /arc:audit issue tracking
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4 font-mono text-neutral-800">
+                    <Link
+                      className="prose-link"
+                      href="https://github.com/vercel-labs/agent-skills"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Vercel Labs
+                    </Link>
+                  </td>
+                  <td className="py-2">
+                    React best practices, composition patterns, UI compliance
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
 
         {/* Divider */}
@@ -302,7 +384,12 @@ export default function ArcPage() {
         </div>
 
         {/* Workflow Diagram + Content Browser (client, shared drawer) */}
-        <PageContent agents={agents} rules={rules} skills={skills} />
+        <PageContent
+          agents={agents}
+          disciplines={disciplines}
+          rules={rules}
+          skills={skills}
+        />
 
         {/* Footer */}
         <footer className="border-neutral-200 border-t pt-[calc(var(--baseline)*1)] text-sm">
