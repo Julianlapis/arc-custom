@@ -30,9 +30,12 @@ function RfcListItem({ children }: { children?: ReactNode }) {
       const rest = first.slice(match[0].length);
       const colors = keywordColors[keyword] ?? keywordColors.MAY;
       return (
-        <li className="flex items-start gap-2" style={{ listStyle: "none", marginLeft: "-1.5em" }}>
+        <li
+          className="flex items-start gap-2"
+          style={{ listStyle: "none", marginLeft: "-1.5em" }}
+        >
           <span
-            className={`mt-[3px] shrink-0 rounded border px-1.5 py-px font-mono text-[10px] font-medium leading-tight ${colors}`}
+            className={`mt-[3px] shrink-0 rounded border px-1.5 py-px font-medium font-mono text-[10px] leading-tight ${colors}`}
           >
             {keyword}
           </span>
