@@ -114,6 +114,63 @@ To test changes locally:
 - **Continuous quality** — TS/lint after every task
 - **Knowledge compounds** — Solved problems documented for future sessions
 - **Small control plane** — `using-arc` handles startup routing; richer workflows load on demand
+- **Lead agent always active** — Vision alignment checked on every Arc command via hook
+- **Feedback logs compound** — Every agent has a per-agent feedback log that accumulates preferences
+
+## Lead Agent
+
+The lead agent (`~/Projects/lead-agent/lead.py`) is the orchestration layer for Arc. It has three modes:
+
+- **`check`** — Hook mode. Fires on every `UserPromptSubmit` via Claude Code hooks. Reads the project vision, injects it as context, warns on drift.
+- **`advise`** — Interactive advisor. Reads project state and recommends next steps.
+- **`orchestrate`** — Full autonomous mode. Builds vision, plans, executes, drift-checks.
+
+The `check` hook is installed in `~/.claude/settings.json` (global) and can be overridden per-project in `.claude/settings.json`.
+
+## Dual Feedback Loop System
+
+Arc uses a two-loop self-improvement system. Manual corrections (Loop 1) always outrank automated observations (Loop 2).
+
+### Loop 1: Feedback Logs (Manual Corrections — Binding)
+
+**Plugin-level:** `feedback-log.md` at plugin root. Binding across ALL skills and agents. Read as FIRST required_reading on every invocation. Contains structured entries with examples of what went wrong and what the fix looked like.
+
+**Agent-level:** Per-agent logs at `~/.claude/feedback/arc/`. Injected via `SubagentStart` hook when each agent spawns. Contains agent-specific learnings.
+
+```
+arc-custom/
+├── feedback-log.md          (binding across entire plugin)
+
+~/.claude/feedback/arc/
+├── general.md               (read by ALL agents)
+├── build/                   (one file per build agent)
+├── review/                  (one file per review agent)
+├── workflow/                (one file per workflow agent)
+└── research/                (one file per research agent)
+```
+
+### Loop 2: Observation Log (Automated Self-Tracking)
+
+After every skill run, an entry is appended to `logs/execution-log.md` scoring the output on 5 dimensions:
+
+| Dimension | What it measures |
+|-----------|-----------------|
+| Vision Alignment | Does the output serve the project vision? |
+| Craft Quality | Is the output well-built, not junior? |
+| Process Adherence | Were the right skills and tools used? |
+| User Satisfaction | Did Julian accept or correct? |
+| Knowledge Capture | Were learnings logged for future sessions? |
+
+Below 35/50 = the run failed. Every 3rd run, scan for recurring weak dimensions. If any dimension scored below 7 three or more times in the last 10 runs, flag it as systemic.
+
+### Priority Hierarchy
+
+1. Julian's explicit instructions in conversation (highest)
+2. Feedback log entries (binding corrections)
+3. Observation-driven improvements (automated, Julian approves)
+4. Default plugin behavior (lowest)
+
+The feedback logs compound over time. By session 10 with any given agent, it knows Julian's preferences. By session 20, first drafts come back close to done.
 
 ## Complementary Plugins
 
