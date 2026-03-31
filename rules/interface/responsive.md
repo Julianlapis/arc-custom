@@ -147,6 +147,29 @@ SHOULD test on: one real iPhone, one real Android, a tablet if relevant. Cheap A
 
 ---
 
+## Responsive Text Measurement (Pretext)
+
+When text containers resize across breakpoints, avoid DOM measurement to check fit. Use `@chenglou/pretext` for reflow-free text height calculation:
+
+```ts
+import { prepare, layout } from '@chenglou/pretext'
+const prepared = prepare(text, '14px Inter') // once
+// On resize — pure arithmetic, no layout reflow
+const mobileHeight = layout(prepared, 343, 20).height   // 375px - 32px padding
+const desktopHeight = layout(prepared, 600, 20).height
+```
+
+This is especially valuable for:
+- Virtualized lists that change column width at breakpoints
+- Container queries where text containers resize independently
+- Preventing layout shift when viewport changes
+
+**Gotcha:** If `font-size` changes at a breakpoint (via `clamp()` or media query), you need a new `prepare()` call with the updated font string. `layout()` returns heights based on the font metrics from `prepare()` — stale font = wrong height.
+
+See `references/pretext.md` for full API.
+
+---
+
 ## Anti-Patterns
 
 - NEVER: Desktop-first CSS (base styles should be mobile)

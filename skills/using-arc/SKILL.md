@@ -97,6 +97,21 @@ Rules:
 - **If drift is detected, STOP.** Tell the user what drifted and why before continuing.
 - **If no vision exists and the work is substantial, suggest `/arc:vision` first.**
 
+## Context-Aware Skill Activation
+
+Before routing, check what's present in the project:
+
+```
+references/skill-contexts.md
+```
+
+This reference maps every Arc skill to its activation context (web project, has UI, has tests, etc.).
+Use it to filter suggestions in `/arc:go`, `/arc:help`, and `/arc:suggest`. Never hide skills
+entirely — dim irrelevant ones with an explanation. The user may know better.
+
+Key rule: if a skill requires `has_web` and the project has no `package.json`, don't suggest it
+prominently. But if the user explicitly invokes it, run it anyway.
+
 ## Workflow Routing
 
 Use these defaults:

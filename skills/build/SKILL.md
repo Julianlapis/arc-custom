@@ -40,6 +40,7 @@ website:
 1. `references/testing-patterns.md` — Test philosophy
 2. `references/frontend-design.md` — If UI work
 3. `references/component-design.md` — If React components
+4. `references/pretext.md` — If building virtualized lists, chat UIs, masonry layouts, or auto-sizing textareas (DOM-free text measurement)
 </required_reading>
 
 <agents>

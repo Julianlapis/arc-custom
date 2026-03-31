@@ -158,6 +158,24 @@ Tools like [Fontaine](https://github.com/unjs/fontaine) or Next.js `next/font` c
 | Body text | `text-pretty` |
 | Dense UI | `truncate` or `line-clamp-*` |
 
+## Programmatic Text Measurement (Pretext)
+
+When you need text height, line count, or optimal container width without DOM measurement:
+
+- SHOULD: Use `@chenglou/pretext` for text-aware layouts (virtualization, masonry, chat bubbles, auto-sizing textareas)
+- SHOULD: Use `walkLineRanges()` to find shrinkwrap width (tightest container that fits text)
+- MUST: Match `prepare()` font string to your CSS font declaration exactly
+- MUST: Match `layout()` lineHeight to your CSS `line-height` in pixels
+- NEVER: Use `system-ui` with Pretext — canvas and DOM can resolve different fonts on macOS
+
+```ts
+import { prepare, layout } from '@chenglou/pretext'
+const prepared = prepare(text, '16px Inter')  // one-time
+const { height, lineCount } = layout(prepared, containerWidth, 24)  // pure math, no DOM
+```
+
+See `references/pretext.md` for full API, patterns, and when to use vs. when CSS is enough.
+
 ## Content Formatting
 
 - MUST: Ellipsis character `…` (not `...`)

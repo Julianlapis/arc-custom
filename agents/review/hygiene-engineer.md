@@ -1,6 +1,6 @@
 ---
 name: hygiene-engineer
-model: sonnet
+model: haiku
 color: magenta
 description: Use this agent to detect code artifacts that don't match codebase style. Reviews for unnecessary comments, defensive checks in trusted codepaths, type escapes, and style inconsistencies. Use when running /arc:audit --hygiene, after rapid coding sessions, or before merging branches with substantial new code.
 website:

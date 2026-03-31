@@ -12,7 +12,7 @@ description: |
   Spec review comes before code quality review. Catches over/under-building early.
   </commentary>
   </example>
-model: sonnet
+model: haiku
 color: blue
 website:
   desc: Spec compliance checker

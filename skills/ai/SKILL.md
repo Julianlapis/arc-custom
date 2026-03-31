@@ -42,6 +42,7 @@ AI SDK 6 guidance for building AI-powered features.
 **Read after detecting AI SDK (Step 1):**
 1. references/ai-sdk.md — Patterns and code examples
 2. rules/ai-sdk.md — MUST/NEVER constraints
+3. references/pretext.md — If building chat UIs: DOM-free text measurement for message bubble shrinkwrap, virtualized message lists with exact row heights, and auto-sizing textareas
 </required_reading>
 
 <process>

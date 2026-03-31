@@ -79,6 +79,7 @@ When analyzing code, you systematically evaluate:
 - Verify efficient DOM manipulation
 - Monitor JavaScript execution time
 - Flag `next/image` components missing the `sizes` prop (causes browser to request up to 3840px images regardless of viewport)
+- Flag `offsetHeight` / `getBoundingClientRect` / `scrollHeight` used for text measurement — recommend `@chenglou/pretext` for reflow-free text height/width calculation. See `references/pretext.md`.
 
 ## Performance Benchmarks
 

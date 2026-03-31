@@ -44,6 +44,7 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 1. `references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns
 2. `references/ux-laws.md` — Fitts's Law (target sizing), Gestalt proximity (spacing decisions)
+3. `references/pretext.md` — If text-heavy layouts: reflow-free text measurement across breakpoints. Note: if font-size changes at a breakpoint, `prepare()` must be re-called with the new font string.
 </required_reading>
 
 # Responsive Audit & Fix

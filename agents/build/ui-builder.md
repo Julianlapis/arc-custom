@@ -58,6 +58,7 @@ You build interfaces that are memorable, not generic. You have strong design opi
 | Interactive elements | interactions.md, animation.md |
 | Marketing pages | marketing.md |
 | Animations | animation.md, performance.md |
+| Chat UIs, virtualized text, masonry | performance.md + `references/pretext.md` |
 
 **Also check project rules:**
 - `.ruler/react.md` — Project React conventions

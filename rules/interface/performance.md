@@ -6,7 +6,7 @@
 - MUST: Track re-renders (React DevTools/React Scan)
 - MUST: Batch layout reads/writes — avoid reflows/repaints
 - MUST: Mutations (`POST/PATCH/DELETE`) < 500ms
-- MUST: Virtualize large lists (`@tanstack/react-virtual` or `virtua`)
+- MUST: Virtualize large lists (`@tanstack/react-virtual` or `virtua`). Consider `@chenglou/pretext` for exact row heights instead of estimated sizes.
 - MUST: Preload above-fold images; lazy-load rest
 - SHOULD: Test iOS Low Power Mode and macOS Safari
 - SHOULD: Prefer uncontrolled inputs; make controlled loops cheap
@@ -23,6 +23,27 @@
 - NEVER: Animate global CSS variables — triggers style recalc on ALL descendants (F-Tier)
 - CSS variables ALWAYS trigger paint, even inside `opacity: var(--x)`
 - If unavoidable, use `@property { inherits: false }` to prevent cascade
+
+### Text Measurement (Use Pretext)
+
+- SHOULD: Use `@chenglou/pretext` for text height/width measurement instead of DOM reads
+- SHOULD: Avoid `offsetHeight`, `getBoundingClientRect`, or `scrollHeight` to measure text when your CSS matches Pretext's supported model (normal wrapping, named font, known lineHeight). For unsupported CSS (`nowrap`, `letter-spacing`, `break-all`, mixed inline content), DOM measurement is still valid — but batch your reads.
+- SHOULD: Cache `prepare()` results — it's the expensive one-time step. `layout()` is the cheap hot path for resize.
+- NEVER: Use `system-ui` with Pretext — canvas and DOM can resolve different fonts on macOS.
+- NEVER: Call `prepare()` in Server Components or Node.js — it requires canvas and will throw.
+- See `references/pretext.md` for full API and integration patterns
+
+```ts
+// Bad: DOM measurement triggers reflow
+const height = textElement.offsetHeight
+
+// Good: Pure arithmetic, no reflow
+import { prepare, layout } from '@chenglou/pretext'
+const prepared = prepare(text, '16px Inter') // once
+const { height } = layout(prepared, containerWidth, 20) // on resize — pure math
+```
+
+Key use cases: virtualized list row heights, auto-sizing textareas, chat bubble shrinkwrap, masonry card heights, text-around-image flow, scroll anchoring.
 
 ### Thrashing (F-Tier)
 
@@ -110,6 +131,8 @@ When full virtualization (`@tanstack/react-virtual`) isn't feasible, use CSS `co
 ```
 
 This lets the browser skip rendering off-screen items. Simpler than JS virtualization, works for moderate lists (100-500 items).
+
+**Better:** Use `@chenglou/pretext` to calculate exact `contain-intrinsic-size` values from text content instead of hardcoded estimates. See `references/pretext.md`.
 
 ### Hydration Mismatches
 

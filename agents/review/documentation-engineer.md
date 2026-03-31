@@ -1,6 +1,6 @@
 ---
 name: documentation-engineer
-model: sonnet
+model: haiku
 color: blue
 description: |
   Use this agent to review TypeScript/JavaScript codebases for JSDoc coverage and quality.

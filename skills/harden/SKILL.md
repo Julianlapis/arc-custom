@@ -101,6 +101,8 @@ Every text element needs an overflow strategy:
 <p class="break-all">superlongdomainname.com/path/to/thing</p>
 ```
 
+For dynamic or user-generated text, consider using `@chenglou/pretext` to verify text fits its container programmatically — `prepare()` + `layout()` returns height and line count without DOM measurement. See `references/pretext.md`.
+
 Check:
 - [ ] Every text element has an overflow strategy
 - [ ] Flex/grid children use `min-w-0` where needed

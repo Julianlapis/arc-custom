@@ -135,6 +135,8 @@ When uncertain, err toward not reporting. False positives waste everyone's time.
 | No empty state | "What if there's no data?" |
 | Inconsistent spacing | "Spacing looks inconsistent. Use design system tokens." |
 | Missing focus/hover states | "Add interaction states." |
+| `offsetHeight`/`getBoundingClientRect` for text measurement | "Use `@chenglou/pretext` — reflow-free text height. See `references/pretext.md`." |
+| Estimated row heights in virtualized lists | "Use Pretext for exact heights instead of guessing. See `references/pretext.md`." |
 
 ### Loading States & Progressive Feedback
 

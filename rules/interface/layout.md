@@ -36,3 +36,27 @@ MUST use fixed scale — no arbitrary values like `z-[999]`:
   {/* New stacking context, no global z-index conflict */}
 </div>
 ```
+
+## Text-Aware Layouts (Pretext)
+
+For layouts where text content determines geometry — masonry grids, chat bubbles, text-around-obstacles, editorial columns — use `@chenglou/pretext` instead of DOM measurement or height estimates.
+
+- SHOULD: Use `prepare()` + `layout()` for masonry card heights based on actual text content
+- SHOULD: Use `walkLineRanges()` for shrinkwrap containers (chat bubbles, labels, tooltips)
+- SHOULD: Use `layoutNextLine()` for text flowing around images or obstacles with variable-width lines
+- SHOULD: Prefer Pretext over `offsetHeight` / `getBoundingClientRect` for text layout calculations — it avoids reflow entirely
+
+```ts
+// Masonry: know card heights before placement
+import { prepare, layout } from '@chenglou/pretext'
+const prepared = prepare(cardText, '14px Inter')
+const { height } = layout(prepared, cardWidth, 20)
+
+// Chat bubble shrinkwrap: tightest width that fits
+import { prepareWithSegments, walkLineRanges } from '@chenglou/pretext'
+const prepared = prepareWithSegments(message, '14px Inter')
+let maxW = 0
+walkLineRanges(prepared, maxBubbleWidth, line => { if (line.width > maxW) maxW = line.width })
+```
+
+See `references/pretext.md` for full API and integration patterns.

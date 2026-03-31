@@ -15,7 +15,7 @@ description: |
   implemented, or added beyond the plan's scope.
   </commentary>
   </example>
-model: sonnet
+model: haiku
 color: green
 website:
   desc: Plan completion verifier

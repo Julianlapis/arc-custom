@@ -1,6 +1,6 @@
 ---
 name: seo-engineer
-model: sonnet
+model: haiku
 color: green
 description: |
   Use this agent to review web projects for SEO compliance. Checks all vitals from rules/seo.md — meta tags, heading hierarchy, Open Graph, robots.txt, sitemap, structured data, and page classification (marketing vs app). Flags missing or broken SEO elements that would hurt indexing or social sharing.
