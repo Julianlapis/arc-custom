@@ -65,6 +65,39 @@ AskUserQuestion:
 
 ### Step 2: Gather Context
 
+**First: check for a strategy-engine handoff contract.**
+
+**Use Read tool:** `docs/strategy/04-brief-handoff.yaml`
+
+**If the handoff file exists:** The project has a strategic brief from `/strategy:product`.
+Read the YAML. Extract: purpose, rallying_cry, audience, goals, success, non_goals, principles.
+Also read `docs/strategy/04-brief.md` for richer context (the Problem and Proposition sections
+add depth that the YAML summary compresses out).
+
+Skip the Q&A below. Proceed directly to Step 3 with the handoff data as input.
+Present a summary to the user:
+
+```
+AskUserQuestion:
+  question: "I found a strategic brief with handoff contract. Here's what I'll use to generate
+  the vision: [summarize purpose, rallying cry, goals, non-goals]. Generate from this, or
+  do you want to adjust anything first?"
+  header: "Brief Found"
+  options:
+    - label: "Generate from brief"
+      description: "Use the strategic brief handoff data to draft the vision document"
+    - label: "Adjust first"
+      description: "I want to modify some inputs before you draft"
+    - label: "Ignore brief, start fresh"
+      description: "Skip the brief and use the Q&A intake instead"
+```
+
+**If the handoff file does NOT exist:** Fall back to the 5-question Q&A below.
+
+---
+
+**Q&A Intake (fallback when no handoff contract exists):**
+
 Ask one question at a time. Wait for the user's response before asking the next question.
 
 **Question 1:**
@@ -121,29 +154,57 @@ AskUserQuestion:
 
 ### Step 3: Draft Vision
 
-Write a 500-700 word vision document covering:
+Write a 500-700 word vision document. If the handoff contract was used, the vision
+should translate strategic language into builder language. The audience for this
+document is the AI in future sessions and developers working in the repo.
 
 ```markdown
 # Vision
 
+## Rallying Cry
+[If from handoff: carry the rallying cry verbatim from the brief.
+If from Q&A: distill the project description into 2-5 words that name the core bet.]
+
 ## Purpose
-[One paragraph: What is this and why does it exist?]
+[One paragraph: What is this and why does it exist?
+If from handoff: translate the brief's Proposition into builder language.
+"We're building X because Y" not "The market opportunity is Z."]
 
 ## Goals
-[3-5 bullet points: What are we trying to achieve?]
+[3-5 bullet points: What are we trying to achieve?
+If from handoff: carry goals from the YAML contract.]
 
 ## Target Users
-[Who is this for? What do they need?]
+[Who is this for? What do they need?
+If from handoff: carry audience from the YAML, add behavioral detail from the brief.]
 
 ## Success Criteria
-[How do we know if we've succeeded?]
+[How do we know if we've succeeded?
+If from handoff: carry success from the YAML contract. Keep the numbers.]
 
 ## Non-Goals
-[What are we explicitly NOT trying to do?]
+[What are we explicitly NOT trying to do?
+If from handoff: carry non_goals from the YAML. Frame as builder constraints:
+"No native mobile app" not "Mobile is out of scope for this engagement."]
 
 ## Principles
-[2-3 guiding principles for decisions]
+[2-3 guiding principles for decisions.
+If from handoff: carry principles from the YAML.
+If from Q&A: derive from the constraints and non-goals.]
 ```
+
+**Source tracking:** At the bottom of the vision document, add:
+```markdown
+---
+*Source: strategy-engine brief (docs/strategy/04-brief.md) | Generated: [date]*
+```
+Or if from Q&A:
+```markdown
+---
+*Source: direct input | Generated: [date]*
+```
+
+This lets future sessions know whether to check the brief for richer context.
 
 ### Step 4: Validate
 
@@ -179,6 +240,19 @@ Entry: `/arc:vision — [Created / Updated] vision document`
 
 ## Interop
 
+- **/strategy:product** (vision mode) produces the brief that feeds this skill via `04-brief-handoff.yaml`
 - **/arc:ideate** reads vision for context
 - **/arc:suggest** references vision as lowest-priority source
 - **/arc:letsgo** checks vision alignment
+
+## Pipeline Position
+
+In the full pipeline (strategy-engine → arc), this skill is the bridge:
+
+```
+strategy-engine:product (brief) → 04-brief-handoff.yaml → arc:vision → docs/vision.md
+```
+
+The brief is the human-facing strategy document. The vision is the agent-facing north star.
+They contain overlapping information, but the vision is written for builders and machines,
+not stakeholders. When the brief updates, re-run this skill to keep vision.md in sync.
