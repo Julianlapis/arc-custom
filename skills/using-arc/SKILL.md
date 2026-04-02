@@ -114,7 +114,24 @@ prominently. But if the user explicitly invokes it, run it anyway.
 
 ## Workflow Routing
 
-Use these defaults:
+### Arc vs. strategy-engine
+
+Arc goes from idea to shipped code. Strategy-engine adds enterprise/agency-class
+strategic rigor (research, briefs, specs, component maps) before the build phase.
+
+- **Arc alone** is valid for small personal projects where the builder already knows
+  what they're building. Go straight to `vision` or `ideate`.
+- **Strategy-engine → Arc** is for work that needs the problem understood before it's
+  solved. Strategy-engine produces Steps 1-6a (intake through human-facing map).
+  Arc picks up at Step 6b (`arc:vision` generates `docs/vision.md` from the brief's
+  handoff contract) and runs the full build suite in Step 7.
+- **The bridge** is `arc:vision`. It checks for `docs/strategy/04-brief-handoff.yaml`.
+  If found, it generates from the contract. If not, it falls back to its own Q&A.
+
+When routing, if you see `docs/strategy/` artifacts in the project, the pipeline is
+active. Respect the sequence. If no strategy artifacts exist, route normally through Arc.
+
+### Arc routing defaults
 
 - New feature or product thinking -> `ideate`
 - Plan execution -> `implement`

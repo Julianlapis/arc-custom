@@ -55,6 +55,13 @@ Keep it brief — 5-10 bullet points max."
 ls docs/vision.md docs/arc/specs/*.md docs/arc/plans/*.md docs/plans/*.md 2>/dev/null | head -10
 ```
 
+**Check for strategy-engine artifacts (pipeline active?):**
+```bash
+ls docs/strategy/*.md docs/strategy/*.yaml docs/map/*.md 2>/dev/null | head -10
+```
+If strategy artifacts exist, the project is running through the full pipeline.
+Note which step they're on (last numbered file in docs/strategy/) and surface this in Step 2.
+
 **Check Linear (if MCP available):**
 If `mcp__linear__*` tools exist, check for active issues.
 
@@ -130,10 +137,12 @@ AskUserQuestion:
   question: "This project doesn't have a framework set up yet. What would you like to do?"
   header: "Empty Project"
   options:
-    - label: "Set up a new project"
-      description: "Scaffold a framework (Next.js, etc.) and get started"
     - label: "Define a vision first"
       description: "Run /arc:vision to clarify project goals before building"
+    - label: "Run the full pipeline"
+      description: "For strategic work: /strategy:pipeline runs research → brief → spec → map before build"
+    - label: "Set up and start building"
+      description: "Scaffold a framework (Next.js, etc.) and get started"
     - label: "I know what I want to build"
       description: "Describe the feature and jump straight in"
 ```
