@@ -9,9 +9,14 @@ metadata:
   author: howells
 ---
 
-# Progress Journal
+# Progress Journal (Deprecated)
 
-Internal patterns for maintaining cross-session context via `docs/arc/progress.md`.
+> **This system has been replaced by `docs/context.md`.** All Arc skills now write to
+> `docs/context.md` via `<context_update>` blocks instead of appending to `docs/arc/progress.md`.
+> The SessionStart hook (`context_reader.py`) injects `docs/context.md` at session start.
+> See `docs/arc/specs/2026-04-04-context-system-design.md` for the full design.
+
+Legacy patterns for maintaining cross-session context via `docs/arc/progress.md`.
 
 ## Journal Format
 
