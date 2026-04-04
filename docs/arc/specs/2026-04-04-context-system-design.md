@@ -63,6 +63,8 @@ A single `docs/context.md` per project, maintained by Arc skills as their final 
 
 **Secondary (Arc skills):** Each Arc skill also writes `docs/context.md` as its final step via `<context_update>` blocks. This provides higher-quality, more precise updates at specific workflow moments.
 
+**Safety net (Stop hook):** `context_writer.py` fires at session end. If `docs/context.md` wasn't updated in the last 2 minutes (likely this session), it injects a `systemMessage` reminding the model to write it. This catches sessions where the CLAUDE.md instruction was forgotten or where non-Arc, non-strategy-engine workflows were used.
+
 **Skills that write context:**
 - `/arc:build` (after build completes)
 - `/arc:implement` (after each task or at plan completion)
