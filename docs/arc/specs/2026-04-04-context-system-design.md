@@ -57,9 +57,11 @@ A single `docs/context.md` per project, maintained by Arc skills as their final 
 
 ## Architecture
 
-### Write Path: Skill-Driven
+### Write Path: Global + Skill-Driven
 
-Each Arc skill writes `docs/context.md` as its final step. The model is active at skill completion, so there is no timing risk.
+**Primary (global):** A Hard Rule in `~/.claude/CLAUDE.md` instructs the model to write `docs/context.md` before ending any meaningful work session. This works on every project, whether or not Arc skills are used.
+
+**Secondary (Arc skills):** Each Arc skill also writes `docs/context.md` as its final step via `<context_update>` blocks. This provides higher-quality, more precise updates at specific workflow moments.
 
 **Skills that write context:**
 - `/arc:build` (after build completes)
