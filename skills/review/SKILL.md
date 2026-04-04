@@ -75,7 +75,7 @@ website:
 </rules_context>
 
 <progress_context>
-**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
+**Use Read tool:** `docs/context.md` first. If it does not exist, fall back to `docs/arc/progress.md` (first 50 lines).
 
 Check for context on what led to the plan being reviewed.
 </progress_context>
@@ -416,8 +416,56 @@ scripts/cleanup-orphaned-agents.sh
 **After completing this skill, append to the activity log.**
 See: `references/arc-log.md`
 
-Entry: `/arc:review — [Plan name] reviewed`
+Entry: `/arc:review` [Plan name] reviewed
 </arc_log>
+
+<context_update>
+After completing this skill's main work, update the project context file.
+
+**Skip this step if:**
+- The project has no `docs/` directory
+- The skill made no meaningful changes (read-only operations)
+
+**Steps:**
+
+1. Read `docs/context.md` if it exists (to carry forward the Decisions section)
+2. Write `docs/context.md` with this schema:
+
+   ```markdown
+   # Project Context
+   > Auto-maintained by Arc. Last updated: YYYY-MM-DD HH:MM TZ
+
+   ## Status
+   - **Phase:** [v1-build | v1-polish | v2-planning | shipped | on-hold]
+   - **Stack:** [framework, language, key deps]
+   - **Branch:** [current branch]
+   - **Build:** [passing | failing (brief reason)]
+
+   ## Last Session
+   - [What was just done, 2-4 bullet points]
+   - [Key files touched]
+
+   ## Decisions
+   - [Decision]: [Rationale] (YYYY-MM-DD)
+   <!-- Carry forward from existing file. Cap at 10. Drop decisions older than 90 days unless still constraining current work. -->
+
+   ## Blockers
+   - [Current blocker or "None"]
+
+   ## Next
+   1. [Highest priority]
+   2. [Second priority]
+   3. [Third priority]
+
+   ## Open Questions
+   - [Unresolved question or "None"]
+   ```
+
+3. Commit (skip if commit fails for any reason):
+   ```bash
+   git add docs/context.md && git commit -m "context: update project state" || true
+   ```
+</context_update>
 
 <success_criteria>
 **Plan review** is complete when:
@@ -430,7 +478,7 @@ Entry: `/arc:review — [Plan name] reviewed`
 - [ ] Summary presented
 - [ ] Remaining arc shown (based on plan type)
 - [ ] User chose next step (detail/implement or done)
-- [ ] Progress journal updated
+- [ ] Project context updated (docs/context.md)
 - [ ] Orphaned agents cleaned up
 
 **Diff review** is complete when:

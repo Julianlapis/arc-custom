@@ -65,9 +65,9 @@ Note which step they're on (last numbered file in docs/strategy/) and surface th
 **Check Linear (if MCP available):**
 If `mcp__linear__*` tools exist, check for active issues.
 
-**Read progress journal for recent work:**
+**Read project context (primary) or progress journal (fallback):**
 ```bash
-head -50 docs/arc/progress.md 2>/dev/null
+cat docs/context.md 2>/dev/null || head -50 docs/arc/progress.md 2>/dev/null
 ```
 
 **Check repo staleness:**
