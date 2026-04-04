@@ -410,21 +410,53 @@ AskUserQuestion:
       description: "Nothing else needed right now"
 ```
 
-<progress_append>
-After completing the build:
+<context_update>
+After completing this skill's main work, update the project context file.
 
-```markdown
-## YYYY-MM-DD HH:MM — /arc:build
-**Task:** [What was built]
-**Outcome:** Complete
-**Files:** [Key files]
-**Agents used:** [list]
-**Tests:** [N] unit, [N] integration
-**Next:** [Merge / PR / Continue]
+**Skip this step if:**
+- The project has no `docs/` directory
+- The skill made no meaningful changes (read-only operations)
 
----
-```
-</progress_append>
+**Steps:**
+
+1. Read `docs/context.md` if it exists (to carry forward the Decisions section)
+2. Write `docs/context.md` with this schema:
+
+   ```markdown
+   # Project Context
+   > Auto-maintained by Arc. Last updated: YYYY-MM-DD HH:MM TZ
+
+   ## Status
+   - **Phase:** [v1-build | v1-polish | v2-planning | shipped | on-hold]
+   - **Stack:** [framework, language, key deps]
+   - **Branch:** [current branch]
+   - **Build:** [passing | failing (brief reason)]
+
+   ## Last Session
+   - [What was just done, 2-4 bullet points]
+   - [Key files touched]
+
+   ## Decisions
+   - [Decision]: [Rationale] (YYYY-MM-DD)
+   <!-- Carry forward from existing file. Cap at 10. Drop decisions older than 90 days unless still constraining current work. -->
+
+   ## Blockers
+   - [Current blocker or "None"]
+
+   ## Next
+   1. [Highest priority]
+   2. [Second priority]
+   3. [Third priority]
+
+   ## Open Questions
+   - [Unresolved question or "None"]
+   ```
+
+3. Commit (skip if commit fails for any reason):
+   ```bash
+   git add docs/context.md && git commit -m "context: update project state" || true
+   ```
+</context_update>
 
 <success_criteria>
 Build is complete when:
@@ -437,5 +469,5 @@ Build is complete when:
 - [ ] All tests passing
 - [ ] TS/lint clean
 - [ ] Build plan completion verified (every item checked against code)
-- [ ] Progress journal updated
+- [ ] Project context updated (docs/context.md)
 </success_criteria>
