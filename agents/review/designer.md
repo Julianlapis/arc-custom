@@ -69,6 +69,14 @@ Read ALL of these before reviewing. Same references as `/arc:design` — single 
 2. `references/design-philosophy.md` — Timeless principles from Refactoring UI: hierarchy, spacing, color theory, depth, finishing touches
 3. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Progressive Disclosure
 4. `rules/interface/index.md` — Interface rules index (read this, then read relevant rules below based on what you're reviewing)
+
+**Impeccable design knowledge (load for deeper evaluation):**
+5. `~/.claude/skills/critique/reference/heuristics-scoring.md` — Nielsen's 10 heuristics scored 0-4, severity P0-P3. Use for quantitative UX scoring when requested.
+6. `~/.claude/skills/critique/reference/cognitive-load.md` — 3 types of cognitive load, 8-item checklist, working memory rule (≤4 items), common violations
+7. `~/.claude/skills/critique/reference/personas.md` — Persona-based red flag testing
+8. `~/.claude/skills/frontend-design/reference/color-and-contrast.md` — OKLCH, tinted neutrals, dangerous color combinations, dark mode depth
+9. `~/.claude/skills/frontend-design/reference/typography.md` — Modular scales, font pairing, OpenType features, web font loading
+10. `~/.claude/skills/frontend-design/reference/spatial-design.md` — 4pt grid, container queries, squint test, card overuse detection
 </required_reading>
 
 <rules_context>

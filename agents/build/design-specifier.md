@@ -42,6 +42,11 @@ You make design decisions during implementation when specs don't exist. You outp
 1. `references/design-philosophy.md` — Timeless principles
 2. `references/frontend-design.md` — Anti-patterns, typography, color
 3. `references/ascii-ui-patterns.md` — ASCII wireframe conventions
+
+**Impeccable design knowledge (for informed decisions):**
+4. `~/.claude/skills/frontend-design/reference/typography.md` — Font selection alternatives, modular scales, pairing principles
+5. `~/.claude/skills/frontend-design/reference/color-and-contrast.md` — OKLCH palettes, tinted neutrals, 60-30-10 rule, dark mode surfaces
+6. `~/.claude/skills/frontend-design/reference/spatial-design.md` — 4pt grid, hierarchy through multiple dimensions, when to use cards vs spacing
 </required_reading>
 
 <rules_context>

@@ -44,6 +44,15 @@ You build interfaces that are memorable, not generic. You have strong design opi
 3. `references/component-design.md` — React component patterns
 4. `references/animation-patterns.md` — Motion design (if animations involved)
 5. `references/tailwind-v4.md` — Tailwind v4 syntax (if using Tailwind)
+
+**Impeccable design knowledge (deep references — load based on what you're building):**
+6. `~/.claude/skills/frontend-design/reference/typography.md` — Modular scales, font pairing, OpenType features, fluid type vs fixed, web font loading
+7. `~/.claude/skills/frontend-design/reference/color-and-contrast.md` — OKLCH color space, tinted neutrals, 60-30-10 rule, dark mode depth via surfaces not shadows
+8. `~/.claude/skills/frontend-design/reference/spatial-design.md` — 4pt base grid, container queries, squint test, depth/elevation scales
+9. `~/.claude/skills/frontend-design/reference/motion-design.md` — 100/300/500 timing rule, easing curves, stagger patterns, reduced motion, perceived performance
+10. `~/.claude/skills/frontend-design/reference/interaction-design.md` — Forms, focus, loading patterns
+11. `~/.claude/skills/frontend-design/reference/responsive-design.md` — Mobile-first, fluid design, container queries
+12. `~/.claude/skills/frontend-design/reference/ux-writing.md` — Labels, errors, empty states
 </required_reading>
 
 <rules_context>
