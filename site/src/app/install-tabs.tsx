@@ -97,8 +97,8 @@ export function InstallTabs() {
               <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
                 ~/.agents/skills
               </code>{" "}
-              with auto-update every 6 hours. This is the full Codex install,
-              so Arc workflows that depend on bundled agents, references,
+              with auto-update every 6 hours. This is the full Codex install, so
+              Arc workflows that depend on bundled agents, references,
               disciplines, templates, and scripts work out of the box.
             </p>
           </div>
@@ -150,8 +150,8 @@ export function InstallTabs() {
               files only — you get the skill instructions but not the supporting
               agents, hooks, or orchestration. Best for lightweight prompt-only
               usage. Full-runtime workflows that load Arc-owned `agents/`,
-              `references/`, `disciplines/`, `templates/`, or `scripts/`
-              require the Claude plugin or Codex installer tabs above.
+              `references/`, `disciplines/`, `templates/`, or `scripts/` require
+              the Claude plugin or Codex installer tabs above.
             </p>
           </div>
         </div>
