@@ -19,16 +19,23 @@ metadata:
 If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` steps below. They ARE the plan. Execute them directly.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 <required_reading>
 **Read these reference files NOW:**
-1. references/testing-patterns.md
-2. references/task-granularity.md
-3. references/arc-paths.md
+1. ${ARC_ROOT}/references/testing-patterns.md
+2. ${ARC_ROOT}/references/task-granularity.md
+3. ${ARC_ROOT}/references/arc-paths.md
 
 **Load these only if relevant:**
-- references/model-strategy.md — if dispatching build agents
-- references/frontend-design.md — if UI work involved
-- references/ai-sdk.md — if `ai` in package.json
+- ${ARC_ROOT}/references/model-strategy.md — if dispatching build agents
+- ${ARC_ROOT}/references/frontend-design.md — if UI work involved
+- ${ARC_ROOT}/references/ai-sdk.md — if `ai` in package.json
 
 **For UI work, also load interface rules:**
 - rules/interface/design.md — Visual principles
@@ -38,11 +45,11 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 - rules/interface/animation.md — Motion rules
 - rules/interface/forms.md — If forms involved
 - rules/interface/interactions.md — Interaction patterns
-- references/component-design.md — React component patterns
+- ${ARC_ROOT}/references/component-design.md — React component patterns
 </required_reading>
 
 <hard_rules>
-**Before writing the plan file**, present a brief summary of what you intend to plan (scope, task count estimate, key decisions) and use `AskUserQuestion` to confirm. Plans must not appear without user input.
+**Before writing the plan file**, present a brief summary of what you intend to plan (scope, task count estimate, key decisions) and use the `AskUserQuestion` interaction pattern to confirm. Plans must not appear without user input.
 </hard_rules>
 
 <process>
@@ -139,7 +146,7 @@ Task general-purpose model: haiku: "Gather documentation and best practices for
 
 **Each task = one TDD cycle (2-5 minutes), written as XML:**
 
-Tasks are executable prompts, not documentation. A fresh-context agent should be able to execute any task from the XML alone. See `references/task-granularity.md` for the full XML schema.
+Tasks are executable prompts, not documentation. A fresh-context agent should be able to execute any task from the XML alone. See `${ARC_ROOT}/references/task-granularity.md` for the full XML schema.
 
 ```xml
 <task id="1" depends="" type="auto">
@@ -168,7 +175,7 @@ Tasks are executable prompts, not documentation. A fresh-context agent should be
 </task>
 ```
 
-**Required elements per task:** `<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`. See `references/task-granularity.md` for details.
+**Required elements per task:** `<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`. See `${ARC_ROOT}/references/task-granularity.md` for details.
 
 **Key rules for task content:**
 - `<action>` must contain inline values (env vars, function signatures, library choices with rationale) — never "look it up"
@@ -214,7 +221,7 @@ When a task requires human judgment, use the appropriate `type` attribute:
 - Never ask user to run CLI commands — agent does it
 - Max 1 checkpoint per logical milestone
 - `checkpoint:action` tasks are created DYNAMICALLY during execution (auth gates), not pre-planned
-- See `references/checkpoint-patterns.md`
+- See `${ARC_ROOT}/references/checkpoint-patterns.md`
 
 **Task ordering:**
 1. Data/types first (foundation)
@@ -343,7 +350,7 @@ Write all tasks following the template from Step 3.
 
 After writing the plan:
 
-1. Dispatch `agents/workflow/plan-document-reviewer.md`
+1. Dispatch `${ARC_ROOT}/agents/workflow/plan-document-reviewer.md`
 2. Fix issues in the plan
 3. Re-review until approved or after 5 loops escalate to the user
 

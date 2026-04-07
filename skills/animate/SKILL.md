@@ -30,12 +30,21 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user decisions (motion tone, plan approval). Never ask questions as plain text. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for user decisions such as motion tone and plan approval. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 # Animate Workflow
 
@@ -60,16 +69,16 @@ Animation choices are subjective — the user must see and approve each addition
 **Read ALL of these using the Read tool:**
 
 1. `rules/interface/animation.md` — Easing, duration, spring presets, performance tiers
-2. `references/animation-patterns.md` — Deep animation patterns
-3. `references/interaction-physics.md` — 300ms ceiling, spring vs easing decisions, exit patterns, container two-div pattern
-4. `references/frontend-design.md` — Anti-patterns (bounce/elastic = dated)
+2. `${ARC_ROOT}/references/animation-patterns.md` — Deep animation patterns
+3. `${ARC_ROOT}/references/interaction-physics.md` — 300ms ceiling, spring vs easing decisions, exit patterns, container two-div pattern
+4. `${ARC_ROOT}/references/frontend-design.md` — Anti-patterns (bounce/elastic = dated)
 </required_reading>
 
 ---
 
 ## Phase 1: Context
 
-**Ask the user using AskUserQuestion:**
+**Ask the user using the AskUserQuestion interaction pattern:**
 ```yaml
 AskUserQuestion:
   question: "What's the personality of this feature?"
@@ -117,7 +126,7 @@ Analyze the code and identify static areas:
 - Empty states that could benefit from subtle motion
 - Success moments (form submit, task complete)
 - First-time user moments
-- Audio feedback for key moments (see `references/audio-feedback.md` — optional, user must opt in)
+- Audio feedback for key moments (see `${ARC_ROOT}/references/audio-feedback.md` — optional, user must opt in)
 
 ---
 
@@ -155,7 +164,7 @@ Present a focused plan. **Less is more.**
 | Staggered entrance | Simultaneous fade |
 ```
 
-**Ask using AskUserQuestion:**
+**Ask using the AskUserQuestion interaction pattern:**
 ```yaml
 AskUserQuestion:
   question: "Does this animation plan feel right?"
@@ -291,7 +300,7 @@ After implementing:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:animate — [Component/page] animated ([hero moment, # micro-interactions])`
 </arc_log>

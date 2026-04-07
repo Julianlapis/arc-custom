@@ -24,6 +24,15 @@ website:
     position: utility
 ---
 
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
+
 <arc_log>
 **Use Read tool:** `.arc/log.md` (first 50 lines)
 
@@ -113,7 +122,7 @@ Present top 3-5 suggestions:
 
 "Those are the immediate priorities. Want me to look beyond the codebase — research what's trending in your space and propose new feature ideas?"
 
-**Use AskUserQuestion tool:**
+**Use the AskUserQuestion interaction pattern:**
 ```
 Question: "Want me to research new feature opportunities?"
 Header: "Discover"
@@ -146,7 +155,7 @@ Return a structured profile with all six sections."
 
 **Use Task tool to spawn the feature-scout agent:**
 
-Read the agent definition from: `agents/research/feature-scout.md`
+Read the agent definition from: `${ARC_ROOT}/agents/research/feature-scout.md`
 
 ```
 Task feature-scout model: sonnet: "Here is the project profile:

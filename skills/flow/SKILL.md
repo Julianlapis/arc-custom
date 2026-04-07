@@ -37,8 +37,15 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every question — confirming dev server, auth status, handling stale flows — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question, including confirming dev server state, auth status, and stale flows. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
+
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
 
 # User Flow Discovery & Verification
 
@@ -250,7 +257,7 @@ Routes in this group:
 Read each route's component code, follow imports to find interactive elements,
 and generate flow artifacts using the step DSL.
 
-See agents/workflow/flow-discoverer.md for the full protocol."
+See ${ARC_ROOT}/agents/workflow/flow-discoverer.md for the full protocol."
 ```
 
 Dispatch all groups in a single message for maximum parallelism.
@@ -727,8 +734,8 @@ Next steps:
 <required_reading>
 Read before running:
 - `docs/arc/specs/2026-03-13-user-flows-design.md` — Full design spec with decisions and rationale
-- `references/authentication.md` — Auth patterns for Clerk, WorkOS, self-rolled (when auth is detected)
-- `references/platform-tools.md` — Browser tool mappings across platforms
+- `${ARC_ROOT}/references/authentication.md` — Auth patterns for Clerk, WorkOS, self-rolled (when auth is detected)
+- `${ARC_ROOT}/references/platform-tools.md` — Browser tool mappings across platforms
 </required_reading>
 
 <progress_append>

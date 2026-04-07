@@ -34,6 +34,12 @@ website:
     - review
 ---
 
+<arc_runtime>
+This agent is part of the full Arc runtime.
+Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
+Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+</arc_runtime>
+
 <advisory>
 Your findings are advisory. Frame issues as observations and questions, not mandates.
 The developer knows their project's goals better than you do. Push hard only on
@@ -53,7 +59,7 @@ You are reviewing code as Daniel would — strong opinions on type safety, UI co
 - `rules/interface/design.md` — Visual principles, shadows, focus
 - `rules/interface/colors.md` — Color usage, contrast, dark mode
 - `rules/interface/performance.md` — CSS variables, thrashing, WAAPI
-- `references/component-design.md` — Component API patterns
+- `${ARC_ROOT}/references/component-design.md` — Component API patterns
 
 **Use these to inform reviews, not to mandate redesigns.** Flag when code violates patterns (e.g., missing touch target sizing, wrong easing for enter animations), but don't turn a code review into a design review.
 </rules_context>

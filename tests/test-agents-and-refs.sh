@@ -58,6 +58,22 @@ WORKFLOW_AGENTS=(
     "spec-flow-analyzer"
 )
 
+find_bare_internal_refs() {
+    local file="$1"
+    sed '/<arc_runtime>/,/<\/arc_runtime>/d' "$file" \
+        | grep -nE '(^|[^$[:alnum:]_{/])(references|disciplines|agents|templates|scripts)/' || true
+}
+
+uses_arc_root_refs() {
+    local file="$1"
+    grep -q '\${ARC_ROOT}/' "$file"
+}
+
+declares_arc_runtime() {
+    local file="$1"
+    grep -q "<arc_runtime>" "$file"
+}
+
 echo "Checking review agents..."
 echo ""
 for agent in "${REVIEW_AGENTS[@]}"; do
@@ -204,6 +220,65 @@ if [ $agent_ref_errors -eq 0 ] && [ $agent_ref_checked -gt 0 ]; then
 elif [ $agent_ref_checked -eq 0 ]; then
     skip "No Arc references found in agents"
 fi
+
+section "Full Runtime Portability Tests"
+
+echo "Checking skills with Arc-owned runtime dependencies..."
+echo ""
+
+for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
+    skill="$(basename "$(dirname "$skill_file")")"
+    bare_refs="$(find_bare_internal_refs "$skill_file")"
+
+    if uses_arc_root_refs "$skill_file" || [ -n "$bare_refs" ] || declares_arc_runtime "$skill_file"; then
+        if declares_arc_runtime "$skill_file"; then
+            pass "skill/$skill declares full-runtime requirements"
+        else
+            fail "skill/$skill missing <arc_runtime> block"
+        fi
+
+        if uses_arc_root_refs "$skill_file"; then
+            pass "skill/$skill uses \${ARC_ROOT} paths"
+        else
+            fail "skill/$skill missing \${ARC_ROOT} path references"
+        fi
+
+        if [ -z "$bare_refs" ]; then
+            pass "skill/$skill has no bare Arc-internal paths"
+        else
+            fail "skill/$skill has bare Arc-internal paths" "$bare_refs"
+        fi
+    fi
+done
+
+echo ""
+echo "Checking agents with Arc-owned runtime dependencies..."
+echo ""
+
+for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
+    agent="$(basename "$(dirname "$agent_file")")/$(basename "$agent_file" .md)"
+    bare_refs="$(find_bare_internal_refs "$agent_file")"
+
+    if uses_arc_root_refs "$agent_file" || [ -n "$bare_refs" ] || declares_arc_runtime "$agent_file"; then
+        if declares_arc_runtime "$agent_file"; then
+            pass "agent/$agent declares full-runtime requirements"
+        else
+            fail "agent/$agent missing <arc_runtime> block"
+        fi
+
+        if uses_arc_root_refs "$agent_file"; then
+            pass "agent/$agent uses \${ARC_ROOT} paths"
+        else
+            fail "agent/$agent missing \${ARC_ROOT} path references"
+        fi
+
+        if [ -z "$bare_refs" ]; then
+            pass "agent/$agent has no bare Arc-internal paths"
+        else
+            fail "agent/$agent has bare Arc-internal paths" "$bare_refs"
+        fi
+    fi
+done
 
 # Verify no unexpected agents
 echo ""

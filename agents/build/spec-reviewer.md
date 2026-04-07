@@ -23,6 +23,12 @@ website:
     Over-building wastes time. Under-building creates bugs. A dedicated spec check before code review catches both, keeping implementation honest and focused.
 ---
 
+<arc_runtime>
+This agent is part of the full Arc runtime.
+Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
+Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+</arc_runtime>
+
 # Spec Reviewer Agent
 
 You verify implementations match their specifications exactly. Quick check: nothing missing, nothing extra.
@@ -57,7 +63,7 @@ Get the task specification from:
 <required_reading>
 ### 2.5. Check for Stubs
 
-Use patterns from `references/verification-patterns.md` to verify implementations are substantive:
+Use patterns from `${ARC_ROOT}/references/verification-patterns.md` to verify implementations are substantive:
 
 - No placeholder text or TODO comments in new code
 - Event handlers have real logic (not empty or log-only)

@@ -51,22 +51,41 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
-<tasklist_context>
-**Use TaskList tool** to check for existing tasks related to this work.
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
 
-If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
+<platform_context>
+**Read this reference NOW:**
+1. `${ARC_ROOT}/references/platform-tools.md`
+
+Adapt the workflow to the current harness instead of assuming Claude-specific tool names.
+- Use platform-native task tracking only when available; otherwise continue without it.
+- Use platform-native structured questions when available; otherwise ask concise plain-text questions.
+- Use the platform's subagent/delegation primitives when available; otherwise run the review steps locally.
+</platform_context>
+
+<tasklist_context>
+**If the current platform has a native task/todo tool, use it** to check for existing tasks related to this work.
+
+If a related task exists, note its ID and mark it `in_progress` when starting.
+If no native task/todo tool exists, skip task tracking and continue with the audit.
 </tasklist_context>
 
 <required_reading>
 **Read these reference files NOW:**
-1. disciplines/dispatching-parallel-agents.md
-2. references/audit-stage-calibration.md
+1. `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`
+2. `${ARC_ROOT}/references/audit-stage-calibration.md`
 </required_reading>
 
 <progress_context>
-**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
+**If `docs/arc/progress.md` exists, read the first 50 lines.**
 
 Check for recent changes that should be included in audit scope.
+If the file does not exist, continue without it.
 </progress_context>
 
 <rules_context>
@@ -368,7 +387,7 @@ Execution mode:
 2. Standard mode — Independent reviewers, batched or parallel (faster, lower cost)
 ```
 
-Use AskUserQuestion with:
+Use the platform's structured question prompt if available. Otherwise ask a concise plain-text question with the same two options:
 - **"Team mode (Recommended for pre-launch/production)"** — Reviewers cross-review and challenge each other's findings. Conflicts resolved with evidence-based rationale. Best for high-stakes audits.
 - **"Standard mode"** — Independent reviewers run in batches (default) or parallel (--parallel). Faster and cheaper. Findings consolidated by the skill.
 
@@ -376,7 +395,7 @@ Use AskUserQuestion with:
 
 **If team mode selected**, read the team reference:
 ```
-references/agent-teams.md
+${ARC_ROOT}/references/agent-teams.md
 ```
 </team_mode_check>
 
@@ -385,7 +404,7 @@ references/agent-teams.md
 **Read agent prompts:**
 For each selected reviewer, read:
 ```
-agents/review/[reviewer-name].md
+${ARC_ROOT}/agents/review/[reviewer-name].md
 ```
 
 **Execution strategy:**
@@ -429,7 +448,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 
 Each reviewer must receive the stage context so they can calibrate their severity ratings. Read the matching stage calibration block from:
 ```
-references/audit-stage-calibration.md
+${ARC_ROOT}/references/audit-stage-calibration.md
 ```
 
 Include in every reviewer prompt:
@@ -440,7 +459,10 @@ SEVERITY CALIBRATION FOR THIS STAGE:
 [Paste the matching stage block from audit-stage-calibration.md]
 ```
 
-**For each batch, spawn 2 agents in parallel:**
+**For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
+If the platform does not support subagents, run the same reviewer prompts locally one reviewer at a time and continue with consolidation.
+
+Example reviewer prompts:
 ```
 Task [security-engineer] model: sonnet: "
 Audit the following codebase for security issues.
@@ -553,7 +575,7 @@ After all reviewer agents complete, run an additional structural pass using the 
 
 1. **Read the checklist:**
    ```
-   Read: references/diff-review-checklist.md
+   Read: ${ARC_ROOT}/references/diff-review-checklist.md
    ```
 
 2. **Get the full diff:**
@@ -596,7 +618,7 @@ Skip the deduplication and conflict resolution steps below and proceed directly 
 
 Use the severity validation table and conflict resolution rules from:
 ```
-references/audit-stage-calibration.md
+${ARC_ROOT}/references/audit-stage-calibration.md
 ```
 
 Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`
@@ -733,11 +755,8 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 3. [Prioritized action item]
 ```
 
-**Commit the report:**
-```bash
-git add docs/audits/
-git commit -m "docs: add audit report for [scope]"
-```
+**Do not auto-commit the report unless the user explicitly asks for a commit.**
+You may stage it or leave it unstaged based on the user's preferences and the platform workflow.
 
 ## Phase 6: Present & Offer Actions
 
@@ -762,13 +781,14 @@ Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
 [...]
 ```
 
-**Offer next steps using AskUserQuestion:**
+**Offer next steps using the platform's structured question prompt when available.**
+Otherwise ask a concise plain-text question with the same options:
 
 Present these options (include all that apply):
 
 1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:detail` scoped to the files and issues in that cluster.
 
-2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list. Commit the plan file.
+2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list.
 
 3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
@@ -776,7 +796,7 @@ Present these options (include all that apply):
 
 5. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
 
-5. **Done for now** → End session. Report is committed, user can return to it later.
+5. **Done for now** → End session. Report is saved, user can return to it later.
 
 **If user selects "Tackle critical cluster now":**
 - Identify the cluster with the most critical/high findings
@@ -818,16 +838,13 @@ Create `docs/arc/plans/YYYY-MM-DD-audit-tasks.md`:
 [Repeat for all clusters]
 ```
 
-Commit the plan:
-```bash
-git add docs/arc/plans/
-git commit -m "docs: add audit task plan"
-```
+Do not auto-commit the plan unless the user explicitly asks for a commit.
 
 **If user selects "Add to tasks":**
-- Use **TaskCreate** for each critical/high cluster
+- Use the platform's native task/todo creation flow for each critical/high cluster when available
 - Each task gets the cluster name as subject, findings as description, and present continuous activeForm
 - Lower severity clusters stay in the audit report only
+- If no native task/todo creation flow exists, offer the plan file or Linear issue path instead
 
 **If user selects "Deep dive on a cluster":**
 - Ask which cluster (by number or name)
@@ -842,7 +859,7 @@ git commit -m "docs: add audit task plan"
 After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup to prevent memory accumulation:
 
 ```bash
-scripts/cleanup-orphaned-agents.sh
+${ARC_ROOT}/scripts/cleanup-orphaned-agents.sh
 ```
 
 This is especially important after `--parallel` runs or when auditing large codebases.
@@ -851,8 +868,7 @@ This is especially important after `--parallel` runs or when auditing large code
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-
+See: `${ARC_ROOT}/references/arc-log.md`
 Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 </arc_log>
 
@@ -866,9 +882,9 @@ Audit is complete when:
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
 - [ ] Report generated in `docs/audits/`
-- [ ] Report committed to git
+- [ ] Report saved and optionally staged
 - [ ] Summary presented to user
 - [ ] Next steps offered
-- [ ] Progress journal updated
+- [ ] Progress journal checked if present
 - [ ] Orphaned agents cleaned up (run cleanup script)
 </success_criteria>

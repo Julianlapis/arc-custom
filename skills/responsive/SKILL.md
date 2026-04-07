@@ -34,16 +34,23 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text in your response. Every question to the user — whether confirming routes, choosing options, or validating fixes — MUST use the `AskUserQuestion` tool. This enforces one question at a time and prevents walls of text. If you need to provide context before asking, keep it to 2-3 sentences max, then use the tool.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question to the user, including confirming routes, choosing options, and validating fixes. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. This prevents walls of text. If you need to provide context before asking, keep it to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 
 If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` steps below. Execute them directly.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 <required_reading>
 **Read these using the Read tool when relevant:**
 
-1. `references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns
-2. `references/ux-laws.md` — Fitts's Law (target sizing), Gestalt proximity (spacing decisions)
+1. `${ARC_ROOT}/references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns
+2. `${ARC_ROOT}/references/ux-laws.md` — Fitts's Law (target sizing), Gestalt proximity (spacing decisions)
 </required_reading>
 
 # Responsive Audit & Fix
@@ -408,7 +415,7 @@ Responsive audit is complete when:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:responsive — [N] pages audited, [N] issues fixed`
 </arc_log>

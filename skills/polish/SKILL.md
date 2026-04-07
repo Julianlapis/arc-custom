@@ -29,12 +29,19 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user decisions (approval to apply fixes). Never ask questions as plain text. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for user decisions such as approving fixes. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
 
 # Polish Workflow
 
@@ -60,11 +67,11 @@ Polish requires visual inspection and judgment — it's collaborative, not deleg
 3. `rules/interface/typography.md` — Type hierarchy and OpenType
 4. `rules/interface/interactions.md` — Eight interactive states
 5. `rules/interface/animation.md` — Motion rules
-6. `references/frontend-design.md` — Design review checklist
-7. `references/typography-opentype.md` — OpenType features, tabular-nums, kerning, text-wrap
-8. `references/touch-targets.md` — Hit target expansion, pseudo-element technique, mobile targets
-9. `references/ux-laws.md` — Fitts's Law (target sizing), Gestalt (spacing/grouping), Doherty (timing)
-10. `references/prefetch-patterns.md` — Trajectory prefetching, hit slop zones (when reviewing navigation UX)
+6. `${ARC_ROOT}/references/frontend-design.md` — Design review checklist
+7. `${ARC_ROOT}/references/typography-opentype.md` — OpenType features, tabular-nums, kerning, text-wrap
+8. `${ARC_ROOT}/references/touch-targets.md` — Hit target expansion, pseudo-element technique, mobile targets
+9. `${ARC_ROOT}/references/ux-laws.md` — Fitts's Law (target sizing), Gestalt (spacing/grouping), Doherty (timing)
+10. `${ARC_ROOT}/references/prefetch-patterns.md` — Trajectory prefetching, hit slop zones (when reviewing navigation UX)
 </required_reading>
 
 ---
@@ -230,7 +237,7 @@ Run the Design Review Checklist from `frontend-design.md`:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:polish — [Component/page] polished ([key changes])`
 </arc_log>

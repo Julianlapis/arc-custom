@@ -27,6 +27,9 @@ Treat these as distinct capabilities, not interchangeable tools:
 
 - Native skill discovery loads `SKILL.md` files from `~/.agents/skills/`
 - Terminal exploration replaces most `Read` / `Glob` / `Grep` examples
+- Treat `AskUserQuestion` as a behavioral requirement, not a literal tool dependency
+- Ask exactly one concise question at a time in plain text unless a structured question tool is actually available in the current Codex mode
+- Never mention missing or unavailable tool names to the user as part of the fallback
 - Use commentary updates for progress instead of Claude-specific question primitives
 - Use the built-in plan/todo tools only when a workflow explicitly benefits from them
 - Prefer `agent-browser` for browser automation and page capture

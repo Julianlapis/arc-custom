@@ -30,6 +30,10 @@ What this does:
 2. Symlinks `~/.agents/skills/arc` to `~/.codex/arc/skills`.
 3. Configures scheduled updates using launchd (macOS) or cron (Linux) when `--auto-update` is used.
 
+This is the supported **full-runtime** install for Codex. Because the skills are discovered from the cloned Arc checkout, workflows that load bundled `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/` work without needing special-case copies.
+
+If you install Arc through a prompts-only channel such as `skills.sh`, you only get `SKILL.md` files. That is useful for lightweight routing, but it is not sufficient for full-runtime workflows like `audit`, `review`, `implement`, `design`, `document`, and `testing`.
+
 Restart Codex if skills do not appear immediately.
 
 ## Manual Install

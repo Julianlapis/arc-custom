@@ -42,11 +42,18 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 <required_reading>
 **Read these reference files NOW:**
-1. references/review-patterns.md
-2. disciplines/dispatching-parallel-agents.md
-3. disciplines/receiving-code-review.md
+1. ${ARC_ROOT}/references/review-patterns.md
+2. ${ARC_ROOT}/disciplines/dispatching-parallel-agents.md
+3. ${ARC_ROOT}/disciplines/receiving-code-review.md
 </required_reading>
 
 <rules_context>
@@ -99,9 +106,9 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - Jump to Phase 1D (Diff Review) below
 
 **If argument provided** (e.g., `daniel-product-engineer`):
-- Look for `agents/review/{argument}.md`
+- Look for `${ARC_ROOT}/agents/review/{argument}.md`
 - If found → use only this reviewer, skip Phase 2 detection
-- If not found → list available reviewers from `agents/review/` and ask user to pick
+- If not found → list available reviewers from `${ARC_ROOT}/agents/review/` and ask user to pick
 
 **Available reviewers:**
 - `daniel-product-engineer` — Type safety, UI completeness, React patterns
@@ -174,7 +181,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 
 2. **Read the checklist:**
    ```
-   Read: references/diff-review-checklist.md
+   Read: ${ARC_ROOT}/references/diff-review-checklist.md
    ```
 
 3. **Get the diff:**
@@ -211,30 +218,30 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 **Select reviewers based on project type:**
 
 **TypeScript/React:**
-- agents/review/daniel-product-engineer.md
-- agents/review/senior-engineer.md
-- agents/review/simplicity-engineer.md
-- agents/review/architecture-engineer.md
+- ${ARC_ROOT}/agents/review/daniel-product-engineer.md
+- ${ARC_ROOT}/agents/review/senior-engineer.md
+- ${ARC_ROOT}/agents/review/simplicity-engineer.md
+- ${ARC_ROOT}/agents/review/architecture-engineer.md
 
 **Next.js:**
-- agents/review/lee-nextjs-engineer.md
-- agents/review/daniel-product-engineer.md
-- agents/review/senior-engineer.md
-- agents/review/simplicity-engineer.md
+- ${ARC_ROOT}/agents/review/lee-nextjs-engineer.md
+- ${ARC_ROOT}/agents/review/daniel-product-engineer.md
+- ${ARC_ROOT}/agents/review/senior-engineer.md
+- ${ARC_ROOT}/agents/review/simplicity-engineer.md
 
 **Python:**
-- agents/review/senior-engineer.md
-- agents/review/performance-engineer.md
-- agents/review/architecture-engineer.md
+- ${ARC_ROOT}/agents/review/senior-engineer.md
+- ${ARC_ROOT}/agents/review/performance-engineer.md
+- ${ARC_ROOT}/agents/review/architecture-engineer.md
 
 **General/Unknown:**
-- agents/review/senior-engineer.md
-- agents/review/architecture-engineer.md
-- agents/review/simplicity-engineer.md
+- ${ARC_ROOT}/agents/review/senior-engineer.md
+- ${ARC_ROOT}/agents/review/architecture-engineer.md
+- ${ARC_ROOT}/agents/review/simplicity-engineer.md
 
 **Conditional addition (all UI project types):**
-- If plan involves UI components, forms, or user-facing features → add `agents/review/accessibility-engineer.md`
-- If plan involves UI components, pages, or visual design → add `agents/review/designer.md`
+- If plan involves UI components, forms, or user-facing features → add `${ARC_ROOT}/agents/review/accessibility-engineer.md`
+- If plan involves UI components, pages, or visual design → add `${ARC_ROOT}/agents/review/designer.md`
 
 ## Phase 2.5: Team Mode Check
 
@@ -251,7 +258,7 @@ Execution mode:
 2. Standard mode — Independent reviewers, findings consolidated by skill (faster, lower cost)
 ```
 
-Use AskUserQuestion with:
+Use the AskUserQuestion interaction pattern with:
 - **"Team mode"** — Reviewers cross-review and debate findings. Questions that survive peer scrutiny are stronger. Best when reviewing complex or high-stakes plans.
 - **"Standard mode (Recommended)"** — Independent reviewers run in parallel. Faster and cheaper. Good default for most reviews.
 
@@ -259,7 +266,7 @@ Use AskUserQuestion with:
 
 **If team mode selected**, read the team reference:
 ```
-references/agent-teams.md
+${ARC_ROOT}/references/agent-teams.md
 ```
 </team_mode_check>
 
@@ -332,7 +339,7 @@ Each reviewer reads the others' findings and responds:
 
 **Transform findings into Socratic questions:**
 
-See `references/review-patterns.md` for approach.
+See `${ARC_ROOT}/references/review-patterns.md` for approach.
 
 Instead of presenting critiques:
 - Turn findings into exploratory questions
@@ -407,14 +414,14 @@ If reviewed an **implementation plan**:
 After spawning reviewer agents, some may not exit cleanly. Run cleanup:
 
 ```bash
-scripts/cleanup-orphaned-agents.sh
+${ARC_ROOT}/scripts/cleanup-orphaned-agents.sh
 ```
 
 </process>
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:review — [Plan name] reviewed`
 </arc_log>
@@ -435,7 +442,7 @@ Entry: `/arc:review — [Plan name] reviewed`
 
 **Diff review** is complete when:
 - [ ] Branch has changes vs main
-- [ ] Checklist loaded from references/diff-review-checklist.md
+- [ ] Checklist loaded from ${ARC_ROOT}/references/diff-review-checklist.md
 - [ ] Full diff read before flagging anything
 - [ ] Two-pass review applied (critical then informational)
 - [ ] Findings presented (critical as Socratic questions)

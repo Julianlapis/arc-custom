@@ -29,12 +29,21 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user decisions (core purpose, plan approval). Never ask questions as plain text. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for user decisions such as core purpose and plan approval. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 # Distill Workflow
 
@@ -64,10 +73,10 @@ Simplification requires judgment about what matters — it's collaborative, not 
 
 1. `rules/interface/spacing.md` — Spacing and hierarchy (cards are not required)
 2. `rules/interface/design.md` — Visual principles
-3. `references/design-philosophy.md` — "Less but better" principles
+3. `${ARC_ROOT}/references/design-philosophy.md` — "Less but better" principles
 </required_reading>
 
-**Ask the user using AskUserQuestion:**
+**Ask the user using the AskUserQuestion interaction pattern:**
 ```yaml
 AskUserQuestion:
   question: "What is the ONE thing this component/page should accomplish?"
@@ -144,7 +153,7 @@ Read all files for the target component/page. Look for:
 2. [Extra div required for animation transform-origin]
 ```
 
-**Ask using AskUserQuestion:**
+**Ask using the AskUserQuestion interaction pattern:**
 ```yaml
 AskUserQuestion:
   question: "Does this distillation plan look right? Anything I should preserve?"
@@ -229,7 +238,7 @@ After each batch of changes:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:distill — [Component/page] simplified ([elements removed, classes reduced])`
 </arc_log>

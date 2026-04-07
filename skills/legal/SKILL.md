@@ -34,6 +34,13 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 <progress_context>
 **Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
@@ -238,7 +245,7 @@ Present findings to user:
 
 ## Step 3: Guided Questions
 
-Use AskUserQuestion tool for each round. One focused topic at a time.
+Use the AskUserQuestion interaction pattern for each round. One focused topic at a time, and do not narrate missing tools or fallbacks to the user.
 
 ### Round 1: Business Identity
 
@@ -379,9 +386,9 @@ The templates below show the **structure**. When generating, replace ALL bracket
 
 The template structures for each document are maintained in separate files. **Read these templates at runtime** to use as the structure reference when generating personalized documents:
 
-- **Privacy Policy:** `templates/privacy-policy.md`
-- **Terms of Service:** `templates/terms-of-service.md`
-- **Cookie Policy:** `templates/cookie-policy.md`
+- **Privacy Policy:** `${ARC_ROOT}/templates/privacy-policy.md`
+- **Terms of Service:** `${ARC_ROOT}/templates/terms-of-service.md`
+- **Cookie Policy:** `${ARC_ROOT}/templates/cookie-policy.md`
 
 **Use Read tool** to load each template before generating. The templates show the **structure** — when generating, replace ALL bracketed items with real values from detection and user answers. If a section doesn't apply to this project, omit it entirely.
 
@@ -466,7 +473,7 @@ Present to user after generation:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:legal — Generated Privacy Policy, Terms, Cookie Policy`
 </arc_log>

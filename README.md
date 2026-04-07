@@ -77,6 +77,18 @@ npx skills add howells/arc
 
 Installs skill prompts to Claude Code, Codex, Cursor, Gemini CLI, Windsurf, Cline, and [40+ agents](https://github.com/vercel-labs/skills#supported-agents). This only copies `SKILL.md` files — you get the skill instructions but not the supporting agents, hooks, or orchestration that power the full workflow.
 
+## Install Modes
+
+Arc has two support tiers. Pick the one that matches the workflows you want:
+
+| Install mode | Claude plugin | Codex installer | `skills.sh` / prompt-only |
+|---|---|---|---|
+| Includes full Arc bundle (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`) | Yes | Yes | No |
+| Best for full-runtime workflows like `audit`, `review`, `implement`, `design`, `document`, `testing` | Yes | Yes | No |
+| Best for lightweight prompt-only routing and simple workflows | Yes | Yes | Yes |
+
+If a skill tells the agent to load Arc-owned files such as `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, treat that skill as **full-runtime**. Use the Claude plugin install or the Codex installer for those workflows.
+
 ### Codex
 
 Codex discovers skills from `~/.agents/skills` (legacy `~/.codex/skills` still works, and repo-local `.agents/skills` is also discovered).
@@ -100,6 +112,8 @@ curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh 
 ### Install Once (Recommended)
 
 Follow `.codex/INSTALL.md` (or run the one-line installer above), then invoke Arc skills in any project.
+
+This is the **full-runtime** Codex install. It clones the Arc repo to `~/.codex/arc` and links Codex skill discovery to that checkout, so workflows that need bundled agents, references, disciplines, templates, and scripts work the same way they do in Claude Code.
 
 ### Repo-Local (Project Skills)
 
@@ -127,6 +141,7 @@ without preloading the whole system.
   - terminal exploration instead of `Task` blocks
   - `agent-browser` first, then Playwright, instead of Claude-in-Chrome MCP
   - WireText MCP for wireframes when available; otherwise inline ASCII wireframes
+- Prompt-only installs copied via `skills.sh` are best-effort. They do not include Arc's bundled `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, so full-runtime workflows should upgrade to the Codex installer or Claude plugin before running.
 
 ## Claude Code Dependencies (Optional)
 

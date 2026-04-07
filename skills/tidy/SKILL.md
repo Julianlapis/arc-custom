@@ -28,7 +28,7 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every question — plan disposition, commit confirmation — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question, including plan disposition and commit confirmation. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
 
 # Tidy Workflow

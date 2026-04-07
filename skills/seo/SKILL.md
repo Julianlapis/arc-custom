@@ -26,6 +26,15 @@ website:
     position: utility
 ---
 
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
+
 <tasklist_context>
 **Use TaskList tool** to check for existing tasks related to this work.
 
@@ -88,7 +97,7 @@ Present discovered routes to user.
 
 **Ask the user to classify pages:**
 
-Present the route list and ask which are app-only (authenticated/gated). Use AskUserQuestion with multiSelect.
+Present the route list and ask which are app-only (authenticated/gated). Use the AskUserQuestion interaction pattern with concise multi-option choices.
 
 Default: treat all as marketing unless user marks as app-only.
 
@@ -328,7 +337,7 @@ Count the number of files affected by findings.
 - **4-10 files affected:** Give the user a choice. "There are [N] issues across [N] files. Want me to fix them now, or create an implementation plan with `/arc:detail`?"
 - **10+ files affected:** Recommend a plan. "There are [N] issues across [N] files. This needs a structured approach. Want me to create an implementation plan with `/arc:detail`?"
 
-**Use AskUserQuestion** to present the appropriate options based on file count.
+**Use the AskUserQuestion interaction pattern** to present the appropriate options based on file count.
 
 #### Step 3: Framework-Specific Advice
 
@@ -409,7 +418,7 @@ SEO audit is complete when:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:seo — [scope] audit ([N] issues)`
 </arc_log>

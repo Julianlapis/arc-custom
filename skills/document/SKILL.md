@@ -35,15 +35,22 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text in your response. Every question to the user — whether clarifying scope, choosing audience, or validating content — MUST use the `AskUserQuestion` tool. This enforces one question at a time and prevents walls of text with multiple questions. If you need to provide context before asking, keep it to 2-3 sentences max, then use the tool.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every user question, including clarifying scope, choosing audience, and validating content. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. This prevents walls of text with multiple questions. If you need to provide context before asking, keep it to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 
 If you feel the urge to "plan before acting" — that urge is satisfied by following the `<process>` steps below. Execute them directly.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 <key_principles>
 # Key Principles
 
-- **One question at a time via AskUserQuestion tool** — Every question MUST use the `AskUserQuestion` tool. Never write questions as plain text. Never ask more than one question per message.
+- **One question at a time via the AskUserQuestion interaction pattern** — In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Never ask more than one question per message, and do not narrate missing tools or fallbacks to the user.
 - **Substance before meta-decisions** — Scan the codebase and show what you found BEFORE asking about audience, format, or location. Users decide better with concrete context.
 - **Framework-aware, not framework-coupled** — Detect existing docs frameworks and generate in their format. If none exists, generate plain markdown and recommend one. Never install or scaffold frameworks.
 - **Incremental validation** — Generate a sample section first. Get approval on style and depth before generating the rest.
@@ -59,8 +66,8 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 
 <required_reading>
 **Read these reference files NOW:**
-1. references/documentation-guide.md
-2. templates/doc-templates.md
+1. ${ARC_ROOT}/references/documentation-guide.md
+2. ${ARC_ROOT}/templates/doc-templates.md
 </required_reading>
 
 <progress_context>
@@ -294,7 +301,7 @@ For Fumadocs projects, check `source.config.ts` for the configured content direc
 
 Single-pass generation. No agents needed.
 
-1. Use the templates from `templates/doc-templates.md`
+1. Use the templates from `${ARC_ROOT}/templates/doc-templates.md`
 2. Read all source files identified in Phase 2
 3. Generate documentation matching the validated style sample
 4. Write files to the chosen location
@@ -302,7 +309,7 @@ Single-pass generation. No agents needed.
 
 ### Full-Site (large scope)
 
-**Spawn docs-writer agents in batches following `disciplines/dispatching-parallel-agents.md`.**
+**Spawn docs-writer agents in batches following `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`.**
 
 1. **Prepare agent assignments.** Each outline section = one agent. Each agent gets:
    - Section name and description
@@ -402,7 +409,7 @@ Options:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:document — [scope] ([audience]) [N files]`
 

@@ -29,8 +29,17 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when specified in the process:
-- **`AskUserQuestion`** — Use at every decision point marked with `AskUserQuestion:` in the process below. Do NOT substitute with plain text questions.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern at every decision point marked with `AskUserQuestion:` in the process below. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 <progress_context>
 **Use Read tool:** `docs/arc/progress.md` (first 50 lines)
@@ -688,7 +697,7 @@ If follow-up work is identified, use **TaskCreate**:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:letsgo — [Deployed to URL / Checklist complete]`
 </arc_log>
