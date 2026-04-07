@@ -67,7 +67,7 @@ Detection signals:
 ├── Analytics: GA, mixpanel, posthog, plausible
 ├── i18n: next-intl, i18next, locale files
 ├── CMS: sanity, contentful, payload
-├── File uploads: uploadthing, cloudinary, S3 config
+├── File uploads: stow, cloudinary, S3 config
 └── Existing meta: robots.txt, sitemap, og images
 ```
 

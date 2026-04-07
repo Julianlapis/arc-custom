@@ -160,7 +160,7 @@ DATABASE & STORAGE
 ├── PlanetScale               → MySQL platform
 ├── Neon                       → Serverless Postgres
 ├── Cloudinary                → Image/video storage
-├── Uploadthing               → File uploads
+├── Stow                       → File uploads
 ├── AWS S3                     → Object storage
 └── Vercel Blob               → File storage
 

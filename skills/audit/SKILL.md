@@ -257,6 +257,43 @@ If knip finds >20 unused exports, flag as a separate task cluster rather than di
 
 If `--diff` flag is set, cross-reference knip results with the changed file list (knip does not support diff mode natively, so run on full project but only surface findings that touch changed files).
 
+**Run structural hotspot scan (JS/TS/TSX/JSX projects):**
+
+This is a cheap mechanical pass to surface "probably worth interrogating" files before reviewer agents start. The goal is not to auto-convict large files, but to give reviewers a map of where complexity is likely hiding.
+
+```bash
+# Long files (exclude node_modules, build output, vendored/generated folders)
+find ${scope:-.} -type f \
+  \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) \
+  | grep -vE 'node_modules|\\.git|dist|build|coverage|\\.next|generated' \
+  | xargs wc -l \
+  | sort -nr \
+  | head -20
+
+# Suspicious client-boundary escape hatches
+find ${scope:-.} -type f \
+  \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) \
+  | grep -E '(^|/)[^/]*(-client|-wrapper|-content|-shell|-ui)\\.(tsx?|jsx?)$'
+
+# Check which suspicious files are explicit client components
+grep -rl --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx' \
+  '^["'\"'\"']use client["'\"'\"'];\\?$' ${scope:-.} 2>/dev/null
+```
+
+Interpretation guidance:
+- Treat files **>250 lines** as audit hotspots. Treat files **>400 lines** as severe complexity hotspots, especially when they are React components, pages, layouts, or route handlers.
+- `*-client.*` and `*-wrapper.*` are explicit red flags. They often mean "I needed a client boundary, so I wrapped the real component instead of pushing interactivity down."
+- `*-content.*`, `*-shell.*`, and `*-ui.*` are weaker signals, but worth interrogating when they are also long or marked `"use client"`.
+- When a file is both **long** and suspiciously named, elevate it as a probable god-component / server-client-boundary smell.
+- In `--diff` mode, still run the scan on the requested scope, but only surface hotspots that intersect the changed files.
+
+Store a **structural hotspot manifest** with:
+- Long files over 250 LOC
+- Severe long files over 400 LOC
+- Suspicious boundary files matching `*-client`, `*-wrapper`, `*-content`, `*-shell`, `*-ui`
+- Overlap set: suspiciously named files that are also long
+- `"use client"` overlap: suspiciously named files that also opt into a client boundary
+
 **Detect project scale:**
 
 Use file counts to determine appropriate audit depth:
@@ -323,6 +360,7 @@ Has database: [yes/no]
 Has AI SDK: [yes/no + deprecated API count if any]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
+Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
 Execution mode: [batched (default) / parallel / team]
@@ -458,6 +496,26 @@ Project stage: [prototype / development / pre-launch / production]
 SEVERITY CALIBRATION FOR THIS STAGE:
 [Paste the matching stage block from audit-stage-calibration.md]
 ```
+
+**Include the structural hotspot manifest in every reviewer prompt.**
+
+Every reviewer should receive the precomputed hotspot list so they can decide whether it matters in their domain instead of rediscovering it independently.
+
+Include:
+```
+Structural hotspots:
+- Long files >250 LOC: [list]
+- Severe long files >400 LOC: [list]
+- Suspicious boundary files: [list]
+- Suspicious + long overlap: [list]
+- Suspicious + "use client" overlap: [list]
+```
+
+Reviewer-specific emphasis:
+- `lee-nextjs-engineer`: interrogate `*-client.*` and `*-wrapper.*` first. Ask whether they are "escape hatches" around App Router server-first architecture and whether the real fix is to push interactivity down to leaf client components.
+- `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable UI shape.
+- `organization-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
+- Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
 
 **For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
 If the platform does not support subagents, run the same reviewer prompts locally one reviewer at a time and continue with consolidation.
@@ -669,6 +727,15 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 **Project Stage:** [prototype / development / pre-launch / production]
 
 > Severity ratings have been calibrated for the **[stage]** stage. Issues marked with ↓ were downgraded from their production-level severity.
+
+## Structural Hotspots
+
+- **Long files >250 LOC:** [count]
+- **Severe long files >400 LOC:** [count]
+- **Suspicious boundary files:** [count]
+- **Suspicious + long overlap:** [count]
+
+[Optional short table of the top hotspots with file path, LOC, and why they were flagged]
 
 ## Executive Summary
 
