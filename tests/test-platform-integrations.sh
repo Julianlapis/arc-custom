@@ -17,8 +17,6 @@ assert_file_contains "$PLUGIN_ROOT/skills/design/SKILL.md" "Prefer WireText MCP 
     "design prefers WireText for wireframes"
 assert_file_contains "$PLUGIN_ROOT/skills/responsive/SKILL.md" "agent-browser" \
     "responsive has browser fallback guidance"
-assert_file_contains "$PLUGIN_ROOT/skills/polish/SKILL.md" "agent-browser" \
-    "polish has browser fallback guidance"
 
 assert_file_not_contains "$PLUGIN_ROOT/README.md" "figma-implement" \
     "README has no stale figma-implement reference"

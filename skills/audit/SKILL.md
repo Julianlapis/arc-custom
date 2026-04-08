@@ -31,14 +31,11 @@ website:
     - security-engineer
     - performance-engineer
     - architecture-engineer
-    - organization-engineer
     - daniel-product-engineer
     - lee-nextjs-engineer
     - senior-engineer
     - designer
     - data-engineer
-    - documentation-engineer
-    - ux-writing-engineer
   workflow:
     position: utility
 ---
@@ -121,10 +118,6 @@ Pass relevant rules to each reviewer agent.
 | lee-nextjs-engineer | nextjs.md, api.md, react-correctness.md (Next.js-specific rules) |
 | senior-engineer | code-style.md, typescript.md, react.md, error-handling.md, ai-sdk.md (if AI SDK) |
 | data-engineer | testing.md, api.md |
-| organization-engineer | turborepo.md, code-style.md |
-| hygiene-engineer | stack.md, code-style.md, error-handling.md, ai-sdk.md (if AI SDK) |
-| documentation-engineer | typescript.md, code-style.md |
-| ux-writing-engineer | code-style.md |
 | daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK), react-performance.md, react-correctness.md |
 | performance-engineer | react-performance.md |
 | seo-engineer | seo.md |
@@ -136,8 +129,6 @@ Pass relevant rules to each reviewer agent.
 | designer | design.md, colors.md, typography.md, marketing.md |
 | daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md |
 | lee-nextjs-engineer | layout.md, performance.md |
-| ux-writing-engineer | content-accessibility.md, marketing.md |
-
 Interface rules location: `rules/interface/`
 
 Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
@@ -249,8 +240,7 @@ If knip is already a project dependency, use `npx knip` instead. Knip detects:
 - Duplicate exports (same thing exported multiple ways)
 
 Include dead code count in the detection summary. Pass findings to relevant reviewers:
-- `organization-engineer` — unused files and structural dead weight
-- `architecture-engineer` — unused exports indicating poor module boundaries
+- `architecture-engineer` — unused files, exports indicating poor module boundaries
 - `senior-engineer` — general dead code cleanup
 
 If knip finds >20 unused exports, flag as a separate task cluster rather than distributing across reviewers.
@@ -311,7 +301,6 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 
 **Scale-appropriate signals:**
 - Small projects: Skip `architecture-engineer` (no complex boundaries to review)
-- Small projects: Skip `simplicity-engineer` (not enough code to over-engineer)
 - No tests present + small project: Don't flag missing tests as critical
 - Single developer: Skip `senior-engineer` (no code review discipline needed)
 
@@ -374,7 +363,7 @@ Execution mode: [batched (default) / parallel / team]
 |-------|----------------|
 | Small | security-engineer, performance-engineer |
 | Medium | security-engineer, performance-engineer, architecture-engineer |
-| Large | security-engineer, performance-engineer, architecture-engineer, organization-engineer, senior-engineer |
+| Large | security-engineer, performance-engineer, architecture-engineer, senior-engineer |
 
 **Add framework-specific reviewers (medium/large only):**
 
@@ -386,26 +375,18 @@ Execution mode: [batched (default) / parallel / team]
 
 **Conditional additions:**
 - If scope includes DB/migrations → add `data-engineer`
-- If monorepo with shared packages (large only) → add `simplicity-engineer`
-- If project has >50 files or inconsistent structure detected → add `organization-engineer`
 - If UI-heavy (React/Next.js, medium/large) → add `designer`
 - If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
-- If recent AI-assisted work or branch audit → add `hygiene-engineer`
 - If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
-- If TypeScript/JavaScript project (`.ts`/`.tsx`/`.js`/`.jsx` files, medium/large) → add `documentation-engineer`
 
 **Focus flag overrides:**
 - `--security` → only `security-engineer`
 - `--performance` → only `performance-engineer`
 - `--architecture` → only `architecture-engineer`
-- `--organization` → only `organization-engineer`
 - `--design` → only `designer`
 - `--accessibility` → only `accessibility-engineer`
-- `--hygiene` → only `hygiene-engineer`
 - `--seo` → only `seo-engineer`
-- `--docs` → only `documentation-engineer`
-- `--copy` → only `ux-writing-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -470,17 +451,12 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | security-engineer | sonnet | Pattern recognition + context |
 | performance-engineer | sonnet | Algorithmic reasoning |
 | architecture-engineer | sonnet | Structural analysis |
-| organization-engineer | sonnet | File structure pattern analysis |
 | daniel-product-engineer | sonnet | Code quality judgment |
 | lee-nextjs-engineer | sonnet | Framework pattern recognition |
 | senior-engineer | sonnet | Code review reasoning |
-| simplicity-engineer | sonnet | Complexity analysis |
 | data-engineer | sonnet | Data safety reasoning |
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
-| hygiene-engineer | sonnet | Pattern recognition for AI artifacts |
 | seo-engineer | sonnet | Pattern recognition for SEO elements |
-| documentation-engineer | sonnet | JSDoc coverage analysis |
-| ux-writing-engineer | sonnet | UX copy quality and LLM-smell detection |
 
 **Include project stage in every reviewer prompt.**
 
@@ -514,7 +490,7 @@ Structural hotspots:
 Reviewer-specific emphasis:
 - `lee-nextjs-engineer`: interrogate `*-client.*` and `*-wrapper.*` first. Ask whether they are "escape hatches" around App Router server-first architecture and whether the real fix is to push interactivity down to leaf client components.
 - `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable UI shape.
-- `organization-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
+- `architecture-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
 - Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
 
 **For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
@@ -568,7 +544,7 @@ Focus on: aesthetic direction, memorable elements, typography, color cohesion, A
 **Wait for batch to complete before starting next batch.**
 
 Repeat for remaining batches:
-- Batch 2: architecture-engineer + organization-engineer (if applicable)
+- Batch 2: architecture-engineer + senior-engineer
 - Batch 3: UI reviewers (daniel-product-engineer, lee-nextjs-engineer)
 - Batch 4: remaining reviewers (senior-engineer, designer, data-engineer)
 

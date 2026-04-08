@@ -11,15 +11,15 @@ metadata:
 website:
   order: 11
   desc: Pre-launch checklist
-  summary: The pre-launch checklist. Walks through domains, SEO, security headers, error pages, analytics, legal docs, and deployment—tailored to what your project actually uses.
+  summary: The pre-launch checklist. Walks through domains, SEO, security headers, error pages, analytics, and deployment—tailored to what your project actually uses.
   what: |
-    Letsgo scans your project to understand what you're using (auth? payments? database?), then generates a tailored checklist. It covers: domain setup, DNS configuration, SSL. SEO basics—meta tags, OG images, sitemap, robots.txt. Security headers and environment variables. Error pages (404, 500). Analytics and monitoring. Legal pages (triggers /arc:legal if missing). Performance basics. For Vercel projects, it can deploy directly.
+    Letsgo scans your project to understand what you're using (auth? payments? database?), then generates a tailored checklist. It covers: domain setup, DNS configuration, SSL. SEO basics—meta tags, OG images, sitemap, robots.txt. Security headers and environment variables. Error pages (404, 500). Analytics and monitoring. Performance basics. For Vercel projects, it can deploy directly.
   why: |
     The difference between "it works on my machine" and "it works in production" is a hundred small things—DNS, headers, error pages, meta tags. Letsgo is the checklist so you don't ship with a missing favicon and broken OG images.
   decisions:
     - Scans your stack first. Knows if you have Stripe, auth, a database—tailors the checklist.
     - Interactive walkthrough. One section at a time, tracks what's done.
-    - Triggers /arc:legal automatically if privacy policy or terms are missing.
+    - Flags missing legal pages for user to address externally.
   workflow:
     position: spine
     after: testing
@@ -494,13 +494,7 @@ Invoke skill: vercel-react-native-skills
 - [ ] Accessibility statement page (if WCAG compliance needed)
 - [ ] Contact method for accessibility issues
 
-**If legal documents are missing, offer to generate them:**
-```
-Invoke skill: /arc:legal
-"Generate Privacy Policy, Terms of Service, and Cookie Policy for this project"
-```
-
-This will detect data collection, gather business info, and create template pages.
+**If legal documents are missing**, flag it as a checklist item for the user to address. Consider using a service like Termly, iubenda, or consulting a lawyer for production-ready legal pages.
 
 ### M. Analytics & Tracking (If user wants)
 - [ ] Analytics provider configured (GA4, Plausible, PostHog, etc.)
@@ -718,7 +712,7 @@ Letsgo is complete when:
 - Runs **/arc:testing** as part of quality check
 - Runs **/arc:audit --hygiene** as part of quality check (code artifact detection)
 - References **/arc:vision** to verify alignment
-- Invokes **/arc:legal** to generate missing legal documents
+- Flags missing legal documents for user to address externally
 - Can invoke **vercel-react-best-practices** skill for performance review (if available)
 - Can invoke **vercel-react-native-skills** skill for React Native performance review (if available)
 - Can invoke **vercel-deploy** skill for deployment (if available)

@@ -230,7 +230,7 @@ AskUserQuestion:
       description: "Move straight to detailed design"
 ```
 
-If yes: spawn 2-3 reviewers (architecture-engineer, simplicity-engineer, security-engineer as relevant). Transform findings into questions — "What if we..." not "You should..." — and walk through one at a time.
+If yes: spawn 2-3 reviewers (architecture-engineer, senior-engineer, security-engineer as relevant). Transform findings into questions — "What if we..." not "You should..." — and walk through one at a time.
 
 ## Act 3: Design Together
 

@@ -252,9 +252,7 @@ The skill has built-in opinions about what makes a brand distinctive:
 | Skill | How brand integrates |
 |-------|---------------------|
 | `/arc:design` | Reads `brand-system.md`, inherits palette/typography, skips brand questions |
-| `/arc:polish` | Validates implementations against brand tokens |
 | `/arc:responsive` | Applies brand across breakpoints |
-| `/arc:animate` | Inherits motion personality from brand |
 | `/arc:seo` | Uses brand assets for OG images, favicon |
 | `designer` agent | Reviews against brand system, not generic taste |
 

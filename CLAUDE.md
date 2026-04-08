@@ -24,10 +24,6 @@ arc/
 │   ├── testing/SKILL.md    # 7. Test: strategy & execution
 │   ├── verify/SKILL.md     # 7. Test: build + typecheck + lint runner
 │   ├── letsgo/SKILL.md     # 8. Ship: production readiness
-│   ├── legal/SKILL.md      # 8. Ship: privacy policy, ToS
-│   ├── polish/SKILL.md     # Refine: pre-ship visual refinement
-│   ├── distill/SKILL.md    # Refine: strip UI to essentials
-│   ├── animate/SKILL.md    # Refine: strategic motion addition
 │   ├── harden/SKILL.md     # Refine: production resilience
 │   ├── naming/SKILL.md     # Cross-cutting: project naming
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
@@ -40,7 +36,6 @@ arc/
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
 │   ├── hooks/SKILL.md      # Cross-cutting: auto-format + context hooks
-│   ├── flow/SKILL.md       # Cross-cutting: user flow discovery & verification
 │   ├── help/SKILL.md       # Utility: context-aware command guide
 │   ├── prune-agents/SKILL.md # Utility: kill orphaned subagents
 │   └── progress/SKILL.md   # internal (progress journal)
@@ -75,12 +70,8 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
               /arc:ai         → AI SDK patterns and guidance
 6. TEST       /arc:testing    → Test strategy and execution
               /arc:verify     → Run build, typecheck, lint, and tests
-7. REFINE     /arc:polish     → Pre-ship visual refinement
-              /arc:distill    → Strip UI to essentials
-              /arc:animate    → Add purposeful motion
-              /arc:harden     → Production resilience
+7. REFINE     /arc:harden     → Production resilience
 8. SHIP       /arc:letsgo     → Production readiness checklist
-              /arc:legal      → Privacy policy, Terms of Service
 
 CROSS-CUTTING (available anytime):
               /arc:naming     → Generate and validate project names
@@ -94,7 +85,6 @@ CROSS-CUTTING (available anytime):
               /arc:rules      → Apply coding standards
               /arc:deps       → Dependency audit with batch upgrades
               /arc:hooks      → Auto-format, lint, and context monitor hooks
-              /arc:flow       → User flow discovery, walking, and drift detection
               /arc:help        → Context-aware guide to all commands
               /arc:prune-agents → Kill orphaned subagent processes
 ```

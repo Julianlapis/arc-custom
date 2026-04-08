@@ -572,6 +572,36 @@ If WireText is used:
 
 ## Anti-Patterns to Avoid
 - [Specific things NOT to do for this design]
+
+## Complexity Guardrails
+Keep implementation simple. Flag these during code review:
+- Wrapper divs that add no styling, semantics, or layout purpose
+- More than 3-4 levels of nesting for simple content
+- Cards within cards (use spacing and dividers instead)
+- More than 5 distinct font sizes (muddy hierarchy)
+- More than 3 distinct colors plus neutrals (visual noise)
+- Elements with 15+ Tailwind classes (simplify or extract)
+- Arbitrary spacing values (p-[13px]) instead of scale values
+- Decorative elements that don't aid comprehension
+
+## Interactive States
+Every interactive element must address all 8 states:
+| State | Requirement |
+|-------|-------------|
+| Default | Base styling |
+| Hover | Subtle feedback (gated to `hover:hover` for touch) |
+| Focus | Visible ring for keyboard (`focus-visible:ring-2`) |
+| Active | Press feedback (`active:scale-[0.97]`) |
+| Disabled | Reduced opacity, no pointer events |
+| Loading | Spinner or skeleton (`aria-busy`) |
+| Error | Red border + message (`aria-invalid`) |
+| Success | Confirmation feedback |
+
+## Contrast Requirements
+- Body text: 4.5:1 against background
+- Large text (≥18px bold, ≥24px): 3:1
+- UI components (borders, icons): 3:1
+- No pure black on pure white
 ```
 
 ---
@@ -591,6 +621,9 @@ If WireText is used:
 - [ ] Typography is deliberate
 - [ ] At least one memorable element
 - [ ] Layout has unexpected decisions
+- [ ] Complexity guardrails defined (max nesting, class budget)
+- [ ] All 8 interactive states specified
+- [ ] Contrast requirements met (4.5:1 body, 3:1 large/UI)
 
 ### If Marketing Mode, also check:
 - [ ] **Red Flag:** Cookie-cutter hero → features → testimonials → CTA layout
@@ -705,9 +738,6 @@ Design is complete when:
 - Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin
 - References feed into implementation to maintain design fidelity
 
-### Related Refinement Skills
-After implementation, suggest these for the final mile:
-- **/arc:polish** — Pre-ship visual refinement (spacing, states, contrast)
-- **/arc:distill** — Strip unnecessary complexity
-- **/arc:animate** — Add purposeful motion
+### Related Skills
+After implementation:
 - **/arc:harden** — Production resilience (errors, overflow, i18n)

@@ -339,7 +339,7 @@ export default function ArcPage() {
                     Claude in Chrome
                   </td>
                   <td className="py-2">
-                    /arc:design, /arc:responsive, /arc:polish
+                    /arc:design, /arc:responsive
                   </td>
                 </tr>
                 <tr className="border-neutral-100 border-b">

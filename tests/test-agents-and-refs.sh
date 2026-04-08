@@ -16,20 +16,15 @@ REVIEW_AGENTS=(
     "data-engineer"
     "designer"
     "lee-nextjs-engineer"
-    "hygiene-engineer"
-    "organization-engineer"
     "performance-engineer"
     "security-engineer"
     "senior-engineer"
     "seo-engineer"
-    "simplicity-engineer"
     "test-quality-engineer"
 )
 
 RESEARCH_AGENTS=(
     "docs-researcher"
-    "duplicate-detector"
-    "feature-scout"
     "git-history-analyzer"
     "naming"
 )
@@ -57,6 +52,7 @@ WORKFLOW_AGENTS=(
     "spec-document-reviewer"
     "spec-flow-analyzer"
 )
+# Note: flow-discoverer removed (flow skill deleted)
 
 find_bare_internal_refs() {
     local file="$1"

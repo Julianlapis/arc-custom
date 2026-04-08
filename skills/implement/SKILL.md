@@ -603,16 +603,7 @@ See `${ARC_ROOT}/references/checkpoint-patterns.md` for full protocol.
 ## Phase 4: Quality Checkpoints
 
 **Before creating new utility functions or services:**
-Spawn duplicate-detector to check for existing similar functionality:
-```
-Task [duplicate-detector] model: sonnet: "Scan for functions similar to what I'm about to create.
-
-New function purpose: [what it does]
-Search in: [src/utils/, src/lib/, src/helpers/ or relevant dirs]
-
-Report any semantic duplicates so we can reuse instead of reinvent."
-```
-If duplicates found → reuse existing code. Skip creating the new function.
+Search the codebase (Glob + Grep) for existing functions that serve the same or similar purpose. If found → reuse existing code instead of creating new functions.
 
 **After completing data/types tasks:**
 - Spawn data-engineer (from review agents) for quick review
@@ -790,9 +781,9 @@ For significant features, offer parallel review:
 If yes, spawn review agents in parallel (all use sonnet):
 
 ```
-Task [simplicity-engineer] model: sonnet: "Review implementation for unnecessary complexity.
+Task [senior-engineer] model: sonnet: "Review implementation for unnecessary complexity and code quality.
 Files: [list of new/modified files]
-See ${ARC_ROOT}/agents/review/simplicity-engineer.md"
+See ${ARC_ROOT}/agents/review/senior-engineer.md"
 
 Task [architecture-engineer] model: sonnet: "Review implementation for architectural concerns.
 Files: [list of new/modified files]

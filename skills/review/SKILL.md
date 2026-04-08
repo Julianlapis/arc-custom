@@ -27,7 +27,6 @@ website:
     - architecture-engineer
     - data-engineer
     - senior-engineer
-    - simplicity-engineer
     - designer
   workflow:
     position: spine
@@ -73,7 +72,6 @@ Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 | lee-nextjs-engineer | nextjs.md, api.md |
 | senior-engineer | code-style.md, typescript.md, react.md |
 | architecture-engineer | stack.md, turborepo.md |
-| simplicity-engineer | code-style.md |
 | security-engineer | security.md, api.md, env.md |
 | data-engineer | database.md, testing.md, api.md |
 | senior-engineer | cloudflare-workers.md (if wrangler.toml exists) |
@@ -115,13 +113,10 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - `lee-nextjs-engineer` — Next.js App Router, server-first architecture
 - `senior-engineer` — Asymmetric strictness, review discipline
 - `architecture-engineer` — System design, component boundaries
-- `simplicity-engineer` — YAGNI, minimalism
 - `performance-engineer` — Bottlenecks, scalability
 - `security-engineer` — Vulnerabilities, OWASP
 - `data-engineer` — Migrations, transactions
 - `designer` — Visual design quality, UX fundamentals, AI slop detection
-- `codex-reviewer` — Independent second opinion via OpenAI Codex CLI (different AI model)
-- `gemini-reviewer` — Independent second opinion via Google Gemini CLI (different AI model)
 
 ## Phase 1: Find the Plan
 
@@ -220,14 +215,12 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 **TypeScript/React:**
 - ${ARC_ROOT}/agents/review/daniel-product-engineer.md
 - ${ARC_ROOT}/agents/review/senior-engineer.md
-- ${ARC_ROOT}/agents/review/simplicity-engineer.md
 - ${ARC_ROOT}/agents/review/architecture-engineer.md
 
 **Next.js:**
 - ${ARC_ROOT}/agents/review/lee-nextjs-engineer.md
 - ${ARC_ROOT}/agents/review/daniel-product-engineer.md
 - ${ARC_ROOT}/agents/review/senior-engineer.md
-- ${ARC_ROOT}/agents/review/simplicity-engineer.md
 
 **Python:**
 - ${ARC_ROOT}/agents/review/senior-engineer.md
@@ -237,7 +230,6 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 **General/Unknown:**
 - ${ARC_ROOT}/agents/review/senior-engineer.md
 - ${ARC_ROOT}/agents/review/architecture-engineer.md
-- ${ARC_ROOT}/agents/review/simplicity-engineer.md
 
 **Conditional addition (all UI project types):**
 - If plan involves UI components, forms, or user-facing features → add `${ARC_ROOT}/agents/review/accessibility-engineer.md`

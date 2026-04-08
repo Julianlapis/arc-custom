@@ -76,7 +76,6 @@ Look for:
 | `/arc:commit` | What was committed |
 | `/arc:vision` | Vision created/updated |
 | `/arc:figma` | Components implemented |
-| `/arc:legal` | Legal pages generated |
 | `/arc:seo` | SEO audit results |
 | `/arc:deps` | Dependency audit results |
 

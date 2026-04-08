@@ -28,7 +28,6 @@ DO      /arc:implement  - Plan + execute with TDD
         /arc:build      - Quick build (no formal plan)
         /arc:testing    - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
-        /arc:legal      - Generate privacy policy and terms
 
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
@@ -151,7 +150,7 @@ Arc uses these plugins and MCP integrations for enhanced functionality:
 |-------------|---------|
 | **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
 | **Context7** | research and implementation workflows |
-| **Claude in Chrome** | `/arc:design`, `/arc:responsive`, `/arc:polish`, `designer` review |
+| **Claude in Chrome** | `/arc:design`, `/arc:responsive`, `designer` review |
 | **WireText MCP** | `/arc:design`, `/arc:ideate` wireframing |
 | **agent-browser** | browser automation fallback outside Claude Code |
 
@@ -270,7 +269,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:build` | Quick implementation | Code changes |
 | `/arc:testing` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
-| `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
@@ -290,10 +288,9 @@ Arc includes specialized agents across research, review, build, design, and work
 
 | Category | Agents |
 |----------|--------|
-| **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
-| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, hygiene-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
+| **Research** | docs-researcher, git-history-analyzer, naming |
+| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
-| **Design** | figma-builder |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |
 
 ## Disciplines
