@@ -75,7 +75,7 @@ A single `docs/context.md` per project, maintained by Arc skills as their final 
 - `/arc:letsgo` (after ship checklist)
 - `/arc:commit` (after commit)
 - `/arc:audit` (after audit completes)
-- `/arc:polish`, `/arc:harden`, `/arc:distill`, `/arc:animate` (after refinement)
+- `/arc:harden` (after refinement)
 
 **Implementation:** A shared `<context_update>` block added to each skill's SKILL.md, similar to the existing `<progress_append>` pattern. The block instructs the model to:
 
@@ -184,7 +184,7 @@ git add docs/context.md && git commit -m "context: update project state" || true
 4. Add `<context_update>` to the 3 most-used skills: `/arc:build`, `/arc:implement`, `/arc:commit`
 
 ### Phase 2: Full Skill Coverage
-5. Add `<context_update>` to remaining skills (ideate, testing, review, design, letsgo, audit, polish, harden, distill, animate)
+5. Add `<context_update>` to remaining skills (ideate, testing, review, design, letsgo, audit, harden)
 6. Update `/arc:go` to read `docs/context.md` first, fall back to `docs/arc/progress.md`, fall back to cold start
 
 ### Phase 3: Deprecation (only after Phase 2 is complete)

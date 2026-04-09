@@ -35,16 +35,12 @@ Run these once at the start of routing. Results determine which skills to surfac
 
 ### Requires web/UI project (`has_web` OR `has_ui`)
 - `/arc:design` — UI design
-- `/arc:polish` — visual refinement
-- `/arc:distill` — simplify UI
-- `/arc:animate` — add motion
 - `/arc:responsive` — mobile audit
 - `/arc:brand` — visual identity
 
 ### Requires backend/API (`has_api` OR `has_web`)
 - `/arc:harden` — production resilience
 - `/arc:letsgo` — ship readiness
-- `/arc:legal` — legal pages
 
 ### Requires test infrastructure (`has_tests`)
 - `/arc:testing` — test strategy
