@@ -87,37 +87,10 @@ Do not preload large Arc workflows.
 - Load reference files only when the active task actually needs them
 - Prefer targeted rules and references over broad up-front reading
 
-## Lead Agent Integration
-
-The lead agent (`~/Projects/lead-agent/lead.py`) is the orchestration layer that keeps Arc workflows aligned with the project vision. It runs automatically via hooks but should also be consulted directly.
-
-### Automatic (Hook-Based)
-A `UserPromptSubmit` hook runs `lead.py check` on every prompt. When it detects an `/arc:` command, it:
-- Reads the project vision (`docs/vision.md`)
-- Injects it as context so the skill has the north star loaded
-- Warns if a drift check is due (every 3 tasks)
-- Warns if no vision exists
-
-This happens transparently. You don't need to invoke it.
-
-### When to Consult Lead Agent Directly
-Before starting substantial multi-step work, run:
-```bash
-~/Projects/lead-agent/.venv/bin/python ~/Projects/lead-agent/lead.py advise [project-dir]
-```
-
-Do this when:
-- Starting a session on a complex project (it reads vision, plans, progress, and advises next steps)
-- Unsure which Arc skill to use (it knows the full surface and will recommend)
-- After 3+ tasks without checking alignment (it compares implementation against vision)
-- When the user asks "what should I do next" and a vision doc exists
-
-### Drift Prevention
-The lead agent exists because of a real failure: Sightline v1/v2 rebuilt Chrome's MCP infrastructure instead of wrapping it. The vision doc's "DO NOT BUILD" section was ignored because no one checked.
+## Drift Prevention
 
 Rules:
-- **Every project with a vision doc gets automatic drift checks** via the hook
-- **Every 3 tasks, explicitly compare current state against docs/vision.md** — the hook will warn, but the skill should also self-check
+- **Every 3 tasks, explicitly compare current state against docs/vision.md**
 - **If drift is detected, STOP.** Tell the user what drifted and why before continuing.
 - **If no vision exists and the work is substantial, suggest `/arc:vision` first.**
 

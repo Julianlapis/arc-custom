@@ -16,14 +16,14 @@ Per-agent feedback logs at `~/.claude/feedback/arc/` contain agent-specific lear
 |----------|---------|---------------|
 | Explorations B and C | Components assembled vertically like a checklist, no spatial decisions, no memorable element | /arc:design Phase 4: Make Concrete Visual Decisions |
 | Process | Claimed to have used /arc:design when hadn't | User trust |
-| Process | Didn't use lead agent despite session handoff saying to | Lead agent integration |
+| Process | Didn't follow session handoff instructions | Process adherence |
 
 **What the fixes looked like:**
 
 Before: Two explorations that were "the same screen with different section labels"
 After: Six explorations with genuinely different spatial compositions, memorable elements, and design points of view
 
-**The rule:** ALWAYS use /arc:design for UI exploration work. ALWAYS use the lead agent. Never claim to have used a tool you didn't use. Follow the skill phases completely.
+**The rule:** ALWAYS use /arc:design for UI exploration work. Never claim to have used a tool you didn't use. Follow the skill phases completely.
 
 ---
 

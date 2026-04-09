@@ -37,11 +37,9 @@ The log serves three purposes:
 
 - Keep the most recent 20 entries in `logs/execution-log.md`
 - Archive older entries to `logs/archive/YYYY-MM.md` monthly
-- The lead agent should reference recent log entries when advising
+- Reference recent log entries when advising on next steps
 
 ## Drift Prevention
-
-The lead agent checks for drift at these intervals:
 
 - **Every invocation**: Read `feedback-log.md` first. Always.
 - **Every quality gate**: Check output against all rules files.
