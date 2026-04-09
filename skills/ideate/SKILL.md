@@ -39,10 +39,10 @@ Every message you send during Act 1 MUST follow this exact structure:
 
 ```
 [0-2 sentences of context or acknowledgment]
-[AskUserQuestion tool call — exactly ONE]
+[one question to the user — exactly ONE]
 ```
 
-That's it. Nothing else. The message ends after the AskUserQuestion call.
+That's it. Nothing else. The message ends after the question.
 
 ## Banned Output During Act 1
 
@@ -82,9 +82,11 @@ Four previous versions of this skill said "ask questions first" as advice. The m
 - `EnterPlanMode` — BANNED. This conversation IS the design process.
 - `ExitPlanMode` — BANNED. You are never in plan mode.
 
-**REQUIRED tool — AskUserQuestion:**
+**REQUIRED interaction pattern — AskUserQuestion:**
 
-Every question MUST use the `AskUserQuestion` tool. No exceptions. No plain-text questions.
+Every question MUST follow the `AskUserQuestion` interaction pattern. In Claude Code, use the tool. In Codex, ask the same single question directly in plain text unless a structured question tool is actually available in the current mode.
+
+Do not mention missing tools, unavailable tools, or fallback mechanics to the user.
 
 - ONE AskUserQuestion per message
 - If you need to ask 3 things, that's 3 separate turns
@@ -117,6 +119,13 @@ What do you think?
 
 That second example is EXACTLY the failure mode. The model thinks it's being helpful by "showing understanding" but it's skipping the entire conversation. Every element in that example is banned during Act 1.
 </tool_restrictions>
+
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
 
 <behavioral_mode>
 # This Is a Conversation, Not a Task
@@ -221,7 +230,7 @@ AskUserQuestion:
       description: "Move straight to detailed design"
 ```
 
-If yes: spawn 2-3 reviewers (architecture-engineer, simplicity-engineer, security-engineer as relevant). Transform findings into questions — "What if we..." not "You should..." — and walk through one at a time.
+If yes: spawn 2-3 reviewers (architecture-engineer, senior-engineer, security-engineer as relevant). Transform findings into questions — "What if we..." not "You should..." — and walk through one at a time.
 
 ## Act 3: Design Together
 
@@ -288,7 +297,7 @@ Commit: `git add docs/arc/specs/ && git commit -m "docs: add <topic> design plan
 
 After writing the design doc:
 
-1. Dispatch `agents/workflow/spec-document-reviewer.md`
+1. Dispatch `${ARC_ROOT}/agents/workflow/spec-document-reviewer.md`
 2. If issues are found, revise the spec and review again
 3. Repeat until approved or after 5 review passes escalate to the user
 
@@ -302,7 +311,7 @@ Present the full arc:
 ```
 
 Options via AskUserQuestion:
-1. **Set up worktree → implement** (Recommended) — follow `disciplines/using-git-worktrees.md`
+1. **Set up worktree → implement** (Recommended) — follow `${ARC_ROOT}/disciplines/using-git-worktrees.md`
 2. **Implement on current branch**
 3. **Done for now** — just the design
 </process>
@@ -327,8 +336,8 @@ Options via AskUserQuestion:
 ```
 
 **Then create wireframes**:
-- Prefer WireText MCP when available for low-fidelity structural wireframes (see `references/wiretext.md`)
-- Otherwise create ASCII wireframes (see `references/ascii-ui-patterns.md`)
+- Prefer WireText MCP when available for low-fidelity structural wireframes (see `${ARC_ROOT}/references/wiretext.md`)
+- Otherwise create ASCII wireframes (see `${ARC_ROOT}/references/ascii-ui-patterns.md`)
 - Key screens/states
 - Component hierarchy
 - Interactive elements
@@ -337,9 +346,9 @@ Options via AskUserQuestion:
 Ask: "Does this layout and direction feel right?"
 
 **Reference files** (load when doing UI work):
-- `references/frontend-design.md`
-- `references/design-philosophy.md`
-- `references/wiretext.md`
+- `${ARC_ROOT}/references/frontend-design.md`
+- `${ARC_ROOT}/references/design-philosophy.md`
+- `${ARC_ROOT}/references/wiretext.md`
 - `rules/interface/design.md`
 - `rules/interface/colors.md`
 - `rules/interface/spacing.md`
@@ -362,9 +371,9 @@ When user shares links, images, or Figma during the conversation — capture imm
 # Reference Files
 
 Read these when relevant (not all at once — load what the conversation needs):
-1. `references/review-patterns.md` — How to transform reviewer findings into questions
-2. `references/model-strategy.md` — Which models for which agents
-3. `disciplines/dispatching-parallel-agents.md` — Agent orchestration
+1. `${ARC_ROOT}/references/review-patterns.md` — How to transform reviewer findings into questions
+2. `${ARC_ROOT}/references/model-strategy.md` — Which models for which agents
+3. `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md` — Agent orchestration
 </required_reading>
 
 <context_update>
@@ -425,7 +434,7 @@ If the user accepts:
 2. Present the gaps found
 3. Offer to update the design doc with any missing flows
 
-Agent: `agents/workflow/spec-flow-analyzer.md`
+Agent: `${ARC_ROOT}/agents/workflow/spec-flow-analyzer.md`
 
 This step is optional — skip if the user declines or wants to move straight to implementation.
 </spec_flow_analysis>

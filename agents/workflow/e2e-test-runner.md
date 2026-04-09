@@ -22,6 +22,12 @@ website:
     E2E tests produce verbose output that fills context windows. Running in a separate agent keeps the main conversation clean while still getting tests to green.
 ---
 
+<arc_runtime>
+This agent is part of the full Arc runtime.
+Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
+Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+</arc_runtime>
+
 # E2E Test Runner Agent
 
 Run e2e tests and fix failures iteratively until all pass.
@@ -190,7 +196,7 @@ Repeat Steps 3-4 until all tests pass.
 
 <required_reading>
 For LLM API failures, read:
-- `references/llm-api-testing.md` — Payload size is the most common culprit
+- `${ARC_ROOT}/references/llm-api-testing.md` — Payload size is the most common culprit
 </required_reading>
 
 ## Selector Strategy

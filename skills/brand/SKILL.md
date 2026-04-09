@@ -33,12 +33,21 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user decisions. Brand is deeply subjective — the user must drive every choice. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for all user decisions. Brand is deeply subjective, so the user must drive every choice. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 # Brand Workflow
 
@@ -62,9 +71,9 @@ The skill's job is to present excellent options and push against mediocrity — 
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `references/brand-identity.md` — Brand typography, color psychology, visual character, distinctiveness criteria
-2. `references/design-philosophy.md` — Hierarchy, color theory, personality choices
-3. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
+1. `${ARC_ROOT}/references/brand-identity.md` — Brand typography, color psychology, visual character, distinctiveness criteria
+2. `${ARC_ROOT}/references/design-philosophy.md` — Hierarchy, color theory, personality choices
+3. `${ARC_ROOT}/references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
 4. `rules/interface/colors.md` — OKLCH palettes, tinted neutrals, 60-30-10 rule
 5. `rules/interface/typography.md` — Font loading, OpenType features, type scale
 </required_reading>
@@ -520,13 +529,13 @@ The taste engine is not a hardcoded list — it draws from the references loaded
 
 ### Typography Taste
 
-Consult `references/brand-identity.md` for:
+Consult `${ARC_ROOT}/references/brand-identity.md` for:
 - The "Never use for brand identity" list
 - Recommended brand fonts with character descriptions and use cases
 - Commercial foundries for premium projects
 - Font pairing principles
 
-Consult `references/typography-opentype.md` for:
+Consult `${ARC_ROOT}/references/typography-opentype.md` for:
 - Tracking adjustments per context (tighter for display, looser for all-caps)
 - Font loading strategy decisions
 - OpenType features that add typographic polish
@@ -535,7 +544,7 @@ Consult `references/typography-opentype.md` for:
 
 ### Color Taste
 
-Consult `references/brand-identity.md` for:
+Consult `${ARC_ROOT}/references/brand-identity.md` for:
 - Color psychology beyond basics (hue ranges, when they work, when they don't)
 - Generic palette patterns to avoid
 - How to build a brand palette (meaning → dominant → accent → derive → scale)
@@ -579,7 +588,7 @@ Push users past safe defaults with questions, not mandates:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:brand` [Project] brand identity created ([chosen direction name], [key characteristics])
 </arc_log>

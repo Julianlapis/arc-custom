@@ -11,15 +11,155 @@ Scope: React and Next.js apps. Pass to `daniel-product-engineer`, `lee-nextjs-en
 
 ## State & Effects
 
-- MUST NOT: Use `useEffect` that only calls `setState` derived from deps — replace with `useMemo`:
+The guiding question: **does this code run because the component was displayed, or because of a specific user interaction?** Only the former belongs in an Effect. If no external system is involved, you probably don't need an Effect.
+
+### Derived state — compute during render, not in effects
+
+- MUST NOT: Use `useEffect` + `setState` to compute values from other state/props — calculate inline:
   ```ts
-  // Wrong — unnecessary effect + re-render
+  // Wrong — unnecessary effect + extra re-render
   const [fullName, setFullName] = useState('');
   useEffect(() => setFullName(`${first} ${last}`), [first, last]);
 
-  // Right — derived state
-  const fullName = useMemo(() => `${first} ${last}`, [first, last]);
+  // Right — derive during render (no state, no effect, no memo)
+  const fullName = `${first} ${last}`;
   ```
+- SHOULD: Only reach for `useMemo` when the computation is genuinely expensive (≥1ms measured with `console.time`):
+  ```ts
+  const visibleTodos = useMemo(
+    () => getFilteredTodos(todos, filter),
+    [todos, filter],
+  );
+  ```
+
+### Reset state with `key`, not effects
+
+- MUST NOT: Clear state in an effect when a prop changes — causes a flash of stale UI before the effect fires:
+  ```ts
+  // Wrong — renders stale comment, then clears
+  useEffect(() => { setComment(''); }, [userId]);
+
+  // Right — React resets all state when key changes
+  <Profile userId={userId} key={userId} />
+  ```
+
+### Adjust partial state by storing IDs
+
+- MUST NOT: Reset a selection in an effect when items change:
+  ```ts
+  // Wrong
+  useEffect(() => { setSelection(null); }, [items]);
+
+  // Right — store the ID, derive the object during render
+  const [selectedId, setSelectedId] = useState(null);
+  const selection = items.find(item => item.id === selectedId) ?? null;
+  ```
+
+### Event handler logic belongs in event handlers
+
+- MUST NOT: Move shared logic into an effect because multiple handlers need it — extract a plain function instead:
+  ```ts
+  // Wrong — runs on every state change, not just user actions
+  useEffect(() => {
+    if (product.isInCart) showNotification('Added!');
+  }, [product]);
+
+  // Right — call from each handler
+  function buyProduct() {
+    addToCart(product);
+    showNotification('Added!');
+  }
+  ```
+- MUST NOT: Route form submissions or mutations through state + effect — call the API directly from the event handler:
+  ```ts
+  // Wrong
+  const [payload, setPayload] = useState(null);
+  useEffect(() => {
+    if (payload !== null) post('/api/register', payload);
+  }, [payload]);
+
+  // Right
+  function handleSubmit() { post('/api/register', formData); }
+  ```
+
+### No effect chains (dominoes)
+
+- MUST NOT: Chain effects where each sets state that triggers the next — consolidate into one event handler:
+  ```ts
+  // Wrong — three effects, three extra renders
+  useEffect(() => { if (card?.gold) setGoldCardCount(c => c + 1); }, [card]);
+  useEffect(() => { if (goldCardCount > 3) { setRound(r => r + 1); setGoldCardCount(0); } }, [goldCardCount]);
+  useEffect(() => { if (round > 5) setIsGameOver(true); }, [round]);
+
+  // Right — derive what you can, consolidate the rest
+  const isGameOver = round > 5;
+  function handlePlaceCard(nextCard) {
+    // all game logic in one handler
+  }
+  ```
+
+### Notify parents in handlers, not effects
+
+- MUST NOT: Call an `onChange` callback inside an effect after updating local state — causes an extra render cycle:
+  ```ts
+  // Wrong
+  useEffect(() => { onChange(isOn); }, [isOn, onChange]);
+
+  // Right — update both in the same handler
+  function handleToggle() {
+    const next = !isOn;
+    setIsOn(next);
+    onChange(next);
+  }
+  ```
+- SHOULD: Prefer lifting state to the parent entirely (fully controlled component) over syncing via callbacks.
+
+### Parent owns data, passes it down
+
+- MUST NOT: Fetch data in a child, then send it up via a callback effect — this inverts React's data flow:
+  ```ts
+  // Wrong
+  function Child({ onFetched }) {
+    const data = useSomeAPI();
+    useEffect(() => { if (data) onFetched(data); }, [onFetched, data]);
+  }
+
+  // Right — parent fetches, passes down as props
+  ```
+
+### External store subscriptions
+
+- MUST: Use `useSyncExternalStore` for subscribing to browser APIs or third-party stores — not manual `addEventListener` in an effect:
+  ```ts
+  // Wrong
+  useEffect(() => {
+    const update = () => setIsOnline(navigator.onLine);
+    window.addEventListener('online', update);
+    window.addEventListener('offline', update);
+    return () => { /* cleanup */ };
+  }, []);
+
+  // Right
+  const isOnline = useSyncExternalStore(
+    subscribe,
+    () => navigator.onLine,
+    () => true, // server snapshot
+  );
+  ```
+
+### App initialization
+
+- SHOULD: Run one-time startup logic at module scope, not in a component effect (Strict Mode runs effects twice):
+  ```ts
+  // Right — runs once at module load
+  if (typeof window !== 'undefined') {
+    checkAuthToken();
+    loadDataFromLocalStorage();
+  }
+  ```
+
+### General state rules
+
 - SHOULD: Consolidate 3+ related `useState` calls into `useReducer` or a single state object
 - SHOULD: Batch multiple `setState` calls in one handler into a single update (React 18+ batches automatically in most cases, but verify in async callbacks)
 - MUST NOT: Fetch data in `useEffect` — use React Query, SWR, or server components instead

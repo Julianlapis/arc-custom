@@ -28,8 +28,17 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every question in this skill — gathering context, validating drafts — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question in this skill, including gathering context and validating drafts. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 # Vision Workflow
 
@@ -233,7 +242,7 @@ git commit -m "docs: add project vision"
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:vision — [Created / Updated] vision document`
 </arc_log>

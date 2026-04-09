@@ -25,6 +25,15 @@ website:
     position: utility
 ---
 
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
+
 <progress_context>
 **Use Read tool:** `docs/context.md` (if it exists), then fall back to `docs/arc/progress.md` (first 50 lines).
 
@@ -220,7 +229,7 @@ After completing this skill's main work, update the project context file.
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:commit` [N] commits ([summary])
 </arc_log>

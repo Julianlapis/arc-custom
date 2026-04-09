@@ -27,7 +27,7 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when indicated:
-- **`AskUserQuestion`** — REQUIRED for all user-facing questions. Use structured options instead of plain text.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
 
 # /arc:go

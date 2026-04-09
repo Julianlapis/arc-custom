@@ -6,7 +6,7 @@ The full arc from idea to shipped code. This plugin provides a skills-based work
 
 ```
 arc/
-├── .claude-plugin/
+├── .Codex-plugin/
 │   └── plugin.json         # Plugin metadata
 ├── commands/               # Slash command routers (invoke skills)
 ├── skills/                  # Each skill = one /arc:* command
@@ -44,11 +44,11 @@ arc/
 │   ├── review/
 │   ├── research/
 │   └── workflow/
-├── hooks/                   # Claude Code hooks (statusline, context monitor)
+├── hooks/                   # Codex hooks (statusline, context monitor)
 ├── disciplines/             # Implementation methodologies
 ├── references/              # Domain knowledge
 ├── templates/               # Output templates
-├── CLAUDE.md                # This file
+├── AGENTS.md                # This file
 ├── README.md                # Documentation
 └── LICENSE                  # MIT
 ```
@@ -104,52 +104,6 @@ To test changes locally:
 - **Continuous quality** — TS/lint after every task
 - **Knowledge compounds** — Solved problems documented for future sessions
 - **Small control plane** — `using-arc` handles startup routing; richer workflows load on demand
-- **Feedback logs compound** — Every agent has a per-agent feedback log that accumulates preferences
-
-## Dual Feedback Loop System
-
-Arc uses a two-loop self-improvement system. Manual corrections (Loop 1) always outrank automated observations (Loop 2).
-
-### Loop 1: Feedback Logs (Manual Corrections — Binding)
-
-**Plugin-level:** `feedback-log.md` at plugin root. Binding across ALL skills and agents. Read as FIRST required_reading on every invocation. Contains structured entries with examples of what went wrong and what the fix looked like.
-
-**Agent-level:** Per-agent logs at `~/.claude/feedback/arc/`. Injected via `SubagentStart` hook when each agent spawns. Contains agent-specific learnings.
-
-```
-arc-custom/
-├── feedback-log.md          (binding across entire plugin)
-
-~/.claude/feedback/arc/
-├── general.md               (read by ALL agents)
-├── build/                   (one file per build agent)
-├── review/                  (one file per review agent)
-├── workflow/                (one file per workflow agent)
-└── research/                (one file per research agent)
-```
-
-### Loop 2: Observation Log (Automated Self-Tracking)
-
-After every skill run, an entry is appended to `logs/execution-log.md` scoring the output on 5 dimensions:
-
-| Dimension | What it measures |
-|-----------|-----------------|
-| Vision Alignment | Does the output serve the project vision? |
-| Craft Quality | Is the output well-built, not junior? |
-| Process Adherence | Were the right skills and tools used? |
-| User Satisfaction | Did Julian accept or correct? |
-| Knowledge Capture | Were learnings logged for future sessions? |
-
-Below 35/50 = the run failed. Every 3rd run, scan for recurring weak dimensions. If any dimension scored below 7 three or more times in the last 10 runs, flag it as systemic.
-
-### Priority Hierarchy
-
-1. Julian's explicit instructions in conversation (highest)
-2. Feedback log entries (binding corrections)
-3. Observation-driven improvements (automated, Julian approves)
-4. Default plugin behavior (lowest)
-
-The feedback logs compound over time. By session 10 with any given agent, it knows Julian's preferences. By session 20, first drafts come back close to done.
 
 ## Complementary Plugins
 
@@ -168,12 +122,12 @@ Arc focuses on the development lifecycle. For specialized domains, consider thes
 
 ## Browser And Wireframe Tools
 
-- In Claude Code, prefer `mcp__claude-in-chrome__*` for rendered-page verification.
-- Outside Claude Code, prefer `agent-browser` for browser automation before dropping to Playwright.
+- In Codex, prefer `mcp__claude-in-chrome__*` for rendered-page verification.
+- Outside Codex, prefer `agent-browser` for browser automation before dropping to Playwright.
 - Use WireText MCP for low-fidelity wireframes only. It does not replace Chrome-based rendered review.
 
 ## Publishing
 
-1. Bump version in `.claude-plugin/plugin.json`
+1. Bump version in `.Codex-plugin/plugin.json`
 2. Commit and push to GitHub
-3. Users update via `claude plugins update`
+3. Users update via `Codex plugins update`

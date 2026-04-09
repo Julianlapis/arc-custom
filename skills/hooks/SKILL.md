@@ -46,7 +46,7 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user choices (Biome install options).
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for user choices. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.

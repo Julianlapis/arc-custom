@@ -97,7 +97,7 @@ For each command group, output:
 **Relevance rules:**
 - **Relevant** — the project has the prerequisites AND there's a reason to use it now
 - **Available** — the project has the prerequisites but no urgent reason
-- *Low relevance* — project is missing prerequisites (e.g., no UI = no `/arc:animate`)
+- *Low relevance* — project is missing prerequisites (e.g., no UI = no `/arc:design`)
 - *Not applicable* — fundamentally doesn't apply (e.g., no codebase at all)
 
 ### The Catalog
@@ -154,9 +154,6 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:polish` | Pre-ship visual refinement — spacing, states, contrast, typography | Last pass before shipping UI |
-| `/arc:distill` | Strip UI to essentials — remove unnecessary complexity | When UI feels bloated or over-engineered |
-| `/arc:animate` | Add purposeful motion — entrance choreography, micro-interactions, transitions | When UI is functional but static |
 | `/arc:harden` | Production resilience — error states, text overflow, edge cases, loading patterns | Before shipping to real users |
 
 **SHIP**
@@ -164,7 +161,6 @@ Output ALL of these in order:
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:letsgo` | Production readiness checklist | Final gate before production deployment |
-| `/arc:legal` | Generate Privacy Policy, Terms of Service, Cookie Policy | Before public launch |
 
 **CROSS-CUTTING**
 
@@ -179,7 +175,6 @@ Output ALL of these in order:
 | `/arc:rules` | Apply Arc's coding rules to the project | Setting up a new project with Arc conventions |
 | `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
 | `/arc:hooks` | Install Claude Code hooks for auto-formatting, linting, context | Setting up development environment |
-| `/arc:flow` | Discover, walk, and verify user flows from your codebase | Understanding user journeys, detecting drift |
 
 **UTILITY**
 
@@ -206,7 +201,7 @@ Based on what I found in your project:
 Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
 - What's **stale** (old plans → suggest `/arc:tidy`)
-- What **just changed** (recent UI edits → suggest `/arc:polish`)
+- What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:harden`)
 - What **could be improved** (no tests → suggest `/arc:testing`)
 
 ---

@@ -28,7 +28,6 @@ DO      /arc:implement  - Plan + execute with TDD
         /arc:build      - Quick build (no formal plan)
         /arc:testing    - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
-        /arc:legal      - Generate privacy policy and terms
 
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
@@ -77,6 +76,18 @@ npx skills add howells/arc
 
 Installs skill prompts to Claude Code, Codex, Cursor, Gemini CLI, Windsurf, Cline, and [40+ agents](https://github.com/vercel-labs/skills#supported-agents). This only copies `SKILL.md` files — you get the skill instructions but not the supporting agents, hooks, or orchestration that power the full workflow.
 
+## Install Modes
+
+Arc has two support tiers. Pick the one that matches the workflows you want:
+
+| Install mode | Claude plugin | Codex installer | `skills.sh` / prompt-only |
+|---|---|---|---|
+| Includes full Arc bundle (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`) | Yes | Yes | No |
+| Best for full-runtime workflows like `audit`, `review`, `implement`, `design`, `document`, `testing` | Yes | Yes | No |
+| Best for lightweight prompt-only routing and simple workflows | Yes | Yes | Yes |
+
+If a skill tells the agent to load Arc-owned files such as `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, treat that skill as **full-runtime**. Use the Claude plugin install or the Codex installer for those workflows.
+
 ### Codex
 
 Codex discovers skills from `~/.agents/skills` (legacy `~/.codex/skills` still works, and repo-local `.agents/skills` is also discovered).
@@ -100,6 +111,8 @@ curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh 
 ### Install Once (Recommended)
 
 Follow `.codex/INSTALL.md` (or run the one-line installer above), then invoke Arc skills in any project.
+
+This is the **full-runtime** Codex install. It clones the Arc repo to `~/.codex/arc` and links Codex skill discovery to that checkout, so workflows that need bundled agents, references, disciplines, templates, and scripts work the same way they do in Claude Code.
 
 ### Repo-Local (Project Skills)
 
@@ -127,6 +140,7 @@ without preloading the whole system.
   - terminal exploration instead of `Task` blocks
   - `agent-browser` first, then Playwright, instead of Claude-in-Chrome MCP
   - WireText MCP for wireframes when available; otherwise inline ASCII wireframes
+- Prompt-only installs copied via `skills.sh` are best-effort. They do not include Arc's bundled `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, so full-runtime workflows should upgrade to the Codex installer or Claude plugin before running.
 
 ## Claude Code Dependencies (Optional)
 
@@ -136,7 +150,7 @@ Arc uses these plugins and MCP integrations for enhanced functionality:
 |-------------|---------|
 | **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
 | **Context7** | research and implementation workflows |
-| **Claude in Chrome** | `/arc:design`, `/arc:responsive`, `/arc:polish`, `designer` review |
+| **Claude in Chrome** | `/arc:design`, `/arc:responsive`, `designer` review |
 | **WireText MCP** | `/arc:design`, `/arc:ideate` wireframing |
 | **agent-browser** | browser automation fallback outside Claude Code |
 
@@ -255,7 +269,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:build` | Quick implementation | Code changes |
 | `/arc:testing` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
-| `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
@@ -275,10 +288,9 @@ Arc includes specialized agents across research, review, build, design, and work
 
 | Category | Agents |
 |----------|--------|
-| **Research** | docs-researcher, git-history-analyzer, duplicate-detector, naming, feature-scout |
-| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, hygiene-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, organization-engineer, test-quality-engineer |
+| **Research** | docs-researcher, git-history-analyzer, naming |
+| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
-| **Design** | figma-builder |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |
 
 ## Disciplines

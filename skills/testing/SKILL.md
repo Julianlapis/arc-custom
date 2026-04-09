@@ -34,12 +34,19 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when indicated:
-- **`AskUserQuestion`** — REQUIRED for all user-facing questions. Use structured options instead of plain text.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured testing workflow. Execute it directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
 
 # Testing Strategy Workflow
 
@@ -47,10 +54,10 @@ Create comprehensive test strategies covering the full test pyramid. Execute wit
 
 <required_reading>
 **Read before planning:**
-1. `references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
+1. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
 2. `rules/testing.md` — Project conventions
-3. `references/llm-api-testing.md` — If testing LLM integrations
-4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
+3. `${ARC_ROOT}/references/llm-api-testing.md` — If testing LLM integrations
+4. `${ARC_ROOT}/disciplines/change-impact-testing.md` — Blast radius analysis for code changes
 </required_reading>
 
 ## Agents

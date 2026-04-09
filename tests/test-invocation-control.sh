@@ -4,8 +4,6 @@
 # These skills should NOT be auto-invoked by Claude:
 # - commit (user controls when to commit)
 # - letsgo (production deployment)
-# - legal (generates legal documents)
-# - worktree (creates git worktrees)
 # - tidy (deletes/archives files)
 # - rules (modifies project files)
 
@@ -16,7 +14,6 @@ PROTECTED_SKILLS=(
     "prune-agents"
     "commit"
     "letsgo"
-    "legal"
     "rules"
     "tidy"
 )

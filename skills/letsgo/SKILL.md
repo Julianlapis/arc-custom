@@ -11,15 +11,15 @@ metadata:
 website:
   order: 11
   desc: Pre-launch checklist
-  summary: The pre-launch checklist. Walks through domains, SEO, security headers, error pages, analytics, legal docs, and deployment—tailored to what your project actually uses.
+  summary: The pre-launch checklist. Walks through domains, SEO, security headers, error pages, analytics, and deployment—tailored to what your project actually uses.
   what: |
-    Letsgo scans your project to understand what you're using (auth? payments? database?), then generates a tailored checklist. It covers: domain setup, DNS configuration, SSL. SEO basics—meta tags, OG images, sitemap, robots.txt. Security headers and environment variables. Error pages (404, 500). Analytics and monitoring. Legal pages (triggers /arc:legal if missing). Performance basics. For Vercel projects, it can deploy directly.
+    Letsgo scans your project to understand what you're using (auth? payments? database?), then generates a tailored checklist. It covers: domain setup, DNS configuration, SSL. SEO basics—meta tags, OG images, sitemap, robots.txt. Security headers and environment variables. Error pages (404, 500). Analytics and monitoring. Performance basics. For Vercel projects, it can deploy directly.
   why: |
     The difference between "it works on my machine" and "it works in production" is a hundred small things—DNS, headers, error pages, meta tags. Letsgo is the checklist so you don't ship with a missing favicon and broken OG images.
   decisions:
     - Scans your stack first. Knows if you have Stripe, auth, a database—tailors the checklist.
     - Interactive walkthrough. One section at a time, tracks what's done.
-    - Triggers /arc:legal automatically if privacy policy or terms are missing.
+    - Flags missing legal pages for user to address externally.
   workflow:
     position: spine
     after: testing
@@ -29,8 +29,17 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when specified in the process:
-- **`AskUserQuestion`** — Use at every decision point marked with `AskUserQuestion:` in the process below. Do NOT substitute with plain text questions.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern at every decision point marked with `AskUserQuestion:` in the process below. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 <progress_context>
 **Use Read tool:** `docs/context.md` first. If it does not exist, fall back to `docs/arc/progress.md` (first 50 lines).
@@ -58,7 +67,7 @@ Detection signals:
 ├── Analytics: GA, mixpanel, posthog, plausible
 ├── i18n: next-intl, i18next, locale files
 ├── CMS: sanity, contentful, payload
-├── File uploads: uploadthing, cloudinary, S3 config
+├── File uploads: stow, cloudinary, S3 config
 └── Existing meta: robots.txt, sitemap, og images
 ```
 
@@ -485,13 +494,7 @@ Invoke skill: vercel-react-native-skills
 - [ ] Accessibility statement page (if WCAG compliance needed)
 - [ ] Contact method for accessibility issues
 
-**If legal documents are missing, offer to generate them:**
-```
-Invoke skill: /arc:legal
-"Generate Privacy Policy, Terms of Service, and Cookie Policy for this project"
-```
-
-This will detect data collection, gather business info, and create template pages.
+**If legal documents are missing**, flag it as a checklist item for the user to address. Consider using a service like Termly, iubenda, or consulting a lawyer for production-ready legal pages.
 
 ### M. Analytics & Tracking (If user wants)
 - [ ] Analytics provider configured (GA4, Plausible, PostHog, etc.)
@@ -688,7 +691,7 @@ If follow-up work is identified, use **TaskCreate**:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:letsgo` [Deployed to URL / Checklist complete]
 </arc_log>
@@ -757,7 +760,7 @@ Letsgo is complete when:
 - Runs **/arc:testing** as part of quality check
 - Runs **/arc:audit --hygiene** as part of quality check (code artifact detection)
 - References **/arc:vision** to verify alignment
-- Invokes **/arc:legal** to generate missing legal documents
+- Flags missing legal documents for user to address externally
 - Can invoke **vercel-react-best-practices** skill for performance review (if available)
 - Can invoke **vercel-react-native-skills** skill for React Native performance review (if available)
 - Can invoke **vercel-deploy** skill for deployment (if available)

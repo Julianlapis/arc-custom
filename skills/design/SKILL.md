@@ -32,6 +32,13 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 # Design Workflow
 
 Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
@@ -55,10 +62,10 @@ Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cut
 
 | Agent | Location | When to Use |
 |-------|----------|-------------|
-| `ui-builder` | agents/build/ | Build UI from the change spec you create |
-| `figma-builder` | agents/build/ | Build UI when Figma URL is provided |
-| `design-specifier` | agents/build/ | Quick design decisions during implement (empty states, dropdowns) |
-| `designer` | agents/review/ | Review implemented UI for AI slop |
+| `ui-builder` | ${ARC_ROOT}/agents/build/ | Build UI from the change spec you create |
+| `figma-builder` | ${ARC_ROOT}/agents/build/ | Build UI when Figma URL is provided |
+| `design-specifier` | ${ARC_ROOT}/agents/build/ | Quick design decisions during implement (empty states, dropdowns) |
+| `designer` | ${ARC_ROOT}/agents/review/ | Review implemented UI for AI slop |
 
 **Workflow:**
 ```
@@ -76,13 +83,13 @@ designer (reviews for AI slop)
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `references/frontend-design.md` — UI fonts, anti-patterns, design review checklist. **Critical.**
-2. `references/brand-identity.md` — Brand typography, color psychology, visual character (if no brand-system.md exists)
-3. `references/design-philosophy.md` — Timeless principles from Refactoring UI
-4. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Doherty Threshold
-5. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
-6. `references/ascii-ui-patterns.md` — Wireframe syntax and patterns
-7. `references/wiretext.md` — When to use WireText vs ASCII vs browser review
+1. `${ARC_ROOT}/references/frontend-design.md` — UI fonts, anti-patterns, design review checklist. **Critical.**
+2. `${ARC_ROOT}/references/brand-identity.md` — Brand typography, color psychology, visual character (if no brand-system.md exists)
+3. `${ARC_ROOT}/references/design-philosophy.md` — Timeless principles from Refactoring UI
+4. `${ARC_ROOT}/references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Doherty Threshold
+5. `${ARC_ROOT}/references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
+6. `${ARC_ROOT}/references/ascii-ui-patterns.md` — Wireframe syntax and patterns
+7. `${ARC_ROOT}/references/wiretext.md` — When to use WireText vs ASCII vs browser review
 
 **Then load interface rules:**
 5. `rules/interface/index.md` — Interface rules index
@@ -111,7 +118,7 @@ If only `design-context.md` exists, load it — this file contains project-wide 
 
 If it does NOT exist, offer to create one:
 
-**Use AskUserQuestion:**
+**Use the AskUserQuestion interaction pattern:**
 ```
 Question: "No project-wide design context found. Want to establish one? This saves brand decisions (colors, fonts, tone) so every future design session inherits them."
 Header: "Design context"
@@ -206,7 +213,7 @@ Check for related prior design work and aesthetic decisions.
 
 **Before gathering direction, establish what kind of UI you're designing.**
 
-**Use AskUserQuestion:**
+**Use the AskUserQuestion interaction pattern:**
 ```
 Question: "What are you designing?"
 Header: "Design mode"
@@ -239,7 +246,7 @@ This mode context informs all subsequent phases — questions, research sources,
 - User has already specified a clear direction
 - Adding to an existing design system
 
-**If circumstances allow, use AskUserQuestion:**
+**If circumstances allow, use the AskUserQuestion interaction pattern:**
 ```
 Question: "Would you like me to create 5 vastly different design directions, each at its own route? This lets you compare radically different approaches before committing."
 Header: "Exploration"
@@ -565,6 +572,36 @@ If WireText is used:
 
 ## Anti-Patterns to Avoid
 - [Specific things NOT to do for this design]
+
+## Complexity Guardrails
+Keep implementation simple. Flag these during code review:
+- Wrapper divs that add no styling, semantics, or layout purpose
+- More than 3-4 levels of nesting for simple content
+- Cards within cards (use spacing and dividers instead)
+- More than 5 distinct font sizes (muddy hierarchy)
+- More than 3 distinct colors plus neutrals (visual noise)
+- Elements with 15+ Tailwind classes (simplify or extract)
+- Arbitrary spacing values (p-[13px]) instead of scale values
+- Decorative elements that don't aid comprehension
+
+## Interactive States
+Every interactive element must address all 8 states:
+| State | Requirement |
+|-------|-------------|
+| Default | Base styling |
+| Hover | Subtle feedback (gated to `hover:hover` for touch) |
+| Focus | Visible ring for keyboard (`focus-visible:ring-2`) |
+| Active | Press feedback (`active:scale-[0.97]`) |
+| Disabled | Reduced opacity, no pointer events |
+| Loading | Spinner or skeleton (`aria-busy`) |
+| Error | Red border + message (`aria-invalid`) |
+| Success | Confirmation feedback |
+
+## Contrast Requirements
+- Body text: 4.5:1 against background
+- Large text (≥18px bold, ≥24px): 3:1
+- UI components (borders, icons): 3:1
+- No pure black on pure white
 ```
 
 ---
@@ -584,6 +621,9 @@ If WireText is used:
 - [ ] Typography is deliberate
 - [ ] At least one memorable element
 - [ ] Layout has unexpected decisions
+- [ ] Complexity guardrails defined (max nesting, class budget)
+- [ ] All 8 interactive states specified
+- [ ] Contrast requirements met (4.5:1 body, 3:1 large/UI)
 
 ### If Marketing Mode, also check:
 - [ ] **Red Flag:** Cookie-cutter hero → features → testimonials → CTA layout
@@ -604,7 +644,7 @@ If WireText is used:
 
 ## Phase 8: Hand Off
 
-**Use AskUserQuestion tool:**
+**Use the AskUserQuestion interaction pattern:**
 ```
 Question: "Design documented. What's next?"
 Header: "Next step"
@@ -666,7 +706,7 @@ From `frontend-design.md`:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:design` [Component/page] design ([aesthetic direction])
 </arc_log>
@@ -746,9 +786,6 @@ Design is complete when:
 - Uses **WebFetch** to research design inspiration from Siteinspire and Mobbin
 - References feed into implementation to maintain design fidelity
 
-### Related Refinement Skills
-After implementation, suggest these for the final mile:
-- **/arc:polish** — Pre-ship visual refinement (spacing, states, contrast)
-- **/arc:distill** — Strip unnecessary complexity
-- **/arc:animate** — Add purposeful motion
+### Related Skills
+After implementation:
 - **/arc:harden** — Production resilience (errors, overflow, i18n)

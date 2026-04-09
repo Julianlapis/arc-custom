@@ -29,12 +29,21 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user decisions (approval to apply fixes, keep/remove choices).
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for user decisions such as applying fixes or keep/remove choices. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Execute phases below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 # Harden Workflow
 
@@ -57,8 +66,8 @@ Hardening decisions need context — what's likely vs. paranoid, what's worth th
 1. `rules/interface/forms.md` — Form behavior and validation
 2. `rules/interface/interactions.md` — Interactive states, destructive actions
 3. `rules/interface/content-accessibility.md` — Accessible content
-4. `references/touch-targets.md` — Hit target expansion, minimum sizes, pseudo-element technique
-5. `references/ux-laws.md` — Postel's Law (input tolerance), Hick's Law (option overload), Cognitive Load
+4. `${ARC_ROOT}/references/touch-targets.md` — Hit target expansion, minimum sizes, pseudo-element technique
+5. `${ARC_ROOT}/references/ux-laws.md` — Postel's Law (input tolerance), Hick's Law (option overload), Cognitive Load
 </required_reading>
 
 ---
@@ -313,7 +322,7 @@ After fixes:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:harden` [Component/page] hardened ([# issues found, # fixed])
 </arc_log>

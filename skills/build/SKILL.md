@@ -28,19 +28,26 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when indicated:
-- **`AskUserQuestion`** — REQUIRED for all user-facing questions. Use structured options instead of plain text.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own lightweight planning process. Execute it directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
+
 <required_reading>
 **Read these before building:**
-1. `references/testing-patterns.md` — Test philosophy
-2. `references/frontend-design.md` — If UI work
-3. `references/component-design.md` — If React components
-4. `references/pretext.md` — If building virtualized lists, chat UIs, masonry layouts, or auto-sizing textareas (DOM-free text measurement)
+1. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy
+2. `${ARC_ROOT}/references/frontend-design.md` — If UI work
+3. `${ARC_ROOT}/references/component-design.md` — If React components
+4. `${ARC_ROOT}/references/pretext.md` — If building virtualized lists, chat UIs, masonry layouts, or auto-sizing textareas (DOM-free text measurement)
 </required_reading>
 
 <agents>

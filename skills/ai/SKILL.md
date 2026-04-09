@@ -31,6 +31,15 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
+
 ```
 
 ───────────────────────────────────────────────────────────
@@ -40,7 +49,7 @@ AI SDK 6 guidance for building AI-powered features.
 
 <required_reading>
 **Read after detecting AI SDK (Step 1):**
-1. references/ai-sdk.md — Patterns and code examples
+1. ${ARC_ROOT}/references/ai-sdk.md — Patterns and code examples
 2. rules/ai-sdk.md — MUST/NEVER constraints
 3. references/pretext.md — If building chat UIs: DOM-free text measurement for message bubble shrinkwrap, virtualized message lists with exact row heights, and auto-sizing textareas
 </required_reading>
@@ -85,7 +94,7 @@ Continue with v6 patterns? (recommended even for planning a migration)
 
 **Read the patterns reference:**
 ```
-Read: references/ai-sdk.md
+Read: ${ARC_ROOT}/references/ai-sdk.md
 ```
 
 **Read the rules (MUST/NEVER constraints):**
@@ -108,7 +117,7 @@ AI SDK reference loaded. What are you building?
 6. Debugging — something isn't working
 ```
 
-Use AskUserQuestion with these options.
+Use the AskUserQuestion interaction pattern with these options.
 
 ## Step 4: Present Relevant Patterns
 
@@ -164,7 +173,7 @@ If user selects "Review existing AI code":
 
 <notes>
 - This skill is cross-cutting — invoke anytime, not just during implementation
-- The reference file (references/ai-sdk.md) is also loaded by /arc:implement and /arc:build when they detect `ai` in package.json
+- The reference file (${ARC_ROOT}/references/ai-sdk.md) is also loaded by /arc:implement and /arc:build when they detect `ai` in package.json
 - The rules file (rules/ai-sdk.md) is copied to .ruler/ by /arc:rules and loaded by all build agents
 - OpenRouter is the default provider per stack.md. The patterns use it throughout.
 </notes>

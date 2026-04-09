@@ -90,7 +90,7 @@ Proven options for specific needs. Install when the project requires them.
 
 ### Files
 
-- **UploadThing** — Type-safe file upload routers
+- **Stow** — Managed file upload and delivery
 
 ### AI
 

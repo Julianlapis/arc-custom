@@ -31,14 +31,11 @@ website:
     - security-engineer
     - performance-engineer
     - architecture-engineer
-    - organization-engineer
     - daniel-product-engineer
     - lee-nextjs-engineer
     - senior-engineer
     - designer
     - data-engineer
-    - documentation-engineer
-    - ux-writing-engineer
   workflow:
     position: utility
 ---
@@ -51,22 +48,41 @@ website:
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
 
-<tasklist_context>
-**Use TaskList tool** to check for existing tasks related to this work.
+<arc_runtime>
+This workflow requires the full Arc bundle, not a prompts-only install.
+Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
+Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
+Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+</arc_runtime>
 
-If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
+<platform_context>
+**Read this reference NOW:**
+1. `${ARC_ROOT}/references/platform-tools.md`
+
+Adapt the workflow to the current harness instead of assuming Claude-specific tool names.
+- Use platform-native task tracking only when available; otherwise continue without it.
+- Use platform-native structured questions when available; otherwise ask concise plain-text questions.
+- Use the platform's subagent/delegation primitives when available; otherwise run the review steps locally.
+</platform_context>
+
+<tasklist_context>
+**If the current platform has a native task/todo tool, use it** to check for existing tasks related to this work.
+
+If a related task exists, note its ID and mark it `in_progress` when starting.
+If no native task/todo tool exists, skip task tracking and continue with the audit.
 </tasklist_context>
 
 <required_reading>
 **Read these reference files NOW:**
-1. disciplines/dispatching-parallel-agents.md
-2. references/audit-stage-calibration.md
+1. `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`
+2. `${ARC_ROOT}/references/audit-stage-calibration.md`
 </required_reading>
 
 <progress_context>
 **Use Read tool:** `docs/context.md` first. If it does not exist, fall back to `docs/arc/progress.md` (first 50 lines).
 
 Check for recent changes that should be included in audit scope.
+If the file does not exist, continue without it.
 </progress_context>
 
 <rules_context>
@@ -102,10 +118,6 @@ Pass relevant rules to each reviewer agent.
 | lee-nextjs-engineer | nextjs.md, api.md, react-correctness.md (Next.js-specific rules) |
 | senior-engineer | code-style.md, typescript.md, react.md, error-handling.md, ai-sdk.md (if AI SDK) |
 | data-engineer | testing.md, api.md |
-| organization-engineer | turborepo.md, code-style.md |
-| hygiene-engineer | stack.md, code-style.md, error-handling.md, ai-sdk.md (if AI SDK) |
-| documentation-engineer | typescript.md, code-style.md |
-| ux-writing-engineer | code-style.md |
 | daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK), react-performance.md, react-correctness.md |
 | performance-engineer | react-performance.md |
 | seo-engineer | seo.md |
@@ -117,8 +129,6 @@ Pass relevant rules to each reviewer agent.
 | designer | design.md, colors.md, typography.md, marketing.md |
 | daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md |
 | lee-nextjs-engineer | layout.md, performance.md |
-| ux-writing-engineer | content-accessibility.md, marketing.md |
-
 Interface rules location: `rules/interface/`
 
 Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
@@ -230,13 +240,49 @@ If knip is already a project dependency, use `npx knip` instead. Knip detects:
 - Duplicate exports (same thing exported multiple ways)
 
 Include dead code count in the detection summary. Pass findings to relevant reviewers:
-- `organization-engineer` — unused files and structural dead weight
-- `architecture-engineer` — unused exports indicating poor module boundaries
+- `architecture-engineer` — unused files, exports indicating poor module boundaries
 - `senior-engineer` — general dead code cleanup
 
 If knip finds >20 unused exports, flag as a separate task cluster rather than distributing across reviewers.
 
 If `--diff` flag is set, cross-reference knip results with the changed file list (knip does not support diff mode natively, so run on full project but only surface findings that touch changed files).
+
+**Run structural hotspot scan (JS/TS/TSX/JSX projects):**
+
+This is a cheap mechanical pass to surface "probably worth interrogating" files before reviewer agents start. The goal is not to auto-convict large files, but to give reviewers a map of where complexity is likely hiding.
+
+```bash
+# Long files (exclude node_modules, build output, vendored/generated folders)
+find ${scope:-.} -type f \
+  \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) \
+  | grep -vE 'node_modules|\\.git|dist|build|coverage|\\.next|generated' \
+  | xargs wc -l \
+  | sort -nr \
+  | head -20
+
+# Suspicious client-boundary escape hatches
+find ${scope:-.} -type f \
+  \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) \
+  | grep -E '(^|/)[^/]*(-client|-wrapper|-content|-shell|-ui)\\.(tsx?|jsx?)$'
+
+# Check which suspicious files are explicit client components
+grep -rl --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx' \
+  '^["'\"'\"']use client["'\"'\"'];\\?$' ${scope:-.} 2>/dev/null
+```
+
+Interpretation guidance:
+- Treat files **>250 lines** as audit hotspots. Treat files **>400 lines** as severe complexity hotspots, especially when they are React components, pages, layouts, or route handlers.
+- `*-client.*` and `*-wrapper.*` are explicit red flags. They often mean "I needed a client boundary, so I wrapped the real component instead of pushing interactivity down."
+- `*-content.*`, `*-shell.*`, and `*-ui.*` are weaker signals, but worth interrogating when they are also long or marked `"use client"`.
+- When a file is both **long** and suspiciously named, elevate it as a probable god-component / server-client-boundary smell.
+- In `--diff` mode, still run the scan on the requested scope, but only surface hotspots that intersect the changed files.
+
+Store a **structural hotspot manifest** with:
+- Long files over 250 LOC
+- Severe long files over 400 LOC
+- Suspicious boundary files matching `*-client`, `*-wrapper`, `*-content`, `*-shell`, `*-ui`
+- Overlap set: suspiciously named files that are also long
+- `"use client"` overlap: suspiciously named files that also opt into a client boundary
 
 **Detect project scale:**
 
@@ -255,7 +301,6 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 
 **Scale-appropriate signals:**
 - Small projects: Skip `architecture-engineer` (no complex boundaries to review)
-- Small projects: Skip `simplicity-engineer` (not enough code to over-engineer)
 - No tests present + small project: Don't flag missing tests as critical
 - Single developer: Skip `senior-engineer` (no code review discipline needed)
 
@@ -304,6 +349,7 @@ Has database: [yes/no]
 Has AI SDK: [yes/no + deprecated API count if any]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
+Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
 Execution mode: [batched (default) / parallel / team]
@@ -317,7 +363,7 @@ Execution mode: [batched (default) / parallel / team]
 |-------|----------------|
 | Small | security-engineer, performance-engineer |
 | Medium | security-engineer, performance-engineer, architecture-engineer |
-| Large | security-engineer, performance-engineer, architecture-engineer, organization-engineer, senior-engineer |
+| Large | security-engineer, performance-engineer, architecture-engineer, senior-engineer |
 
 **Add framework-specific reviewers (medium/large only):**
 
@@ -329,26 +375,18 @@ Execution mode: [batched (default) / parallel / team]
 
 **Conditional additions:**
 - If scope includes DB/migrations → add `data-engineer`
-- If monorepo with shared packages (large only) → add `simplicity-engineer`
-- If project has >50 files or inconsistent structure detected → add `organization-engineer`
 - If UI-heavy (React/Next.js, medium/large) → add `designer`
 - If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
-- If recent AI-assisted work or branch audit → add `hygiene-engineer`
 - If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
-- If TypeScript/JavaScript project (`.ts`/`.tsx`/`.js`/`.jsx` files, medium/large) → add `documentation-engineer`
 
 **Focus flag overrides:**
 - `--security` → only `security-engineer`
 - `--performance` → only `performance-engineer`
 - `--architecture` → only `architecture-engineer`
-- `--organization` → only `organization-engineer`
 - `--design` → only `designer`
 - `--accessibility` → only `accessibility-engineer`
-- `--hygiene` → only `hygiene-engineer`
 - `--seo` → only `seo-engineer`
-- `--docs` → only `documentation-engineer`
-- `--copy` → only `ux-writing-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -368,7 +406,7 @@ Execution mode:
 2. Standard mode — Independent reviewers, batched or parallel (faster, lower cost)
 ```
 
-Use AskUserQuestion with:
+Use the platform's structured question prompt if available. Otherwise ask a concise plain-text question with the same two options:
 - **"Team mode (Recommended for pre-launch/production)"** — Reviewers cross-review and challenge each other's findings. Conflicts resolved with evidence-based rationale. Best for high-stakes audits.
 - **"Standard mode"** — Independent reviewers run in batches (default) or parallel (--parallel). Faster and cheaper. Findings consolidated by the skill.
 
@@ -376,7 +414,7 @@ Use AskUserQuestion with:
 
 **If team mode selected**, read the team reference:
 ```
-references/agent-teams.md
+${ARC_ROOT}/references/agent-teams.md
 ```
 </team_mode_check>
 
@@ -385,7 +423,7 @@ references/agent-teams.md
 **Read agent prompts:**
 For each selected reviewer, read:
 ```
-agents/review/[reviewer-name].md
+${ARC_ROOT}/agents/review/[reviewer-name].md
 ```
 
 **Execution strategy:**
@@ -413,23 +451,18 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | security-engineer | sonnet | Pattern recognition + context |
 | performance-engineer | sonnet | Algorithmic reasoning |
 | architecture-engineer | sonnet | Structural analysis |
-| organization-engineer | sonnet | File structure pattern analysis |
 | daniel-product-engineer | sonnet | Code quality judgment |
 | lee-nextjs-engineer | sonnet | Framework pattern recognition |
 | senior-engineer | sonnet | Code review reasoning |
-| simplicity-engineer | sonnet | Complexity analysis |
 | data-engineer | sonnet | Data safety reasoning |
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
-| hygiene-engineer | sonnet | Pattern recognition for AI artifacts |
 | seo-engineer | sonnet | Pattern recognition for SEO elements |
-| documentation-engineer | sonnet | JSDoc coverage analysis |
-| ux-writing-engineer | sonnet | UX copy quality and LLM-smell detection |
 
 **Include project stage in every reviewer prompt.**
 
 Each reviewer must receive the stage context so they can calibrate their severity ratings. Read the matching stage calibration block from:
 ```
-references/audit-stage-calibration.md
+${ARC_ROOT}/references/audit-stage-calibration.md
 ```
 
 Include in every reviewer prompt:
@@ -440,7 +473,30 @@ SEVERITY CALIBRATION FOR THIS STAGE:
 [Paste the matching stage block from audit-stage-calibration.md]
 ```
 
-**For each batch, spawn 2 agents in parallel:**
+**Include the structural hotspot manifest in every reviewer prompt.**
+
+Every reviewer should receive the precomputed hotspot list so they can decide whether it matters in their domain instead of rediscovering it independently.
+
+Include:
+```
+Structural hotspots:
+- Long files >250 LOC: [list]
+- Severe long files >400 LOC: [list]
+- Suspicious boundary files: [list]
+- Suspicious + long overlap: [list]
+- Suspicious + "use client" overlap: [list]
+```
+
+Reviewer-specific emphasis:
+- `lee-nextjs-engineer`: interrogate `*-client.*` and `*-wrapper.*` first. Ask whether they are "escape hatches" around App Router server-first architecture and whether the real fix is to push interactivity down to leaf client components.
+- `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable UI shape.
+- `architecture-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
+- Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
+
+**For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
+If the platform does not support subagents, run the same reviewer prompts locally one reviewer at a time and continue with consolidation.
+
+Example reviewer prompts:
 ```
 Task [security-engineer] model: sonnet: "
 Audit the following codebase for security issues.
@@ -488,7 +544,7 @@ Focus on: aesthetic direction, memorable elements, typography, color cohesion, A
 **Wait for batch to complete before starting next batch.**
 
 Repeat for remaining batches:
-- Batch 2: architecture-engineer + organization-engineer (if applicable)
+- Batch 2: architecture-engineer + senior-engineer
 - Batch 3: UI reviewers (daniel-product-engineer, lee-nextjs-engineer)
 - Batch 4: remaining reviewers (senior-engineer, designer, data-engineer)
 
@@ -553,7 +609,7 @@ After all reviewer agents complete, run an additional structural pass using the 
 
 1. **Read the checklist:**
    ```
-   Read: references/diff-review-checklist.md
+   Read: ${ARC_ROOT}/references/diff-review-checklist.md
    ```
 
 2. **Get the full diff:**
@@ -596,7 +652,7 @@ Skip the deduplication and conflict resolution steps below and proceed directly 
 
 Use the severity validation table and conflict resolution rules from:
 ```
-references/audit-stage-calibration.md
+${ARC_ROOT}/references/audit-stage-calibration.md
 ```
 
 Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`
@@ -647,6 +703,15 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 **Project Stage:** [prototype / development / pre-launch / production]
 
 > Severity ratings have been calibrated for the **[stage]** stage. Issues marked with ↓ were downgraded from their production-level severity.
+
+## Structural Hotspots
+
+- **Long files >250 LOC:** [count]
+- **Severe long files >400 LOC:** [count]
+- **Suspicious boundary files:** [count]
+- **Suspicious + long overlap:** [count]
+
+[Optional short table of the top hotspots with file path, LOC, and why they were flagged]
 
 ## Executive Summary
 
@@ -733,11 +798,8 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 3. [Prioritized action item]
 ```
 
-**Commit the report:**
-```bash
-git add docs/audits/
-git commit -m "docs: add audit report for [scope]"
-```
+**Do not auto-commit the report unless the user explicitly asks for a commit.**
+You may stage it or leave it unstaged based on the user's preferences and the platform workflow.
 
 ## Phase 6: Present & Offer Actions
 
@@ -762,13 +824,14 @@ Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
 [...]
 ```
 
-**Offer next steps using AskUserQuestion:**
+**Offer next steps using the platform's structured question prompt when available.**
+Otherwise ask a concise plain-text question with the same options:
 
 Present these options (include all that apply):
 
 1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:detail` scoped to the files and issues in that cluster.
 
-2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list. Commit the plan file.
+2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list.
 
 3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
@@ -776,7 +839,7 @@ Present these options (include all that apply):
 
 5. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
 
-5. **Done for now** → End session. Report is committed, user can return to it later.
+5. **Done for now** → End session. Report is saved, user can return to it later.
 
 **If user selects "Tackle critical cluster now":**
 - Identify the cluster with the most critical/high findings
@@ -818,16 +881,13 @@ Create `docs/arc/plans/YYYY-MM-DD-audit-tasks.md`:
 [Repeat for all clusters]
 ```
 
-Commit the plan:
-```bash
-git add docs/arc/plans/
-git commit -m "docs: add audit task plan"
-```
+Do not auto-commit the plan unless the user explicitly asks for a commit.
 
 **If user selects "Add to tasks":**
-- Use **TaskCreate** for each critical/high cluster
+- Use the platform's native task/todo creation flow for each critical/high cluster when available
 - Each task gets the cluster name as subject, findings as description, and present continuous activeForm
 - Lower severity clusters stay in the audit report only
+- If no native task/todo creation flow exists, offer the plan file or Linear issue path instead
 
 **If user selects "Deep dive on a cluster":**
 - Ask which cluster (by number or name)
@@ -842,7 +902,7 @@ git commit -m "docs: add audit task plan"
 After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup to prevent memory accumulation:
 
 ```bash
-scripts/cleanup-orphaned-agents.sh
+${ARC_ROOT}/scripts/cleanup-orphaned-agents.sh
 ```
 
 This is especially important after `--parallel` runs or when auditing large codebases.
@@ -851,7 +911,7 @@ This is especially important after `--parallel` runs or when auditing large code
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
+See: `${ARC_ROOT}/references/arc-log.md`
 
 Entry: `/arc:audit` [scope] ([N] critical, [N] high)
 </arc_log>
@@ -914,7 +974,7 @@ Audit is complete when:
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
 - [ ] Report generated in `docs/audits/`
-- [ ] Report committed to git
+- [ ] Report saved and optionally staged
 - [ ] Summary presented to user
 - [ ] Next steps offered
 - [ ] Project context updated (docs/context.md)

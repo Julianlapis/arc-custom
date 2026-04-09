@@ -28,12 +28,21 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these, do not skip:
-- **`AskUserQuestion`** — REQUIRED for all user decisions (update confirmation, Ruler offer).
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for user decisions such as update confirmation and Ruler offers. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
 </tool_restrictions>
+
+<arc_runtime>
+Arc-owned files live under the Arc install root for full-runtime installs.
+
+Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
+`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+
+Project-local files stay relative to the user's repository.
+</arc_runtime>
 
 ```
 

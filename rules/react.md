@@ -66,7 +66,8 @@ LLMs default to creating new components instead of finding existing ones. This r
 
 ## Hooks & Effects
 - MUST: Prefer custom hooks for business logic, data fetching, and side-effects.
-- MUST: Avoid `useEffect` unless absolutely needed. Prefer derived state, event handlers, or server-side logic.
+- MUST: Avoid `useEffect` unless synchronizing with an external system. Before writing one, ask: "Does this run because the component was displayed, or because of a user interaction?" If the latter, it belongs in an event handler.
+- MUST: See `react-correctness.md` § State & Effects for the full list of effect anti-patterns — derived state, key resets, effect chains, parent notification, store subscriptions, and more.
 - SHOULD: Memoize only when necessary (`useMemo`/`useCallback`), and prefer moving logic into hooks first.
 
 ## JSX

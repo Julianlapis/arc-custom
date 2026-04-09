@@ -27,7 +27,7 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — ALWAYS use this for questions. Never ask questions as plain text. Every follow-up question — exploring names, checking TLDs, choosing strategies — MUST use `AskUserQuestion`. Keep context before the question to 2-3 sentences max.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every follow-up question, including exploring names, checking TLDs, and choosing strategies. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
 
 # Naming Workflow

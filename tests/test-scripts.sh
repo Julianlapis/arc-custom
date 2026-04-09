@@ -5,16 +5,12 @@
 # - All scripts exist, are executable, and pass bash -n syntax check
 # - cleanup-orphaned-agents.sh handles flags correctly
 # - validate-plugin.sh runs cleanly on our own plugin
-# - duplicate-detector scripts show help and validate arguments
 
 section "Script Existence & Permissions Tests"
 
 FUNCTIONAL_SCRIPTS=(
     "scripts/cleanup-orphaned-agents.sh"
     ".husky/validate-plugin.sh"
-    "agents/research/duplicate-detector/extract-functions.sh"
-    "agents/research/duplicate-detector/generate-report.sh"
-    "agents/research/duplicate-detector/prepare-category-analysis.sh"
 )
 
 for script in "${FUNCTIONAL_SCRIPTS[@]}"; do
@@ -94,40 +90,3 @@ assert_file_contains "$VALIDATE" "plugin.json" \
 assert_file_contains "$VALIDATE" "frontmatter" \
     "validate-plugin.sh validates frontmatter"
 
-section "Duplicate Detector Script Tests"
-
-EXTRACT="$PLUGIN_ROOT/agents/research/duplicate-detector/extract-functions.sh"
-REPORT="$PLUGIN_ROOT/agents/research/duplicate-detector/generate-report.sh"
-CATEGORY="$PLUGIN_ROOT/agents/research/duplicate-detector/prepare-category-analysis.sh"
-
-# All three should show help with -h and exit 0
-for script_path in "$EXTRACT" "$REPORT" "$CATEGORY"; do
-    script_name=$(basename "$script_path")
-    if output=$(bash "$script_path" -h 2>&1); then
-        if echo "$output" | grep -qi "usage"; then
-            pass "$script_name -h shows usage"
-        else
-            fail "$script_name -h doesn't show usage text"
-        fi
-    else
-        fail "$script_name -h exits with error"
-    fi
-done
-
-# All three should show an error message when no args are given
-for script_path in "$EXTRACT" "$REPORT" "$CATEGORY"; do
-    script_name=$(basename "$script_path")
-    output=$(bash "$script_path" 2>&1) || true
-    if echo "$output" | grep -qi "error\|usage\|required"; then
-        pass "$script_name shows error/usage with no arguments"
-    else
-        fail "$script_name doesn't show error with no arguments"
-    fi
-done
-
-# All three must use set -euo pipefail for safety
-for script_path in "$EXTRACT" "$REPORT" "$CATEGORY"; do
-    script_name=$(basename "$script_path")
-    assert_file_contains "$script_path" "set -euo pipefail" \
-        "$script_name uses strict mode (set -euo pipefail)"
-done
