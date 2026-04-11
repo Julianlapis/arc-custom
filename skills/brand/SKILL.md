@@ -69,6 +69,7 @@ The skill's job is to present excellent options and push against mediocrity — 
 ## Phase 0: Load References & Existing Context
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read ALL of these using the Read tool:**
 
 1. `${ARC_ROOT}/references/brand-identity.md` — Brand typography, color psychology, visual character, distinctiveness criteria

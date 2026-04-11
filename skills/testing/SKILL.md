@@ -53,6 +53,7 @@ Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 Create comprehensive test strategies covering the full test pyramid. Execute with specialist agents.
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read before planning:**
 1. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
 2. `rules/testing.md` — Project conventions

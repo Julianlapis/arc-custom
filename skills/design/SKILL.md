@@ -81,6 +81,7 @@ designer (reviews for AI slop)
 **You MUST read these files before proceeding. Do not skip this step.**
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read ALL of these using the Read tool:**
 
 1. `${ARC_ROOT}/references/frontend-design.md` — UI fonts, anti-patterns, design review checklist. **Critical.**

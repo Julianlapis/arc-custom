@@ -61,6 +61,7 @@ Hardening decisions need context — what's likely vs. paranoid, what's worth th
 ## Phase 0: Load References
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read these using the Read tool:**
 
 1. `rules/interface/forms.md` — Form behavior and validation

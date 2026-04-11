@@ -73,6 +73,7 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 </tasklist_context>
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read these reference files NOW:**
 1. `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`
 2. `${ARC_ROOT}/references/audit-stage-calibration.md`

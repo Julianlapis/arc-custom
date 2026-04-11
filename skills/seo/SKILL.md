@@ -26,6 +26,10 @@ website:
     position: utility
 ---
 
+Read `~/.claude/feedback/pre-flight.md` before any work.
+
+
+
 <arc_runtime>
 Arc-owned files live under the Arc install root for full-runtime installs.
 

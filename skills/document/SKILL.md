@@ -65,6 +65,7 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 </tasklist_context>
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read these reference files NOW:**
 1. ${ARC_ROOT}/references/documentation-guide.md
 2. ${ARC_ROOT}/templates/doc-templates.md

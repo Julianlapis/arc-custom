@@ -48,6 +48,7 @@ Project-local files stay relative to the user's repository.
 AI SDK 6 guidance for building AI-powered features.
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read after detecting AI SDK (Step 1):**
 1. ${ARC_ROOT}/references/ai-sdk.md — Patterns and code examples
 2. rules/ai-sdk.md — MUST/NEVER constraints

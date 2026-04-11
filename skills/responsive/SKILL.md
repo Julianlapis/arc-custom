@@ -47,6 +47,7 @@ Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 </arc_runtime>
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read these using the Read tool when relevant:**
 
 1. `${ARC_ROOT}/references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns

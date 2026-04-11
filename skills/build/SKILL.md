@@ -43,6 +43,7 @@ Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 </arc_runtime>
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 **Read these before building:**
 1. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy
 2. `${ARC_ROOT}/references/frontend-design.md` — If UI work

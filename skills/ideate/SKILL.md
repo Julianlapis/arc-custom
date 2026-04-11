@@ -368,6 +368,7 @@ When user shares links, images, or Figma during the conversation — capture imm
 </reference_capture>
 
 <required_reading>
+Read `~/.claude/feedback/pre-flight.md` before any work.
 # Reference Files
 
 Read these when relevant (not all at once — load what the conversation needs):

@@ -23,6 +23,10 @@ website:
     position: utility
 ---
 
+Read `~/.claude/feedback/pre-flight.md` before any work.
+
+
+
 <tool_restrictions>
 # MANDATORY Tool Restrictions
 
