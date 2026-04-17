@@ -81,21 +81,21 @@ Read `~/.claude/feedback/pre-flight.md` before any work.
 
 **Check for existing brand/design context:**
 ```bash
-ls docs/brand-system.md docs/design-context.md docs/vision.md 2>/dev/null
+ls DESIGN.md docs/design-context.md docs/vision.md .impeccable.md 2>/dev/null
 ```
 
-If `brand-system.md` exists:
+If `DESIGN.md` exists:
 ```yaml
 AskUserQuestion:
-  question: "You already have a brand system. What would you like to do?"
-  header: "Existing brand"
+  question: "You already have a design system. What would you like to do?"
+  header: "Existing design system"
   options:
     - label: "Evolve it"
       description: "Keep the core identity but refresh or extend it"
     - label: "Replace it"
       description: "Start fresh with a new identity"
     - label: "Review it"
-      description: "Audit the current brand for issues or inconsistencies"
+      description: "Audit the current design system for issues or inconsistencies"
 ```
 
 **Check for fonts in the project (local fonts are premium — prefer them over Google Fonts):**
@@ -427,9 +427,35 @@ Provide atmospheric prompts for the user to run manually. For logos/marks, build
 
 ## Phase 6: Produce Outputs
 
-### 1. Brand System Document
+### 1. Design System Document (DESIGN.md)
 
-Write to `docs/brand-system.md` with the full brand system (see spec for structure).
+Write to `DESIGN.md` (project root) with implementation tokens only. This file contains colors, type scale, spacing, components, motion, and anti-patterns — each section with a one-line rationale.
+
+**DESIGN.md must NOT contain:**
+- Brand personality prose (that belongs in `.impeccable.md`)
+- Emotional goals or tone of voice
+- Brand tension or narrative framing
+- Visual references or mood descriptions
+
+**DESIGN.md must include this frontmatter:**
+```yaml
+---
+upstream: [.impeccable.md]
+authority: impeccable
+last_reviewed: YYYY-MM-DD
+---
+```
+
+**If `.impeccable.md` does not exist,** create it alongside DESIGN.md with the personality content that would otherwise bloat the token file: brand tension, emotional goals, personality traits, tone of voice, visual references, and anti-references. Give it matching frontmatter:
+```yaml
+---
+upstream: [docs/vision.md]
+authority: impeccable
+last_reviewed: YYYY-MM-DD
+---
+```
+
+See the three-doc layering model: `vision.md` (north star + design register), `.impeccable.md` (creative brief + personality), `DESIGN.md` (implementation tokens).
 
 ### 2. Design Tokens
 
@@ -497,7 +523,7 @@ AskUserQuestion:
     - label: "Yes, create it"
       description: "A beautiful page showing palette, typography, logo usage, and component examples"
     - label: "No, the docs are enough"
-      description: "The brand-system.md and tokens are sufficient"
+      description: "The DESIGN.md and tokens are sufficient"
 ```
 
 If yes, generate a page at `app/brand/page.tsx` (or equivalent) that displays:
@@ -654,7 +680,8 @@ Brand is complete when:
 - [ ] Typography system defined (display, body, mono with scale and weights)
 - [ ] Visual character established (radius, shadow, density, motion)
 - [ ] Assets generated (logo, roundel, OG image, favicon)
-- [ ] `docs/brand-system.md` written
+- [ ] `DESIGN.md` written (tokens only, no personality prose)
+- [ ] `.impeccable.md` written or updated (personality, tension, emotional goals)
 - [ ] Design tokens generated for project's CSS setup
 - [ ] Assets saved to project
 - [ ] Brand page offered (and generated if accepted)
