@@ -17,6 +17,22 @@ export function sanitizeContent(content: string): string {
     "progress_append",
     "arc_log",
     "success_criteria",
+    // Claude-instruction wrappers — internal architecture, not for public display.
+    "context_update",
+    "arc_runtime",
+    "behavioral_mode",
+    "hard_gate",
+    "hard_rules",
+    "platform_context",
+    "team_mode_check",
+    "team_consolidation",
+    "tool_restrictions_reminder",
+    "scope_discipline",
+    "spec_flow_analysis",
+    "tasklist_update",
+    "reference_capture",
+    "ui_design",
+    "when_to_stop",
   ];
   for (const tag of stripBlocks) {
     const re = new RegExp(`<${tag}>[\\s\\S]*?</${tag}>\\s*`, "gi");

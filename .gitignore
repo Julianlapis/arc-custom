@@ -16,3 +16,7 @@ site/.env.*.local
 site/*.tsbuildinfo
 .vercel
 .env*.local
+
+# Per-user observation/feedback logs — should not be committed (added 2026-06-12 security pass)
+feedback-log.md
+logs/
